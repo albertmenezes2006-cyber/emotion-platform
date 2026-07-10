@@ -5,12 +5,11 @@ from sqlalchemy import create_engine, Column, Integer, String, DateTime, Foreign
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session, relationship
 from passlib.context import CryptContext
-from datetime import datetime
+from datetime import datetime, date
 import unicodedata
 import mercadopago
 import os
 
-# SUAS CHAVES DO MERCADO PAGO INSERIDAS DIRETAMENTE
 MP_ACCESS_TOKEN = "TEST-4193087911174356-070916-6998b24ec235b0c1e540bf1db1e4e24d-3532571592"
 
 DATABASE_URL = "sqlite:///./emotion.db"
@@ -49,9 +48,11 @@ def hash_senha(senha):
 def verificar_senha(senha, hash):
     return pwd_context.verify(senha, hash)
 
-app = FastAPI(title="Emotion Intelligence Platform", version="5.0")
+app = FastAPI(title="Emotion Intelligence Platform", version="6.0")
 templates = Jinja2Templates(directory="templates")
 sessoes = {}
+
+LIMITE_FREE = 10
 
 def get_db():
     db = SessionLocal()
@@ -66,6 +67,13 @@ def get_usuario_logado(request: Request, db: Session = Depends(get_db)):
         return None
     usuario_id = sessoes[session_id]
     return db.query(Usuario).filter(Usuario.id == usuario_id).first()
+
+def contar_analises_hoje(usuario_id: int, db: Session):
+    hoje = date.today()
+    return db.query(Analise).filter(
+        Analise.usuario_id == usuario_id,
+        Analise.criado_em >= datetime.combine(hoje, datetime.min.time())
+    ).count()
 
 palavras_emocoes = {
     "alegria": ["feliz", "alegre", "contente", "animado", "otimo", "maravilhoso",
@@ -85,7 +93,15 @@ palavras_emocoes = {
     "nojo": ["nojo", "repulsa", "asco", "horrivel", "terrivel",
              "repugnante", "enjoado"],
     "amor": ["amo", "amar", "amor", "carinho", "apaixonado", "ternura",
-             "beijo", "afetuoso", "estima", "quero"]
+             "beijo", "afetuoso", "estima", "quero"],
+    "esperanca": ["esperanca", "esperancoso", "otimista", "acredito",
+                  "vai melhorar", "confiante", "positivo"],
+    "gratidao": ["grato", "agradecido", "obrigado", "gratidao",
+                 "reconhecido", "valorizando"],
+    "solidao": ["sozinho", "isolado", "abandonado", "sem amigos",
+                "ninguem", "excluido"],
+    "euforia": ["eufórico", "empolgado", "animadissimo", "incrivel",
+                "fantástico", "extraordinario"]
 }
 
 recomendacoes = {
@@ -96,6 +112,10 @@ recomendacoes = {
     "surpresa": "Absorva o momento! Surpresas fazem parte da vida. ✨",
     "nojo": "Afaste-se do que causa desconforto. Cuide-se. 🛡️",
     "amor": "O amor enriquece a vida. Valorize seus sentimentos. ❤️",
+    "esperanca": "Continue acreditando! O futuro reserva coisas boas. 🌅",
+    "gratidao": "A gratidão transforma perspectivas. Continue assim! 🙏",
+    "solidao": "Você não está sozinho. Busque conexões significativas. 🤗",
+    "euforia": "Aproveite esse momento incrível com responsabilidade! 🎉",
     "neutro": "Momento de equilíbrio. Aproveite a calma! ⚖️"
 }
 
@@ -103,7 +123,8 @@ def get_emoji(emocao):
     emojis = {
         "alegria": "😄", "tristeza": "😢", "raiva": "😡",
         "medo": "😨", "surpresa": "😲", "nojo": "🤢",
-        "amor": "❤️", "neutro": "😐"
+        "amor": "❤️", "esperanca": "🌅", "gratidao": "🙏",
+        "solidao": "😔", "euforia": "🎉", "neutro": "😐"
     }
     return emojis.get(emocao, "😐")
 
@@ -127,7 +148,12 @@ def index(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
     if not usuario:
         return RedirectResponse(url="/login")
-    return templates.TemplateResponse(request, "dashboard.html", {"usuario": usuario})
+    analises_hoje = contar_analises_hoje(usuario.id, db)
+    return templates.TemplateResponse(request, "dashboard.html", {
+        "usuario": usuario,
+        "analises_hoje": analises_hoje,
+        "limite_free": LIMITE_FREE
+    })
 
 @app.get("/login", response_class=HTMLResponse)
 def login_page(request: Request):
@@ -173,6 +199,15 @@ def analyze(request: Request, text: str, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
     if not usuario:
         raise HTTPException(status_code=401, detail="Não autorizado")
+
+    if usuario.plano == "free":
+        analises_hoje = contar_analises_hoje(usuario.id, db)
+        if analises_hoje >= LIMITE_FREE:
+            raise HTTPException(
+                status_code=429,
+                detail=f"Limite de {LIMITE_FREE} análises diárias atingido! Faça upgrade para Premium."
+            )
+
     emocao = detectar_emocao(text)
     analise = Analise(
         texto=text,
@@ -234,18 +269,14 @@ def checkout(request: Request, plano: str, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
     if not usuario:
         return RedirectResponse(url="/login")
-
     precos = {
         "premium": {"valor": 49, "nome": "Emotion Premium"},
         "enterprise": {"valor": 199, "nome": "Emotion Enterprise"}
     }
     if plano not in precos:
         raise HTTPException(status_code=400, detail="Plano invalido")
-
     try:
-        # SDK INICIADO COM O SEU TOKEN DE TESTE
         sdk = mercadopago.SDK(MP_ACCESS_TOKEN)
-        
         preference_data = {
             "items": [{
                 "title": precos[plano]["nome"],
@@ -268,13 +299,53 @@ def checkout(request: Request, plano: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/sucesso", response_class=HTMLResponse)
-def sucesso(request: Request):
-    return HTMLResponse("<h1 style='color:green;font-family:sans-serif;text-align:center;margin-top:100px'>✅ Pagamento aprovado! Obrigado!</h1><br><center><a href='/'>Voltar ao Dashboard</a></center>")
+def sucesso(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if usuario:
+        usuario.plano = "premium"
+        db.commit()
+    return HTMLResponse("""
+    <html>
+    <head><meta charset='UTF-8'><style>
+    body{font-family:sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63);color:#fff;text-align:center;padding-top:100px}
+    h1{font-size:48px;margin-bottom:20px}
+    a{background:linear-gradient(90deg,#00d2ff,#3a7bd5);padding:15px 40px;border-radius:15px;color:#fff;text-decoration:none;font-size:18px}
+    </style></head>
+    <body>
+    <h1>✅ Pagamento aprovado!</h1>
+    <p style='font-size:20px;margin-bottom:30px'>Seu plano foi atualizado para Premium!</p>
+    <a href='/'>Ir para o Dashboard</a>
+    </body></html>
+    """)
 
 @app.get("/falha", response_class=HTMLResponse)
 def falha(request: Request):
-    return HTMLResponse("<h1 style='color:red;font-family:sans-serif;text-align:center;margin-top:100px'>❌ Pagamento falhou. Tente novamente.</h1><br><center><a href='/planos'>Tentar novamente</a></center>")
+    return HTMLResponse("""
+    <html>
+    <head><meta charset='UTF-8'><style>
+    body{font-family:sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63);color:#fff;text-align:center;padding-top:100px}
+    h1{font-size:48px;margin-bottom:20px}
+    a{background:#e74c3c;padding:15px 40px;border-radius:15px;color:#fff;text-decoration:none;font-size:18px}
+    </style></head>
+    <body>
+    <h1>❌ Pagamento falhou!</h1>
+    <p style='font-size:20px;margin-bottom:30px'>Tente novamente.</p>
+    <a href='/planos'>Tentar novamente</a>
+    </body></html>
+    """)
 
 @app.get("/pendente", response_class=HTMLResponse)
 def pendente(request: Request):
-    return HTMLResponse("<h1 style='color:orange;font-family:sans-serif;text-align:center;margin-top:100px'>⏳ Pagamento pendente. Aguarde a confirmação.</h1><br><center><a href='/'>Voltar ao Dashboard</a></center>")
+    return HTMLResponse("""
+    <html>
+    <head><meta charset='UTF-8'><style>
+    body{font-family:sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63);color:#fff;text-align:center;padding-top:100px}
+    h1{font-size:48px;margin-bottom:20px}
+    a{background:#f39c12;padding:15px 40px;border-radius:15px;color:#fff;text-decoration:none;font-size:18px}
+    </style></head>
+    <body>
+    <h1>⏳ Pagamento pendente!</h1>
+    <p style='font-size:20px;margin-bottom:30px'>Aguarde a confirmação.</p>
+    <a href='/'>Voltar ao Dashboard</a>
+    </body></html>
+    """)
