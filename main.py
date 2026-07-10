@@ -2,6 +2,8 @@ from fastapi import FastAPI, HTTPException, Request, Depends, Form, BackgroundTa
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from fastapi.exception_handlers import http_exception_handler
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session, relationship
@@ -160,6 +162,25 @@ async def enviar_email_premium(nome: str, email: str):
             </body></html>"""
         )
         sg.send(message)
+        sg2 = sendgrid.SendGridAPIClient(api_key=SENDGRID_API_KEY)
+        notif = Mail(
+            from_email=ADMIN_EMAIL,
+            to_emails=ADMIN_EMAIL,
+            subject=f"💰 Novo Premium: {nome}!",
+            html_content=f"""
+            <html><body style="font-family:sans-serif;padding:40px">
+            <h1 style="color:#2ecc71">💰 Nova assinatura Premium!</h1>
+            <p><strong>Nome:</strong> {nome}</p>
+            <p><strong>Email:</strong> {email}</p>
+            <p><strong>Valor:</strong> R$49/mês</p>
+            <p><strong>Data:</strong> {datetime.now().strftime("%d/%m/%Y %H:%M")}</p>
+            <br>
+            <a href="{BASE_URL}/admin"
+            style="background:#2ecc71;padding:15px 30px;border-radius:15px;color:#fff;text-decoration:none">
+            Ver Painel Admin</a>
+            </body></html>"""
+        )
+        sg2.send(notif)
     except Exception as e:
         print(f"Erro email: {e}")
 
@@ -228,6 +249,12 @@ def detectar_emocao(text):
     if pontuacao:
         return max(pontuacao, key=pontuacao.get)
     return "neutro"
+
+@app.exception_handler(StarletteHTTPException)
+async def custom_404(request: Request, exc: StarletteHTTPException):
+    if exc.status_code == 404:
+        return templates.TemplateResponse(request, "404.html", status_code=404)
+    return await http_exception_handler(request, exc)
 
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request, ref: str = None, db: Session = Depends(get_db)):
@@ -314,6 +341,14 @@ def privacidade(request: Request):
 @app.get("/termos", response_class=HTMLResponse)
 def termos(request: Request):
     return templates.TemplateResponse(request, "termos.html")
+
+@app.get("/faq", response_class=HTMLResponse)
+def faq(request: Request):
+    return templates.TemplateResponse(request, "faq.html")
+
+@app.get("/contato", response_class=HTMLResponse)
+def contato(request: Request):
+    return templates.TemplateResponse(request, "contato.html")
 
 @app.get("/perfil", response_class=HTMLResponse)
 def perfil_page(request: Request, db: Session = Depends(get_db)):

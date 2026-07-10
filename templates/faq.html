@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ — Emotion Intelligence</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh}
+nav{background:rgba(0,0,0,0.3);padding:20px 60px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:22px;font-weight:bold;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+.btn-back{background:#3a7bd5;padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px}
+.container{max-width:800px;margin:0 auto;padding:60px 20px}
+h1{font-size:42px;font-weight:bold;margin-bottom:10px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.subtitle{color:rgba(255,255,255,0.5);margin-bottom:40px;font-size:16px}
+.faq-item{background:rgba(255,255,255,0.05);border-radius:15px;margin-bottom:15px;border:1px solid rgba(255,255,255,0.1);overflow:hidden}
+.faq-pergunta{padding:20px 25px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:18px;font-weight:bold}
+.faq-pergunta:hover{background:rgba(255,255,255,0.05)}
+.faq-icone{font-size:20px;transition:transform 0.3s;color:#00d2ff}
+.faq-resposta{padding:0 25px;max-height:0;overflow:hidden;transition:all 0.3s;color:rgba(255,255,255,0.7);line-height:1.8}
+.faq-resposta.aberto{padding:0 25px 20px;max-height:500px}
+.cta{text-align:center;margin-top:60px;padding:40px;background:rgba(255,255,255,0.05);border-radius:20px;border:1px solid rgba(255,255,255,0.1)}
+.cta h2{font-size:28px;margin-bottom:15px}
+.btn{display:inline-block;padding:15px 40px;border-radius:15px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);color:#fff;text-decoration:none;font-size:18px;font-weight:bold}
+footer{text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:14px}
+</style>
+</head>
+<body>
+<nav>
+<a href="/" class="logo">🧠 Emotion Intelligence</a>
+<a href="/" class="btn-back">← Voltar</a>
+</nav>
+<div class="container">
+<h1>Perguntas Frequentes</h1>
+<p class="subtitle">Tire suas dúvidas sobre a Emotion Intelligence Platform</p>
+
+<div class="faq-item">
+<div class="faq-pergunta" onclick="toggle(this)">
+O que é a Emotion Intelligence Platform?
+<span class="faq-icone">+</span>
+</div>
+<div class="faq-resposta">
+É uma plataforma de análise emocional que usa Inteligência Artificial para identificar emoções em textos e voz. Você digita ou fala uma frase e nossa IA identifica instantaneamente sua emoção.
+</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-pergunta" onclick="toggle(this)">
+Como funciona a análise por voz?
+<span class="faq-icone">+</span>
+</div>
+<div class="faq-resposta">
+Clique no botão do microfone 🎤, fale uma frase e nossa IA converte sua voz em texto e analisa a emoção instantaneamente. Funciona melhor no Chrome e navegadores modernos.
+</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-pergunta" onclick="toggle(this)">
+O plano Free é realmente gratuito?
+<span class="faq-icone">+</span>
+</div>
+<div class="faq-resposta">
+Sim! O plano Free é 100% gratuito e não precisa de cartão de crédito. Você tem direito a 10 análises por dia, histórico e gráficos básicos.
+</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-pergunta" onclick="toggle(this)">
+Qual a diferença entre Free e Premium?
+<span class="faq-icone">+</span>
+</div>
+<div class="faq-resposta">
+O plano Free tem limite de 10 análises por dia. O Premium oferece análises ilimitadas, histórico completo, gráficos avançados, suporte prioritário e acesso à API por apenas R$49/mês.
+</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-pergunta" onclick="toggle(this)">
+Como funciona o Programa de Afiliados?
+<span class="faq-icone">+</span>
+</div>
+<div class="faq-resposta">
+Cada usuário recebe um link único de afiliado. Quando alguém se cadastrar pelo seu link e assinar o Premium, você ganha 20% de comissão automaticamente. Por exemplo: 10 indicados Premium = R$98/mês para você!
+</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-pergunta" onclick="toggle(this)">
+Meus dados estão seguros?
+<span class="faq-icone">+</span>
+</div>
+<div class="faq-resposta">
+Sim! Todas as senhas são criptografadas e as conexões são protegidas por HTTPS. Não vendemos seus dados a terceiros. Seguimos a Lei Geral de Proteção de Dados (LGPD).
+</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-pergunta" onclick="toggle(this)">
+Posso instalar como aplicativo no celular?
+<span class="faq-icone">+</span>
+</div>
+<div class="faq-resposta">
+Sim! Abra o site no Chrome do seu celular e clique em "Adicionar à tela inicial" ou "Instalar aplicativo". O app ficará na tela principal do seu celular como qualquer outro app.
+</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-pergunta" onclick="toggle(this)">
+Como cancelo minha assinatura?
+<span class="faq-icone">+</span>
+</div>
+<div class="faq-resposta">
+Entre em contato pelo email albertmenezes2006@gmail.com ou pelo chat de suporte. O cancelamento é feito em até 24 horas e você continua com acesso Premium até o fim do período pago.
+</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-pergunta" onclick="toggle(this)">
+A plataforma substitui acompanhamento psicológico?
+<span class="faq-icone">+</span>
+</div>
+<div class="faq-resposta">
+Não. A Emotion Intelligence Platform é uma ferramenta de autoconhecimento e não substitui o acompanhamento de profissionais de saúde mental. Em caso de sofrimento emocional intenso, procure um psicólogo ou médico.
+</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-pergunta" onclick="toggle(this)">
+Quais formas de pagamento são aceitas?
+<span class="faq-icone">+</span>
+</div>
+<div class="faq-resposta">
+Aceitamos PIX, cartão de crédito, cartão de débito e boleto bancário através do MercadoPago, a plataforma de pagamentos mais confiável do Brasil.
+</div>
+</div>
+
+<div class="cta">
+<h2>Ainda tem dúvidas?</h2>
+<p style="color:rgba(255,255,255,0.6);margin-bottom:20px">Nossa equipe está pronta para ajudar!</p>
+<a href="/contato" class="btn">💬 Falar com Suporte</a>
+</div>
+
+</div>
+<footer>
+<p>Emotion Intelligence Platform © 2026 — Todos os direitos reservados</p>
+</footer>
+<script>
+function toggle(el){
+var resposta=el.nextElementSibling;
+var icone=el.querySelector('.faq-icone');
+resposta.classList.toggle('aberto');
+icone.textContent=resposta.classList.contains('aberto')?'−':'+';
+}
+</script>
+</body>
+</html>
