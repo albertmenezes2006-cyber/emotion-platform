@@ -9,10 +9,9 @@ from datetime import datetime
 import unicodedata
 import mercadopago
 import os
-from dotenv import load_dotenv
 
-load_dotenv()
-MP_ACCESS_TOKEN = os.getenv("MP_ACCESS_TOKEN")
+# SUAS CHAVES DO MERCADO PAGO INSERIDAS DIRETAMENTE
+MP_ACCESS_TOKEN = "TEST-4193087911174356-070916-6998b24ec235b0c1e540bf1db1e4e24d-3532571592"
 
 DATABASE_URL = "sqlite:///./emotion.db"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
@@ -235,31 +234,38 @@ def checkout(request: Request, plano: str, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
     if not usuario:
         return RedirectResponse(url="/login")
+
     precos = {
         "premium": {"valor": 49, "nome": "Emotion Premium"},
         "enterprise": {"valor": 199, "nome": "Emotion Enterprise"}
     }
     if plano not in precos:
         raise HTTPException(status_code=400, detail="Plano invalido")
-    sdk = mercadopago.SDK(MP_ACCESS_TOKEN)
-    preference_data = {
-        "items": [{
-            "title": precos[plano]["nome"],
-            "quantity": 1,
-            "currency_id": "BRL",
-            "unit_price": float(precos[plano]["valor"])
-        }],
-        "payer": {"email": usuario.email},
-        "back_urls": {
-            "success": "https://emotion-platform-albert.onrender.com/sucesso",
-            "failure": "https://emotion-platform-albert.onrender.com/falha",
-            "pending": "https://emotion-platform-albert.onrender.com/pendente"
-        },
-        "auto_return": "approved"
-    }
-    preference_response = sdk.preference().create(preference_data)
-    preference = preference_response["response"]
-    return RedirectResponse(url=preference["init_point"])
+
+    try:
+        # SDK INICIADO COM O SEU TOKEN DE TESTE
+        sdk = mercadopago.SDK(MP_ACCESS_TOKEN)
+        
+        preference_data = {
+            "items": [{
+                "title": precos[plano]["nome"],
+                "quantity": 1,
+                "currency_id": "BRL",
+                "unit_price": float(precos[plano]["valor"])
+            }],
+            "payer": {"email": usuario.email},
+            "back_urls": {
+                "success": "https://emotion-platform-albert.onrender.com/sucesso",
+                "failure": "https://emotion-platform-albert.onrender.com/falha",
+                "pending": "https://emotion-platform-albert.onrender.com/pendente"
+            },
+            "auto_return": "approved"
+        }
+        preference_response = sdk.preference().create(preference_data)
+        preference = preference_response["response"]
+        return RedirectResponse(url=preference["init_point"])
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/sucesso", response_class=HTMLResponse)
 def sucesso(request: Request):
@@ -272,4 +278,3 @@ def falha(request: Request):
 @app.get("/pendente", response_class=HTMLResponse)
 def pendente(request: Request):
     return HTMLResponse("<h1 style='color:orange;font-family:sans-serif;text-align:center;margin-top:100px'>⏳ Pagamento pendente. Aguarde a confirmação.</h1><br><center><a href='/'>Voltar ao Dashboard</a></center>")
-
