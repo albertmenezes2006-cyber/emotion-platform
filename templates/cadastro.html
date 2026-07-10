@@ -1,121 +1,78 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro — Emotion Intelligence</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-        }
-        .card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 50px 40px;
-            width: 100%;
-            max-width: 420px;
-            backdrop-filter: blur(10px);
-        }
-        .logo { text-align: center; font-size: 40px; margin-bottom: 10px; }
-        h1 {
-            text-align: center;
-            font-size: 24px;
-            margin-bottom: 5px;
-            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        p.sub {
-            text-align: center;
-            color: rgba(255,255,255,0.4);
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
-        .erro {
-            background: rgba(231,76,60,0.2);
-            border: 1px solid #e74c3c;
-            color: #e74c3c;
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            text-align: center;
-            font-size: 14px;
-        }
-        label {
-            display: block;
-            margin-bottom: 6px;
-            color: rgba(255,255,255,0.6);
-            font-size: 14px;
-        }
-        input {
-            width: 100%;
-            padding: 15px 20px;
-            border-radius: 12px;
-            border: 2px solid rgba(255,255,255,0.1);
-            background: rgba(255,255,255,0.05);
-            color: #fff;
-            font-size: 16px;
-            outline: none;
-            margin-bottom: 20px;
-            transition: all 0.3s;
-        }
-        input:focus {
-            border-color: #3a7bd5;
-            box-shadow: 0 0 15px rgba(58,123,213,0.3);
-        }
-        button {
-            width: 100%;
-            padding: 15px;
-            border-radius: 12px;
-            border: none;
-            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
-            color: #fff;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(58,123,213,0.4);
-        }
-        .link {
-            text-align: center;
-            margin-top: 20px;
-            color: rgba(255,255,255,0.5);
-            font-size: 14px;
-        }
-        .link a { color: #00d2ff; text-decoration: none; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadastro — Emotion Intelligence</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);min-height:100vh;display:flex;align-items:center;justify-content:center;color:#fff;padding:20px}
+.card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:50px 40px;width:100%;max-width:440px;backdrop-filter:blur(10px)}
+.logo{text-align:center;font-size:40px;margin-bottom:10px}
+h1{text-align:center;font-size:24px;margin-bottom:5px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+p.sub{text-align:center;color:rgba(255,255,255,0.4);margin-bottom:30px;font-size:14px}
+.erro{background:rgba(231,76,60,0.2);border:1px solid #e74c3c;color:#e74c3c;padding:12px;border-radius:10px;margin-bottom:20px;text-align:center;font-size:14px}
+label{display:block;margin-bottom:6px;color:rgba(255,255,255,0.6);font-size:14px}
+input[type=text],input[type=email],input[type=password]{width:100%;padding:15px 20px;border-radius:12px;border:2px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#fff;font-size:16px;outline:none;margin-bottom:20px;transition:all 0.3s}
+input:focus{border-color:#3a7bd5;box-shadow:0 0 15px rgba(58,123,213,0.3)}
+.checkbox-group{display:flex;align-items:flex-start;gap:10px;margin-bottom:20px}
+.checkbox-group input[type=checkbox]{width:18px;height:18px;margin-top:2px;cursor:pointer;accent-color:#00d2ff;flex-shrink:0}
+.checkbox-group label{color:rgba(255,255,255,0.6);font-size:13px;margin:0;line-height:1.5}
+.checkbox-group label a{color:#00d2ff;text-decoration:none}
+button{width:100%;padding:15px;border-radius:12px;border:none;background:linear-gradient(90deg,#00d2ff,#3a7bd5);color:#fff;font-size:18px;font-weight:bold;cursor:pointer;transition:all 0.3s}
+button:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(58,123,213,0.4)}
+.link{text-align:center;margin-top:20px;color:rgba(255,255,255,0.5);font-size:14px}
+.link a{color:#00d2ff;text-decoration:none}
+.beneficios{background:rgba(0,210,255,0.05);border:1px solid rgba(0,210,255,0.2);border-radius:12px;padding:15px;margin-bottom:20px}
+.beneficios p{font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:5px}
+.beneficios p::before{content:"✅ ";margin-right:5px}
+</style>
 </head>
 <body>
-    <div class="card">
-        <div class="logo">🧠</div>
-        <h1>Criar Conta</h1>
-        <p class="sub">Comece gratuitamente agora</p>
-        {% if erro %}
-        <div class="erro">{{ erro }}</div>
-        {% endif %}
-        <form method="post" action="/cadastro">
-            <label>Nome</label>
-            <input type="text" name="nome" placeholder="Seu nome" required>
-            <label>Email</label>
-            <input type="email" name="email" placeholder="seu@email.com" required>
-            <label>Senha</label>
-            <input type="password" name="senha" placeholder="••••••••" required>
-            <button type="submit">Criar Conta</button>
-        </form>
-        <div class="link">
-            Já tem conta? <a href="/login">Fazer login</a>
-        </div>
-    </div>
+<div class="card">
+<div class="logo">🧠</div>
+<h1>Criar Conta Grátis</h1>
+<p class="sub">Comece agora sem cartão de crédito</p>
+
+<div class="beneficios">
+<p>10 análises por dia grátis</p>
+<p>Análise por voz incluída</p>
+<p>Gráficos emocionais</p>
+<p>Link de afiliado para ganhar dinheiro</p>
+</div>
+
+{% if erro %}
+<div class="erro">{{ erro }}</div>
+{% endif %}
+
+<form method="post" action="/cadastro">
+<label>Nome completo</label>
+<input type="text" name="nome" placeholder="Seu nome" required>
+<label>Email</label>
+<input type="email" name="email" placeholder="seu@email.com" required>
+<label>Senha</label>
+<input type="password" name="senha" placeholder="Mínimo 6 caracteres" required>
+
+<div class="checkbox-group">
+<input type="checkbox" id="termos" required>
+<label for="termos">
+Concordo com os <a href="/termos" target="_blank">Termos de Uso</a> e a <a href="/privacidade" target="_blank">Política de Privacidade</a>
+</label>
+</div>
+
+<div class="checkbox-group">
+<input type="checkbox" id="newsletter">
+<label for="newsletter">
+Quero receber novidades e dicas sobre inteligência emocional por email
+</label>
+</div>
+
+<button type="submit">🚀 Criar Conta Grátis</button>
+</form>
+
+<div class="link">
+Já tem conta? <a href="/login">Fazer login</a>
+</div>
+</div>
 </body>
 </html>
