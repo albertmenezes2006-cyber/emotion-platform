@@ -350,6 +350,10 @@ def faq(request: Request):
 def contato(request: Request):
     return templates.TemplateResponse(request, "contato.html")
 
+@app.get("/sobre", response_class=HTMLResponse)
+def sobre(request: Request):
+    return templates.TemplateResponse(request, "sobre.html")
+
 @app.get("/perfil", response_class=HTMLResponse)
 def perfil_page(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
