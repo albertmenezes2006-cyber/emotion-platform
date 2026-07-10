@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emotion Intelligence Platform</title>
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#3a7bd5">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -70,13 +72,12 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29
 <h1>🧠 Emotion Intelligence Platform</h1>
 <div class="nav-right">
 <span class="user">Ola, {{ usuario.nome }}!</span>
-<span class="version">v6.0 PRO</span>
+<span class="version">v8.0 PRO</span>
 <a href="/planos" class="btn-planos">⭐ Planos</a>
 <a href="/logout" class="logout">Sair</a>
 </div>
 </nav>
 <div class="container">
-
 {% if usuario.plano == "free" %}
 <div class="limite-banner">
 <div class="limite-info">
@@ -93,7 +94,6 @@ Plano <span>FREE</span> — {{ analises_hoje }}/{{ limite_free }} análises hoje
 <a href="/planos" class="btn-upgrade">⭐ Ver Planos</a>
 </div>
 {% endif %}
-
 <div class="analyze-section">
 <h2>🔍 Analisar Emocao</h2>
 <div class="input-group">
@@ -114,7 +114,6 @@ Plano <span>FREE</span> — {{ analises_hoje }}/{{ limite_free }} análises hoje
 </div>
 </div>
 </div>
-
 <div class="dashboard-grid">
 <div class="card">
 <h3>📊 Total de Análises</h3>
@@ -129,141 +128,77 @@ Plano <span>FREE</span> — {{ analises_hoje }}/{{ limite_free }} análises hoje
 </div>
 </div>
 </div>
-
 <div class="grafico-card">
 <h3>📈 Gráfico de Emoções</h3>
 <canvas id="graficoEmocoes" height="100"></canvas>
 </div>
-
 <div class="grafico-card" style="margin-top:20px">
 <h3>🍩 Distribuição de Emoções</h3>
 <canvas id="graficoPizza" height="100"></canvas>
 </div>
-
 </div>
 <div class="footer">
 <p>Emotion Intelligence Platform 2026 — Todos os direitos reservados</p>
 </div>
 <script>
-var graficoEmocoes = null;
-var graficoPizza = null;
-
-document.getElementById('btnAnalisar').addEventListener('click', analyzeText);
-document.getElementById('textInput').addEventListener('keypress', function(e){
-    if(e.key==='Enter') analyzeText();
-});
-
+var graficoEmocoes=null;
+var graficoPizza=null;
+document.getElementById('btnAnalisar').addEventListener('click',analyzeText);
+document.getElementById('textInput').addEventListener('keypress',function(e){if(e.key==='Enter')analyzeText();});
 function analyzeText(){
-    var text=document.getElementById('textInput').value;
-    if(!text) return;
-    fetch('/analyze?text='+encodeURIComponent(text))
-    .then(function(r){
-        if(r.status===429){
-            document.getElementById('alertaLimite').classList.add('show');
-            document.getElementById('resultCard').classList.remove('show');
-            return null;
-        }
-        return r.json();
-    })
-    .then(function(data){
-        if(!data) return;
-        document.getElementById('resultEmoji').textContent=data.emoji;
-        document.getElementById('resultEmotion').textContent=data.emocao;
-        document.getElementById('resultRec').textContent=data.recomendacao;
-        document.getElementById('resultTime').textContent=data.timestamp;
-        document.getElementById('resultCard').classList.add('show');
-        document.getElementById('alertaLimite').classList.remove('show');
-        document.getElementById('textInput').value='';
-        loadStats();
-        loadHistory();
-    })
-    .catch(function(){alert('Erro ao analisar');});
+var text=document.getElementById('textInput').value;
+if(!text)return;
+fetch('/analyze?text='+encodeURIComponent(text))
+.then(function(r){
+if(r.status===429){document.getElementById('alertaLimite').classList.add('show');document.getElementById('resultCard').classList.remove('show');return null;}
+return r.json();
+})
+.then(function(data){
+if(!data)return;
+document.getElementById('resultEmoji').textContent=data.emoji;
+document.getElementById('resultEmotion').textContent=data.emocao;
+document.getElementById('resultRec').textContent=data.recomendacao;
+document.getElementById('resultTime').textContent=data.timestamp;
+document.getElementById('resultCard').classList.add('show');
+document.getElementById('alertaLimite').classList.remove('show');
+document.getElementById('textInput').value='';
+loadStats();loadHistory();
+}).catch(function(){alert('Erro ao analisar');});
 }
-
 function loadStats(){
-    fetch('/stats')
-    .then(function(r){return r.json();})
-    .then(function(data){
-        if(data.total_analises){
-            document.getElementById('totalAnalyses').textContent=data.total_analises;
-            document.getElementById('maisFrequente').textContent='Emoção mais frequente: '+data.mais_frequente;
-
-            var labels=Object.keys(data.emocoes_detectadas);
-            var valores=Object.values(data.emocoes_detectadas);
-            var cores=[
-                '#2ecc71','#3498db','#e74c3c','#9b59b6',
-                '#f1c40f','#27ae60','#ff6b81','#95a5a6',
-                '#00d2ff','#f39c12','#1abc9c','#e67e22'
-            ];
-
-            if(graficoEmocoes){
-                graficoEmocoes.destroy();
-            }
-            var ctx1=document.getElementById('graficoEmocoes').getContext('2d');
-            graficoEmocoes=new Chart(ctx1,{
-                type:'bar',
-                data:{
-                    labels:labels,
-                    datasets:[{
-                        label:'Quantidade',
-                        data:valores,
-                        backgroundColor:cores,
-                        borderRadius:10
-                    }]
-                },
-                options:{
-                    plugins:{legend:{display:false}},
-                    scales:{
-                        x:{ticks:{color:'#fff'},grid:{color:'rgba(255,255,255,0.05)'}},
-                        y:{ticks:{color:'#fff'},grid:{color:'rgba(255,255,255,0.05)'}}
-                    }
-                }
-            });
-
-            if(graficoPizza){
-                graficoPizza.destroy();
-            }
-            var ctx2=document.getElementById('graficoPizza').getContext('2d');
-            graficoPizza=new Chart(ctx2,{
-                type:'doughnut',
-                data:{
-                    labels:labels,
-                    datasets:[{
-                        data:valores,
-                        backgroundColor:cores,
-                        borderWidth:0
-                    }]
-                },
-                options:{
-                    plugins:{
-                        legend:{
-                            labels:{color:'#fff'},
-                            position:'right'
-                        }
-                    }
-                }
-            });
-        }
-    }).catch(function(){});
+fetch('/stats').then(function(r){return r.json();}).then(function(data){
+if(data.total_analises){
+document.getElementById('totalAnalyses').textContent=data.total_analises;
+document.getElementById('maisFrequente').textContent='Emoção mais frequente: '+data.mais_frequente;
+var labels=Object.keys(data.emocoes_detectadas);
+var valores=Object.values(data.emocoes_detectadas);
+var cores=['#2ecc71','#3498db','#e74c3c','#9b59b6','#f1c40f','#27ae60','#ff6b81','#95a5a6','#00d2ff','#f39c12','#1abc9c','#e67e22'];
+if(graficoEmocoes){graficoEmocoes.destroy();}
+var ctx1=document.getElementById('graficoEmocoes').getContext('2d');
+graficoEmocoes=new Chart(ctx1,{type:'bar',data:{labels:labels,datasets:[{label:'Quantidade',data:valores,backgroundColor:cores,borderRadius:10}]},options:{plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#fff'},grid:{color:'rgba(255,255,255,0.05)'}},y:{ticks:{color:'#fff'},grid:{color:'rgba(255,255,255,0.05)'}}}}});
+if(graficoPizza){graficoPizza.destroy();}
+var ctx2=document.getElementById('graficoPizza').getContext('2d');
+graficoPizza=new Chart(ctx2,{type:'doughnut',data:{labels:labels,datasets:[{data:valores,backgroundColor:cores,borderWidth:0}]},options:{plugins:{legend:{labels:{color:'#fff'},position:'right'}}}});
 }
-
+}).catch(function(){});
+}
 function loadHistory(){
-    fetch('/historico')
-    .then(function(r){return r.json();})
-    .then(function(data){
-        if(data.total>0){
-            var html='';
-            var items=data.analises.slice().reverse().slice(0,10);
-            for(var i=0;i<items.length;i++){
-                var item=items[i];
-                var cls='emotion-'+item.emocao.toLowerCase();
-                html+='<div class="history-item"><span class="history-text">'+item.texto+'</span><span class="history-emotion '+cls+'">'+item.emoji+' '+item.emocao+'</span></div>';
-            }
-            document.getElementById('historyList').innerHTML=html;
-        }
-    }).catch(function(){});
+fetch('/historico').then(function(r){return r.json();}).then(function(data){
+if(data.total>0){
+var html='';
+var items=data.analises.slice().reverse().slice(0,10);
+for(var i=0;i<items.length;i++){
+var item=items[i];
+var cls='emotion-'+item.emocao.toLowerCase();
+html+='<div class="history-item"><span class="history-text">'+item.texto+'</span><span class="history-emotion '+cls+'">'+item.emoji+' '+item.emocao+'</span></div>';
 }
-
+document.getElementById('historyList').innerHTML=html;
+}
+}).catch(function(){});
+}
+if('serviceWorker' in navigator){
+navigator.serviceWorker.register('/static/sw.js').catch(function(){});
+}
 loadStats();
 loadHistory();
 </script>

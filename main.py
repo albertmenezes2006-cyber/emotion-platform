@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException, Request, Depends, Form, BackgroundTasks
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
@@ -60,8 +61,9 @@ def hash_senha(senha):
 def verificar_senha(senha, hash):
     return pwd_context.verify(senha, hash)
 
-app = FastAPI(title="Emotion Intelligence Platform", version="7.0")
+app = FastAPI(title="Emotion Intelligence Platform", version="8.0")
 templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 sessoes = {}
 LIMITE_FREE = 10
 
@@ -92,8 +94,7 @@ async def enviar_email_boas_vindas(nome: str, email: str):
             subject="🧠 Bem-vindo ao Emotion Intelligence Platform!",
             recipients=[email],
             body=f"""
-            <html>
-            <body style="font-family:sans-serif;background:#0f0c29;color:#fff;padding:40px">
+            <html><body style="font-family:sans-serif;background:#0f0c29;color:#fff;padding:40px">
             <h1 style="color:#00d2ff">🧠 Emotion Intelligence Platform</h1>
             <h2>Olá, {nome}! 👋</h2>
             <p style="font-size:18px">Bem-vindo à plataforma de inteligência emocional!</p>
@@ -126,8 +127,7 @@ async def enviar_email_premium(nome: str, email: str):
             subject="⭐ Seu plano Premium está ativo!",
             recipients=[email],
             body=f"""
-            <html>
-            <body style="font-family:sans-serif;background:#0f0c29;color:#fff;padding:40px">
+            <html><body style="font-family:sans-serif;background:#0f0c29;color:#fff;padding:40px">
             <h1 style="color:#00d2ff">🧠 Emotion Intelligence Platform</h1>
             <h2>Parabéns, {nome}! 🎉</h2>
             <p style="font-size:18px">Seu plano Premium foi ativado com sucesso!</p>
@@ -281,7 +281,7 @@ def analyze(request: Request, text: str, db: Session = Depends(get_db)):
     if usuario.plano == "free":
         analises_hoje = contar_analises_hoje(usuario.id, db)
         if analises_hoje >= LIMITE_FREE:
-            raise HTTPException(status_code=429, detail=f"Limite atingido!")
+            raise HTTPException(status_code=429, detail="Limite atingido!")
     emocao = detectar_emocao(text)
     analise = Analise(
         texto=text,

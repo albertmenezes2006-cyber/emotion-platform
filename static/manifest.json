@@ -1,0 +1,15 @@
+{
+  "name": "Emotion Intelligence Platform",
+  "short_name": "Emotion IA",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0c29",
+  "theme_color": "#3a7bd5",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/1693/1693055.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
