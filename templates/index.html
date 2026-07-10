@@ -15,7 +15,9 @@ nav{padding:20px 60px;display:flex;justify-content:space-between;align-items:cen
 .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:100px 20px 60px;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e)}
 .hero h1{font-size:64px;font-weight:bold;line-height:1.2;margin-bottom:20px}
 .hero h1 span{background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{font-size:22px;color:rgba(255,255,255,0.7);max-width:600px;margin:0 auto 40px}
+.hero p{font-size:22px;color:rgba(255,255,255,0.7);max-width:600px;margin:0 auto 15px}
+.contador{font-size:16px;color:rgba(255,255,255,0.5);margin-bottom:30px}
+.contador strong{color:#00d2ff}
 .hero-btns{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
 .btn-primary{padding:18px 45px;border-radius:15px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);color:#fff;text-decoration:none;font-size:20px;font-weight:bold}
 .btn-secondary{padding:18px 45px;border-radius:15px;border:2px solid rgba(255,255,255,0.3);color:#fff;text-decoration:none;font-size:20px}
@@ -86,6 +88,7 @@ footer{padding:30px 20px}
 <div>
 <h1>Descubra suas <span>emoções</span><br>com Inteligência Artificial</h1>
 <p>Analise textos e voz em segundos. Entenda seus sentimentos com tecnologia de ponta.</p>
+<p class="contador">🔥 Junte-se a <strong>{{ total_usuarios }}</strong> pessoas que já descobriram suas emoções!</p>
 <div class="hero-btns">
 <a href="/cadastro" class="btn-primary">🚀 Começar Grátis</a>
 <a href="#como-funciona" class="btn-secondary">Ver como funciona</a>

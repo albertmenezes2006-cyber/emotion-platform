@@ -17,6 +17,7 @@ import os
 MP_ACCESS_TOKEN = "APP_USR-4193087911174356-070916-cefe9e3636798457e9e78f6036cd4500-3532571592"
 ADMIN_EMAIL = "albertmenezes2006@gmail.com"
 SENDGRID_API_KEY = "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"
+BASE_URL = "https://emotion-platform-albert.onrender.com"
 
 DATABASE_URL = "sqlite:///./emotion.db"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
@@ -32,7 +33,6 @@ class Usuario(Base):
     plano = Column(String, default="free")
     ref_code = Column(String, unique=True, nullable=True)
     indicado_por = Column(String, nullable=True)
-    comissao_total = Column(Integer, default=0)
     criado_em = Column(DateTime, default=datetime.now)
     analises = relationship("Analise", back_populates="usuario")
 
@@ -56,6 +56,11 @@ def hash_senha(senha):
 
 def verificar_senha(senha, hash):
     return pwd_context.verify(senha, hash)
+
+def gerar_ref_code(nome: str):
+    base = nome.lower().replace(" ", "")[:6]
+    sufixo = str(uuid.uuid4())[:4]
+    return f"{base}{sufixo}"
 
 app = FastAPI(title="Emotion Intelligence Platform", version="10.0")
 templates = Jinja2Templates(directory="templates")
@@ -85,14 +90,13 @@ def contar_analises_hoje(usuario_id: int, db: Session):
         Analise.criado_em >= datetime.combine(hoje, datetime.min.time())
     ).count()
 
-def gerar_ref_code(nome: str):
-    base = nome.lower().replace(" ", "")[:6]
-    sufixo = str(uuid.uuid4())[:4]
-    return f"{base}{sufixo}"
+def contar_total_usuarios(db: Session):
+    return db.query(Usuario).count()
 
-async def enviar_email_boas_vindas(nome: str, email: str):
+async def enviar_email_boas_vindas(nome: str, email: str, ref_code: str):
     try:
         sg = sendgrid.SendGridAPIClient(api_key=SENDGRID_API_KEY)
+        link_afiliado = f"{BASE_URL}/?ref={ref_code}"
         message = Mail(
             from_email=ADMIN_EMAIL,
             to_emails=email,
@@ -102,14 +106,42 @@ async def enviar_email_boas_vindas(nome: str, email: str):
             <h1 style="color:#00d2ff">🧠 Emotion Intelligence</h1>
             <h2>Olá, {nome}! 👋</h2>
             <p>Bem-vindo! Com o FREE você tem 10 análises por dia.</p>
-            <a href="https://emotion-platform-albert.onrender.com/planos"
+            <br>
+            <p><strong>💰 Seu link de afiliado:</strong></p>
+            <p style="background:#f5f5f5;padding:10px;border-radius:8px">{link_afiliado}</p>
+            <p>Compartilhe e ganhe 20% de comissão em cada venda!</p>
+            <br>
+            <a href="{BASE_URL}"
             style="background:#00d2ff;padding:15px 30px;border-radius:15px;color:#fff;text-decoration:none">
-            Ver Planos Premium</a>
+            Acessar Dashboard</a>
             </body></html>"""
         )
         sg.send(message)
     except Exception as e:
         print(f"Erro email: {e}")
+
+async def enviar_email_novo_cadastro(nome: str, email: str):
+    try:
+        sg = sendgrid.SendGridAPIClient(api_key=SENDGRID_API_KEY)
+        message = Mail(
+            from_email=ADMIN_EMAIL,
+            to_emails=ADMIN_EMAIL,
+            subject=f"🎉 Novo cadastro: {nome}",
+            html_content=f"""
+            <html><body style="font-family:sans-serif;padding:40px">
+            <h1 style="color:#00d2ff">🎉 Novo usuário cadastrado!</h1>
+            <p><strong>Nome:</strong> {nome}</p>
+            <p><strong>Email:</strong> {email}</p>
+            <p><strong>Data:</strong> {datetime.now().strftime("%d/%m/%Y %H:%M")}</p>
+            <br>
+            <a href="{BASE_URL}/admin"
+            style="background:#00d2ff;padding:15px 30px;border-radius:15px;color:#fff;text-decoration:none">
+            Ver Painel Admin</a>
+            </body></html>"""
+        )
+        sg.send(message)
+    except Exception as e:
+        print(f"Erro email admin: {e}")
 
 async def enviar_email_premium(nome: str, email: str):
     try:
@@ -123,7 +155,7 @@ async def enviar_email_premium(nome: str, email: str):
             <h1 style="color:#00d2ff">🧠 Emotion Intelligence</h1>
             <h2>Parabéns, {nome}! 🎉</h2>
             <p>Plano Premium ativado! Análises ilimitadas liberadas.</p>
-            <a href="https://emotion-platform-albert.onrender.com"
+            <a href="{BASE_URL}"
             style="background:#00d2ff;padding:15px 30px;border-radius:15px;color:#fff;text-decoration:none">
             Acessar Dashboard</a>
             </body></html>"""
@@ -202,7 +234,10 @@ def detectar_emocao(text):
 def index(request: Request, ref: str = None, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
     if not usuario:
-        response = templates.TemplateResponse(request, "index.html")
+        total_usuarios = contar_total_usuarios(db)
+        response = templates.TemplateResponse(request, "index.html", {
+            "total_usuarios": total_usuarios
+        })
         if ref:
             response.set_cookie(key="ref", value=ref, max_age=86400)
         return response
@@ -240,17 +275,29 @@ async def cadastro(background_tasks: BackgroundTasks, request: Request, nome: st
     ref_cookie = request.cookies.get("ref")
     ref_code = gerar_ref_code(nome)
     novo = Usuario(
-        nome=nome,
-        email=email,
-        senha=hash_senha(senha),
-        plano="free",
-        ref_code=ref_code,
-        indicado_por=ref_cookie
+        nome=nome, email=email, senha=hash_senha(senha),
+        plano="free", ref_code=ref_code, indicado_por=ref_cookie
     )
     db.add(novo)
     db.commit()
-    background_tasks.add_task(enviar_email_boas_vindas, nome, email)
-    return RedirectResponse(url="/login", status_code=302)
+    background_tasks.add_task(enviar_email_boas_vindas, nome, email, ref_code)
+    background_tasks.add_task(enviar_email_novo_cadastro, nome, email)
+    session_id = str(uuid.uuid4())
+    sessoes[session_id] = novo.id
+    response = RedirectResponse(url="/obrigado", status_code=302)
+    response.set_cookie(key="session_id", value=session_id)
+    return response
+
+@app.get("/obrigado", response_class=HTMLResponse)
+def obrigado(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return RedirectResponse(url="/login")
+    link_afiliado = f"{BASE_URL}/?ref={usuario.ref_code}"
+    return templates.TemplateResponse(request, "obrigado.html", {
+        "usuario": usuario,
+        "link_afiliado": link_afiliado
+    })
 
 @app.get("/logout")
 def logout(request: Request):
@@ -260,22 +307,6 @@ def logout(request: Request):
     response = RedirectResponse(url="/login")
     response.delete_cookie("session_id")
     return response
-
-@app.get("/afiliado", response_class=HTMLResponse)
-def afiliado_page(request: Request, db: Session = Depends(get_db)):
-    usuario = get_usuario_logado(request, db)
-    if not usuario:
-        return RedirectResponse(url="/login")
-    indicados = db.query(Usuario).filter(Usuario.indicado_por == usuario.ref_code).all()
-    indicados_premium = [u for u in indicados if u.plano == "premium"]
-    comissao = len(indicados_premium) * 49 * COMISSAO_PERCENT // 100
-    return templates.TemplateResponse(request, "afiliado.html", {
-        "usuario": usuario,
-        "total_indicados": len(indicados),
-        "indicados_premium": len(indicados_premium),
-        "comissao": comissao,
-        "link": f"https://emotion-platform-albert.onrender.com/?ref={usuario.ref_code}"
-    })
 
 @app.get("/perfil", response_class=HTMLResponse)
 def perfil_page(request: Request, db: Session = Depends(get_db)):
@@ -323,6 +354,22 @@ def perfil_update(request: Request, nome: str = Form(...), senha: str = Form("")
         "sucesso": "Perfil atualizado com sucesso!"
     })
 
+@app.get("/afiliado", response_class=HTMLResponse)
+def afiliado_page(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return RedirectResponse(url="/login")
+    indicados = db.query(Usuario).filter(Usuario.indicado_por == usuario.ref_code).all()
+    indicados_premium = [u for u in indicados if u.plano == "premium"]
+    comissao = len(indicados_premium) * 49 * COMISSAO_PERCENT // 100
+    return templates.TemplateResponse(request, "afiliado.html", {
+        "usuario": usuario,
+        "total_indicados": len(indicados),
+        "indicados_premium": len(indicados_premium),
+        "comissao": comissao,
+        "link": f"{BASE_URL}/?ref={usuario.ref_code}"
+    })
+
 @app.get("/analyze")
 def analyze(request: Request, text: str, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
@@ -334,8 +381,7 @@ def analyze(request: Request, text: str, db: Session = Depends(get_db)):
             raise HTTPException(status_code=429, detail="Limite atingido!")
     emocao = detectar_emocao(text)
     analise = Analise(
-        texto=text,
-        emocao=emocao.capitalize(),
+        texto=text, emocao=emocao.capitalize(),
         emoji=get_emoji(emocao),
         recomendacao=recomendacoes.get(emocao, ""),
         usuario_id=usuario.id
@@ -343,8 +389,7 @@ def analyze(request: Request, text: str, db: Session = Depends(get_db)):
     db.add(analise)
     db.commit()
     return {
-        "texto": text,
-        "emocao": emocao.capitalize(),
+        "texto": text, "emocao": emocao.capitalize(),
         "emoji": get_emoji(emocao),
         "recomendacao": recomendacoes.get(emocao, ""),
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -402,17 +447,13 @@ def checkout(request: Request, plano: str, db: Session = Depends(get_db)):
     try:
         sdk = mercadopago.SDK(MP_ACCESS_TOKEN)
         preference_data = {
-            "items": [{
-                "title": precos[plano]["nome"],
-                "quantity": 1,
-                "currency_id": "BRL",
-                "unit_price": float(precos[plano]["valor"])
-            }],
+            "items": [{"title": precos[plano]["nome"], "quantity": 1,
+                       "currency_id": "BRL", "unit_price": float(precos[plano]["valor"])}],
             "payer": {"email": usuario.email},
             "back_urls": {
-                "success": "https://emotion-platform-albert.onrender.com/sucesso",
-                "failure": "https://emotion-platform-albert.onrender.com/falha",
-                "pending": "https://emotion-platform-albert.onrender.com/pendente"
+                "success": f"{BASE_URL}/sucesso",
+                "failure": f"{BASE_URL}/falha",
+                "pending": f"{BASE_URL}/pendente"
             },
             "auto_return": "approved"
         }
@@ -436,22 +477,17 @@ def admin(request: Request, db: Session = Depends(get_db)):
     lista_usuarios = []
     for u in todos_usuarios:
         lista_usuarios.append({
-            "nome": u.nome,
-            "email": u.email,
-            "plano": u.plano,
+            "nome": u.nome, "email": u.email, "plano": u.plano,
             "total_analises": len(u.analises),
             "criado_em": u.criado_em.strftime("%d/%m/%Y"),
-            "ref_code": u.ref_code,
-            "indicado_por": u.indicado_por
+            "ref_code": u.ref_code, "indicado_por": u.indicado_por
         })
     return templates.TemplateResponse(request, "admin.html", {
-        "usuario": usuario,
-        "usuarios": lista_usuarios,
+        "usuario": usuario, "usuarios": lista_usuarios,
         "total_usuarios": len(todos_usuarios),
         "usuarios_free": usuarios_free,
         "usuarios_premium": usuarios_premium,
-        "total_analises": total_analises,
-        "receita": receita
+        "total_analises": total_analises, "receita": receita
     })
 
 @app.get("/sucesso", response_class=HTMLResponse)

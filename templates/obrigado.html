@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bem-vindo — Emotion Intelligence</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center}
+.container{max-width:700px;padding:40px 20px;text-align:center}
+.emoji{font-size:80px;margin-bottom:20px}
+h1{font-size:48px;font-weight:bold;margin-bottom:15px}
+h1 span{background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.subtitle{font-size:20px;color:rgba(255,255,255,0.6);margin-bottom:40px}
+.card{background:rgba(255,255,255,0.05);border-radius:20px;padding:40px;border:1px solid rgba(255,255,255,0.1);margin-bottom:30px}
+.card h2{font-size:24px;color:#00d2ff;margin-bottom:15px}
+.link-box{background:rgba(0,0,0,0.3);border-radius:12px;padding:15px 20px;font-size:14px;word-break:break-all;margin:15px 0;border:1px solid rgba(255,255,255,0.1)}
+.btn{display:inline-block;padding:18px 40px;border-radius:15px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);color:#fff;text-decoration:none;font-size:18px;font-weight:bold;margin:10px;cursor:pointer;border:none}
+.btn:hover{transform:translateY(-2px)}
+.btn-green{background:linear-gradient(90deg,#2ecc71,#27ae60)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-top:20px}
+.step{background:rgba(255,255,255,0.05);border-radius:12px;padding:20px;text-align:center}
+.step-icon{font-size:32px;margin-bottom:10px}
+.step p{font-size:13px;color:rgba(255,255,255,0.6)}
+.copied{color:#2ecc71;font-size:14px;margin-top:10px;display:none}
+.copied.show{display:block}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="emoji">🎉</div>
+<h1>Bem-vindo à <span>Emotion Intelligence!</span></h1>
+<p class="subtitle">Sua conta foi criada com sucesso! Agora vamos começar.</p>
+
+<div class="card">
+<h2>🚀 O que fazer agora:</h2>
+<div class="steps">
+<div class="step">
+<div class="step-icon">🔍</div>
+<p>Analise sua primeira emoção</p>
+</div>
+<div class="step">
+<div class="step-icon">📊</div>
+<p>Veja seus gráficos emocionais</p>
+</div>
+<div class="step">
+<div class="step-icon">💰</div>
+<p>Compartilhe seu link e ganhe</p>
+</div>
+<div class="step">
+<div class="step-icon">⭐</div>
+<p>Faça upgrade para Premium</p>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2>💰 Seu Link de Afiliado</h2>
+<p style="color:rgba(255,255,255,0.6);margin-bottom:10px">Compartilhe e ganhe 20% de comissão em cada venda!</p>
+<div class="link-box" id="linkAfiliado">{{ link_afiliado }}</div>
+<button class="btn btn-green" onclick="copiarLink()">📋 Copiar Link</button>
+<div class="copied" id="copied">✅ Link copiado! Agora compartilhe!</div>
+</div>
+
+<a href="/" class="btn">🧠 Ir para o Dashboard</a>
+</div>
+<script>
+function copiarLink(){
+var link=document.getElementById('linkAfiliado').textContent;
+navigator.clipboard.writeText(link).then(function(){
+document.getElementById('copied').classList.add('show');
+setTimeout(function(){document.getElementById('copied').classList.remove('show');},3000);
+});
+}
+</script>
+</body>
+</html>
