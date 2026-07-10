@@ -17,7 +17,7 @@ import uuid
 
 MP_ACCESS_TOKEN = "APP_USR-4193087911174356-070916-cefe9e3636798457e9e78f6036cd4500-3532571592"
 ADMIN_EMAIL = "albertmenezes2006@gmail.com"
-SENDGRID_API_KEY = "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"
+SENDGRID_API_KEY = " SG.1gLDQfckRHKrwE6_XCcaw.LOKQw6eBgj21PBfCXGbrBph9PqwRhPJV1GV8-dIY67w"
 BASE_URL = "https://emotion-platform-albert.onrender.com"
 
 DATABASE_URL = "sqlite:///./emotion.db"
