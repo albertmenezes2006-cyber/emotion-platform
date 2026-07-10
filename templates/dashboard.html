@@ -90,7 +90,6 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29
 </div>
 </nav>
 <div class="container">
-
 {% if usuario.plano == "free" %}
 <div class="limite-banner">
 <div class="limite-info">
@@ -107,7 +106,6 @@ Plano <span>FREE</span> — {{ analises_hoje }}/{{ limite_free }} análises hoje
 <a href="/planos" class="btn-upgrade">⭐ Ver Planos</a>
 </div>
 {% endif %}
-
 <div class="analyze-section">
 <h2>🔍 Analisar Emoção</h2>
 <div class="input-group">
@@ -130,7 +128,6 @@ Plano <span>FREE</span> — {{ analises_hoje }}/{{ limite_free }} análises hoje
 </div>
 </div>
 </div>
-
 <div class="dashboard-grid">
 <div class="card">
 <h3>📊 Total de Análises</h3>
@@ -145,17 +142,14 @@ Plano <span>FREE</span> — {{ analises_hoje }}/{{ limite_free }} análises hoje
 </div>
 </div>
 </div>
-
 <div class="grafico-card">
 <h3>📈 Gráfico de Emoções</h3>
 <canvas id="graficoEmocoes" height="100"></canvas>
 </div>
-
 <div class="grafico-card" style="margin-top:20px">
 <h3>🍩 Distribuição de Emoções</h3>
 <canvas id="graficoPizza" height="100"></canvas>
 </div>
-
 </div>
 <div class="footer">
 <p>Emotion Intelligence Platform 2026 — Todos os direitos reservados</p>
@@ -166,7 +160,6 @@ var graficoPizza=null;
 document.getElementById('btnAnalisar').addEventListener('click',analyzeText);
 document.getElementById('textInput').addEventListener('keypress',function(e){if(e.key==='Enter')analyzeText();});
 document.getElementById('btnMic').addEventListener('click',startVoice);
-
 function analyzeText(){
 var text=document.getElementById('textInput').value;
 if(!text)return;
@@ -187,7 +180,6 @@ document.getElementById('textInput').value='';
 loadStats();loadHistory();
 }).catch(function(){alert('Erro ao analisar');});
 }
-
 function startVoice(){
 var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 if(!SR){alert('Use o Chrome para reconhecimento de voz!');return;}
@@ -210,7 +202,6 @@ document.getElementById('btnMic').classList.remove('gravando');
 };
 r.onend=function(){document.getElementById('btnMic').classList.remove('gravando');};
 }
-
 function loadStats(){
 fetch('/stats').then(function(r){return r.json();}).then(function(data){
 if(data.total_analises){
@@ -228,7 +219,6 @@ graficoPizza=new Chart(ctx2,{type:'doughnut',data:{labels:labels,datasets:[{data
 }
 }).catch(function(){});
 }
-
 function loadHistory(){
 fetch('/historico').then(function(r){return r.json();}).then(function(data){
 if(data.total>0){
@@ -243,10 +233,22 @@ document.getElementById('historyList').innerHTML=html;
 }
 }).catch(function(){});
 }
-
 if('serviceWorker' in navigator){navigator.serviceWorker.register('/static/sw.js').catch(function(){});}
 loadStats();
 loadHistory();
 </script>
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/6a50994525b1321d4287f3fc/1jt5ddei4';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
 </body>
 </html>
