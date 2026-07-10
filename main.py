@@ -2,7 +2,6 @@ from fastapi import FastAPI, HTTPException, Request, Depends, Form, BackgroundTa
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session, relationship
@@ -10,21 +9,13 @@ from passlib.context import CryptContext
 from datetime import datetime, date
 import unicodedata
 import mercadopago
+import sendgrid
+from sendgrid.helpers.mail import Mail
 import os
 
 MP_ACCESS_TOKEN = "APP_USR-4193087911174356-070916-cefe9e3636798457e9e78f6036cd4500-3532571592"
 ADMIN_EMAIL = "albertmenezes2006@gmail.com"
-
-conf = ConnectionConfig(
-    MAIL_USERNAME="albertmenezes2006@gmail.com",
-    MAIL_PASSWORD="mqbzuhgkmkmziehs",
-    MAIL_FROM="albertmenezes2006@gmail.com",
-    MAIL_PORT=465,
-    MAIL_SERVER="smtp.gmail.com",
-    MAIL_STARTTLS=False,
-    MAIL_SSL_TLS=True,
-    USE_CREDENTIALS=True
-)
+SENDGRID_API_KEY = "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"
 
 DATABASE_URL = "sqlite:///./emotion.db"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
@@ -91,41 +82,72 @@ def contar_analises_hoje(usuario_id: int, db: Session):
 
 async def enviar_email_boas_vindas(nome: str, email: str):
     try:
-        message = MessageSchema(
-            subject="🧠 Bem-vindo ao Emotion Intelligence!",
-            recipients=[email],
-            body=f"""<html><body style="font-family:sans-serif;padding:40px">
+        sg = sendgrid.SendGridAPIClient(api_key=SENDGRID_API_KEY)
+        message = Mail(
+            from_email=ADMIN_EMAIL,
+            to_emails=email,
+            subject="🧠 Bem-vindo ao Emotion Intelligence Platform!",
+            html_content=f"""
+            <html><body style="font-family:sans-serif;padding:40px">
             <h1 style="color:#00d2ff">🧠 Emotion Intelligence</h1>
             <h2>Olá, {nome}! 👋</h2>
-            <p>Bem-vindo! Com o FREE você tem 10 análises por dia.</p>
+            <p style="font-size:18px">Bem-vindo à plataforma de inteligência emocional!</p>
+            <br>
+            <p>Com o seu plano FREE você pode:</p>
+            <ul>
+            <li>✅ 10 análises por dia</li>
+            <li>✅ Histórico de análises</li>
+            <li>✅ Estatísticas emocionais</li>
+            <li>✅ Análise por voz</li>
+            </ul>
+            <br>
             <a href="https://emotion-platform-albert.onrender.com/planos"
-            style="background:#00d2ff;padding:15px 30px;border-radius:15px;color:#fff;text-decoration:none">
-            Ver Planos Premium</a>
-            </body></html>""",
-            subtype="html"
+            style="background:#00d2ff;padding:15px 30px;border-radius:15px;color:#fff;text-decoration:none;font-size:16px">
+            🚀 Ver Planos Premium
+            </a>
+            <br><br>
+            <p style="color:#666;font-size:12px">Emotion Intelligence Platform © 2026</p>
+            </body></html>
+            """
         )
-        fm = FastMail(conf)
-        await fm.send_message(message)
+        sg.send(message)
+        print(f"Email boas-vindas enviado para {email}")
     except Exception as e:
         print(f"Erro email: {e}")
 
 async def enviar_email_premium(nome: str, email: str):
     try:
-        message = MessageSchema(
+        sg = sendgrid.SendGridAPIClient(api_key=SENDGRID_API_KEY)
+        message = Mail(
+            from_email=ADMIN_EMAIL,
+            to_emails=email,
             subject="⭐ Seu plano Premium está ativo!",
-            recipients=[email],
-            body=f"""<html><body style="font-family:sans-serif;padding:40px">
+            html_content=f"""
+            <html><body style="font-family:sans-serif;padding:40px">
             <h1 style="color:#00d2ff">🧠 Emotion Intelligence</h1>
             <h2>Parabéns, {nome}! 🎉</h2>
-            <p>Plano Premium ativado! Análises ilimitadas liberadas.</p>
+            <p style="font-size:18px">Seu plano Premium foi ativado com sucesso!</p>
+            <br>
+            <p>Agora você tem acesso a:</p>
+            <ul>
+            <li>✅ Análises ilimitadas</li>
+            <li>✅ Histórico completo</li>
+            <li>✅ Gráficos avançados</li>
+            <li>✅ Análise por voz</li>
+            <li>✅ Suporte prioritário</li>
+            </ul>
+            <br>
             <a href="https://emotion-platform-albert.onrender.com"
-            style="background:#00d2ff;padding:15px 30px;border-radius:15px;color:#fff;text-decoration:none">
-            Acessar Dashboard</a>
-            </body></html>""",
-            subtype="html"
+            style="background:#00d2ff;padding:15px 30px;border-radius:15px;color:#fff;text-decoration:none;font-size:16px">
+            🚀 Acessar Dashboard
+            </a>
+            <br><br>
+            <p style="color:#666;font-size:12px">Emotion Intelligence Platform © 2026</p>
+            </body></html>
+            """
         )
-        fm = FastMail(conf)
-        await fm.send_message(message)
+        sg.send(message)
+        print(f"Email premium enviado para {email}")
     except Exception as e:
         print(f"Erro email: {e}")
 
@@ -436,7 +458,7 @@ async def sucesso(background_tasks: BackgroundTasks, request: Request, db: Sessi
     a{background:linear-gradient(90deg,#00d2ff,#3a7bd5);padding:15px 40px;border-radius:15px;color:#fff;text-decoration:none;font-size:18px}
     </style></head><body>
     <h1>✅ Pagamento aprovado!</h1>
-    <p style='font-size:20px;margin-bottom:30px'>Plano Premium ativado! 📧</p>
+    <p style='font-size:20px;margin-bottom:30px'>Plano Premium ativado! Verifique seu email. 📧</p>
     <a href='/'>Ir para o Dashboard</a>
     </body></html>""")
 

@@ -62,6 +62,7 @@ pydantic-settings==2.14.2
 pydantic_core==2.46.4
 Pygments==2.20.0
 python-dotenv==1.2.2
+python-http-client==3.3.7
 python-jose==3.5.0
 python-multipart==0.0.32
 PyYAML==6.0.3
@@ -70,6 +71,7 @@ requests==2.34.2
 rich==15.0.0
 rsa==4.9.1
 safetensors==0.8.0
+sendgrid==6.12.5
 setuptools==83.0.0
 shellingham==1.5.4
 six==1.17.0
@@ -85,3 +87,4 @@ typing-inspection==0.4.2
 typing_extensions==4.16.0
 urllib3==2.7.0
 uvicorn==0.51.0
+Werkzeug==3.1.8
