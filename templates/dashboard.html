@@ -12,10 +12,12 @@
 body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh}
 .navbar{background:rgba(0,0,0,0.3);padding:20px 40px;display:flex;justify-content:space-between;align-items:center}
 .navbar h1{font-size:24px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.nav-right{display:flex;align-items:center;gap:15px}
+.nav-right{display:flex;align-items:center;gap:15px;flex-wrap:wrap}
 .user{color:rgba(255,255,255,0.6);font-size:14px}
 .version{background:#3a7bd5;padding:5px 15px;border-radius:20px;font-size:12px}
 .btn-planos{background:linear-gradient(90deg,#00d2ff,#3a7bd5);padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px;font-weight:bold}
+.btn-perfil{background:rgba(255,255,255,0.1);padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px}
+.btn-admin{background:#f39c12;padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px;font-weight:bold}
 .logout{background:#e74c3c;padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px}
 .container{max-width:1200px;margin:0 auto;padding:40px 20px}
 .plano-banner{background:linear-gradient(90deg,rgba(0,210,255,0.1),rgba(58,123,213,0.1));border:1px solid rgba(0,210,255,0.3);border-radius:15px;padding:20px 30px;margin-bottom:30px;display:flex;justify-content:space-between;align-items:center}
@@ -29,8 +31,8 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29
 .progresso-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#2ecc71,#e74c3c)}
 .analyze-section{background:rgba(255,255,255,0.05);border-radius:20px;padding:40px;margin-bottom:30px;border:1px solid rgba(255,255,255,0.1)}
 .analyze-section h2{margin-bottom:20px;font-size:28px}
-.input-group{display:flex;gap:15px;margin-bottom:20px}
-.input-group input{flex:1;padding:18px 25px;border-radius:15px;border:2px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#fff;font-size:18px;outline:none}
+.input-group{display:flex;gap:15px;margin-bottom:20px;flex-wrap:wrap}
+.input-group input{flex:1;padding:18px 25px;border-radius:15px;border:2px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#fff;font-size:18px;outline:none;min-width:200px}
 .input-group input:focus{border-color:#3a7bd5}
 .input-group input::placeholder{color:rgba(255,255,255,0.4)}
 .btn{padding:18px 30px;border-radius:15px;border:none;background:linear-gradient(90deg,#00d2ff,#3a7bd5);color:#fff;font-size:18px;font-weight:bold;cursor:pointer}
@@ -38,6 +40,7 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29
 .btn-mic{background:linear-gradient(90deg,#e67e22,#e74c3c);padding:18px 25px;border-radius:15px;border:none;color:#fff;font-size:22px;cursor:pointer}
 .btn-mic.gravando{animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.status-mic{color:rgba(255,255,255,0.5);font-size:14px;margin-top:10px;min-height:20px}
 .result-card{background:rgba(255,255,255,0.08);border-radius:20px;padding:30px;margin-top:20px;display:none;border:1px solid rgba(255,255,255,0.1)}
 .result-card.show{display:block}
 .emotion-display{text-align:center;padding:30px}
@@ -68,16 +71,19 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29
 .emotion-gratidao{background:rgba(46,204,113,0.3);color:#2ecc71}
 .emotion-solidao{background:rgba(149,165,166,0.3);color:#95a5a6}
 .emotion-euforia{background:rgba(255,107,129,0.3);color:#ff6b81}
-.status-mic{text-align:center;color:rgba(255,255,255,0.5);font-size:14px;margin-top:10px;min-height:20px}
 </style>
 </head>
 <body>
 <nav class="navbar">
 <h1>🧠 Emotion Intelligence Platform</h1>
 <div class="nav-right">
-<span class="user">Ola, {{ usuario.nome }}!</span>
-<span class="version">v8.0 PRO</span>
+<span class="user">Olá, {{ usuario.nome }}!</span>
+<span class="version">v9.0 PRO</span>
+<a href="/perfil" class="btn-perfil">👤 Perfil</a>
 <a href="/planos" class="btn-planos">⭐ Planos</a>
+{% if usuario.email == "albertmenezes2006@gmail.com" %}
+<a href="/admin" class="btn-admin">🔐 Admin</a>
+{% endif %}
 <a href="/logout" class="logout">Sair</a>
 </div>
 </nav>
@@ -155,108 +161,88 @@ Plano <span>FREE</span> — {{ analises_hoje }}/{{ limite_free }} análises hoje
 <script>
 var graficoEmocoes=null;
 var graficoPizza=null;
-
 document.getElementById('btnAnalisar').addEventListener('click',analyzeText);
 document.getElementById('textInput').addEventListener('keypress',function(e){if(e.key==='Enter')analyzeText();});
 document.getElementById('btnMic').addEventListener('click',startVoice);
 
 function analyzeText(){
-    var text=document.getElementById('textInput').value;
-    if(!text)return;
-    fetch('/analyze?text='+encodeURIComponent(text))
-    .then(function(r){
-        if(r.status===429){
-            document.getElementById('alertaLimite').classList.add('show');
-            document.getElementById('resultCard').classList.remove('show');
-            return null;
-        }
-        return r.json();
-    })
-    .then(function(data){
-        if(!data)return;
-        document.getElementById('resultEmoji').textContent=data.emoji;
-        document.getElementById('resultEmotion').textContent=data.emocao;
-        document.getElementById('resultRec').textContent=data.recomendacao;
-        document.getElementById('resultTime').textContent=data.timestamp;
-        document.getElementById('resultCard').classList.add('show');
-        document.getElementById('alertaLimite').classList.remove('show');
-        document.getElementById('textInput').value='';
-        loadStats();
-        loadHistory();
-    })
-    .catch(function(){alert('Erro ao analisar');});
+var text=document.getElementById('textInput').value;
+if(!text)return;
+fetch('/analyze?text='+encodeURIComponent(text))
+.then(function(r){
+if(r.status===429){document.getElementById('alertaLimite').classList.add('show');document.getElementById('resultCard').classList.remove('show');return null;}
+return r.json();
+})
+.then(function(data){
+if(!data)return;
+document.getElementById('resultEmoji').textContent=data.emoji;
+document.getElementById('resultEmotion').textContent=data.emocao;
+document.getElementById('resultRec').textContent=data.recomendacao;
+document.getElementById('resultTime').textContent=data.timestamp;
+document.getElementById('resultCard').classList.add('show');
+document.getElementById('alertaLimite').classList.remove('show');
+document.getElementById('textInput').value='';
+loadStats();loadHistory();
+}).catch(function(){alert('Erro ao analisar');});
 }
 
 function startVoice(){
-    var SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
-    if(!SpeechRecognition){
-        alert('Seu navegador nao suporta reconhecimento de voz. Use o Chrome!');
-        return;
-    }
-    var recognition=new SpeechRecognition();
-    recognition.lang='pt-BR';
-    recognition.interimResults=false;
-    recognition.maxAlternatives=1;
-    document.getElementById('btnMic').classList.add('gravando');
-    document.getElementById('statusMic').textContent='🔴 Gravando... Fale agora!';
-    recognition.start();
-    recognition.onresult=function(event){
-        var transcript=event.results[0][0].transcript;
-        document.getElementById('textInput').value=transcript;
-        document.getElementById('statusMic').textContent='✅ Detectado: '+transcript;
-        document.getElementById('btnMic').classList.remove('gravando');
-        analyzeText();
-    };
-    recognition.onerror=function(){
-        document.getElementById('statusMic').textContent='❌ Erro ao gravar. Tente novamente.';
-        document.getElementById('btnMic').classList.remove('gravando');
-    };
-    recognition.onend=function(){
-        document.getElementById('btnMic').classList.remove('gravando');
-    };
+var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(!SR){alert('Use o Chrome para reconhecimento de voz!');return;}
+var r=new SR();
+r.lang='pt-BR';
+r.interimResults=false;
+document.getElementById('btnMic').classList.add('gravando');
+document.getElementById('statusMic').textContent='🔴 Gravando... Fale agora!';
+r.start();
+r.onresult=function(e){
+var t=e.results[0][0].transcript;
+document.getElementById('textInput').value=t;
+document.getElementById('statusMic').textContent='✅ Detectado: '+t;
+document.getElementById('btnMic').classList.remove('gravando');
+analyzeText();
+};
+r.onerror=function(){
+document.getElementById('statusMic').textContent='❌ Erro. Tente novamente.';
+document.getElementById('btnMic').classList.remove('gravando');
+};
+r.onend=function(){document.getElementById('btnMic').classList.remove('gravando');};
 }
 
 function loadStats(){
-    fetch('/stats')
-    .then(function(r){return r.json();})
-    .then(function(data){
-        if(data.total_analises){
-            document.getElementById('totalAnalyses').textContent=data.total_analises;
-            document.getElementById('maisFrequente').textContent='Emoção mais frequente: '+data.mais_frequente;
-            var labels=Object.keys(data.emocoes_detectadas);
-            var valores=Object.values(data.emocoes_detectadas);
-            var cores=['#2ecc71','#3498db','#e74c3c','#9b59b6','#f1c40f','#27ae60','#ff6b81','#95a5a6','#00d2ff','#f39c12','#1abc9c','#e67e22'];
-            if(graficoEmocoes){graficoEmocoes.destroy();}
-            var ctx1=document.getElementById('graficoEmocoes').getContext('2d');
-            graficoEmocoes=new Chart(ctx1,{type:'bar',data:{labels:labels,datasets:[{label:'Quantidade',data:valores,backgroundColor:cores,borderRadius:10}]},options:{plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#fff'},grid:{color:'rgba(255,255,255,0.05)'}},y:{ticks:{color:'#fff'},grid:{color:'rgba(255,255,255,0.05)'}}}}});
-            if(graficoPizza){graficoPizza.destroy();}
-            var ctx2=document.getElementById('graficoPizza').getContext('2d');
-            graficoPizza=new Chart(ctx2,{type:'doughnut',data:{labels:labels,datasets:[{data:valores,backgroundColor:cores,borderWidth:0}]},options:{plugins:{legend:{labels:{color:'#fff'},position:'right'}}}});
-        }
-    }).catch(function(){});
+fetch('/stats').then(function(r){return r.json();}).then(function(data){
+if(data.total_analises){
+document.getElementById('totalAnalyses').textContent=data.total_analises;
+document.getElementById('maisFrequente').textContent='Emoção mais frequente: '+data.mais_frequente;
+var labels=Object.keys(data.emocoes_detectadas);
+var valores=Object.values(data.emocoes_detectadas);
+var cores=['#2ecc71','#3498db','#e74c3c','#9b59b6','#f1c40f','#27ae60','#ff6b81','#95a5a6','#00d2ff','#f39c12','#1abc9c','#e67e22'];
+if(graficoEmocoes){graficoEmocoes.destroy();}
+var ctx1=document.getElementById('graficoEmocoes').getContext('2d');
+graficoEmocoes=new Chart(ctx1,{type:'bar',data:{labels:labels,datasets:[{label:'Qtd',data:valores,backgroundColor:cores,borderRadius:10}]},options:{plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#fff'},grid:{color:'rgba(255,255,255,0.05)'}},y:{ticks:{color:'#fff'},grid:{color:'rgba(255,255,255,0.05)'}}}}});
+if(graficoPizza){graficoPizza.destroy();}
+var ctx2=document.getElementById('graficoPizza').getContext('2d');
+graficoPizza=new Chart(ctx2,{type:'doughnut',data:{labels:labels,datasets:[{data:valores,backgroundColor:cores,borderWidth:0}]},options:{plugins:{legend:{labels:{color:'#fff'},position:'right'}}}});
+}
+}).catch(function(){});
 }
 
 function loadHistory(){
-    fetch('/historico')
-    .then(function(r){return r.json();})
-    .then(function(data){
-        if(data.total>0){
-            var html='';
-            var items=data.analises.slice().reverse().slice(0,10);
-            for(var i=0;i<items.length;i++){
-                var item=items[i];
-                var cls='emotion-'+item.emocao.toLowerCase();
-                html+='<div class="history-item"><span class="history-text">'+item.texto+'</span><span class="history-emotion '+cls+'">'+item.emoji+' '+item.emocao+'</span></div>';
-            }
-            document.getElementById('historyList').innerHTML=html;
-        }
-    }).catch(function(){});
+fetch('/historico').then(function(r){return r.json();}).then(function(data){
+if(data.total>0){
+var html='';
+var items=data.analises.slice().reverse().slice(0,10);
+for(var i=0;i<items.length;i++){
+var item=items[i];
+var cls='emotion-'+item.emocao.toLowerCase();
+html+='<div class="history-item"><span class="history-text">'+item.texto+'</span><span class="history-emotion '+cls+'">'+item.emoji+' '+item.emocao+'</span></div>';
+}
+document.getElementById('historyList').innerHTML=html;
+}
+}).catch(function(){});
 }
 
-if('serviceWorker' in navigator){
-    navigator.serviceWorker.register('/static/sw.js').catch(function(){});
-}
-
+if('serviceWorker' in navigator){navigator.serviceWorker.register('/static/sw.js').catch(function(){});}
 loadStats();
 loadHistory();
 </script>

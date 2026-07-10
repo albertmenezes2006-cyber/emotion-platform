@@ -92,19 +92,16 @@ def contar_analises_hoje(usuario_id: int, db: Session):
 async def enviar_email_boas_vindas(nome: str, email: str):
     try:
         message = MessageSchema(
-            subject="🧠 Bem-vindo ao Emotion Intelligence Platform!",
+            subject="🧠 Bem-vindo ao Emotion Intelligence!",
             recipients=[email],
-            body=f"""
-            <html><body style="font-family:sans-serif;padding:40px">
+            body=f"""<html><body style="font-family:sans-serif;padding:40px">
             <h1 style="color:#00d2ff">🧠 Emotion Intelligence</h1>
             <h2>Olá, {nome}! 👋</h2>
             <p>Bem-vindo! Com o FREE você tem 10 análises por dia.</p>
             <a href="https://emotion-platform-albert.onrender.com/planos"
             style="background:#00d2ff;padding:15px 30px;border-radius:15px;color:#fff;text-decoration:none">
-            Ver Planos Premium
-            </a>
-            </body></html>
-            """,
+            Ver Planos Premium</a>
+            </body></html>""",
             subtype="html"
         )
         fm = FastMail(conf)
@@ -117,17 +114,14 @@ async def enviar_email_premium(nome: str, email: str):
         message = MessageSchema(
             subject="⭐ Seu plano Premium está ativo!",
             recipients=[email],
-            body=f"""
-            <html><body style="font-family:sans-serif;padding:40px">
+            body=f"""<html><body style="font-family:sans-serif;padding:40px">
             <h1 style="color:#00d2ff">🧠 Emotion Intelligence</h1>
             <h2>Parabéns, {nome}! 🎉</h2>
             <p>Plano Premium ativado! Análises ilimitadas liberadas.</p>
             <a href="https://emotion-platform-albert.onrender.com"
             style="background:#00d2ff;padding:15px 30px;border-radius:15px;color:#fff;text-decoration:none">
-            Acessar Dashboard
-            </a>
-            </body></html>
-            """,
+            Acessar Dashboard</a>
+            </body></html>""",
             subtype="html"
         )
         fm = FastMail(conf)
@@ -252,6 +246,52 @@ def logout(request: Request):
     response = RedirectResponse(url="/login")
     response.delete_cookie("session_id")
     return response
+
+@app.get("/perfil", response_class=HTMLResponse)
+def perfil_page(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return RedirectResponse(url="/login")
+    total_analises = db.query(Analise).filter(Analise.usuario_id == usuario.id).count()
+    analises_hoje = contar_analises_hoje(usuario.id, db)
+    dias_cadastrado = (datetime.now() - usuario.criado_em).days
+    return templates.TemplateResponse(request, "perfil.html", {
+        "usuario": usuario,
+        "total_analises": total_analises,
+        "analises_hoje": analises_hoje,
+        "dias_cadastrado": dias_cadastrado
+    })
+
+@app.post("/perfil")
+def perfil_update(request: Request, nome: str = Form(...), senha: str = Form(""), confirmar_senha: str = Form(""), db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return RedirectResponse(url="/login")
+    if senha and senha != confirmar_senha:
+        total_analises = db.query(Analise).filter(Analise.usuario_id == usuario.id).count()
+        analises_hoje = contar_analises_hoje(usuario.id, db)
+        dias_cadastrado = (datetime.now() - usuario.criado_em).days
+        return templates.TemplateResponse(request, "perfil.html", {
+            "usuario": usuario,
+            "total_analises": total_analises,
+            "analises_hoje": analises_hoje,
+            "dias_cadastrado": dias_cadastrado,
+            "erro": "As senhas não coincidem!"
+        })
+    usuario.nome = nome
+    if senha:
+        usuario.senha = hash_senha(senha)
+    db.commit()
+    total_analises = db.query(Analise).filter(Analise.usuario_id == usuario.id).count()
+    analises_hoje = contar_analises_hoje(usuario.id, db)
+    dias_cadastrado = (datetime.now() - usuario.criado_em).days
+    return templates.TemplateResponse(request, "perfil.html", {
+        "usuario": usuario,
+        "total_analises": total_analises,
+        "analises_hoje": analises_hoje,
+        "dias_cadastrado": dias_cadastrado,
+        "sucesso": "Perfil atualizado com sucesso!"
+    })
 
 @app.get("/analyze")
 def analyze(request: Request, text: str, db: Session = Depends(get_db)):
@@ -398,8 +438,7 @@ async def sucesso(background_tasks: BackgroundTasks, request: Request, db: Sessi
     <h1>✅ Pagamento aprovado!</h1>
     <p style='font-size:20px;margin-bottom:30px'>Plano Premium ativado! 📧</p>
     <a href='/'>Ir para o Dashboard</a>
-    </body></html>
-    """)
+    </body></html>""")
 
 @app.get("/falha", response_class=HTMLResponse)
 def falha(request: Request):
@@ -411,8 +450,7 @@ def falha(request: Request):
     </style></head><body>
     <h1>❌ Pagamento falhou!</h1>
     <a href='/planos'>Tentar novamente</a>
-    </body></html>
-    """)
+    </body></html>""")
 
 @app.get("/pendente", response_class=HTMLResponse)
 def pendente(request: Request):
@@ -424,5 +462,4 @@ def pendente(request: Request):
     </style></head><body>
     <h1>⏳ Pagamento pendente!</h1>
     <a href='/'>Voltar ao Dashboard</a>
-    </body></html>
-    """)
+    </body></html>""")
