@@ -1,6 +1,7 @@
-from fastapi import FastAPI, HTTPException, Request, Depends, Form
+from fastapi import FastAPI, HTTPException, Request, Depends, Form, BackgroundTasks
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
+from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session, relationship
@@ -11,6 +12,17 @@ import mercadopago
 import os
 
 MP_ACCESS_TOKEN = "APP_USR-4193087911174356-070916-cefe9e3636798457e9e78f6036cd4500-3532571592"
+
+conf = ConnectionConfig(
+    MAIL_USERNAME="albertmenezes2006@gmail.com",
+    MAIL_PASSWORD="mqbzuhgkmkmziehs",
+    MAIL_FROM="albertmenezes2006@gmail.com",
+    MAIL_PORT=587,
+    MAIL_SERVER="smtp.gmail.com",
+    MAIL_STARTTLS=True,
+    MAIL_SSL_TLS=False,
+    USE_CREDENTIALS=True
+)
 
 DATABASE_URL = "sqlite:///./emotion.db"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
@@ -48,10 +60,9 @@ def hash_senha(senha):
 def verificar_senha(senha, hash):
     return pwd_context.verify(senha, hash)
 
-app = FastAPI(title="Emotion Intelligence Platform", version="6.0")
+app = FastAPI(title="Emotion Intelligence Platform", version="7.0")
 templates = Jinja2Templates(directory="templates")
 sessoes = {}
-
 LIMITE_FREE = 10
 
 def get_db():
@@ -75,6 +86,75 @@ def contar_analises_hoje(usuario_id: int, db: Session):
         Analise.criado_em >= datetime.combine(hoje, datetime.min.time())
     ).count()
 
+async def enviar_email_boas_vindas(nome: str, email: str):
+    try:
+        message = MessageSchema(
+            subject="🧠 Bem-vindo ao Emotion Intelligence Platform!",
+            recipients=[email],
+            body=f"""
+            <html>
+            <body style="font-family:sans-serif;background:#0f0c29;color:#fff;padding:40px">
+            <h1 style="color:#00d2ff">🧠 Emotion Intelligence Platform</h1>
+            <h2>Olá, {nome}! 👋</h2>
+            <p style="font-size:18px">Bem-vindo à plataforma de inteligência emocional!</p>
+            <br>
+            <p>Com o seu plano FREE você pode:</p>
+            <ul>
+            <li>✅ 10 análises por dia</li>
+            <li>✅ Histórico de análises</li>
+            <li>✅ Estatísticas emocionais</li>
+            </ul>
+            <br>
+            <a href="https://emotion-platform-albert.onrender.com/planos"
+            style="background:#00d2ff;padding:15px 30px;border-radius:15px;color:#fff;text-decoration:none">
+            🚀 Ver Planos Premium
+            </a>
+            <br><br>
+            <p style="color:#666">Emotion Intelligence Platform © 2026</p>
+            </body></html>
+            """,
+            subtype="html"
+        )
+        fm = FastMail(conf)
+        await fm.send_message(message)
+    except Exception as e:
+        print(f"Erro email: {e}")
+
+async def enviar_email_premium(nome: str, email: str):
+    try:
+        message = MessageSchema(
+            subject="⭐ Seu plano Premium está ativo!",
+            recipients=[email],
+            body=f"""
+            <html>
+            <body style="font-family:sans-serif;background:#0f0c29;color:#fff;padding:40px">
+            <h1 style="color:#00d2ff">🧠 Emotion Intelligence Platform</h1>
+            <h2>Parabéns, {nome}! 🎉</h2>
+            <p style="font-size:18px">Seu plano Premium foi ativado com sucesso!</p>
+            <br>
+            <p>Agora você tem acesso a:</p>
+            <ul>
+            <li>✅ Análises ilimitadas</li>
+            <li>✅ Histórico completo</li>
+            <li>✅ Gráficos avançados</li>
+            <li>✅ Suporte prioritário</li>
+            </ul>
+            <br>
+            <a href="https://emotion-platform-albert.onrender.com"
+            style="background:#00d2ff;padding:15px 30px;border-radius:15px;color:#fff;text-decoration:none">
+            🚀 Acessar Dashboard
+            </a>
+            <br><br>
+            <p style="color:#666">Emotion Intelligence Platform © 2026</p>
+            </body></html>
+            """,
+            subtype="html"
+        )
+        fm = FastMail(conf)
+        await fm.send_message(message)
+    except Exception as e:
+        print(f"Erro email: {e}")
+
 palavras_emocoes = {
     "alegria": ["feliz", "alegre", "contente", "animado", "otimo", "maravilhoso",
                 "incrivel", "satisfeito", "radiante", "euforico", "empolgado",
@@ -95,13 +175,11 @@ palavras_emocoes = {
     "amor": ["amo", "amar", "amor", "carinho", "apaixonado", "ternura",
              "beijo", "afetuoso", "estima", "quero"],
     "esperanca": ["esperanca", "esperancoso", "otimista", "acredito",
-                  "vai melhorar", "confiante", "positivo"],
+                  "confiante", "positivo"],
     "gratidao": ["grato", "agradecido", "obrigado", "gratidao",
                  "reconhecido", "valorizando"],
-    "solidao": ["sozinho", "isolado", "abandonado", "sem amigos",
-                "ninguem", "excluido"],
-    "euforia": ["euforico", "empolgado", "animadissimo", "incrivel",
-                "fantastico", "extraordinario"]
+    "solidao": ["sozinho", "isolado", "abandonado", "ninguem", "excluido"],
+    "euforia": ["euforico", "empolgado", "animadissimo", "fantastico", "extraordinario"]
 }
 
 recomendacoes = {
@@ -176,13 +254,14 @@ def cadastro_page(request: Request):
     return templates.TemplateResponse(request, "cadastro.html")
 
 @app.post("/cadastro")
-def cadastro(request: Request, nome: str = Form(...), email: str = Form(...), senha: str = Form(...), db: Session = Depends(get_db)):
+async def cadastro(background_tasks: BackgroundTasks, request: Request, nome: str = Form(...), email: str = Form(...), senha: str = Form(...), db: Session = Depends(get_db)):
     existe = db.query(Usuario).filter(Usuario.email == email).first()
     if existe:
         return templates.TemplateResponse(request, "cadastro.html", {"erro": "Email já cadastrado"})
     novo = Usuario(nome=nome, email=email, senha=hash_senha(senha), plano="free")
     db.add(novo)
     db.commit()
+    background_tasks.add_task(enviar_email_boas_vindas, nome, email)
     return RedirectResponse(url="/login", status_code=302)
 
 @app.get("/logout")
@@ -202,10 +281,7 @@ def analyze(request: Request, text: str, db: Session = Depends(get_db)):
     if usuario.plano == "free":
         analises_hoje = contar_analises_hoje(usuario.id, db)
         if analises_hoje >= LIMITE_FREE:
-            raise HTTPException(
-                status_code=429,
-                detail=f"Limite de {LIMITE_FREE} análises diárias atingido! Faça upgrade para Premium."
-            )
+            raise HTTPException(status_code=429, detail=f"Limite atingido!")
     emocao = detectar_emocao(text)
     analise = Analise(
         texto=text,
@@ -297,21 +373,20 @@ def checkout(request: Request, plano: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/sucesso", response_class=HTMLResponse)
-def sucesso(request: Request, db: Session = Depends(get_db)):
+async def sucesso(background_tasks: BackgroundTasks, request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
     if usuario:
         usuario.plano = "premium"
         db.commit()
+        background_tasks.add_task(enviar_email_premium, usuario.nome, usuario.email)
     return HTMLResponse("""
-    <html>
-    <head><meta charset='UTF-8'><style>
+    <html><head><meta charset='UTF-8'><style>
     body{font-family:sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63);color:#fff;text-align:center;padding-top:100px}
     h1{font-size:48px;margin-bottom:20px}
     a{background:linear-gradient(90deg,#00d2ff,#3a7bd5);padding:15px 40px;border-radius:15px;color:#fff;text-decoration:none;font-size:18px}
-    </style></head>
-    <body>
+    </style></head><body>
     <h1>✅ Pagamento aprovado!</h1>
-    <p style='font-size:20px;margin-bottom:30px'>Seu plano foi atualizado para Premium!</p>
+    <p style='font-size:20px;margin-bottom:30px'>Plano Premium ativado! Verifique seu email. 📧</p>
     <a href='/'>Ir para o Dashboard</a>
     </body></html>
     """)
@@ -319,13 +394,11 @@ def sucesso(request: Request, db: Session = Depends(get_db)):
 @app.get("/falha", response_class=HTMLResponse)
 def falha(request: Request):
     return HTMLResponse("""
-    <html>
-    <head><meta charset='UTF-8'><style>
+    <html><head><meta charset='UTF-8'><style>
     body{font-family:sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63);color:#fff;text-align:center;padding-top:100px}
     h1{font-size:48px;margin-bottom:20px}
     a{background:#e74c3c;padding:15px 40px;border-radius:15px;color:#fff;text-decoration:none;font-size:18px}
-    </style></head>
-    <body>
+    </style></head><body>
     <h1>❌ Pagamento falhou!</h1>
     <p style='font-size:20px;margin-bottom:30px'>Tente novamente.</p>
     <a href='/planos'>Tentar novamente</a>
@@ -335,13 +408,11 @@ def falha(request: Request):
 @app.get("/pendente", response_class=HTMLResponse)
 def pendente(request: Request):
     return HTMLResponse("""
-    <html>
-    <head><meta charset='UTF-8'><style>
+    <html><head><meta charset='UTF-8'><style>
     body{font-family:sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63);color:#fff;text-align:center;padding-top:100px}
     h1{font-size:48px;margin-bottom:20px}
     a{background:#f39c12;padding:15px 40px;border-radius:15px;color:#fff;text-decoration:none;font-size:18px}
-    </style></head>
-    <body>
+    </style></head><body>
     <h1>⏳ Pagamento pendente!</h1>
     <p style='font-size:20px;margin-bottom:30px'>Aguarde a confirmação.</p>
     <a href='/'>Voltar ao Dashboard</a>
