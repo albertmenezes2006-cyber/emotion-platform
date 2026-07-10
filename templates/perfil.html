@@ -12,15 +12,24 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29
 .nav-right{display:flex;gap:15px;align-items:center}
 .btn-back{background:#3a7bd5;padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px}
 .logout{background:#e74c3c;padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px}
-.container{max-width:700px;margin:0 auto;padding:40px 20px}
-.profile-card{background:rgba(255,255,255,0.05);border-radius:20px;padding:40px;border:1px solid rgba(255,255,255,0.1);margin-bottom:30px}
-.avatar{width:100px;height:100px;border-radius:50%;background:linear-gradient(90deg,#00d2ff,#3a7bd5);display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:bold;margin:0 auto 20px}
-.profile-name{text-align:center;font-size:28px;font-weight:bold;margin-bottom:5px}
-.profile-email{text-align:center;color:rgba(255,255,255,0.5);margin-bottom:20px}
-.badge{display:inline-block;padding:8px 20px;border-radius:20px;font-size:14px;font-weight:bold;margin:0 auto;display:block;width:fit-content}
+.container{max-width:750px;margin:0 auto;padding:40px 20px}
+.profile-card{background:rgba(255,255,255,0.05);border-radius:20px;padding:40px;border:1px solid rgba(255,255,255,0.1);margin-bottom:25px;text-align:center}
+.avatar-circle{width:100px;height:100px;border-radius:50%;background:linear-gradient(90deg,#00d2ff,#3a7bd5);display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:bold;margin:0 auto 20px}
+.profile-name{font-size:28px;font-weight:bold;margin-bottom:5px}
+.profile-email{color:rgba(255,255,255,0.5);margin-bottom:20px;font-size:15px}
+.badge-plano{display:inline-block;padding:8px 25px;border-radius:20px;font-size:15px;font-weight:bold;margin-bottom:20px}
 .badge-free{background:rgba(149,165,166,0.3);color:#95a5a6}
 .badge-premium{background:rgba(0,210,255,0.3);color:#00d2ff}
 .badge-enterprise{background:rgba(241,196,15,0.3);color:#f1c40f}
+.stats-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:20px}
+.stat-mini{background:rgba(255,255,255,0.05);border-radius:12px;padding:15px}
+.stat-mini-num{font-size:32px;font-weight:bold;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-mini-label{font-size:12px;color:rgba(255,255,255,0.5);margin-top:5px}
+.acoes-rapidas{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:25px}
+.acao{background:rgba(255,255,255,0.05);border-radius:15px;padding:20px;text-align:center;text-decoration:none;color:#fff;border:1px solid rgba(255,255,255,0.1);transition:all 0.3s}
+.acao:hover{background:rgba(255,255,255,0.1);transform:translateY(-3px)}
+.acao-icon{font-size:30px;margin-bottom:8px}
+.acao-label{font-size:13px;color:rgba(255,255,255,0.7)}
 .form-card{background:rgba(255,255,255,0.05);border-radius:20px;padding:40px;border:1px solid rgba(255,255,255,0.1)}
 .form-card h2{margin-bottom:25px;font-size:22px;color:#00d2ff}
 label{display:block;margin-bottom:8px;color:rgba(255,255,255,0.6);font-size:14px}
@@ -30,10 +39,7 @@ input:focus{border-color:#3a7bd5}
 .btn:hover{transform:translateY(-2px)}
 .sucesso{background:rgba(46,204,113,0.2);border:1px solid #2ecc71;color:#2ecc71;padding:15px;border-radius:12px;margin-bottom:20px;text-align:center}
 .erro{background:rgba(231,76,60,0.2);border:1px solid #e74c3c;color:#e74c3c;padding:15px;border-radius:12px;margin-bottom:20px;text-align:center}
-.stats-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:20px}
-.stat-mini{background:rgba(255,255,255,0.05);border-radius:12px;padding:15px;text-align:center}
-.stat-mini-num{font-size:28px;font-weight:bold;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.stat-mini-label{font-size:12px;color:rgba(255,255,255,0.5);margin-top:5px}
+footer{text-align:center;padding:30px;color:rgba(255,255,255,0.3);font-size:13px}
 </style>
 </head>
 <body>
@@ -44,17 +50,18 @@ input:focus{border-color:#3a7bd5}
 <a href="/logout" class="logout">Sair</a>
 </div>
 </nav>
+
 <div class="container">
 
 <div class="profile-card">
-<div class="avatar">{{ usuario.nome[0] | upper }}</div>
+<div class="avatar-circle">{{ usuario.nome[0] | upper }}</div>
 <div class="profile-name">{{ usuario.nome }}</div>
 <div class="profile-email">{{ usuario.email }}</div>
-<span class="badge badge-{{ usuario.plano }}">{{ usuario.plano | upper }}</span>
+<span class="badge-plano badge-{{ usuario.plano }}">{{ usuario.plano | upper }}</span>
 <div class="stats-mini">
 <div class="stat-mini">
 <div class="stat-mini-num">{{ total_analises }}</div>
-<div class="stat-mini-label">Análises Total</div>
+<div class="stat-mini-label">Total Análises</div>
 </div>
 <div class="stat-mini">
 <div class="stat-mini-num">{{ analises_hoje }}</div>
@@ -65,6 +72,25 @@ input:focus{border-color:#3a7bd5}
 <div class="stat-mini-label">Dias na plataforma</div>
 </div>
 </div>
+</div>
+
+<div class="acoes-rapidas">
+<a href="/afiliado" class="acao">
+<div class="acao-icon">💰</div>
+<div class="acao-label">Programa Afiliados</div>
+</a>
+<a href="/planos" class="acao">
+<div class="acao-icon">⭐</div>
+<div class="acao-label">Ver Planos</div>
+</a>
+<a href="/faq" class="acao">
+<div class="acao-icon">❓</div>
+<div class="acao-label">FAQ</div>
+</a>
+<a href="/contato" class="acao">
+<div class="acao-icon">📧</div>
+<div class="acao-label">Contato</div>
+</a>
 </div>
 
 <div class="form-card">
@@ -87,5 +113,8 @@ input:focus{border-color:#3a7bd5}
 </div>
 
 </div>
+<footer>
+<p>Emotion Intelligence Platform © 2026</p>
+</footer>
 </body>
 </html>
