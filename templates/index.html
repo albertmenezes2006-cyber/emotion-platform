@@ -61,9 +61,13 @@ nav{padding:20px 60px;display:flex;justify-content:space-between;align-items:cen
 .cta h2{font-size:52px;font-weight:bold;margin-bottom:20px}
 .cta h2 span{background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .cta p{font-size:20px;color:rgba(255,255,255,0.6);margin-bottom:40px}
-footer{padding:40px 60px;background:rgba(0,0,0,0.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
-footer p{color:rgba(255,255,255,0.4);font-size:14px}
-footer a{color:rgba(255,255,255,0.4);text-decoration:none;font-size:14px}
+footer{padding:60px;background:rgba(0,0,0,0.5);border-top:1px solid rgba(255,255,255,0.1)}
+.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:40px;max-width:1200px;margin:0 auto 40px}
+.footer-col h3{color:#00d2ff;font-size:16px;margin-bottom:20px}
+.footer-col a{display:block;color:rgba(255,255,255,0.5);text-decoration:none;font-size:14px;margin-bottom:10px}
+.footer-col a:hover{color:#00d2ff}
+.footer-col p{color:rgba(255,255,255,0.5);font-size:14px;line-height:1.8}
+.footer-bottom{text-align:center;color:rgba(255,255,255,0.3);font-size:13px;border-top:1px solid rgba(255,255,255,0.1);padding-top:30px;max-width:1200px;margin:0 auto}
 .popup-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:9999;align-items:center;justify-content:center}
 .popup-overlay.show{display:flex}
 .popup-box{background:linear-gradient(135deg,#0f0c29,#302b63);border:1px solid rgba(0,210,255,0.3);border-radius:20px;padding:50px;max-width:500px;width:90%;text-align:center;position:relative}
@@ -76,12 +80,8 @@ footer a{color:rgba(255,255,255,0.4);text-decoration:none;font-size:14px}
 @media(max-width:768px){
 .hero h1{font-size:36px}
 nav{padding:15px 20px}
-.section{padding:60px 20px}
-.como-funciona{padding:60px 20px}
-.planos-section{padding:60px 20px}
-.depoimentos{padding:60px 20px}
-.cta{padding:60px 20px}
-footer{padding:30px 20px}
+.section,.como-funciona,.planos-section,.depoimentos,.cta{padding:60px 20px}
+footer{padding:40px 20px}
 }
 </style>
 </head>
@@ -201,7 +201,7 @@ footer{padding:30px 20px}
 <div class="plano-preco">R$0<span>/mês</span></div>
 <ul>
 <li>10 análises por dia</li>
-<li>Histórico de 7 dias</li>
+<li>Histórico básico</li>
 <li>Gráficos básicos</li>
 <li>Análise por voz</li>
 </ul>
@@ -272,12 +272,31 @@ footer{padding:30px 20px}
 </section>
 
 <footer>
+<div class="footer-grid">
+<div class="footer-col">
+<h3>🧠 Emotion Intelligence</h3>
+<p>A plataforma de análise emocional por IA mais completa do Brasil.</p>
+</div>
+<div class="footer-col">
+<h3>Produto</h3>
+<a href="/cadastro">Criar Conta Grátis</a>
+<a href="/planos">Planos e Preços</a>
+<a href="/login">Fazer Login</a>
+</div>
+<div class="footer-col">
+<h3>Recursos</h3>
+<a href="/faq">FAQ</a>
+<a href="/contato">Contato</a>
+<a href="/afiliado">Programa de Afiliados</a>
+</div>
+<div class="footer-col">
+<h3>Legal</h3>
+<a href="/privacidade">Política de Privacidade</a>
+<a href="/termos">Termos de Uso</a>
+</div>
+</div>
+<div class="footer-bottom">
 <p>Emotion Intelligence Platform © 2026 — Todos os direitos reservados</p>
-<div style="display:flex;gap:20px">
-<a href="/login">Login</a>
-<a href="/cadastro">Cadastro</a>
-<a href="/planos">Planos</a>
-<a href="/privacidade">Privacidade</a>
 </div>
 </footer>
 
