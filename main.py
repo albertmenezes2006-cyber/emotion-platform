@@ -13,6 +13,7 @@ import mercadopago
 import os
 
 MP_ACCESS_TOKEN = "APP_USR-4193087911174356-070916-cefe9e3636798457e9e78f6036cd4500-3532571592"
+ADMIN_EMAIL = "albertmenezes2006@gmail.com"
 
 conf = ConnectionConfig(
     MAIL_USERNAME="albertmenezes2006@gmail.com",
@@ -61,7 +62,7 @@ def hash_senha(senha):
 def verificar_senha(senha, hash):
     return pwd_context.verify(senha, hash)
 
-app = FastAPI(title="Emotion Intelligence Platform", version="8.0")
+app = FastAPI(title="Emotion Intelligence Platform", version="9.0")
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 sessoes = {}
@@ -94,24 +95,14 @@ async def enviar_email_boas_vindas(nome: str, email: str):
             subject="🧠 Bem-vindo ao Emotion Intelligence Platform!",
             recipients=[email],
             body=f"""
-            <html><body style="font-family:sans-serif;background:#0f0c29;color:#fff;padding:40px">
-            <h1 style="color:#00d2ff">🧠 Emotion Intelligence Platform</h1>
+            <html><body style="font-family:sans-serif;padding:40px">
+            <h1 style="color:#00d2ff">🧠 Emotion Intelligence</h1>
             <h2>Olá, {nome}! 👋</h2>
-            <p style="font-size:18px">Bem-vindo à plataforma de inteligência emocional!</p>
-            <br>
-            <p>Com o seu plano FREE você pode:</p>
-            <ul>
-            <li>✅ 10 análises por dia</li>
-            <li>✅ Histórico de análises</li>
-            <li>✅ Estatísticas emocionais</li>
-            </ul>
-            <br>
+            <p>Bem-vindo! Com o FREE você tem 10 análises por dia.</p>
             <a href="https://emotion-platform-albert.onrender.com/planos"
             style="background:#00d2ff;padding:15px 30px;border-radius:15px;color:#fff;text-decoration:none">
-            🚀 Ver Planos Premium
+            Ver Planos Premium
             </a>
-            <br><br>
-            <p style="color:#666">Emotion Intelligence Platform © 2026</p>
             </body></html>
             """,
             subtype="html"
@@ -127,25 +118,14 @@ async def enviar_email_premium(nome: str, email: str):
             subject="⭐ Seu plano Premium está ativo!",
             recipients=[email],
             body=f"""
-            <html><body style="font-family:sans-serif;background:#0f0c29;color:#fff;padding:40px">
-            <h1 style="color:#00d2ff">🧠 Emotion Intelligence Platform</h1>
+            <html><body style="font-family:sans-serif;padding:40px">
+            <h1 style="color:#00d2ff">🧠 Emotion Intelligence</h1>
             <h2>Parabéns, {nome}! 🎉</h2>
-            <p style="font-size:18px">Seu plano Premium foi ativado com sucesso!</p>
-            <br>
-            <p>Agora você tem acesso a:</p>
-            <ul>
-            <li>✅ Análises ilimitadas</li>
-            <li>✅ Histórico completo</li>
-            <li>✅ Gráficos avançados</li>
-            <li>✅ Suporte prioritário</li>
-            </ul>
-            <br>
+            <p>Plano Premium ativado! Análises ilimitadas liberadas.</p>
             <a href="https://emotion-platform-albert.onrender.com"
             style="background:#00d2ff;padding:15px 30px;border-radius:15px;color:#fff;text-decoration:none">
-            🚀 Acessar Dashboard
+            Acessar Dashboard
             </a>
-            <br><br>
-            <p style="color:#666">Emotion Intelligence Platform © 2026</p>
             </body></html>
             """,
             subtype="html"
@@ -372,6 +352,36 @@ def checkout(request: Request, plano: str, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/admin", response_class=HTMLResponse)
+def admin(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario or usuario.email != ADMIN_EMAIL:
+        return RedirectResponse(url="/")
+    todos_usuarios = db.query(Usuario).all()
+    total_analises = db.query(Analise).count()
+    usuarios_premium = len([u for u in todos_usuarios if u.plano == "premium"])
+    usuarios_enterprise = len([u for u in todos_usuarios if u.plano == "enterprise"])
+    usuarios_free = len([u for u in todos_usuarios if u.plano == "free"])
+    receita = (usuarios_premium * 49) + (usuarios_enterprise * 199)
+    lista_usuarios = []
+    for u in todos_usuarios:
+        lista_usuarios.append({
+            "nome": u.nome,
+            "email": u.email,
+            "plano": u.plano,
+            "total_analises": len(u.analises),
+            "criado_em": u.criado_em.strftime("%d/%m/%Y")
+        })
+    return templates.TemplateResponse(request, "admin.html", {
+        "usuario": usuario,
+        "usuarios": lista_usuarios,
+        "total_usuarios": len(todos_usuarios),
+        "usuarios_free": usuarios_free,
+        "usuarios_premium": usuarios_premium,
+        "total_analises": total_analises,
+        "receita": receita
+    })
+
 @app.get("/sucesso", response_class=HTMLResponse)
 async def sucesso(background_tasks: BackgroundTasks, request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
@@ -386,7 +396,7 @@ async def sucesso(background_tasks: BackgroundTasks, request: Request, db: Sessi
     a{background:linear-gradient(90deg,#00d2ff,#3a7bd5);padding:15px 40px;border-radius:15px;color:#fff;text-decoration:none;font-size:18px}
     </style></head><body>
     <h1>✅ Pagamento aprovado!</h1>
-    <p style='font-size:20px;margin-bottom:30px'>Plano Premium ativado! Verifique seu email. 📧</p>
+    <p style='font-size:20px;margin-bottom:30px'>Plano Premium ativado! 📧</p>
     <a href='/'>Ir para o Dashboard</a>
     </body></html>
     """)
@@ -400,7 +410,6 @@ def falha(request: Request):
     a{background:#e74c3c;padding:15px 40px;border-radius:15px;color:#fff;text-decoration:none;font-size:18px}
     </style></head><body>
     <h1>❌ Pagamento falhou!</h1>
-    <p style='font-size:20px;margin-bottom:30px'>Tente novamente.</p>
     <a href='/planos'>Tentar novamente</a>
     </body></html>
     """)
@@ -414,7 +423,6 @@ def pendente(request: Request):
     a{background:#f39c12;padding:15px 40px;border-radius:15px;color:#fff;text-decoration:none;font-size:18px}
     </style></head><body>
     <h1>⏳ Pagamento pendente!</h1>
-    <p style='font-size:20px;margin-bottom:30px'>Aguarde a confirmação.</p>
     <a href='/'>Voltar ao Dashboard</a>
     </body></html>
     """)
