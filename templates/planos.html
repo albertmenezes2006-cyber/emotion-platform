@@ -9,86 +9,184 @@
 body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh}
 .navbar{background:rgba(0,0,0,0.3);padding:20px 40px;display:flex;justify-content:space-between;align-items:center}
 .navbar h1{font-size:24px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.nav-right{display:flex;align-items:center;gap:15px}
+.nav-right{display:flex;gap:15px;align-items:center}
+.btn-back{background:#3a7bd5;padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px}
 .logout{background:#e74c3c;padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px}
-.voltar{background:#3a7bd5;padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px}
-.container{max-width:1200px;margin:0 auto;padding:60px 20px;text-align:center}
-.titulo{font-size:42px;font-weight:bold;margin-bottom:15px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.subtitulo{font-size:18px;color:rgba(255,255,255,0.5);margin-bottom:60px}
-.planos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;margin-top:40px}
-.plano{background:rgba(255,255,255,0.05);border-radius:20px;padding:40px;border:1px solid rgba(255,255,255,0.1);transition:all 0.3s}
-.plano:hover{transform:translateY(-10px);box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+.container{max-width:1100px;margin:0 auto;padding:60px 20px}
+.hero{text-align:center;margin-bottom:60px}
+.hero h1{font-size:48px;font-weight:bold;margin-bottom:15px}
+.hero h1 span{background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:20px;color:rgba(255,255,255,0.6)}
+.plano-atual{background:linear-gradient(90deg,rgba(0,210,255,0.1),rgba(58,123,213,0.1));border:1px solid rgba(0,210,255,0.3);border-radius:15px;padding:15px 25px;text-align:center;margin-bottom:40px;font-size:16px}
+.plano-atual span{color:#00d2ff;font-weight:bold}
+.planos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:25px;margin-bottom:60px}
+.plano{background:rgba(255,255,255,0.05);border-radius:20px;padding:40px;border:1px solid rgba(255,255,255,0.1);position:relative;transition:transform 0.3s}
+.plano:hover{transform:translateY(-5px)}
 .plano.destaque{border:2px solid #00d2ff;background:rgba(0,210,255,0.05)}
-.plano-badge{background:linear-gradient(90deg,#00d2ff,#3a7bd5);padding:5px 20px;border-radius:20px;font-size:12px;font-weight:bold;display:inline-block;margin-bottom:20px}
-.plano-nome{font-size:28px;font-weight:bold;margin-bottom:10px}
-.plano-preco{font-size:52px;font-weight:bold;margin:20px 0;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.plano.atual{border:2px solid #2ecc71;background:rgba(46,204,113,0.05)}
+.badge{position:absolute;top:-15px;left:50%;transform:translateX(-50%);padding:6px 25px;border-radius:20px;font-size:13px;font-weight:bold;white-space:nowrap}
+.badge-popular{background:linear-gradient(90deg,#00d2ff,#3a7bd5)}
+.badge-atual{background:linear-gradient(90deg,#2ecc71,#27ae60)}
+.plano-nome{font-size:28px;font-weight:bold;margin-bottom:10px;text-align:center}
+.plano-preco{font-size:56px;font-weight:bold;text-align:center;margin:20px 0;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .plano-preco span{font-size:18px;color:rgba(255,255,255,0.5)}
-.plano-features{list-style:none;margin:30px 0;text-align:left}
-.plano-features li{padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.7);font-size:15px}
-.plano-features li::before{content:"✅ ";margin-right:8px}
-.btn-plano{width:100%;padding:18px;border-radius:15px;border:none;font-size:18px;font-weight:bold;cursor:pointer;transition:all 0.3s;margin-top:20px}
+.plano-desc{text-align:center;color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:25px}
+.plano ul{list-style:none;margin:0 0 30px}
+.plano ul li{padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.8);font-size:15px;display:flex;align-items:center;gap:10px}
+.plano ul li .check{color:#2ecc71;font-size:18px}
+.plano ul li .x{color:#e74c3c;font-size:18px}
+.btn-plano{width:100%;padding:16px;border-radius:12px;border:none;font-size:18px;font-weight:bold;cursor:pointer;transition:all 0.3s}
 .btn-free{background:rgba(255,255,255,0.1);color:#fff}
 .btn-free:hover{background:rgba(255,255,255,0.2)}
 .btn-premium{background:linear-gradient(90deg,#00d2ff,#3a7bd5);color:#fff}
 .btn-premium:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(58,123,213,0.4)}
 .btn-enterprise{background:linear-gradient(90deg,#f1c40f,#e67e22);color:#fff}
 .btn-enterprise:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(241,196,15,0.4)}
+.btn-atual{background:rgba(46,204,113,0.2);color:#2ecc71;border:1px solid #2ecc71;cursor:default}
+.garantia{text-align:center;padding:40px;background:rgba(255,255,255,0.03);border-radius:20px;margin-bottom:40px}
+.garantia h2{font-size:28px;margin-bottom:15px}
+.garantia p{color:rgba(255,255,255,0.6);font-size:16px;max-width:500px;margin:0 auto}
+.faq-mini{margin-bottom:40px}
+.faq-mini h2{text-align:center;font-size:28px;margin-bottom:30px}
+.faq-item{background:rgba(255,255,255,0.05);border-radius:12px;padding:20px;margin-bottom:12px;border:1px solid rgba(255,255,255,0.1)}
+.faq-item h3{font-size:16px;margin-bottom:8px;color:#00d2ff}
+.faq-item p{color:rgba(255,255,255,0.6);font-size:14px;line-height:1.6}
+footer{text-align:center;padding:30px;color:rgba(255,255,255,0.3);font-size:13px}
+footer a{color:rgba(255,255,255,0.3);text-decoration:none;margin:0 10px}
 </style>
 </head>
 <body>
 <nav class="navbar">
-    <h1>🧠 Emotion Intelligence Platform</h1>
-    <div class="nav-right">
-        <a href="/" class="voltar">← Voltar</a>
-        <a href="/logout" class="logout">Sair</a>
-    </div>
-</nav>
-<div class="container">
-    <div class="titulo">Escolha seu Plano</div>
-    <div class="subtitulo">Comece grátis e escale quando precisar</div>
-    <div class="planos-grid">
-        <div class="plano">
-            <div class="plano-nome">Free</div>
-            <div class="plano-preco">R$0<span>/mês</span></div>
-            <ul class="plano-features">
-                <li>10 análises por dia</li>
-                <li>Histórico de 7 dias</li>
-                <li>Suporte por email</li>
-            </ul>
-            <button class="btn-plano btn-free" onclick="window.location.href='/'">Plano Atual</button>
-        </div>
-        <div class="plano destaque">
-            <div class="plano-badge">⭐ MAIS POPULAR</div>
-            <div class="plano-nome">Premium</div>
-            <div class="plano-preco">R$49<span>/mês</span></div>
-            <ul class="plano-features">
-                <li>Análises ilimitadas</li>
-                <li>Histórico completo</li>
-                <li>Relatórios mensais</li>
-                <li>Suporte prioritário</li>
-                <li>API Access</li>
-            </ul>
-            <button class="btn-plano btn-premium" onclick="assinar('premium')">Assinar Premium</button>
-        </div>
-        <div class="plano">
-            <div class="plano-nome">Enterprise</div>
-            <div class="plano-preco">R$199<span>/mês</span></div>
-            <ul class="plano-features">
-                <li>Tudo do Premium</li>
-                <li>Múltiplos usuários</li>
-                <li>Dashboard corporativo</li>
-                <li>Integração por API</li>
-                <li>Suporte 24/7</li>
-                <li>SLA garantido</li>
-            </ul>
-            <button class="btn-plano btn-enterprise" onclick="assinar('enterprise')">Assinar Enterprise</button>
-        </div>
-    </div>
+<h1>🧠 Emotion Intelligence</h1>
+<div class="nav-right">
+<a href="/" class="btn-back">← Dashboard</a>
+<a href="/logout" class="logout">Sair</a>
 </div>
-<script>
-function assinar(plano) {
-    window.location.href = '/checkout?plano=' + plano;
-}
-</script>
+</nav>
+
+<div class="container">
+
+<div class="hero">
+<h1>Escolha seu <span>Plano</span></h1>
+<p>Comece grátis e faça upgrade quando precisar</p>
+</div>
+
+<div class="plano-atual">
+Seu plano atual: <span>{{ usuario.plano | upper }}</span>
+{% if usuario.plano == "free" %}
+— Faça upgrade para ter análises ilimitadas!
+{% else %}
+— Obrigado por ser Premium! 🎉
+{% endif %}
+</div>
+
+<div class="planos-grid">
+
+<div class="plano {% if usuario.plano == 'free' %}atual{% endif %}">
+{% if usuario.plano == "free" %}
+<div class="badge badge-atual">✅ Plano Atual</div>
+{% endif %}
+<div class="plano-nome">Free</div>
+<div class="plano-preco">R$0<span>/mês</span></div>
+<p class="plano-desc">Para começar a explorar</p>
+<ul>
+<li><span class="check">✅</span> 10 análises por dia</li>
+<li><span class="check">✅</span> Análise por voz</li>
+<li><span class="check">✅</span> Gráficos básicos</li>
+<li><span class="check">✅</span> Histórico básico</li>
+<li><span class="check">✅</span> Link de afiliado</li>
+<li><span class="x">❌</span> Análises ilimitadas</li>
+<li><span class="x">❌</span> Suporte prioritário</li>
+<li><span class="x">❌</span> API Access</li>
+</ul>
+{% if usuario.plano == "free" %}
+<button class="btn-plano btn-atual">Plano Atual</button>
+{% else %}
+<button class="btn-plano btn-free" onclick="window.location.href='/'">Usar Grátis</button>
+{% endif %}
+</div>
+
+<div class="plano destaque {% if usuario.plano == 'premium' %}atual{% endif %}">
+<div class="badge badge-popular">⭐ MAIS POPULAR</div>
+{% if usuario.plano == "premium" %}
+<div style="margin-top:20px"></div>
+{% endif %}
+<div class="plano-nome">Premium</div>
+<div class="plano-preco">R$49<span>/mês</span></div>
+<p class="plano-desc">Para uso intenso e profissional</p>
+<ul>
+<li><span class="check">✅</span> Análises ilimitadas</li>
+<li><span class="check">✅</span> Análise por voz</li>
+<li><span class="check">✅</span> Gráficos avançados</li>
+<li><span class="check">✅</span> Histórico completo</li>
+<li><span class="check">✅</span> Link de afiliado</li>
+<li><span class="check">✅</span> Suporte prioritário</li>
+<li><span class="check">✅</span> API Access</li>
+<li><span class="check">✅</span> Relatórios mensais</li>
+</ul>
+{% if usuario.plano == "premium" %}
+<button class="btn-plano btn-atual">Plano Atual ✅</button>
+{% else %}
+<button class="btn-plano btn-premium" onclick="window.location.href='/checkout?plano=premium'">Assinar Premium</button>
+{% endif %}
+</div>
+
+<div class="plano {% if usuario.plano == 'enterprise' %}atual{% endif %}">
+{% if usuario.plano == "enterprise" %}
+<div class="badge badge-atual">✅ Plano Atual</div>
+{% endif %}
+<div class="plano-nome">Enterprise</div>
+<div class="plano-preco">R$199<span>/mês</span></div>
+<p class="plano-desc">Para empresas e equipes</p>
+<ul>
+<li><span class="check">✅</span> Tudo do Premium</li>
+<li><span class="check">✅</span> Múltiplos usuários</li>
+<li><span class="check">✅</span> Dashboard corporativo</li>
+<li><span class="check">✅</span> Integração por API</li>
+<li><span class="check">✅</span> Suporte 24/7</li>
+<li><span class="check">✅</span> SLA garantido</li>
+<li><span class="check">✅</span> Treinamento da equipe</li>
+<li><span class="check">✅</span> Relatórios personalizados</li>
+</ul>
+{% if usuario.plano == "enterprise" %}
+<button class="btn-plano btn-atual">Plano Atual ✅</button>
+{% else %}
+<button class="btn-plano btn-enterprise" onclick="window.location.href='/checkout?plano=enterprise'">Assinar Enterprise</button>
+{% endif %}
+</div>
+
+</div>
+
+<div class="garantia">
+<h2>🔒 Pagamento 100% Seguro</h2>
+<p>Processado pelo MercadoPago. Aceita PIX, cartão de crédito, débito e boleto. Cancele quando quiser.</p>
+</div>
+
+<div class="faq-mini">
+<h2>Dúvidas frequentes</h2>
+<div class="faq-item">
+<h3>Posso cancelar quando quiser?</h3>
+<p>Sim! Entre em contato pelo email ou chat e cancelamos em até 24 horas.</p>
+</div>
+<div class="faq-item">
+<h3>Quais formas de pagamento são aceitas?</h3>
+<p>PIX, cartão de crédito, débito e boleto através do MercadoPago.</p>
+</div>
+<div class="faq-item">
+<h3>O plano Free é realmente gratuito?</h3>
+<p>Sim! 100% gratuito, sem cartão de crédito, para sempre.</p>
+</div>
+</div>
+
+</div>
+
+<footer>
+<a href="/faq">FAQ Completo</a>
+<a href="/contato">Contato</a>
+<a href="/privacidade">Privacidade</a>
+<a href="/termos">Termos</a>
+<br><br>
+<p>Emotion Intelligence Platform © 2026</p>
+</footer>
 </body>
 </html>
