@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin — Emotion Intelligence</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh}
@@ -13,12 +14,17 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29
 .btn-back{background:#3a7bd5;padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px}
 .logout{background:#e74c3c;padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px}
 .container{max-width:1200px;margin:0 auto;padding:40px 20px}
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:40px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;margin-bottom:40px}
 .stat-card{background:rgba(255,255,255,0.05);border-radius:20px;padding:30px;text-align:center;border:1px solid rgba(255,255,255,0.1)}
 .stat-number{font-size:48px;font-weight:bold;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .stat-label{color:rgba(255,255,255,0.5);margin-top:5px;font-size:14px}
+.receita-card{background:linear-gradient(90deg,rgba(46,204,113,0.1),rgba(39,174,96,0.1));border:1px solid rgba(46,204,113,0.3);border-radius:20px;padding:30px;text-align:center}
+.receita-valor{font-size:52px;font-weight:bold;color:#2ecc71}
 .card{background:rgba(255,255,255,0.05);border-radius:20px;padding:30px;border:1px solid rgba(255,255,255,0.1);margin-bottom:30px}
-.card h2{margin-bottom:20px;font-size:22px;color:#00d2ff}
+.card h2{margin-bottom:20px;font-size:22px;color:#00d2ff;display:flex;justify-content:space-between;align-items:center}
+.filtros{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.filtro-btn{padding:8px 20px;border-radius:20px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.05);color:#fff;cursor:pointer;font-size:13px}
+.filtro-btn.ativo{background:linear-gradient(90deg,#00d2ff,#3a7bd5);border:none}
 table{width:100%;border-collapse:collapse}
 th{text-align:left;padding:12px 15px;color:rgba(255,255,255,0.5);font-size:13px;border-bottom:1px solid rgba(255,255,255,0.1)}
 td{padding:12px 15px;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.05)}
@@ -27,7 +33,10 @@ tr:hover td{background:rgba(255,255,255,0.03)}
 .badge-free{background:rgba(149,165,166,0.3);color:#95a5a6}
 .badge-premium{background:rgba(0,210,255,0.3);color:#00d2ff}
 .badge-enterprise{background:rgba(241,196,15,0.3);color:#f1c40f}
-.receita{font-size:36px;font-weight:bold;color:#2ecc71}
+.grafico-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:20px;margin-bottom:30px}
+.grafico-card{background:rgba(255,255,255,0.05);border-radius:20px;padding:30px;border:1px solid rgba(255,255,255,0.1)}
+.grafico-card h3{margin-bottom:20px;font-size:18px;color:#00d2ff}
+.search-box{padding:10px 20px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.05);color:#fff;font-size:14px;width:250px;outline:none}
 </style>
 </head>
 <body>
@@ -43,7 +52,7 @@ tr:hover td{background:rgba(255,255,255,0.03)}
 <div class="stats-grid">
 <div class="stat-card">
 <div class="stat-number">{{ total_usuarios }}</div>
-<div class="stat-label">Total de Usuários</div>
+<div class="stat-label">Total Usuários</div>
 </div>
 <div class="stat-card">
 <div class="stat-number">{{ usuarios_free }}</div>
@@ -55,32 +64,52 @@ tr:hover td{background:rgba(255,255,255,0.03)}
 </div>
 <div class="stat-card">
 <div class="stat-number">{{ total_analises }}</div>
-<div class="stat-label">Total de Análises</div>
+<div class="stat-label">Total Análises</div>
 </div>
-<div class="stat-card">
-<div class="receita">R$ {{ receita }}</div>
-<div class="stat-label">Receita Mensal</div>
+<div class="receita-card">
+<div class="receita-valor">R${{ receita }}</div>
+<div class="stat-label" style="color:rgba(255,255,255,0.5)">Receita Mensal</div>
+</div>
+</div>
+
+<div class="grafico-grid">
+<div class="grafico-card">
+<h3>📊 Distribuição de Planos</h3>
+<canvas id="graficoplanos" height="200"></canvas>
+</div>
+<div class="grafico-card">
+<h3>💰 Projeção de Receita</h3>
+<canvas id="graficoreceita" height="200"></canvas>
 </div>
 </div>
 
 <div class="card">
-<h2>👥 Usuários Cadastrados</h2>
-<table>
+<h2>
+👥 Usuários
+<input type="text" class="search-box" id="busca" placeholder="🔍 Buscar usuário..." onkeyup="filtrarTabela()">
+</h2>
+<div class="filtros">
+<button class="filtro-btn ativo" onclick="filtrar('todos',this)">Todos</button>
+<button class="filtro-btn" onclick="filtrar('free',this)">Free</button>
+<button class="filtro-btn" onclick="filtrar('premium',this)">Premium</button>
+<button class="filtro-btn" onclick="filtrar('enterprise',this)">Enterprise</button>
+</div>
+<table id="tabelaUsuarios">
 <tr>
 <th>Nome</th>
 <th>Email</th>
 <th>Plano</th>
 <th>Análises</th>
+<th>Indicado por</th>
 <th>Cadastro</th>
 </tr>
 {% for u in usuarios %}
-<tr>
+<tr class="linha-usuario" data-plano="{{ u.plano }}">
 <td>{{ u.nome }}</td>
 <td>{{ u.email }}</td>
-<td>
-<span class="badge badge-{{ u.plano }}">{{ u.plano | upper }}</span>
-</td>
+<td><span class="badge badge-{{ u.plano }}">{{ u.plano | upper }}</span></td>
 <td>{{ u.total_analises }}</td>
+<td>{{ u.indicado_por or "—" }}</td>
 <td>{{ u.criado_em }}</td>
 </tr>
 {% endfor %}
@@ -88,5 +117,46 @@ tr:hover td{background:rgba(255,255,255,0.03)}
 </div>
 
 </div>
+<script>
+var ctx1=document.getElementById('graficoplanos').getContext('2d');
+new Chart(ctx1,{
+type:'doughnut',
+data:{
+labels:['Free','Premium','Enterprise'],
+datasets:[{data:[{{ usuarios_free }},{{ usuarios_premium }},0],backgroundColor:['#95a5a6','#00d2ff','#f1c40f'],borderWidth:0}]
+},
+options:{plugins:{legend:{labels:{color:'#fff'}}}}
+});
+
+var ctx2=document.getElementById('graficoreceita').getContext('2d');
+new Chart(ctx2,{
+type:'bar',
+data:{
+labels:['Free','Premium','Enterprise'],
+datasets:[{label:'Receita R$',data:[0,{{ usuarios_premium * 49 }},0],backgroundColor:['#95a5a6','#00d2ff','#f1c40f'],borderRadius:8}]
+},
+options:{plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#fff'},grid:{color:'rgba(255,255,255,0.05)'}},y:{ticks:{color:'#fff'},grid:{color:'rgba(255,255,255,0.05)'}}}}
+});
+
+function filtrar(plano, btn){
+document.querySelectorAll('.filtro-btn').forEach(function(b){b.classList.remove('ativo');});
+btn.classList.add('ativo');
+document.querySelectorAll('.linha-usuario').forEach(function(linha){
+if(plano==='todos'||linha.dataset.plano===plano){
+linha.style.display='';
+}else{
+linha.style.display='none';
+}
+});
+}
+
+function filtrarTabela(){
+var busca=document.getElementById('busca').value.toLowerCase();
+document.querySelectorAll('.linha-usuario').forEach(function(linha){
+var texto=linha.textContent.toLowerCase();
+linha.style.display=texto.includes(busca)?'':'none';
+});
+}
+</script>
 </body>
 </html>

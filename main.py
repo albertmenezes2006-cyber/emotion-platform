@@ -12,7 +12,6 @@ import mercadopago
 import sendgrid
 from sendgrid.helpers.mail import Mail
 import uuid
-import os
 
 MP_ACCESS_TOKEN = "APP_USR-4193087911174356-070916-cefe9e3636798457e9e78f6036cd4500-3532571592"
 ADMIN_EMAIL = "albertmenezes2006@gmail.com"
@@ -311,6 +310,10 @@ def logout(request: Request):
 @app.get("/privacidade", response_class=HTMLResponse)
 def privacidade(request: Request):
     return templates.TemplateResponse(request, "privacidade.html")
+
+@app.get("/termos", response_class=HTMLResponse)
+def termos(request: Request):
+    return templates.TemplateResponse(request, "termos.html")
 
 @app.get("/perfil", response_class=HTMLResponse)
 def perfil_page(request: Request, db: Session = Depends(get_db)):
