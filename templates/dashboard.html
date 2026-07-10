@@ -12,11 +12,12 @@
 body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh}
 .navbar{background:rgba(0,0,0,0.3);padding:20px 40px;display:flex;justify-content:space-between;align-items:center}
 .navbar h1{font-size:24px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.nav-right{display:flex;align-items:center;gap:15px;flex-wrap:wrap}
+.nav-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .user{color:rgba(255,255,255,0.6);font-size:14px}
 .version{background:#3a7bd5;padding:5px 15px;border-radius:20px;font-size:12px}
 .btn-planos{background:linear-gradient(90deg,#00d2ff,#3a7bd5);padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px;font-weight:bold}
 .btn-perfil{background:rgba(255,255,255,0.1);padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px}
+.btn-afiliado{background:#2ecc71;padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px;font-weight:bold}
 .btn-admin{background:#f39c12;padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px;font-weight:bold}
 .logout{background:#e74c3c;padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px}
 .container{max-width:1200px;margin:0 auto;padding:40px 20px}
@@ -78,8 +79,9 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29
 <h1>🧠 Emotion Intelligence Platform</h1>
 <div class="nav-right">
 <span class="user">Olá, {{ usuario.nome }}!</span>
-<span class="version">v9.0 PRO</span>
+<span class="version">v10.0 PRO</span>
 <a href="/perfil" class="btn-perfil">👤 Perfil</a>
+<a href="/afiliado" class="btn-afiliado">💰 Afiliados</a>
 <a href="/planos" class="btn-planos">⭐ Planos</a>
 {% if usuario.email == "albertmenezes2006@gmail.com" %}
 <a href="/admin" class="btn-admin">🔐 Admin</a>

@@ -11,6 +11,7 @@ import unicodedata
 import mercadopago
 import sendgrid
 from sendgrid.helpers.mail import Mail
+import uuid
 import os
 
 MP_ACCESS_TOKEN = "APP_USR-4193087911174356-070916-cefe9e3636798457e9e78f6036cd4500-3532571592"
@@ -29,6 +30,9 @@ class Usuario(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     senha = Column(String, nullable=False)
     plano = Column(String, default="free")
+    ref_code = Column(String, unique=True, nullable=True)
+    indicado_por = Column(String, nullable=True)
+    comissao_total = Column(Integer, default=0)
     criado_em = Column(DateTime, default=datetime.now)
     analises = relationship("Analise", back_populates="usuario")
 
@@ -53,11 +57,12 @@ def hash_senha(senha):
 def verificar_senha(senha, hash):
     return pwd_context.verify(senha, hash)
 
-app = FastAPI(title="Emotion Intelligence Platform", version="9.0")
+app = FastAPI(title="Emotion Intelligence Platform", version="10.0")
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 sessoes = {}
 LIMITE_FREE = 10
+COMISSAO_PERCENT = 20
 
 def get_db():
     db = SessionLocal()
@@ -80,38 +85,29 @@ def contar_analises_hoje(usuario_id: int, db: Session):
         Analise.criado_em >= datetime.combine(hoje, datetime.min.time())
     ).count()
 
+def gerar_ref_code(nome: str):
+    base = nome.lower().replace(" ", "")[:6]
+    sufixo = str(uuid.uuid4())[:4]
+    return f"{base}{sufixo}"
+
 async def enviar_email_boas_vindas(nome: str, email: str):
     try:
         sg = sendgrid.SendGridAPIClient(api_key=SENDGRID_API_KEY)
         message = Mail(
             from_email=ADMIN_EMAIL,
             to_emails=email,
-            subject="🧠 Bem-vindo ao Emotion Intelligence Platform!",
+            subject="🧠 Bem-vindo ao Emotion Intelligence!",
             html_content=f"""
             <html><body style="font-family:sans-serif;padding:40px">
             <h1 style="color:#00d2ff">🧠 Emotion Intelligence</h1>
             <h2>Olá, {nome}! 👋</h2>
-            <p style="font-size:18px">Bem-vindo à plataforma de inteligência emocional!</p>
-            <br>
-            <p>Com o seu plano FREE você pode:</p>
-            <ul>
-            <li>✅ 10 análises por dia</li>
-            <li>✅ Histórico de análises</li>
-            <li>✅ Estatísticas emocionais</li>
-            <li>✅ Análise por voz</li>
-            </ul>
-            <br>
+            <p>Bem-vindo! Com o FREE você tem 10 análises por dia.</p>
             <a href="https://emotion-platform-albert.onrender.com/planos"
-            style="background:#00d2ff;padding:15px 30px;border-radius:15px;color:#fff;text-decoration:none;font-size:16px">
-            🚀 Ver Planos Premium
-            </a>
-            <br><br>
-            <p style="color:#666;font-size:12px">Emotion Intelligence Platform © 2026</p>
-            </body></html>
-            """
+            style="background:#00d2ff;padding:15px 30px;border-radius:15px;color:#fff;text-decoration:none">
+            Ver Planos Premium</a>
+            </body></html>"""
         )
         sg.send(message)
-        print(f"Email boas-vindas enviado para {email}")
     except Exception as e:
         print(f"Erro email: {e}")
 
@@ -126,28 +122,13 @@ async def enviar_email_premium(nome: str, email: str):
             <html><body style="font-family:sans-serif;padding:40px">
             <h1 style="color:#00d2ff">🧠 Emotion Intelligence</h1>
             <h2>Parabéns, {nome}! 🎉</h2>
-            <p style="font-size:18px">Seu plano Premium foi ativado com sucesso!</p>
-            <br>
-            <p>Agora você tem acesso a:</p>
-            <ul>
-            <li>✅ Análises ilimitadas</li>
-            <li>✅ Histórico completo</li>
-            <li>✅ Gráficos avançados</li>
-            <li>✅ Análise por voz</li>
-            <li>✅ Suporte prioritário</li>
-            </ul>
-            <br>
+            <p>Plano Premium ativado! Análises ilimitadas liberadas.</p>
             <a href="https://emotion-platform-albert.onrender.com"
-            style="background:#00d2ff;padding:15px 30px;border-radius:15px;color:#fff;text-decoration:none;font-size:16px">
-            🚀 Acessar Dashboard
-            </a>
-            <br><br>
-            <p style="color:#666;font-size:12px">Emotion Intelligence Platform © 2026</p>
-            </body></html>
-            """
+            style="background:#00d2ff;padding:15px 30px;border-radius:15px;color:#fff;text-decoration:none">
+            Acessar Dashboard</a>
+            </body></html>"""
         )
         sg.send(message)
-        print(f"Email premium enviado para {email}")
     except Exception as e:
         print(f"Erro email: {e}")
 
@@ -218,10 +199,13 @@ def detectar_emocao(text):
     return "neutro"
 
 @app.get("/", response_class=HTMLResponse)
-def index(request: Request, db: Session = Depends(get_db)):
+def index(request: Request, ref: str = None, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
     if not usuario:
-        return templates.TemplateResponse(request, "index.html")
+        response = templates.TemplateResponse(request, "index.html")
+        if ref:
+            response.set_cookie(key="ref", value=ref, max_age=86400)
+        return response
     analises_hoje = contar_analises_hoje(usuario.id, db)
     return templates.TemplateResponse(request, "dashboard.html", {
         "usuario": usuario,
@@ -238,7 +222,6 @@ def login(request: Request, email: str = Form(...), senha: str = Form(...), db: 
     usuario = db.query(Usuario).filter(Usuario.email == email).first()
     if not usuario or not verificar_senha(senha, usuario.senha):
         return templates.TemplateResponse(request, "login.html", {"erro": "Email ou senha incorretos"})
-    import uuid
     session_id = str(uuid.uuid4())
     sessoes[session_id] = usuario.id
     response = RedirectResponse(url="/", status_code=302)
@@ -254,7 +237,16 @@ async def cadastro(background_tasks: BackgroundTasks, request: Request, nome: st
     existe = db.query(Usuario).filter(Usuario.email == email).first()
     if existe:
         return templates.TemplateResponse(request, "cadastro.html", {"erro": "Email já cadastrado"})
-    novo = Usuario(nome=nome, email=email, senha=hash_senha(senha), plano="free")
+    ref_cookie = request.cookies.get("ref")
+    ref_code = gerar_ref_code(nome)
+    novo = Usuario(
+        nome=nome,
+        email=email,
+        senha=hash_senha(senha),
+        plano="free",
+        ref_code=ref_code,
+        indicado_por=ref_cookie
+    )
     db.add(novo)
     db.commit()
     background_tasks.add_task(enviar_email_boas_vindas, nome, email)
@@ -268,6 +260,22 @@ def logout(request: Request):
     response = RedirectResponse(url="/login")
     response.delete_cookie("session_id")
     return response
+
+@app.get("/afiliado", response_class=HTMLResponse)
+def afiliado_page(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return RedirectResponse(url="/login")
+    indicados = db.query(Usuario).filter(Usuario.indicado_por == usuario.ref_code).all()
+    indicados_premium = [u for u in indicados if u.plano == "premium"]
+    comissao = len(indicados_premium) * 49 * COMISSAO_PERCENT // 100
+    return templates.TemplateResponse(request, "afiliado.html", {
+        "usuario": usuario,
+        "total_indicados": len(indicados),
+        "indicados_premium": len(indicados_premium),
+        "comissao": comissao,
+        "link": f"https://emotion-platform-albert.onrender.com/?ref={usuario.ref_code}"
+    })
 
 @app.get("/perfil", response_class=HTMLResponse)
 def perfil_page(request: Request, db: Session = Depends(get_db)):
@@ -432,7 +440,9 @@ def admin(request: Request, db: Session = Depends(get_db)):
             "email": u.email,
             "plano": u.plano,
             "total_analises": len(u.analises),
-            "criado_em": u.criado_em.strftime("%d/%m/%Y")
+            "criado_em": u.criado_em.strftime("%d/%m/%Y"),
+            "ref_code": u.ref_code,
+            "indicado_por": u.indicado_por
         })
     return templates.TemplateResponse(request, "admin.html", {
         "usuario": usuario,
@@ -458,7 +468,7 @@ async def sucesso(background_tasks: BackgroundTasks, request: Request, db: Sessi
     a{background:linear-gradient(90deg,#00d2ff,#3a7bd5);padding:15px 40px;border-radius:15px;color:#fff;text-decoration:none;font-size:18px}
     </style></head><body>
     <h1>✅ Pagamento aprovado!</h1>
-    <p style='font-size:20px;margin-bottom:30px'>Plano Premium ativado! Verifique seu email. 📧</p>
+    <p style='font-size:20px;margin-bottom:30px'>Plano Premium ativado! 📧</p>
     <a href='/'>Ir para o Dashboard</a>
     </body></html>""")
 
