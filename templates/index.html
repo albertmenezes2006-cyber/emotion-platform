@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emotion Intelligence — Plataforma de IA Emocional</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#0f0c29;color:#fff}
+nav{padding:20px 60px;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.3);position:fixed;width:100%;z-index:100}
+.logo{font-size:22px;font-weight:bold;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-btns{display:flex;gap:15px}
+.btn-login{padding:10px 25px;border-radius:25px;border:2px solid rgba(255,255,255,0.3);color:#fff;text-decoration:none;font-size:14px}
+.btn-cadastro{padding:10px 25px;border-radius:25px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);color:#fff;text-decoration:none;font-size:14px;font-weight:bold}
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:100px 20px 60px;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e)}
+.hero h1{font-size:64px;font-weight:bold;line-height:1.2;margin-bottom:20px}
+.hero h1 span{background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:22px;color:rgba(255,255,255,0.7);max-width:600px;margin:0 auto 40px}
+.hero-btns{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+.btn-primary{padding:18px 45px;border-radius:15px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);color:#fff;text-decoration:none;font-size:20px;font-weight:bold}
+.btn-secondary{padding:18px 45px;border-radius:15px;border:2px solid rgba(255,255,255,0.3);color:#fff;text-decoration:none;font-size:20px}
+.emocoes{display:flex;gap:15px;justify-content:center;flex-wrap:wrap;margin-top:60px}
+.emoji-card{background:rgba(255,255,255,0.05);border-radius:15px;padding:20px;text-align:center;font-size:40px}
+.section{padding:100px 60px;text-align:center}
+.section h2{font-size:48px;margin-bottom:20px}
+.section h2 span{background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.section p{font-size:18px;color:rgba(255,255,255,0.6);max-width:600px;margin:0 auto 60px}
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px;max-width:1200px;margin:0 auto}
+.feature{background:rgba(255,255,255,0.05);border-radius:20px;padding:40px;border:1px solid rgba(255,255,255,0.1);text-align:left}
+.feature-icon{font-size:48px;margin-bottom:20px}
+.feature h3{font-size:24px;margin-bottom:10px}
+.feature p{color:rgba(255,255,255,0.6);font-size:16px}
+.como-funciona{background:linear-gradient(135deg,#0f0c29,#302b63);padding:100px 60px;text-align:center}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;max-width:1000px;margin:60px auto 0}
+.step{text-align:center;padding:30px}
+.step-num{width:60px;height:60px;border-radius:50%;background:linear-gradient(90deg,#00d2ff,#3a7bd5);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;margin:0 auto 20px}
+.step h3{font-size:22px;margin-bottom:10px}
+.step p{color:rgba(255,255,255,0.6)}
+.planos-section{padding:100px 60px;text-align:center;background:#0f0c29}
+.planos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px;max-width:1000px;margin:60px auto 0}
+.plano{background:rgba(255,255,255,0.05);border-radius:20px;padding:40px;border:1px solid rgba(255,255,255,0.1)}
+.plano.destaque{border:2px solid #00d2ff;background:rgba(0,210,255,0.05)}
+.plano-nome{font-size:28px;font-weight:bold;margin-bottom:10px}
+.plano-preco{font-size:52px;font-weight:bold;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.plano-preco span{font-size:18px;color:rgba(255,255,255,0.5)}
+.plano ul{list-style:none;margin:20px 0;text-align:left}
+.plano ul li{padding:8px 0;color:rgba(255,255,255,0.7);font-size:15px}
+.plano ul li::before{content:"✅ ";margin-right:5px}
+.btn-plano{width:100%;padding:15px;border-radius:12px;border:none;font-size:18px;font-weight:bold;cursor:pointer;margin-top:20px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);color:#fff}
+.depoimentos{padding:100px 60px;text-align:center;background:linear-gradient(135deg,#0f0c29,#302b63)}
+.depoimentos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px;max-width:1000px;margin:60px auto 0}
+.depoimento{background:rgba(255,255,255,0.05);border-radius:20px;padding:30px;text-align:left}
+.depoimento p{font-size:16px;color:rgba(255,255,255,0.8);margin-bottom:20px;font-style:italic}
+.depoimento-autor{display:flex;align-items:center;gap:10px}
+.avatar{width:45px;height:45px;border-radius:50%;background:linear-gradient(90deg,#00d2ff,#3a7bd5);display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px}
+.autor-info strong{display:block;font-size:16px}
+.autor-info span{font-size:13px;color:rgba(255,255,255,0.5)}
+.cta{padding:100px 60px;text-align:center;background:#0f0c29}
+.cta h2{font-size:52px;font-weight:bold;margin-bottom:20px}
+.cta h2 span{background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.cta p{font-size:20px;color:rgba(255,255,255,0.6);margin-bottom:40px}
+footer{padding:40px 60px;background:rgba(0,0,0,0.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
+footer p{color:rgba(255,255,255,0.4);font-size:14px}
+footer a{color:rgba(255,255,255,0.4);text-decoration:none;font-size:14px}
+@media(max-width:768px){
+.hero h1{font-size:36px}
+nav{padding:15px 20px}
+.section{padding:60px 20px}
+.como-funciona{padding:60px 20px}
+.planos-section{padding:60px 20px}
+.depoimentos{padding:60px 20px}
+.cta{padding:60px 20px}
+footer{padding:30px 20px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+<div class="logo">🧠 Emotion Intelligence</div>
+<div class="nav-btns">
+<a href="/login" class="btn-login">Entrar</a>
+<a href="/cadastro" class="btn-cadastro">Começar Grátis</a>
+</div>
+</nav>
+
+<section class="hero">
+<div>
+<h1>Descubra suas <span>emoções</span><br>com Inteligência Artificial</h1>
+<p>Analise textos e voz em segundos. Entenda seus sentimentos com tecnologia de ponta.</p>
+<div class="hero-btns">
+<a href="/cadastro" class="btn-primary">🚀 Começar Grátis</a>
+<a href="#como-funciona" class="btn-secondary">Ver como funciona</a>
+</div>
+<div class="emocoes">
+<div class="emoji-card">😄</div>
+<div class="emoji-card">😢</div>
+<div class="emoji-card">😡</div>
+<div class="emoji-card">😨</div>
+<div class="emoji-card">❤️</div>
+<div class="emoji-card">😲</div>
+<div class="emoji-card">🙏</div>
+<div class="emoji-card">🌅</div>
+</div>
+</div>
+</section>
+
+<section class="section">
+<h2>Por que usar a <span>Emotion Intelligence?</span></h2>
+<p>A plataforma mais completa de análise emocional do Brasil</p>
+<div class="features">
+<div class="feature">
+<div class="feature-icon">🧠</div>
+<h3>Inteligência Artificial</h3>
+<p>Nossa IA detecta 11 emoções diferentes com alta precisão em português.</p>
+</div>
+<div class="feature">
+<div class="feature-icon">🎤</div>
+<h3>Análise por Voz</h3>
+<p>Fale e nossa IA detecta instantaneamente a emoção na sua voz.</p>
+</div>
+<div class="feature">
+<div class="feature-icon">📊</div>
+<h3>Gráficos e Relatórios</h3>
+<p>Visualize suas emoções ao longo do tempo com gráficos interativos.</p>
+</div>
+<div class="feature">
+<div class="feature-icon">📱</div>
+<h3>Funciona no Celular</h3>
+<p>Instale como aplicativo no seu celular e use em qualquer lugar.</p>
+</div>
+<div class="feature">
+<div class="feature-icon">🔒</div>
+<h3>100% Seguro</h3>
+<p>Seus dados são criptografados e protegidos. Privacidade garantida.</p>
+</div>
+<div class="feature">
+<div class="feature-icon">⚡</div>
+<h3>Resultado em Segundos</h3>
+<p>Análise instantânea. Digite ou fale e receba o resultado na hora.</p>
+</div>
+</div>
+</section>
+
+<section class="como-funciona" id="como-funciona">
+<h2>Como <span>funciona?</span></h2>
+<p>Simples, rápido e preciso</p>
+<div class="steps">
+<div class="step">
+<div class="step-num">1</div>
+<h3>Crie sua conta</h3>
+<p>Cadastre-se gratuitamente em menos de 1 minuto.</p>
+</div>
+<div class="step">
+<div class="step-num">2</div>
+<h3>Digite ou fale</h3>
+<p>Escreva uma frase ou use o microfone para falar.</p>
+</div>
+<div class="step">
+<div class="step-num">3</div>
+<h3>Receba a análise</h3>
+<p>Nossa IA identifica a emoção instantaneamente.</p>
+</div>
+<div class="step">
+<div class="step-num">4</div>
+<h3>Acompanhe sua evolução</h3>
+<p>Veja gráficos e relatórios das suas emoções.</p>
+</div>
+</div>
+</section>
+
+<section class="planos-section">
+<h2>Planos e <span>Preços</span></h2>
+<p>Comece grátis e faça upgrade quando precisar</p>
+<div class="planos-grid">
+<div class="plano">
+<div class="plano-nome">Free</div>
+<div class="plano-preco">R$0<span>/mês</span></div>
+<ul>
+<li>10 análises por dia</li>
+<li>Histórico de 7 dias</li>
+<li>Gráficos básicos</li>
+<li>Análise por voz</li>
+</ul>
+<button class="btn-plano" onclick="window.location.href='/cadastro'">Começar Grátis</button>
+</div>
+<div class="plano destaque">
+<div style="background:linear-gradient(90deg,#00d2ff,#3a7bd5);padding:5px 20px;border-radius:20px;font-size:12px;font-weight:bold;display:inline-block;margin-bottom:15px">⭐ MAIS POPULAR</div>
+<div class="plano-nome">Premium</div>
+<div class="plano-preco">R$49<span>/mês</span></div>
+<ul>
+<li>Análises ilimitadas</li>
+<li>Histórico completo</li>
+<li>Gráficos avançados</li>
+<li>Análise por voz</li>
+<li>Suporte prioritário</li>
+<li>API Access</li>
+</ul>
+<button class="btn-plano" onclick="window.location.href='/cadastro'">Assinar Premium</button>
+</div>
+<div class="plano">
+<div class="plano-nome">Enterprise</div>
+<div class="plano-preco">R$199<span>/mês</span></div>
+<ul>
+<li>Tudo do Premium</li>
+<li>Múltiplos usuários</li>
+<li>Dashboard corporativo</li>
+<li>Integração por API</li>
+<li>Suporte 24/7</li>
+<li>SLA garantido</li>
+</ul>
+<button class="btn-plano" onclick="window.location.href='/cadastro'">Assinar Enterprise</button>
+</div>
+</div>
+</section>
+
+<section class="depoimentos">
+<h2>O que nossos <span>usuários dizem</span></h2>
+<p>Milhares de pessoas já usam a Emotion Intelligence</p>
+<div class="depoimentos-grid">
+<div class="depoimento">
+<p>"Incrível! A IA detectou exatamente o que eu estava sentindo. Uso todos os dias para acompanhar meu estado emocional."</p>
+<div class="depoimento-autor">
+<div class="avatar">A</div>
+<div class="autor-info">
+<strong>Ana Silva</strong>
+<span>Psicóloga</span>
+</div>
+</div>
+</div>
+<div class="depoimento">
+<p>"Uso para analisar as mensagens da minha equipe. Melhorou muito a comunicação e reduziu conflitos no trabalho."</p>
+<div class="depoimento-autor">
+<div class="avatar">C</div>
+<div class="autor-info">
+<strong>Carlos Mendes</strong>
+<span>Gestor de RH</span>
+</div>
+</div>
+</div>
+<div class="depoimento">
+<p>"A análise por voz é fantástica! Falo e em segundos sei qual é minha emoção dominante. Recomendo muito!"</p>
+<div class="depoimento-autor">
+<div class="avatar">M</div>
+<div class="autor-info">
+<strong>Maria Santos</strong>
+<span>Coach Emocional</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="cta">
+<h2>Comece <span>gratuitamente</span> agora!</h2>
+<p>Sem cartão de crédito. Sem compromisso. Comece em 1 minuto.</p>
+<a href="/cadastro" class="btn-primary" style="display:inline-block;font-size:22px;padding:20px 60px">🚀 Criar Conta Grátis</a>
+</section>
+
+<footer>
+<p>Emotion Intelligence Platform © 2026 — Todos os direitos reservados</p>
+<div style="display:flex;gap:20px">
+<a href="/login">Login</a>
+<a href="/cadastro">Cadastro</a>
+<a href="/planos">Planos</a>
+</div>
+</footer>
+
+</body>
+</html>

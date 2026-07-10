@@ -225,7 +225,7 @@ def detectar_emocao(text):
 def index(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
     if not usuario:
-        return RedirectResponse(url="/login")
+        return templates.TemplateResponse(request, "index.html")
     analises_hoje = contar_analises_hoje(usuario.id, db)
     return templates.TemplateResponse(request, "dashboard.html", {
         "usuario": usuario,
