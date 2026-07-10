@@ -12,6 +12,7 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29
 .nav-right{display:flex;align-items:center;gap:15px}
 .user{color:rgba(255,255,255,0.6);font-size:14px}
 .version{background:#3a7bd5;padding:5px 15px;border-radius:20px;font-size:12px}
+.btn-planos{background:linear-gradient(90deg,#00d2ff,#3a7bd5);padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px;font-weight:bold}
 .logout{background:#e74c3c;padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px}
 .container{max-width:1200px;margin:0 auto;padding:40px 20px}
 .analyze-section{background:rgba(255,255,255,0.05);border-radius:20px;padding:40px;margin-bottom:30px;border:1px solid rgba(255,255,255,0.1)}
@@ -39,6 +40,10 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29
 .stat-bar-label{width:100px;font-size:14px}
 .stat-bar-fill{height:25px;border-radius:12px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);min-width:5px}
 .stat-bar-count{font-size:14px;color:rgba(255,255,255,0.6)}
+.plano-banner{background:linear-gradient(90deg,rgba(0,210,255,0.1),rgba(58,123,213,0.1));border:1px solid rgba(0,210,255,0.3);border-radius:15px;padding:20px 30px;margin-bottom:30px;display:flex;justify-content:space-between;align-items:center}
+.plano-info{font-size:16px;color:rgba(255,255,255,0.8)}
+.plano-info span{color:#00d2ff;font-weight:bold}
+.btn-upgrade{background:linear-gradient(90deg,#00d2ff,#3a7bd5);padding:10px 25px;border-radius:12px;color:#fff;text-decoration:none;font-size:14px;font-weight:bold}
 .footer{text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:14px}
 .emotion-alegria{background:rgba(46,204,113,0.3);color:#2ecc71}
 .emotion-tristeza{background:rgba(52,152,219,0.3);color:#3498db}
@@ -55,11 +60,16 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29
 <h1>🧠 Emotion Intelligence Platform</h1>
 <div class="nav-right">
 <span class="user">Ola, {{ usuario.nome }}!</span>
-<span class="version">v4.0 PRO</span>
+<span class="version">v5.0 PRO</span>
+<a href="/planos" class="btn-planos">⭐ Planos</a>
 <a href="/logout" class="logout">Sair</a>
 </div>
 </nav>
 <div class="container">
+<div class="plano-banner">
+<div class="plano-info">Seu plano atual: <span>{{ usuario.plano | upper }}</span></div>
+<a href="/planos" class="btn-upgrade">🚀 Fazer Upgrade</a>
+</div>
 <div class="analyze-section">
 <h2>🔍 Analisar Emocao</h2>
 <div class="input-group">
@@ -91,68 +101,63 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29
 </div>
 </div>
 <div class="footer">
-<p>Emotion Intelligence Platform 2026</p>
+<p>Emotion Intelligence Platform 2026 — Todos os direitos reservados</p>
 </div>
 <script>
 document.getElementById('btnAnalisar').addEventListener('click', analyzeText);
-document.getElementById('textInput').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') analyzeText();
+document.getElementById('textInput').addEventListener('keypress', function(e){
+    if(e.key==='Enter') analyzeText();
 });
-
-function analyzeText() {
-    var text = document.getElementById('textInput').value;
-    if (!text) return;
-    fetch('/analyze?text=' + encodeURIComponent(text))
-    .then(function(response) { return response.json(); })
-    .then(function(data) {
-        document.getElementById('resultEmoji').textContent = data.emoji;
-        document.getElementById('resultEmotion').textContent = data.emocao;
-        document.getElementById('resultRec').textContent = data.recomendacao;
-        document.getElementById('resultTime').textContent = data.timestamp;
+function analyzeText(){
+    var text=document.getElementById('textInput').value;
+    if(!text) return;
+    fetch('/analyze?text='+encodeURIComponent(text))
+    .then(function(r){return r.json();})
+    .then(function(data){
+        document.getElementById('resultEmoji').textContent=data.emoji;
+        document.getElementById('resultEmotion').textContent=data.emocao;
+        document.getElementById('resultRec').textContent=data.recomendacao;
+        document.getElementById('resultTime').textContent=data.timestamp;
         document.getElementById('resultCard').classList.add('show');
-        document.getElementById('textInput').value = '';
+        document.getElementById('textInput').value='';
         loadStats();
         loadHistory();
     })
-    .catch(function() { alert('Erro ao analisar'); });
+    .catch(function(){alert('Erro ao analisar');});
 }
-
-function loadStats() {
+function loadStats(){
     fetch('/stats')
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-        if (data.total_analises) {
-            document.getElementById('totalAnalyses').textContent = data.total_analises;
-            var barsHTML = '';
-            var values = Object.values(data.emocoes_detectadas);
-            var max = Math.max.apply(null, values);
-            for (var emocao in data.emocoes_detectadas) {
-                var count = data.emocoes_detectadas[emocao];
-                var width = (count / max) * 100;
-                barsHTML += '<div class="stat-bar"><span class="stat-bar-label">' + emocao + '</span><div style="flex:1;background:rgba(255,255,255,0.05);border-radius:12px"><div class="stat-bar-fill" style="width:' + width + '%"></div></div><span class="stat-bar-count">' + count + '</span></div>';
+    .then(function(r){return r.json();})
+    .then(function(data){
+        if(data.total_analises){
+            document.getElementById('totalAnalyses').textContent=data.total_analises;
+            var barsHTML='';
+            var max=Math.max.apply(null,Object.values(data.emocoes_detectadas));
+            for(var emocao in data.emocoes_detectadas){
+                var count=data.emocoes_detectadas[emocao];
+                var width=(count/max)*100;
+                barsHTML+='<div class="stat-bar"><span class="stat-bar-label">'+emocao+'</span><div style="flex:1;background:rgba(255,255,255,0.05);border-radius:12px"><div class="stat-bar-fill" style="width:'+width+'%"></div></div><span class="stat-bar-count">'+count+'</span></div>';
             }
-            document.getElementById('statBars').innerHTML = barsHTML;
+            document.getElementById('statBars').innerHTML=barsHTML;
         }
-    }).catch(function() {});
+    }).catch(function(){});
 }
-
-function loadHistory() {
+function loadHistory(){
     fetch('/historico')
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-        if (data.total > 0) {
-            var html = '';
-            var items = data.analises.slice().reverse().slice(0, 10);
-            for (var i = 0; i < items.length; i++) {
-                var item = items[i];
-                var cls = 'emotion-' + item.emocao.toLowerCase();
-                html += '<div class="history-item"><span class="history-text">' + item.texto + '</span><span class="history-emotion ' + cls + '">' + item.emoji + ' ' + item.emocao + '</span></div>';
+    .then(function(r){return r.json();})
+    .then(function(data){
+        if(data.total>0){
+            var html='';
+            var items=data.analises.slice().reverse().slice(0,10);
+            for(var i=0;i<items.length;i++){
+                var item=items[i];
+                var cls='emotion-'+item.emocao.toLowerCase();
+                html+='<div class="history-item"><span class="history-text">'+item.texto+'</span><span class="history-emotion '+cls+'">'+item.emoji+' '+item.emocao+'</span></div>';
             }
-            document.getElementById('historyList').innerHTML = html;
+            document.getElementById('historyList').innerHTML=html;
         }
-    }).catch(function() {});
+    }).catch(function(){});
 }
-
 loadStats();
 loadHistory();
 </script>

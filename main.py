@@ -7,6 +7,12 @@ from sqlalchemy.orm import sessionmaker, Session, relationship
 from passlib.context import CryptContext
 from datetime import datetime
 import unicodedata
+import mercadopago
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+MP_ACCESS_TOKEN = os.getenv("MP_ACCESS_TOKEN")
 
 DATABASE_URL = "sqlite:///./emotion.db"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
@@ -19,6 +25,7 @@ class Usuario(Base):
     nome = Column(String, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
     senha = Column(String, nullable=False)
+    plano = Column(String, default="free")
     criado_em = Column(DateTime, default=datetime.now)
     analises = relationship("Analise", back_populates="usuario")
 
@@ -43,7 +50,7 @@ def hash_senha(senha):
 def verificar_senha(senha, hash):
     return pwd_context.verify(senha, hash)
 
-app = FastAPI(title="Emotion Intelligence Platform", version="4.0")
+app = FastAPI(title="Emotion Intelligence Platform", version="5.0")
 templates = Jinja2Templates(directory="templates")
 sessoes = {}
 
@@ -148,7 +155,7 @@ def cadastro(request: Request, nome: str = Form(...), email: str = Form(...), se
     existe = db.query(Usuario).filter(Usuario.email == email).first()
     if existe:
         return templates.TemplateResponse(request, "cadastro.html", {"erro": "Email já cadastrado"})
-    novo = Usuario(nome=nome, email=email, senha=hash_senha(senha))
+    novo = Usuario(nome=nome, email=email, senha=hash_senha(senha), plano="free")
     db.add(novo)
     db.commit()
     return RedirectResponse(url="/login", status_code=302)
@@ -215,3 +222,54 @@ def stats(request: Request, db: Session = Depends(get_db)):
         "emocoes_detectadas": contagem,
         "mais_frequente": max(contagem, key=contagem.get)
     }
+
+@app.get("/planos", response_class=HTMLResponse)
+def planos(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return RedirectResponse(url="/login")
+    return templates.TemplateResponse(request, "planos.html", {"usuario": usuario})
+
+@app.get("/checkout")
+def checkout(request: Request, plano: str, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return RedirectResponse(url="/login")
+    precos = {
+        "premium": {"valor": 49, "nome": "Emotion Premium"},
+        "enterprise": {"valor": 199, "nome": "Emotion Enterprise"}
+    }
+    if plano not in precos:
+        raise HTTPException(status_code=400, detail="Plano invalido")
+    sdk = mercadopago.SDK(MP_ACCESS_TOKEN)
+    preference_data = {
+        "items": [{
+            "title": precos[plano]["nome"],
+            "quantity": 1,
+            "currency_id": "BRL",
+            "unit_price": float(precos[plano]["valor"])
+        }],
+        "payer": {"email": usuario.email},
+        "back_urls": {
+            "success": "https://emotion-platform-albert.onrender.com/sucesso",
+            "failure": "https://emotion-platform-albert.onrender.com/falha",
+            "pending": "https://emotion-platform-albert.onrender.com/pendente"
+        },
+        "auto_return": "approved"
+    }
+    preference_response = sdk.preference().create(preference_data)
+    preference = preference_response["response"]
+    return RedirectResponse(url=preference["init_point"])
+
+@app.get("/sucesso", response_class=HTMLResponse)
+def sucesso(request: Request):
+    return HTMLResponse("<h1 style='color:green;font-family:sans-serif;text-align:center;margin-top:100px'>✅ Pagamento aprovado! Obrigado!</h1><br><center><a href='/'>Voltar ao Dashboard</a></center>")
+
+@app.get("/falha", response_class=HTMLResponse)
+def falha(request: Request):
+    return HTMLResponse("<h1 style='color:red;font-family:sans-serif;text-align:center;margin-top:100px'>❌ Pagamento falhou. Tente novamente.</h1><br><center><a href='/planos'>Tentar novamente</a></center>")
+
+@app.get("/pendente", response_class=HTMLResponse)
+def pendente(request: Request):
+    return HTMLResponse("<h1 style='color:orange;font-family:sans-serif;text-align:center;margin-top:100px'>⏳ Pagamento pendente. Aguarde a confirmação.</h1><br><center><a href='/'>Voltar ao Dashboard</a></center>")
+

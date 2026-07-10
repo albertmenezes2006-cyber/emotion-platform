@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planos — Emotion Intelligence</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh}
+.navbar{background:rgba(0,0,0,0.3);padding:20px 40px;display:flex;justify-content:space-between;align-items:center}
+.navbar h1{font-size:24px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-right{display:flex;align-items:center;gap:15px}
+.logout{background:#e74c3c;padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px}
+.voltar{background:#3a7bd5;padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px}
+.container{max-width:1200px;margin:0 auto;padding:60px 20px;text-align:center}
+.titulo{font-size:42px;font-weight:bold;margin-bottom:15px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.subtitulo{font-size:18px;color:rgba(255,255,255,0.5);margin-bottom:60px}
+.planos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;margin-top:40px}
+.plano{background:rgba(255,255,255,0.05);border-radius:20px;padding:40px;border:1px solid rgba(255,255,255,0.1);transition:all 0.3s}
+.plano:hover{transform:translateY(-10px);box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+.plano.destaque{border:2px solid #00d2ff;background:rgba(0,210,255,0.05)}
+.plano-badge{background:linear-gradient(90deg,#00d2ff,#3a7bd5);padding:5px 20px;border-radius:20px;font-size:12px;font-weight:bold;display:inline-block;margin-bottom:20px}
+.plano-nome{font-size:28px;font-weight:bold;margin-bottom:10px}
+.plano-preco{font-size:52px;font-weight:bold;margin:20px 0;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.plano-preco span{font-size:18px;color:rgba(255,255,255,0.5)}
+.plano-features{list-style:none;margin:30px 0;text-align:left}
+.plano-features li{padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.7);font-size:15px}
+.plano-features li::before{content:"✅ ";margin-right:8px}
+.btn-plano{width:100%;padding:18px;border-radius:15px;border:none;font-size:18px;font-weight:bold;cursor:pointer;transition:all 0.3s;margin-top:20px}
+.btn-free{background:rgba(255,255,255,0.1);color:#fff}
+.btn-free:hover{background:rgba(255,255,255,0.2)}
+.btn-premium{background:linear-gradient(90deg,#00d2ff,#3a7bd5);color:#fff}
+.btn-premium:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(58,123,213,0.4)}
+.btn-enterprise{background:linear-gradient(90deg,#f1c40f,#e67e22);color:#fff}
+.btn-enterprise:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(241,196,15,0.4)}
+</style>
+</head>
+<body>
+<nav class="navbar">
+    <h1>🧠 Emotion Intelligence Platform</h1>
+    <div class="nav-right">
+        <a href="/" class="voltar">← Voltar</a>
+        <a href="/logout" class="logout">Sair</a>
+    </div>
+</nav>
+<div class="container">
+    <div class="titulo">Escolha seu Plano</div>
+    <div class="subtitulo">Comece grátis e escale quando precisar</div>
+    <div class="planos-grid">
+        <div class="plano">
+            <div class="plano-nome">Free</div>
+            <div class="plano-preco">R$0<span>/mês</span></div>
+            <ul class="plano-features">
+                <li>10 análises por dia</li>
+                <li>Histórico de 7 dias</li>
+                <li>Suporte por email</li>
+            </ul>
+            <button class="btn-plano btn-free" onclick="window.location.href='/'">Plano Atual</button>
+        </div>
+        <div class="plano destaque">
+            <div class="plano-badge">⭐ MAIS POPULAR</div>
+            <div class="plano-nome">Premium</div>
+            <div class="plano-preco">R$49<span>/mês</span></div>
+            <ul class="plano-features">
+                <li>Análises ilimitadas</li>
+                <li>Histórico completo</li>
+                <li>Relatórios mensais</li>
+                <li>Suporte prioritário</li>
+                <li>API Access</li>
+            </ul>
+            <button class="btn-plano btn-premium" onclick="assinar('premium')">Assinar Premium</button>
+        </div>
+        <div class="plano">
+            <div class="plano-nome">Enterprise</div>
+            <div class="plano-preco">R$199<span>/mês</span></div>
+            <ul class="plano-features">
+                <li>Tudo do Premium</li>
+                <li>Múltiplos usuários</li>
+                <li>Dashboard corporativo</li>
+                <li>Integração por API</li>
+                <li>Suporte 24/7</li>
+                <li>SLA garantido</li>
+            </ul>
+            <button class="btn-plano btn-enterprise" onclick="assinar('enterprise')">Assinar Enterprise</button>
+        </div>
+    </div>
+</div>
+<script>
+function assinar(plano) {
+    window.location.href = '/checkout?plano=' + plano;
+}
+</script>
+</body>
+</html>
