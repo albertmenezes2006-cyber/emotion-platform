@@ -62,7 +62,7 @@ def gerar_ref_code(nome: str):
     sufixo = str(uuid.uuid4())[:4]
     return f"{base}{sufixo}"
 
-app = FastAPI(title="Emotion Intelligence Platform", version="10.0")
+app = FastAPI(title="Emotion Intelligence Platform", version="11.0")
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 sessoes = {}
@@ -108,7 +108,7 @@ async def enviar_email_boas_vindas(nome: str, email: str, ref_code: str):
             <p>Bem-vindo! Com o FREE você tem 10 análises por dia.</p>
             <br>
             <p><strong>💰 Seu link de afiliado:</strong></p>
-            <p style="background:#f5f5f5;padding:10px;border-radius:8px">{link_afiliado}</p>
+            <p style="background:#f5f5f5;padding:10px;border-radius:8px;color:#333">{link_afiliado}</p>
             <p>Compartilhe e ganhe 20% de comissão em cada venda!</p>
             <br>
             <a href="{BASE_URL}"
@@ -129,7 +129,7 @@ async def enviar_email_novo_cadastro(nome: str, email: str):
             subject=f"🎉 Novo cadastro: {nome}",
             html_content=f"""
             <html><body style="font-family:sans-serif;padding:40px">
-            <h1 style="color:#00d2ff">🎉 Novo usuário cadastrado!</h1>
+            <h1 style="color:#00d2ff">🎉 Novo usuário!</h1>
             <p><strong>Nome:</strong> {nome}</p>
             <p><strong>Email:</strong> {email}</p>
             <p><strong>Data:</strong> {datetime.now().strftime("%d/%m/%Y %H:%M")}</p>
@@ -307,6 +307,10 @@ def logout(request: Request):
     response = RedirectResponse(url="/login")
     response.delete_cookie("session_id")
     return response
+
+@app.get("/privacidade", response_class=HTMLResponse)
+def privacidade(request: Request):
+    return templates.TemplateResponse(request, "privacidade.html")
 
 @app.get("/perfil", response_class=HTMLResponse)
 def perfil_page(request: Request, db: Session = Depends(get_db)):

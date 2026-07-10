@@ -64,6 +64,15 @@ nav{padding:20px 60px;display:flex;justify-content:space-between;align-items:cen
 footer{padding:40px 60px;background:rgba(0,0,0,0.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
 footer p{color:rgba(255,255,255,0.4);font-size:14px}
 footer a{color:rgba(255,255,255,0.4);text-decoration:none;font-size:14px}
+.popup-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:9999;align-items:center;justify-content:center}
+.popup-overlay.show{display:flex}
+.popup-box{background:linear-gradient(135deg,#0f0c29,#302b63);border:1px solid rgba(0,210,255,0.3);border-radius:20px;padding:50px;max-width:500px;width:90%;text-align:center;position:relative}
+.popup-close{position:absolute;top:15px;right:20px;background:none;border:none;color:#fff;font-size:24px;cursor:pointer}
+.popup-emoji{font-size:60px;margin-bottom:20px}
+.popup-box h2{font-size:32px;margin-bottom:15px}
+.popup-box p{font-size:18px;color:rgba(255,255,255,0.7);margin-bottom:25px}
+.popup-btn{background:linear-gradient(90deg,#00d2ff,#3a7bd5);padding:15px 40px;border-radius:15px;color:#fff;text-decoration:none;font-size:20px;font-weight:bold;display:block;margin-bottom:15px}
+.popup-nao{background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:14px}
 @media(max-width:768px){
 .hero h1{font-size:36px}
 nav{padding:15px 20px}
@@ -77,6 +86,18 @@ footer{padding:30px 20px}
 </style>
 </head>
 <body>
+
+<div class="popup-overlay" id="popup">
+<div class="popup-box">
+<button class="popup-close" onclick="fecharPopup()">✕</button>
+<div class="popup-emoji">🎁</div>
+<h2>Espera! Não vá ainda!</h2>
+<p>Crie sua conta GRÁTIS agora e comece a descobrir suas emoções com IA!</p>
+<a href="/cadastro" class="popup-btn">🚀 Criar Conta Grátis</a>
+<button class="popup-nao" onclick="fecharPopup()">Não, obrigado</button>
+</div>
+</div>
+
 <nav>
 <div class="logo">🧠 Emotion Intelligence</div>
 <div class="nav-btns">
@@ -84,6 +105,7 @@ footer{padding:30px 20px}
 <a href="/cadastro" class="btn-cadastro">Começar Grátis</a>
 </div>
 </nav>
+
 <section class="hero">
 <div>
 <h1>Descubra suas <span>emoções</span><br>com Inteligência Artificial</h1>
@@ -105,6 +127,7 @@ footer{padding:30px 20px}
 </div>
 </div>
 </section>
+
 <section class="section">
 <h2>Por que usar a <span>Emotion Intelligence?</span></h2>
 <p>A plataforma mais completa de análise emocional do Brasil</p>
@@ -141,6 +164,7 @@ footer{padding:30px 20px}
 </div>
 </div>
 </section>
+
 <section class="como-funciona" id="como-funciona">
 <h2>Como <span>funciona?</span></h2>
 <p>Simples, rápido e preciso</p>
@@ -167,6 +191,7 @@ footer{padding:30px 20px}
 </div>
 </div>
 </section>
+
 <section class="planos-section">
 <h2>Planos e <span>Preços</span></h2>
 <p>Comece grátis e faça upgrade quando precisar</p>
@@ -211,6 +236,7 @@ footer{padding:30px 20px}
 </div>
 </div>
 </section>
+
 <section class="depoimentos">
 <h2>O que nossos <span>usuários dizem</span></h2>
 <p>Milhares de pessoas já usam a Emotion Intelligence</p>
@@ -238,19 +264,23 @@ footer{padding:30px 20px}
 </div>
 </div>
 </section>
+
 <section class="cta">
 <h2>Comece <span>gratuitamente</span> agora!</h2>
 <p>Sem cartão de crédito. Sem compromisso. Comece em 1 minuto.</p>
 <a href="/cadastro" class="btn-primary" style="display:inline-block;font-size:22px;padding:20px 60px">🚀 Criar Conta Grátis</a>
 </section>
+
 <footer>
 <p>Emotion Intelligence Platform © 2026 — Todos os direitos reservados</p>
 <div style="display:flex;gap:20px">
 <a href="/login">Login</a>
 <a href="/cadastro">Cadastro</a>
 <a href="/planos">Planos</a>
+<a href="/privacidade">Privacidade</a>
 </div>
 </footer>
+
 <!--Start of Tawk.to Script-->
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
@@ -264,5 +294,18 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 <!--End of Tawk.to Script-->
+
+<script>
+var popupMostrado=false;
+document.addEventListener('mouseleave',function(e){
+if(e.clientY<=0&&!popupMostrado){
+popupMostrado=true;
+document.getElementById('popup').classList.add('show');
+}
+});
+function fecharPopup(){
+document.getElementById('popup').classList.remove('show');
+}
+</script>
 </body>
 </html>
