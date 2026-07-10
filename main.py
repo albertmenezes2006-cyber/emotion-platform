@@ -10,7 +10,7 @@ import unicodedata
 import mercadopago
 import os
 
-MP_ACCESS_TOKEN = "TEST-4193087911174356-070916-6998b24ec235b0c1e540bf1db1e4e24d-3532571592"
+MP_ACCESS_TOKEN = "APP_USR-4193087911174356-070916-cefe9e3636798457e9e78f6036cd4500-3532571592"
 
 DATABASE_URL = "sqlite:///./emotion.db"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
@@ -100,8 +100,8 @@ palavras_emocoes = {
                  "reconhecido", "valorizando"],
     "solidao": ["sozinho", "isolado", "abandonado", "sem amigos",
                 "ninguem", "excluido"],
-    "euforia": ["eufórico", "empolgado", "animadissimo", "incrivel",
-                "fantástico", "extraordinario"]
+    "euforia": ["euforico", "empolgado", "animadissimo", "incrivel",
+                "fantastico", "extraordinario"]
 }
 
 recomendacoes = {
@@ -199,7 +199,6 @@ def analyze(request: Request, text: str, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
     if not usuario:
         raise HTTPException(status_code=401, detail="Não autorizado")
-
     if usuario.plano == "free":
         analises_hoje = contar_analises_hoje(usuario.id, db)
         if analises_hoje >= LIMITE_FREE:
@@ -207,7 +206,6 @@ def analyze(request: Request, text: str, db: Session = Depends(get_db)):
                 status_code=429,
                 detail=f"Limite de {LIMITE_FREE} análises diárias atingido! Faça upgrade para Premium."
             )
-
     emocao = detectar_emocao(text)
     analise = Analise(
         texto=text,
