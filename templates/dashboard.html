@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emotion Intelligence Platform</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh}
@@ -22,8 +23,8 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29
 .limite-banner{background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.3);border-radius:15px;padding:20px 30px;margin-bottom:30px;display:flex;justify-content:space-between;align-items:center}
 .limite-info{font-size:16px;color:rgba(255,255,255,0.8)}
 .limite-info span{color:#e74c3c;font-weight:bold}
-.progresso{width:200px;height:10px;background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden}
-.progresso-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#2ecc71,#e74c3c);transition:width 0.5s}
+.progresso{width:200px;height:10px;background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;margin-top:8px}
+.progresso-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#2ecc71,#e74c3c)}
 .analyze-section{background:rgba(255,255,255,0.05);border-radius:20px;padding:40px;margin-bottom:30px;border:1px solid rgba(255,255,255,0.1)}
 .analyze-section h2{margin-bottom:20px;font-size:28px}
 .input-group{display:flex;gap:15px;margin-bottom:20px}
@@ -45,12 +46,10 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29
 .history-text{flex:1;font-size:14px;color:rgba(255,255,255,0.8)}
 .history-emotion{padding:5px 15px;border-radius:20px;font-size:12px;font-weight:bold}
 .stat-number{font-size:48px;font-weight:bold;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.stat-bar{display:flex;align-items:center;margin:10px 0;gap:10px}
-.stat-bar-label{width:100px;font-size:14px}
-.stat-bar-fill{height:25px;border-radius:12px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);min-width:5px}
-.stat-bar-count{font-size:14px;color:rgba(255,255,255,0.6)}
-.alerta-limite{background:rgba(231,76,60,0.2);border:1px solid #e74c3c;border-radius:15px;padding:20px;text-align:center;display:none}
+.alerta-limite{background:rgba(231,76,60,0.2);border:1px solid #e74c3c;border-radius:15px;padding:20px;text-align:center;display:none;margin-top:15px}
 .alerta-limite.show{display:block}
+.grafico-card{background:rgba(255,255,255,0.05);border-radius:20px;padding:30px;margin-top:30px;border:1px solid rgba(255,255,255,0.1)}
+.grafico-card h3{margin-bottom:20px;font-size:20px;color:#00d2ff}
 .footer{text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:14px}
 .emotion-alegria{background:rgba(46,204,113,0.3);color:#2ecc71}
 .emotion-tristeza{background:rgba(52,152,219,0.3);color:#3498db}
@@ -82,7 +81,7 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29
 <div class="limite-banner">
 <div class="limite-info">
 Plano <span>FREE</span> — {{ analises_hoje }}/{{ limite_free }} análises hoje
-<div class="progresso" style="margin-top:8px">
+<div class="progresso">
 <div class="progresso-fill" style="width:{{ (analises_hoje / limite_free * 100)|int }}%"></div>
 </div>
 </div>
@@ -115,29 +114,45 @@ Plano <span>FREE</span> — {{ analises_hoje }}/{{ limite_free }} análises hoje
 </div>
 </div>
 </div>
+
 <div class="dashboard-grid">
 <div class="card">
-<h3>📊 Estatisticas</h3>
+<h3>📊 Total de Análises</h3>
 <div class="stat-number" id="totalAnalyses">0</div>
-<p style="color:rgba(255,255,255,0.5)">analises realizadas</p>
-<div id="statBars" style="margin-top:20px"></div>
+<p style="color:rgba(255,255,255,0.5)">análises realizadas</p>
+<p style="color:#00d2ff;margin-top:10px" id="maisFrequente"></p>
 </div>
 <div class="card">
-<h3>📜 Historico</h3>
+<h3>📜 Histórico Recente</h3>
 <div id="historyList">
-<p style="color:rgba(255,255,255,0.4)">Nenhuma analise ainda</p>
+<p style="color:rgba(255,255,255,0.4)">Nenhuma análise ainda</p>
 </div>
 </div>
 </div>
+
+<div class="grafico-card">
+<h3>📈 Gráfico de Emoções</h3>
+<canvas id="graficoEmocoes" height="100"></canvas>
+</div>
+
+<div class="grafico-card" style="margin-top:20px">
+<h3>🍩 Distribuição de Emoções</h3>
+<canvas id="graficoPizza" height="100"></canvas>
+</div>
+
 </div>
 <div class="footer">
 <p>Emotion Intelligence Platform 2026 — Todos os direitos reservados</p>
 </div>
 <script>
+var graficoEmocoes = null;
+var graficoPizza = null;
+
 document.getElementById('btnAnalisar').addEventListener('click', analyzeText);
 document.getElementById('textInput').addEventListener('keypress', function(e){
     if(e.key==='Enter') analyzeText();
 });
+
 function analyzeText(){
     var text=document.getElementById('textInput').value;
     if(!text) return;
@@ -164,23 +179,74 @@ function analyzeText(){
     })
     .catch(function(){alert('Erro ao analisar');});
 }
+
 function loadStats(){
     fetch('/stats')
     .then(function(r){return r.json();})
     .then(function(data){
         if(data.total_analises){
             document.getElementById('totalAnalyses').textContent=data.total_analises;
-            var barsHTML='';
-            var max=Math.max.apply(null,Object.values(data.emocoes_detectadas));
-            for(var emocao in data.emocoes_detectadas){
-                var count=data.emocoes_detectadas[emocao];
-                var width=(count/max)*100;
-                barsHTML+='<div class="stat-bar"><span class="stat-bar-label">'+emocao+'</span><div style="flex:1;background:rgba(255,255,255,0.05);border-radius:12px"><div class="stat-bar-fill" style="width:'+width+'%"></div></div><span class="stat-bar-count">'+count+'</span></div>';
+            document.getElementById('maisFrequente').textContent='Emoção mais frequente: '+data.mais_frequente;
+
+            var labels=Object.keys(data.emocoes_detectadas);
+            var valores=Object.values(data.emocoes_detectadas);
+            var cores=[
+                '#2ecc71','#3498db','#e74c3c','#9b59b6',
+                '#f1c40f','#27ae60','#ff6b81','#95a5a6',
+                '#00d2ff','#f39c12','#1abc9c','#e67e22'
+            ];
+
+            if(graficoEmocoes){
+                graficoEmocoes.destroy();
             }
-            document.getElementById('statBars').innerHTML=barsHTML;
+            var ctx1=document.getElementById('graficoEmocoes').getContext('2d');
+            graficoEmocoes=new Chart(ctx1,{
+                type:'bar',
+                data:{
+                    labels:labels,
+                    datasets:[{
+                        label:'Quantidade',
+                        data:valores,
+                        backgroundColor:cores,
+                        borderRadius:10
+                    }]
+                },
+                options:{
+                    plugins:{legend:{display:false}},
+                    scales:{
+                        x:{ticks:{color:'#fff'},grid:{color:'rgba(255,255,255,0.05)'}},
+                        y:{ticks:{color:'#fff'},grid:{color:'rgba(255,255,255,0.05)'}}
+                    }
+                }
+            });
+
+            if(graficoPizza){
+                graficoPizza.destroy();
+            }
+            var ctx2=document.getElementById('graficoPizza').getContext('2d');
+            graficoPizza=new Chart(ctx2,{
+                type:'doughnut',
+                data:{
+                    labels:labels,
+                    datasets:[{
+                        data:valores,
+                        backgroundColor:cores,
+                        borderWidth:0
+                    }]
+                },
+                options:{
+                    plugins:{
+                        legend:{
+                            labels:{color:'#fff'},
+                            position:'right'
+                        }
+                    }
+                }
+            });
         }
     }).catch(function(){});
 }
+
 function loadHistory(){
     fetch('/historico')
     .then(function(r){return r.json();})
@@ -197,6 +263,7 @@ function loadHistory(){
         }
     }).catch(function(){});
 }
+
 loadStats();
 loadHistory();
 </script>
