@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException, Request, Depends, Form, BackgroundTasks
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, Response
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.exception_handlers import http_exception_handler
@@ -14,11 +14,13 @@ import mercadopago
 import sendgrid
 from sendgrid.helpers.mail import Mail
 import uuid
+import os
 
-MP_ACCESS_TOKEN = "APP_USR-4193087911174356-070916-cefe9e3636798457e9e78f6036cd4500-3532571592"
-ADMIN_EMAIL = "albertmenezes2006@gmail.com"
-SENDGRID_API_KEY = " SG.1gLDQfckRHKrwE6_XCcaw.LOKQw6eBgj21PBfCXGbrBph9PqwRhPJV1GV8-dIY67w"
-BASE_URL = "https://emotion-platform-albert.onrender.com"
+# ✅ Todas as chaves via variável de ambiente
+MP_ACCESS_TOKEN = os.environ.get("MP_ACCESS_TOKEN")
+ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "albertmenezes2006@gmail.com")
+SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
+BASE_URL = os.environ.get("BASE_URL", "https://emotion-platform-albert.onrender.com")
 
 DATABASE_URL = "sqlite:///./emotion.db"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
@@ -119,7 +121,7 @@ async def enviar_email_boas_vindas(nome: str, email: str, ref_code: str):
         )
         sg.send(message)
     except Exception as e:
-        print(f"Erro email: {e}")
+        print(f"Erro email boas vindas: {e}")
 
 async def enviar_email_novo_cadastro(nome: str, email: str):
     try:
@@ -182,7 +184,7 @@ async def enviar_email_premium(nome: str, email: str):
         )
         sg2.send(notif)
     except Exception as e:
-        print(f"Erro email: {e}")
+        print(f"Erro email premium: {e}")
 
 palavras_emocoes = {
     "alegria": ["feliz", "alegre", "contente", "animado", "otimo", "maravilhoso",
@@ -249,6 +251,15 @@ def detectar_emocao(text):
     if pontuacao:
         return max(pontuacao, key=pontuacao.get)
     return "neutro"
+
+# ✅ Health check corrigido
+@app.get("/health")
+async def health():
+    return {"status": "healthy"}
+
+@app.head("/")
+async def head_root():
+    return Response(status_code=200)
 
 @app.exception_handler(StarletteHTTPException)
 async def custom_404(request: Request, exc: StarletteHTTPException):
@@ -533,7 +544,9 @@ def admin(request: Request, db: Session = Depends(get_db)):
         "total_usuarios": len(todos_usuarios),
         "usuarios_free": usuarios_free,
         "usuarios_premium": usuarios_premium,
-        "total_analises": total_analises, "receita": receita
+        "usuarios_enterprise": usuarios_enterprise,
+        "total_analises": total_analises,
+        "receita": receita
     })
 
 @app.get("/sucesso", response_class=HTMLResponse)
