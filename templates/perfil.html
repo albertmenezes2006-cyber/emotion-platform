@@ -6,115 +6,463 @@
 <title>Perfil — Emotion Intelligence</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#00d2ff;
+  --secondary:#3a7bd5;
+  --success:#2ecc71;
+  --danger:#e74c3c;
+  --warning:#f39c12;
+  --card:rgba(255,255,255,0.05);
+  --border:rgba(255,255,255,0.1);
+  --text-muted:rgba(255,255,255,0.5);
+}
 body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh}
-.navbar{background:rgba(0,0,0,0.3);padding:20px 40px;display:flex;justify-content:space-between;align-items:center}
-.navbar h1{font-size:24px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.nav-right{display:flex;gap:15px;align-items:center}
-.btn-back{background:#3a7bd5;padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px}
-.logout{background:#e74c3c;padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px}
-.container{max-width:750px;margin:0 auto;padding:40px 20px}
-.profile-card{background:rgba(255,255,255,0.05);border-radius:20px;padding:40px;border:1px solid rgba(255,255,255,0.1);margin-bottom:25px;text-align:center}
-.avatar-circle{width:100px;height:100px;border-radius:50%;background:linear-gradient(90deg,#00d2ff,#3a7bd5);display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:bold;margin:0 auto 20px}
-.profile-name{font-size:28px;font-weight:bold;margin-bottom:5px}
-.profile-email{color:rgba(255,255,255,0.5);margin-bottom:20px;font-size:15px}
-.badge-plano{display:inline-block;padding:8px 25px;border-radius:20px;font-size:15px;font-weight:bold;margin-bottom:20px}
-.badge-free{background:rgba(149,165,166,0.3);color:#95a5a6}
-.badge-premium{background:rgba(0,210,255,0.3);color:#00d2ff}
-.badge-enterprise{background:rgba(241,196,15,0.3);color:#f1c40f}
-.stats-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:20px}
-.stat-mini{background:rgba(255,255,255,0.05);border-radius:12px;padding:15px}
-.stat-mini-num{font-size:32px;font-weight:bold;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.stat-mini-label{font-size:12px;color:rgba(255,255,255,0.5);margin-top:5px}
-.acoes-rapidas{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:25px}
-.acao{background:rgba(255,255,255,0.05);border-radius:15px;padding:20px;text-align:center;text-decoration:none;color:#fff;border:1px solid rgba(255,255,255,0.1);transition:all 0.3s}
+.navbar{background:rgba(0,0,0,0.4);backdrop-filter:blur(10px);padding:15px 30px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border)}
+.navbar h1{font-size:20px;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-right{display:flex;gap:8px;align-items:center}
+.nav-btn{padding:7px 16px;border-radius:20px;color:#fff;text-decoration:none;font-size:12px;font-weight:600;transition:all .2s}
+.nav-btn:hover{transform:translateY(-1px)}
+.btn-back{background:var(--secondary)}
+.btn-logout{background:var(--danger)}
+.container{max-width:900px;margin:0 auto;padding:25px 20px}
+/* PROFILE CARD */
+.profile-card{
+  background:var(--card);
+  border-radius:24px;
+  padding:36px;
+  border:1px solid var(--border);
+  margin-bottom:20px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.profile-card::before{
+  content:'';
+  position:absolute;
+  top:-50%;left:-50%;
+  width:200%;height:200%;
+  background:radial-gradient(circle,rgba(0,210,255,0.05) 0%,transparent 60%);
+  pointer-events:none;
+}
+.avatar-circle{
+  width:100px;height:100px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  display:flex;align-items:center;justify-content:center;
+  font-size:42px;font-weight:bold;
+  margin:0 auto 16px;
+  box-shadow:0 0 30px rgba(0,210,255,0.3);
+}
+.profile-name{font-size:26px;font-weight:bold;margin-bottom:4px}
+.profile-email{color:var(--text-muted);margin-bottom:16px;font-size:14px}
+.badge-plano{
+  display:inline-block;
+  padding:7px 22px;
+  border-radius:20px;
+  font-size:14px;font-weight:bold;
+  margin-bottom:20px;
+}
+.badge-free{background:rgba(149,165,166,.25);color:#95a5a6}
+.badge-trial{background:rgba(243,156,18,.25);color:#f39c12}
+.badge-premium{background:rgba(0,210,255,.25);color:#00d2ff}
+.badge-enterprise{background:rgba(241,196,15,.25);color:#f1c40f}
+/* GAMIFICATION */
+.gam-section{
+  background:rgba(0,210,255,0.08);
+  border:1px solid rgba(0,210,255,0.2);
+  border-radius:16px;
+  padding:18px 24px;
+  margin-bottom:20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:16px;
+}
+.gam-item{text-align:center}
+.gam-value{
+  font-size:28px;font-weight:bold;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.gam-label{font-size:12px;color:var(--text-muted);margin-top:2px}
+.badge-display{
+  font-size:18px;font-weight:bold;
+  background:rgba(0,210,255,0.1);
+  border:1px solid rgba(0,210,255,0.2);
+  padding:8px 18px;border-radius:20px;
+}
+.proximo-nivel{
+  background:rgba(46,204,113,0.08);
+  border:1px solid rgba(46,204,113,0.2);
+  border-radius:12px;padding:12px 16px;
+  font-size:13px;color:rgba(255,255,255,0.7);
+  margin-top:10px;
+}
+.proximo-nivel span{color:var(--success);font-weight:bold}
+/* STATS */
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:14px;
+  margin-bottom:20px;
+}
+.stat-card{
+  background:var(--card);
+  border-radius:16px;
+  padding:18px;
+  text-align:center;
+  border:1px solid var(--border);
+  transition:transform .2s;
+}
+.stat-card:hover{transform:translateY(-3px)}
+.stat-num{
+  font-size:34px;font-weight:bold;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:1;
+}
+.stat-label{font-size:12px;color:var(--text-muted);margin-top:6px}
+/* API TOKEN */
+.token-card{
+  background:var(--card);
+  border-radius:16px;
+  padding:20px 24px;
+  border:1px solid var(--border);
+  margin-bottom:20px;
+}
+.token-card h3{font-size:15px;color:var(--primary);margin-bottom:12px}
+.token-box{
+  display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+}
+.token-value{
+  flex:1;
+  padding:10px 14px;
+  background:rgba(0,0,0,0.3);
+  border-radius:10px;
+  font-size:12px;
+  font-family:monospace;
+  color:rgba(255,255,255,0.6);
+  word-break:break-all;
+  border:1px solid var(--border);
+}
+.btn-copy{
+  padding:10px 16px;
+  border-radius:10px;
+  border:none;
+  background:rgba(0,210,255,0.2);
+  color:var(--primary);
+  cursor:pointer;
+  font-size:13px;font-weight:600;
+  white-space:nowrap;
+  border:1px solid rgba(0,210,255,0.3);
+}
+/* AÇÕES RÁPIDAS */
+.acoes-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:12px;
+  margin-bottom:20px;
+}
+.acao{
+  background:var(--card);
+  border-radius:16px;
+  padding:18px;
+  text-align:center;
+  text-decoration:none;
+  color:#fff;
+  border:1px solid var(--border);
+  transition:all .2s;
+  cursor:pointer;
+}
 .acao:hover{background:rgba(255,255,255,0.1);transform:translateY(-3px)}
-.acao-icon{font-size:30px;margin-bottom:8px}
-.acao-label{font-size:13px;color:rgba(255,255,255,0.7)}
-.form-card{background:rgba(255,255,255,0.05);border-radius:20px;padding:40px;border:1px solid rgba(255,255,255,0.1)}
-.form-card h2{margin-bottom:25px;font-size:22px;color:#00d2ff}
-label{display:block;margin-bottom:8px;color:rgba(255,255,255,0.6);font-size:14px}
-input{width:100%;padding:15px 20px;border-radius:12px;border:2px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#fff;font-size:16px;outline:none;margin-bottom:20px}
-input:focus{border-color:#3a7bd5}
-.btn{width:100%;padding:15px;border-radius:12px;border:none;background:linear-gradient(90deg,#00d2ff,#3a7bd5);color:#fff;font-size:18px;font-weight:bold;cursor:pointer}
-.btn:hover{transform:translateY(-2px)}
-.sucesso{background:rgba(46,204,113,0.2);border:1px solid #2ecc71;color:#2ecc71;padding:15px;border-radius:12px;margin-bottom:20px;text-align:center}
-.erro{background:rgba(231,76,60,0.2);border:1px solid #e74c3c;color:#e74c3c;padding:15px;border-radius:12px;margin-bottom:20px;text-align:center}
-footer{text-align:center;padding:30px;color:rgba(255,255,255,0.3);font-size:13px}
+.acao-icon{font-size:28px;margin-bottom:6px}
+.acao-label{font-size:12px;color:var(--text-muted)}
+/* FORM */
+.form-card{
+  background:var(--card);
+  border-radius:20px;
+  padding:32px;
+  border:1px solid var(--border);
+  margin-bottom:20px;
+}
+.form-card h2{margin-bottom:22px;font-size:18px;color:var(--primary)}
+label{display:block;margin-bottom:6px;color:var(--text-muted);font-size:13px;font-weight:600}
+input[type=text],input[type=password],input[type=email]{
+  width:100%;
+  padding:13px 18px;
+  border-radius:12px;
+  border:2px solid var(--border);
+  background:rgba(255,255,255,0.05);
+  color:#fff;font-size:14px;outline:none;
+  margin-bottom:18px;
+  transition:border-color .2s;
+  font-family:inherit;
+}
+input:focus{border-color:var(--secondary)}
+input::placeholder{color:rgba(255,255,255,0.3)}
+.btn-submit{
+  width:100%;padding:14px;
+  border-radius:12px;border:none;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  color:#fff;font-size:16px;font-weight:bold;
+  cursor:pointer;transition:transform .2s;
+}
+.btn-submit:hover{transform:translateY(-2px)}
+.alert{padding:14px 18px;border-radius:12px;margin-bottom:18px;font-size:14px;text-align:center}
+.alert-success{background:rgba(46,204,113,.15);border:1px solid var(--success);color:var(--success)}
+.alert-error{background:rgba(231,76,60,.15);border:1px solid var(--danger);color:var(--danger)}
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:rgba(46,204,113,.95);color:#fff;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s;max-width:300px}
+.toast.show{transform:translateY(0);opacity:1}
+/* FOOTER */
+.footer{text-align:center;padding:30px;color:rgba(255,255,255,0.25);font-size:12px}
+.footer a{color:rgba(255,255,255,0.3);text-decoration:none;margin:0 8px}
+.footer a:hover{color:var(--primary)}
+@media(max-width:768px){
+  .navbar{padding:12px 16px}
+  .container{padding:16px 12px}
+  .gam-section{flex-direction:column;text-align:center}
+}
 </style>
 </head>
 <body>
+
 <nav class="navbar">
-<h1>🧠 Emotion Intelligence</h1>
-<div class="nav-right">
-<a href="/" class="btn-back">← Dashboard</a>
-<a href="/logout" class="logout">Sair</a>
-</div>
+  <h1>🧠 Emotion Intelligence</h1>
+  <div class="nav-right">
+    <a href="/"       class="nav-btn btn-back">← Dashboard</a>
+    <a href="/logout" class="nav-btn btn-logout">Sair</a>
+  </div>
 </nav>
 
 <div class="container">
 
+<!-- PROFILE CARD -->
 <div class="profile-card">
-<div class="avatar-circle">{{ usuario.nome[0] | upper }}</div>
-<div class="profile-name">{{ usuario.nome }}</div>
-<div class="profile-email">{{ usuario.email }}</div>
-<span class="badge-plano badge-{{ usuario.plano }}">{{ usuario.plano | upper }}</span>
-<div class="stats-mini">
-<div class="stat-mini">
-<div class="stat-mini-num">{{ total_analises }}</div>
-<div class="stat-mini-label">Total Análises</div>
-</div>
-<div class="stat-mini">
-<div class="stat-mini-num">{{ analises_hoje }}</div>
-<div class="stat-mini-label">Hoje</div>
-</div>
-<div class="stat-mini">
-<div class="stat-mini-num">{{ dias_cadastrado }}</div>
-<div class="stat-mini-label">Dias na plataforma</div>
-</div>
-</div>
+  <div class="avatar-circle">{{ usuario.nome[0]|upper }}</div>
+  <div class="profile-name">{{ usuario.nome }}</div>
+  <div class="profile-email">{{ usuario.email }}</div>
+  <span class="badge-plano badge-{{ usuario.plano }}">
+    {% if usuario.plano == 'free' %}🆓 FREE
+    {% elif usuario.plano == 'trial' %}⏳ TRIAL
+    {% elif usuario.plano == 'premium' %}⭐ PREMIUM
+    {% else %}👑 ENTERPRISE{% endif %}
+  </span>
+  {% if usuario.plano == 'free' and not usuario.trial_usado %}
+  <br>
+  <a href="/planos" style="display:inline-block;margin-top:12px;background:linear-gradient(90deg,var(--primary),var(--secondary));padding:10px 24px;border-radius:12px;color:#fff;text-decoration:none;font-size:14px;font-weight:bold">
+    🚀 Fazer Upgrade
+  </a>
+  {% endif %}
 </div>
 
-<div class="acoes-rapidas">
-<a href="/afiliado" class="acao">
-<div class="acao-icon">💰</div>
-<div class="acao-label">Programa Afiliados</div>
-</a>
-<a href="/planos" class="acao">
-<div class="acao-icon">⭐</div>
-<div class="acao-label">Ver Planos</div>
-</a>
-<a href="/faq" class="acao">
-<div class="acao-icon">❓</div>
-<div class="acao-label">FAQ</div>
-</a>
-<a href="/contato" class="acao">
-<div class="acao-icon">📧</div>
-<div class="acao-label">Contato</div>
-</a>
+<!-- GAMIFICAÇÃO -->
+<div class="gam-section">
+  <div class="gam-item">
+    <div class="gam-value">{{ usuario.pontos }}</div>
+    <div class="gam-label">🏆 Pontos</div>
+  </div>
+  <div class="gam-item">
+    <div class="badge-display">{{ usuario.badge }}</div>
+    <div class="gam-label" style="margin-top:6px">Seu Badge</div>
+  </div>
+  <div class="gam-item">
+    <div class="gam-value">{{ dias_cadastrado }}</div>
+    <div class="gam-label">📅 Dias na plataforma</div>
+  </div>
+  <div class="gam-item">
+    <div class="gam-value">{{ total_analises }}</div>
+    <div class="gam-label">🔍 Total Análises</div>
+  </div>
+  <div class="gam-item">
+    <div class="gam-value">{{ total_mensagens }}</div>
+    <div class="gam-label">💬 Chats Sofia</div>
+  </div>
+  <div class="gam-item">
+    <div class="gam-value">{{ total_diarios }}</div>
+    <div class="gam-label">📔 Diários</div>
+  </div>
 </div>
 
+{% if proximo_badge and proximo_badge.faltam > 0 %}
+<div class="proximo-nivel">
+  🎯 Próximo badge: <span>{{ proximo_badge.badge }}</span> —
+  faltam <span>{{ proximo_badge.faltam }} pontos</span>!
+  Continue analisando para evoluir! 🚀
+</div>
+{% elif proximo_badge %}
+<div class="proximo-nivel" style="border-color:rgba(241,196,15,0.3);color:#f1c40f">
+  👑 Você atingiu o nível máximo! Parabéns!
+</div>
+{% endif %}
+
+<!-- STATS -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-num">{{ total_analises }}</div>
+    <div class="stat-label">🔍 Total Análises</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">{{ analises_hoje }}</div>
+    <div class="stat-label">📅 Análises Hoje</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">{{ total_mensagens }}</div>
+    <div class="stat-label">💬 Chats Sofia</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">{{ total_diarios }}</div>
+    <div class="stat-label">📔 Diários</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">{{ usuario.pontos }}</div>
+    <div class="stat-label">🏆 Pontos</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">{{ dias_cadastrado }}</div>
+    <div class="stat-label">📆 Dias Ativo</div>
+  </div>
+</div>
+
+<!-- API TOKEN -->
+{% if api_token %}
+<div class="token-card">
+  <h3>🔑 Seu Token de API</h3>
+  <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px">
+    Use este token para acessar a API pública via header <code style="color:var(--primary)">X-Api-Token</code>
+  </p>
+  <div class="token-box">
+    <div class="token-value" id="tokenValue">{{ api_token }}</div>
+    <button class="btn-copy" onclick="copiarToken()">📋 Copiar</button>
+  </div>
+  <p style="font-size:11px;color:var(--text-muted);margin-top:10px">
+    Endpoint: <code style="color:var(--primary)">GET /api/v1/analyze?text=seu+texto</code>
+  </p>
+</div>
+{% endif %}
+
+<!-- AÇÕES RÁPIDAS -->
+<div class="acoes-grid">
+  <a href="/afiliado" class="acao">
+    <div class="acao-icon">💰</div>
+    <div class="acao-label">Afiliados</div>
+  </a>
+  <a href="/planos" class="acao">
+    <div class="acao-icon">⭐</div>
+    <div class="acao-label">Planos</div>
+  </a>
+  <a href="/faq" class="acao">
+    <div class="acao-icon">❓</div>
+    <div class="acao-label">FAQ</div>
+  </a>
+  <a href="/contato" class="acao">
+    <div class="acao-icon">📧</div>
+    <div class="acao-label">Contato</div>
+  </a>
+  <a href="/sobre" class="acao">
+    <div class="acao-icon">ℹ️</div>
+    <div class="acao-label">Sobre</div>
+  </a>
+  <div class="acao" onclick="baixarDados()">
+    <div class="acao-icon">📊</div>
+    <div class="acao-label">Meus Dados</div>
+  </div>
+</div>
+
+<!-- FORM EDITAR PERFIL -->
 <div class="form-card">
-<h2>✏️ Editar Perfil</h2>
-{% if sucesso %}
-<div class="sucesso">✅ {{ sucesso }}</div>
-{% endif %}
-{% if erro %}
-<div class="erro">❌ {{ erro }}</div>
-{% endif %}
-<form method="post" action="/perfil">
-<label>Nome</label>
-<input type="text" name="nome" value="{{ usuario.nome }}" required>
-<label>Nova Senha (deixe em branco para manter)</label>
-<input type="password" name="senha" placeholder="••••••••">
-<label>Confirmar Nova Senha</label>
-<input type="password" name="confirmar_senha" placeholder="••••••••">
-<button type="submit" class="btn">💾 Salvar Alterações</button>
-</form>
+  <h2>✏️ Editar Perfil</h2>
+  {% if sucesso %}
+  <div class="alert alert-success">✅ {{ sucesso }}</div>
+  {% endif %}
+  {% if erro %}
+  <div class="alert alert-error">❌ {{ erro }}</div>
+  {% endif %}
+  <form method="post" action="/perfil">
+    <label>Nome completo</label>
+    <input type="text" name="nome" value="{{ usuario.nome }}" required>
+    <label>Nova Senha <span style="color:var(--text-muted);font-weight:400">(deixe em branco para manter)</span></label>
+    <input type="password" name="senha" placeholder="••••••••">
+    <label>Confirmar Nova Senha</label>
+    <input type="password" name="confirmar_senha" placeholder="••••••••">
+    <button type="submit" class="btn-submit">💾 Salvar Alterações</button>
+  </form>
+</div>
+
+<!-- PERIGO -->
+<div class="form-card" style="border-color:rgba(231,76,60,0.2)">
+  <h2 style="color:var(--danger)">⚠️ Zona de Perigo</h2>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">
+    Ações irreversíveis relacionadas à sua conta.
+  </p>
+  <button onclick="solicitarExclusao()"
+    style="padding:12px 24px;border-radius:12px;border:1px solid rgba(231,76,60,0.3);
+    background:rgba(231,76,60,0.1);color:var(--danger);cursor:pointer;font-size:14px;font-weight:600">
+    🗑️ Solicitar exclusão da conta
+  </button>
 </div>
 
 </div>
-<footer>
-<p>Emotion Intelligence Platform © 2026</p>
-</footer>
+
+<div class="footer">
+  <a href="/privacidade">Privacidade</a>
+  <a href="/termos">Termos</a>
+  <a href="/faq">FAQ</a>
+  <a href="/contato">Contato</a>
+  <br><br>
+  🧠 Emotion Intelligence Platform 2026 — v13.0
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function showToast(msg,tipo){
+  var t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast '+(tipo||'')+' show';
+  setTimeout(function(){t.className='toast '+(tipo||'')},3000);
+}
+
+function copiarToken(){
+  var token=document.getElementById('tokenValue').textContent;
+  navigator.clipboard.writeText(token).then(function(){
+    showToast('Token copiado! 📋');
+  }).catch(function(){
+    showToast('Erro ao copiar','error');
+  });
+}
+
+function baixarDados(){
+  fetch('/stats')
+    .then(function(r){return r.json()})
+    .then(function(stats){
+      return fetch('/historico').then(function(r){return r.json()}).then(function(hist){
+        var dados={
+          usuario:'{{ usuario.nome }}',
+          email:'{{ usuario.email }}',
+          plano:'{{ usuario.plano }}',
+          pontos:{{ usuario.pontos }},
+          badge:'{{ usuario.badge }}',
+          stats:stats,
+          historico:hist
+        };
+        var blob=new Blob([JSON.stringify(dados,null,2)],{type:'application/json'});
+        var url=URL.createObjectURL(blob);
+        var a=document.createElement('a');
+        a.href=url;
+        a.download='meus-dados-emotion.json';
+        a.click();
+        showToast('Dados baixados! 📊');
+      });
+    }).catch(function(){showToast('Erro ao baixar dados','error')});
+}
+
+function solicitarExclusao(){
+  if(confirm('Tem certeza? Isso enviará uma solicitação de exclusão da sua conta.')){
+    showToast('Solicitação enviada! Entre em contato com o suporte.','info');
+  }
+}
+</script>
 </body>
 </html>
