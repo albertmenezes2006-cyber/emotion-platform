@@ -3,327 +3,1003 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Emotion Intelligence — Plataforma de IA Emocional</title>
+<title>Emotion Intelligence — IA Emocional #1 do Brasil</title>
+<meta name="description" content="Plataforma de análise emocional com IA. Detecte emoções por texto e voz. Converse com Sofia, sua psicóloga virtual.">
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#00d2ff">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',sans-serif;background:#0f0c29;color:#fff}
-nav{padding:20px 60px;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.3);position:fixed;width:100%;z-index:100}
-.logo{font-size:22px;font-weight:bold;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.nav-btns{display:flex;gap:15px}
-.btn-login{padding:10px 25px;border-radius:25px;border:2px solid rgba(255,255,255,0.3);color:#fff;text-decoration:none;font-size:14px}
-.btn-cadastro{padding:10px 25px;border-radius:25px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);color:#fff;text-decoration:none;font-size:14px;font-weight:bold}
-.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:100px 20px 60px;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e)}
-.hero h1{font-size:64px;font-weight:bold;line-height:1.2;margin-bottom:20px}
-.hero h1 span{background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{font-size:22px;color:rgba(255,255,255,0.7);max-width:600px;margin:0 auto 15px}
-.contador{font-size:16px;color:rgba(255,255,255,0.5);margin-bottom:30px}
-.contador strong{color:#00d2ff}
-.hero-btns{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
-.btn-primary{padding:18px 45px;border-radius:15px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);color:#fff;text-decoration:none;font-size:20px;font-weight:bold}
-.btn-secondary{padding:18px 45px;border-radius:15px;border:2px solid rgba(255,255,255,0.3);color:#fff;text-decoration:none;font-size:20px}
-.emocoes{display:flex;gap:15px;justify-content:center;flex-wrap:wrap;margin-top:60px}
-.emoji-card{background:rgba(255,255,255,0.05);border-radius:15px;padding:20px;text-align:center;font-size:40px}
-.section{padding:100px 60px;text-align:center}
-.section h2{font-size:48px;margin-bottom:20px}
-.section h2 span{background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.section p{font-size:18px;color:rgba(255,255,255,0.6);max-width:600px;margin:0 auto 60px}
-.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px;max-width:1200px;margin:0 auto}
-.feature{background:rgba(255,255,255,0.05);border-radius:20px;padding:40px;border:1px solid rgba(255,255,255,0.1);text-align:left}
-.feature-icon{font-size:48px;margin-bottom:20px}
-.feature h3{font-size:24px;margin-bottom:10px}
-.feature p{color:rgba(255,255,255,0.6);font-size:16px}
-.como-funciona{background:linear-gradient(135deg,#0f0c29,#302b63);padding:100px 60px;text-align:center}
-.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;max-width:1000px;margin:60px auto 0}
-.step{text-align:center;padding:30px}
-.step-num{width:60px;height:60px;border-radius:50%;background:linear-gradient(90deg,#00d2ff,#3a7bd5);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;margin:0 auto 20px}
-.step h3{font-size:22px;margin-bottom:10px}
-.step p{color:rgba(255,255,255,0.6)}
-.planos-section{padding:100px 60px;text-align:center;background:#0f0c29}
-.planos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px;max-width:1000px;margin:60px auto 0}
-.plano{background:rgba(255,255,255,0.05);border-radius:20px;padding:40px;border:1px solid rgba(255,255,255,0.1)}
-.plano.destaque{border:2px solid #00d2ff;background:rgba(0,210,255,0.05)}
-.plano-nome{font-size:28px;font-weight:bold;margin-bottom:10px}
-.plano-preco{font-size:52px;font-weight:bold;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.plano-preco span{font-size:18px;color:rgba(255,255,255,0.5)}
-.plano ul{list-style:none;margin:20px 0;text-align:left}
-.plano ul li{padding:8px 0;color:rgba(255,255,255,0.7);font-size:15px}
-.plano ul li::before{content:"✅ ";margin-right:5px}
-.btn-plano{width:100%;padding:15px;border-radius:12px;border:none;font-size:18px;font-weight:bold;cursor:pointer;margin-top:20px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);color:#fff}
-.depoimentos{padding:100px 60px;text-align:center;background:linear-gradient(135deg,#0f0c29,#302b63)}
-.depoimentos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px;max-width:1000px;margin:60px auto 0}
-.depoimento{background:rgba(255,255,255,0.05);border-radius:20px;padding:30px;text-align:left}
-.depoimento p{font-size:16px;color:rgba(255,255,255,0.8);margin-bottom:20px;font-style:italic}
-.depoimento-autor{display:flex;align-items:center;gap:10px}
-.avatar{width:45px;height:45px;border-radius:50%;background:linear-gradient(90deg,#00d2ff,#3a7bd5);display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px}
-.autor-info strong{display:block;font-size:16px}
-.autor-info span{font-size:13px;color:rgba(255,255,255,0.5)}
-.cta{padding:100px 60px;text-align:center;background:#0f0c29}
-.cta h2{font-size:52px;font-weight:bold;margin-bottom:20px}
-.cta h2 span{background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.cta p{font-size:20px;color:rgba(255,255,255,0.6);margin-bottom:40px}
-footer{padding:60px;background:rgba(0,0,0,0.5);border-top:1px solid rgba(255,255,255,0.1)}
-.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:40px;max-width:1200px;margin:0 auto 40px}
-.footer-col h3{color:#00d2ff;font-size:16px;margin-bottom:20px}
-.footer-col a{display:block;color:rgba(255,255,255,0.5);text-decoration:none;font-size:14px;margin-bottom:10px}
-.footer-col a:hover{color:#00d2ff}
-.footer-col p{color:rgba(255,255,255,0.5);font-size:14px;line-height:1.8}
-.footer-bottom{text-align:center;color:rgba(255,255,255,0.3);font-size:13px;border-top:1px solid rgba(255,255,255,0.1);padding-top:30px;max-width:1200px;margin:0 auto}
-.popup-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:9999;align-items:center;justify-content:center}
+:root{
+  --primary:#00d2ff;
+  --secondary:#3a7bd5;
+  --success:#2ecc71;
+  --danger:#e74c3c;
+  --warning:#f39c12;
+  --dark:#0f0c29;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',sans-serif;background:var(--dark);color:#fff;overflow-x:hidden}
+/* NAV */
+nav{
+  padding:16px 50px;
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(0,0,0,0.4);
+  backdrop-filter:blur(12px);
+  position:fixed;width:100%;z-index:100;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  transition:all .3s;
+}
+.logo{font-size:20px;font-weight:bold;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-btns{display:flex;gap:10px;align-items:center}
+.btn-login{padding:9px 22px;border-radius:25px;border:1px solid rgba(255,255,255,0.2);color:#fff;text-decoration:none;font-size:13px;transition:all .2s}
+.btn-login:hover{background:rgba(255,255,255,0.1)}
+.btn-cadastro{padding:9px 22px;border-radius:25px;background:linear-gradient(90deg,var(--primary),var(--secondary));color:#fff;text-decoration:none;font-size:13px;font-weight:bold;transition:all .2s}
+.btn-cadastro:hover{transform:translateY(-1px);box-shadow:0 5px 20px rgba(0,210,255,0.3)}
+/* HERO */
+.hero{
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:120px 20px 80px;
+  background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';
+  position:absolute;top:-50%;left:-50%;
+  width:200%;height:200%;
+  background:radial-gradient(ellipse at center,rgba(0,210,255,0.08) 0%,transparent 60%);
+  animation:rotate 20s linear infinite;
+}
+@keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.hero-content{position:relative;z-index:1;max-width:900px}
+.hero-badge{
+  display:inline-block;
+  background:rgba(0,210,255,0.1);
+  border:1px solid rgba(0,210,255,0.3);
+  padding:6px 18px;border-radius:20px;
+  font-size:13px;color:var(--primary);
+  margin-bottom:24px;
+  animation:fadeInDown .6s ease;
+}
+@keyframes fadeInDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero h1{
+  font-size:68px;font-weight:900;
+  line-height:1.1;margin-bottom:20px;
+  animation:fadeInUp .6s ease .1s both;
+}
+.hero h1 span{
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero-sub{
+  font-size:20px;color:rgba(255,255,255,0.65);
+  max-width:580px;margin:0 auto 10px;line-height:1.6;
+  animation:fadeInUp .6s ease .2s both;
+}
+.contador{
+  font-size:15px;color:rgba(255,255,255,0.45);
+  margin-bottom:32px;
+  animation:fadeInUp .6s ease .3s both;
+}
+.contador strong{color:var(--primary)}
+.hero-btns{
+  display:flex;gap:14px;justify-content:center;
+  flex-wrap:wrap;margin-bottom:50px;
+  animation:fadeInUp .6s ease .4s both;
+}
+.btn-primary{
+  padding:16px 40px;border-radius:14px;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  color:#fff;text-decoration:none;font-size:17px;font-weight:bold;
+  transition:all .3s;display:inline-block;
+}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 15px 40px rgba(58,123,213,0.4)}
+.btn-secondary{
+  padding:16px 40px;border-radius:14px;
+  border:1px solid rgba(255,255,255,0.2);
+  color:#fff;text-decoration:none;font-size:17px;
+  transition:all .3s;
+}
+.btn-secondary:hover{background:rgba(255,255,255,0.08)}
+.emocoes-row{
+  display:flex;gap:12px;justify-content:center;
+  flex-wrap:wrap;
+  animation:fadeInUp .6s ease .5s both;
+}
+.emoji-card{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:14px;padding:16px 18px;
+  font-size:32px;
+  transition:transform .2s;cursor:default;
+}
+.emoji-card:hover{transform:scale(1.15) translateY(-4px)}
+/* STATS BAR */
+.stats-bar{
+  background:rgba(0,0,0,0.4);
+  border-top:1px solid rgba(255,255,255,0.08);
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  padding:24px 40px;
+  display:flex;justify-content:center;
+  gap:60px;flex-wrap:wrap;
+}
+.stats-bar-item{text-align:center}
+.stats-bar-num{
+  font-size:32px;font-weight:bold;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.stats-bar-label{font-size:12px;color:rgba(255,255,255,0.4);margin-top:2px}
+/* SECTIONS */
+.section{padding:90px 40px;text-align:center;max-width:1300px;margin:0 auto}
+.section-full{padding:90px 40px;text-align:center}
+.section-tag{
+  display:inline-block;
+  background:rgba(0,210,255,0.1);
+  border:1px solid rgba(0,210,255,0.2);
+  padding:5px 16px;border-radius:20px;
+  font-size:12px;color:var(--primary);
+  margin-bottom:16px;font-weight:600;
+  text-transform:uppercase;letter-spacing:1px;
+}
+.section h2{font-size:44px;font-weight:bold;margin-bottom:14px;line-height:1.2}
+.section h2 span,
+.section-full h2 span{
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.section-full h2{font-size:44px;font-weight:bold;margin-bottom:14px}
+.section-desc{font-size:17px;color:rgba(255,255,255,0.55);max-width:560px;margin:0 auto 50px;line-height:1.7}
+/* FEATURES */
+.features-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+}
+.feature{
+  background:rgba(255,255,255,0.04);
+  border-radius:20px;padding:32px;
+  border:1px solid rgba(255,255,255,0.08);
+  text-align:left;
+  transition:all .3s;
+  position:relative;overflow:hidden;
+}
+.feature::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  transform:scaleX(0);transition:transform .3s;
+}
+.feature:hover{transform:translateY(-5px);border-color:rgba(0,210,255,0.2);background:rgba(255,255,255,0.07)}
+.feature:hover::before{transform:scaleX(1)}
+.feature-icon{font-size:44px;margin-bottom:16px;display:block}
+.feature h3{font-size:20px;margin-bottom:8px;font-weight:700}
+.feature p{color:rgba(255,255,255,0.55);font-size:14px;line-height:1.7}
+.feature-tag{
+  display:inline-block;margin-top:12px;
+  padding:3px 10px;border-radius:10px;
+  font-size:11px;font-weight:600;
+}
+.tag-new{background:rgba(46,204,113,.2);color:var(--success)}
+.tag-ai{background:rgba(0,210,255,.2);color:var(--primary)}
+.tag-hot{background:rgba(231,76,60,.2);color:var(--danger)}
+/* SOFIA SECTION */
+.sofia-section{
+  background:linear-gradient(135deg,#0f0c29,#1a1a3e);
+  padding:90px 40px;
+  border-top:1px solid rgba(255,255,255,0.06);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.sofia-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:60px;align-items:center;
+  max-width:1100px;margin:0 auto;
+}
+.sofia-chat-preview{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:20px;overflow:hidden;
+}
+.sofia-chat-header{
+  background:linear-gradient(90deg,rgba(0,210,255,0.15),rgba(58,123,213,0.15));
+  padding:14px 18px;
+  display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.sofia-avatar-preview{
+  width:38px;height:38px;
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;
+}
+.sofia-chat-body{padding:16px;display:flex;flex-direction:column;gap:10px}
+.preview-msg{
+  padding:10px 14px;border-radius:14px;
+  font-size:13px;line-height:1.5;max-width:85%;
+}
+.preview-msg.sofia{
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.08);
+  align-self:flex-start;
+  border-bottom-left-radius:4px;
+}
+.preview-msg.user{
+  background:linear-gradient(135deg,rgba(0,210,255,0.2),rgba(58,123,213,0.2));
+  border:1px solid rgba(0,210,255,0.2);
+  align-self:flex-end;
+  border-bottom-right-radius:4px;
+}
+.sofia-info{text-align:left}
+.sofia-info h2{font-size:38px;font-weight:bold;margin-bottom:14px;line-height:1.2}
+.sofia-info p{color:rgba(255,255,255,0.6);font-size:15px;line-height:1.7;margin-bottom:20px}
+.sofia-features{list-style:none}
+.sofia-features li{
+  padding:8px 0;font-size:14px;
+  color:rgba(255,255,255,0.75);
+  display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.sofia-features li:last-child{border:none}
+/* COMO FUNCIONA */
+.steps-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:20px;
+  max-width:1000px;margin:0 auto;
+}
+.step{
+  text-align:center;padding:30px 20px;
+  background:rgba(255,255,255,0.03);
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,0.07);
+  transition:all .3s;
+  position:relative;
+}
+.step:hover{transform:translateY(-4px);background:rgba(255,255,255,0.06)}
+.step-num{
+  width:54px;height:54px;border-radius:50%;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:bold;
+  margin:0 auto 16px;
+  box-shadow:0 0 20px rgba(0,210,255,0.3);
+}
+.step h3{font-size:18px;margin-bottom:8px;font-weight:700}
+.step p{color:rgba(255,255,255,0.5);font-size:13px;line-height:1.6}
+.step-arrow{
+  position:absolute;right:-14px;top:50%;
+  transform:translateY(-50%);
+  font-size:20px;color:rgba(255,255,255,0.2);
+  display:none;
+}
+/* PLANOS */
+.planos-section{
+  background:linear-gradient(135deg,#0f0c29,#1a1040);
+  padding:90px 40px;
+  border-top:1px solid rgba(255,255,255,0.06);
+}
+.planos-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:22px;
+  max-width:1000px;margin:0 auto;
+  align-items:start;
+}
+.plano{
+  background:rgba(255,255,255,0.04);
+  border-radius:22px;padding:36px 28px;
+  border:1px solid rgba(255,255,255,0.08);
+  transition:all .3s;position:relative;
+}
+.plano:hover{transform:translateY(-5px)}
+.plano.destaque{
+  border:2px solid var(--primary);
+  background:rgba(0,210,255,0.05);
+  transform:scale(1.03);
+}
+.plano.destaque:hover{transform:scale(1.03) translateY(-5px)}
+.plano-badge{
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  padding:4px 20px;border-radius:20px;
+  font-size:11px;font-weight:bold;white-space:nowrap;
+}
+.badge-pop{background:linear-gradient(90deg,var(--primary),var(--secondary))}
+.badge-ent{background:linear-gradient(90deg,var(--warning),#e67e22)}
+.plano-icon{font-size:36px;text-align:center;margin-bottom:10px;display:block}
+.plano-nome{font-size:24px;font-weight:bold;text-align:center;margin-bottom:6px}
+.plano-preco{
+  font-size:48px;font-weight:bold;text-align:center;margin:14px 0 4px;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;
+}
+.plano-periodo{text-align:center;color:rgba(255,255,255,0.4);font-size:13px;margin-bottom:20px}
+.plano-features{list-style:none;margin-bottom:24px}
+.plano-features li{
+  padding:8px 0;font-size:13px;
+  color:rgba(255,255,255,0.75);
+  display:flex;align-items:center;gap:8px;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.plano-features li:last-child{border:none}
+.btn-plano{
+  width:100%;padding:14px;border-radius:12px;
+  border:none;font-size:15px;font-weight:bold;cursor:pointer;
+  transition:all .3s;
+}
+.btn-free-p{background:rgba(255,255,255,0.1);color:#fff}
+.btn-free-p:hover{background:rgba(255,255,255,0.2)}
+.btn-prem-p{background:linear-gradient(90deg,var(--primary),var(--secondary));color:#fff}
+.btn-prem-p:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(58,123,213,0.4)}
+.btn-ent-p{background:linear-gradient(90deg,var(--warning),#e67e22);color:#fff}
+.btn-ent-p:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(241,196,15,0.3)}
+/* DEPOIMENTOS */
+.dep-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:20px;max-width:1100px;margin:0 auto;
+}
+.dep{
+  background:rgba(255,255,255,0.04);
+  border-radius:18px;padding:28px;
+  border:1px solid rgba(255,255,255,0.08);
+  text-align:left;transition:all .3s;
+}
+.dep:hover{transform:translateY(-4px);background:rgba(255,255,255,0.07)}
+.dep-stars{color:var(--warning);font-size:15px;margin-bottom:12px}
+.dep-text{
+  font-size:14px;color:rgba(255,255,255,0.75);
+  line-height:1.7;margin-bottom:16px;font-style:italic;
+}
+.dep-autor{display:flex;align-items:center;gap:10px}
+.dep-avatar{
+  width:42px;height:42px;border-radius:50%;
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:bold;flex-shrink:0;
+}
+.dep-nome{font-size:14px;font-weight:700}
+.dep-cargo{font-size:12px;color:rgba(255,255,255,0.4)}
+/* GAMIFICAÇÃO */
+.gam-section{
+  background:linear-gradient(135deg,#0f0c29,#1a1040);
+  padding:90px 40px;text-align:center;
+  border-top:1px solid rgba(255,255,255,0.06);
+}
+.badges-row{
+  display:flex;justify-content:center;gap:16px;
+  flex-wrap:wrap;margin:40px 0;
+}
+.badge-card{
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:16px;padding:20px 24px;
+  text-align:center;transition:all .3s;
+}
+.badge-card:hover{transform:translateY(-4px);background:rgba(255,255,255,0.09)}
+.badge-icon{font-size:32px;margin-bottom:8px}
+.badge-name{font-size:13px;font-weight:700;color:rgba(255,255,255,0.8)}
+.badge-pts{font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px}
+/* AFILIADOS */
+.afil-section{
+  padding:90px 40px;text-align:center;
+  background:#0a0818;
+  border-top:1px solid rgba(255,255,255,0.06);
+}
+.afil-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:16px;max-width:800px;margin:40px auto 0;
+}
+.afil-card{
+  background:rgba(46,204,113,0.08);
+  border:1px solid rgba(46,204,113,0.2);
+  border-radius:16px;padding:20px;text-align:center;
+}
+.afil-valor{font-size:28px;font-weight:bold;color:var(--success)}
+.afil-label{font-size:12px;color:rgba(255,255,255,0.5);margin-top:4px}
+/* CTA */
+.cta{
+  padding:100px 40px;text-align:center;
+  background:linear-gradient(135deg,#0f0c29,#302b63);
+  border-top:1px solid rgba(255,255,255,0.06);
+  position:relative;overflow:hidden;
+}
+.cta::before{
+  content:'';
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(0,210,255,0.1) 0%,transparent 70%);
+  pointer-events:none;
+}
+.cta-content{position:relative;z-index:1}
+.cta h2{font-size:52px;font-weight:900;margin-bottom:16px;line-height:1.1}
+.cta p{font-size:18px;color:rgba(255,255,255,0.6);margin-bottom:36px;max-width:500px;margin-left:auto;margin-right:auto}
+.cta-features{
+  display:flex;justify-content:center;gap:24px;
+  flex-wrap:wrap;margin-bottom:36px;
+}
+.cta-feat{font-size:14px;color:rgba(255,255,255,0.6);display:flex;align-items:center;gap:6px}
+/* FOOTER */
+footer{
+  padding:60px 40px 30px;
+  background:rgba(0,0,0,0.6);
+  border-top:1px solid rgba(255,255,255,0.08);
+}
+.footer-grid{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:40px;max-width:1200px;margin:0 auto 40px;
+}
+.footer-col h3{color:var(--primary);font-size:14px;margin-bottom:16px;font-weight:700}
+.footer-col a{
+  display:block;color:rgba(255,255,255,0.45);
+  text-decoration:none;font-size:13px;margin-bottom:8px;
+  transition:color .2s;
+}
+.footer-col a:hover{color:var(--primary)}
+.footer-col p{color:rgba(255,255,255,0.4);font-size:13px;line-height:1.8}
+.footer-bottom{
+  text-align:center;color:rgba(255,255,255,0.25);
+  font-size:12px;border-top:1px solid rgba(255,255,255,0.07);
+  padding-top:24px;max-width:1200px;margin:0 auto;
+}
+/* POPUP */
+.popup-overlay{
+  display:none;position:fixed;
+  top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.85);
+  z-index:9999;align-items:center;justify-content:center;
+}
 .popup-overlay.show{display:flex}
-.popup-box{background:linear-gradient(135deg,#0f0c29,#302b63);border:1px solid rgba(0,210,255,0.3);border-radius:20px;padding:50px;max-width:500px;width:90%;text-align:center;position:relative}
-.popup-close{position:absolute;top:15px;right:20px;background:none;border:none;color:#fff;font-size:24px;cursor:pointer}
-.popup-emoji{font-size:60px;margin-bottom:20px}
-.popup-box h2{font-size:32px;margin-bottom:15px}
-.popup-box p{font-size:18px;color:rgba(255,255,255,0.7);margin-bottom:25px}
-.popup-btn{background:linear-gradient(90deg,#00d2ff,#3a7bd5);padding:15px 40px;border-radius:15px;color:#fff;text-decoration:none;font-size:20px;font-weight:bold;display:block;margin-bottom:15px}
-.popup-nao{background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:14px}
+.popup-box{
+  background:linear-gradient(135deg,#0f0c29,#302b63);
+  border:1px solid rgba(0,210,255,0.3);
+  border-radius:24px;padding:48px 40px;
+  max-width:480px;width:90%;
+  text-align:center;position:relative;
+  animation:fadeInUp .4s ease;
+}
+.popup-close{
+  position:absolute;top:14px;right:18px;
+  background:none;border:none;color:rgba(255,255,255,0.4);
+  font-size:22px;cursor:pointer;
+}
+.popup-close:hover{color:#fff}
+.popup-emoji{font-size:56px;margin-bottom:16px;display:block}
+.popup-box h2{font-size:28px;font-weight:bold;margin-bottom:10px}
+.popup-box p{font-size:16px;color:rgba(255,255,255,0.6);margin-bottom:24px;line-height:1.6}
+.popup-btn{
+  display:block;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  padding:14px 36px;border-radius:14px;
+  color:#fff;text-decoration:none;
+  font-size:17px;font-weight:bold;margin-bottom:12px;
+  transition:transform .2s;
+}
+.popup-btn:hover{transform:translateY(-2px)}
+.popup-nao{
+  background:none;border:none;
+  color:rgba(255,255,255,0.3);cursor:pointer;font-size:13px;
+}
+.popup-nao:hover{color:rgba(255,255,255,0.6)}
+/* TOAST */
+.toast{
+  position:fixed;bottom:24px;right:24px;
+  background:rgba(46,204,113,.95);color:#fff;
+  padding:14px 20px;border-radius:12px;
+  font-size:14px;font-weight:600;
+  z-index:9999;transform:translateY(100px);
+  opacity:0;transition:all .3s;
+}
+.toast.show{transform:translateY(0);opacity:1}
+/* RESPONSIVO */
+@media(max-width:900px){
+  .sofia-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
 @media(max-width:768px){
-.hero h1{font-size:36px}
-nav{padding:15px 20px}
-.section,.como-funciona,.planos-section,.depoimentos,.cta{padding:60px 20px}
-footer{padding:40px 20px}
+  nav{padding:14px 20px}
+  .hero h1{font-size:38px}
+  .hero-sub{font-size:16px}
+  .section,.section-full,.planos-section,.sofia-section,.gam-section,.afil-section,.cta{padding:60px 20px}
+  .cta h2{font-size:36px}
+  .plano.destaque{transform:none}
+  .stats-bar{gap:30px;padding:20px}
+  footer{padding:40px 20px}
+  .footer-grid{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
 <body>
 
+<!-- POPUP -->
 <div class="popup-overlay" id="popup">
-<div class="popup-box">
-<button class="popup-close" onclick="fecharPopup()">✕</button>
-<div class="popup-emoji">🎁</div>
-<h2>Espera! Não vá ainda!</h2>
-<p>Crie sua conta GRÁTIS agora e comece a descobrir suas emoções com IA!</p>
-<a href="/cadastro" class="popup-btn">🚀 Criar Conta Grátis</a>
-<button class="popup-nao" onclick="fecharPopup()">Não, obrigado</button>
-</div>
+  <div class="popup-box">
+    <button class="popup-close" onclick="fecharPopup()">✕</button>
+    <span class="popup-emoji">🎁</span>
+    <h2>Espera! Não vá ainda!</h2>
+    <p>Crie sua conta GRÁTIS agora e comece a descobrir suas emoções com IA + converse com a Sofia, sua psicóloga virtual!</p>
+    <a href="/cadastro" class="popup-btn">🚀 Criar Conta Grátis Agora</a>
+    <button class="popup-nao" onclick="fecharPopup()">Não, obrigado</button>
+  </div>
 </div>
 
+<!-- NAV -->
 <nav>
-<div class="logo">🧠 Emotion Intelligence</div>
-<div class="nav-btns">
-<a href="/login" class="btn-login">Entrar</a>
-<a href="/cadastro" class="btn-cadastro">Começar Grátis</a>
-</div>
+  <div class="logo">🧠 Emotion Intelligence</div>
+  <div class="nav-btns">
+    <a href="/login"    class="btn-login">Entrar</a>
+    <a href="/cadastro" class="btn-cadastro">Começar Grátis ✨</a>
+  </div>
 </nav>
 
+<!-- HERO -->
 <section class="hero">
-<div>
-<h1>Descubra suas <span>emoções</span><br>com Inteligência Artificial</h1>
-<p>Analise textos e voz em segundos. Entenda seus sentimentos com tecnologia de ponta.</p>
-<p class="contador">🔥 Junte-se a <strong>{{ total_usuarios }}</strong> pessoas que já descobriram suas emoções!</p>
-<div class="hero-btns">
-<a href="/cadastro" class="btn-primary">🚀 Começar Grátis</a>
-<a href="#como-funciona" class="btn-secondary">Ver como funciona</a>
-</div>
-<div class="emocoes">
-<div class="emoji-card">😄</div>
-<div class="emoji-card">😢</div>
-<div class="emoji-card">😡</div>
-<div class="emoji-card">😨</div>
-<div class="emoji-card">❤️</div>
-<div class="emoji-card">😲</div>
-<div class="emoji-card">🙏</div>
-<div class="emoji-card">🌅</div>
-</div>
-</div>
+  <div class="hero-content">
+    <div class="hero-badge">🏆 Plataforma de IA Emocional #1 do Brasil</div>
+    <h1>Descubra suas <span>emoções</span><br>com Inteligência Artificial</h1>
+    <p class="hero-sub">
+      Analise textos e voz em segundos. Converse com a Sofia, sua psicóloga virtual.
+      Entenda seus sentimentos com tecnologia de ponta.
+    </p>
+    <p class="contador">
+      🔥 Junte-se a <strong>{{ total_usuarios }}</strong> pessoas que já descobriram suas emoções!
+    </p>
+    <div class="hero-btns">
+      <a href="/cadastro" class="btn-primary">🚀 Começar Grátis</a>
+      <a href="#como-funciona" class="btn-secondary">▶ Ver como funciona</a>
+    </div>
+    <div class="emocoes-row">
+      <div class="emoji-card" title="Alegria">😄</div>
+      <div class="emoji-card" title="Tristeza">😢</div>
+      <div class="emoji-card" title="Raiva">😡</div>
+      <div class="emoji-card" title="Medo">😨</div>
+      <div class="emoji-card" title="Amor">❤️</div>
+      <div class="emoji-card" title="Surpresa">😲</div>
+      <div class="emoji-card" title="Gratidão">🙏</div>
+      <div class="emoji-card" title="Esperança">🌅</div>
+      <div class="emoji-card" title="Calma">🕊️</div>
+      <div class="emoji-card" title="Euforia">🎉</div>
+    </div>
+  </div>
 </section>
 
-<section class="section">
-<h2>Por que usar a <span>Emotion Intelligence?</span></h2>
-<p>A plataforma mais completa de análise emocional do Brasil</p>
-<div class="features">
-<div class="feature">
-<div class="feature-icon">🧠</div>
-<h3>Inteligência Artificial</h3>
-<p>Nossa IA detecta 11 emoções diferentes com alta precisão em português.</p>
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-bar-item">
+    <div class="stats-bar-num">{{ total_usuarios }}+</div>
+    <div class="stats-bar-label">Usuários ativos</div>
+  </div>
+  <div class="stats-bar-item">
+    <div class="stats-bar-num">15</div>
+    <div class="stats-bar-label">Emoções detectadas</div>
+  </div>
+  <div class="stats-bar-item">
+    <div class="stats-bar-num">99%</div>
+    <div class="stats-bar-label">Satisfação</div>
+  </div>
+  <div class="stats-bar-item">
+    <div class="stats-bar-num">24/7</div>
+    <div class="stats-bar-label">Sofia disponível</div>
+  </div>
+  <div class="stats-bar-item">
+    <div class="stats-bar-num">R$0</div>
+    <div class="stats-bar-label">Para começar</div>
+  </div>
 </div>
-<div class="feature">
-<div class="feature-icon">🎤</div>
-<h3>Análise por Voz</h3>
-<p>Fale e nossa IA detecta instantaneamente a emoção na sua voz.</p>
-</div>
-<div class="feature">
-<div class="feature-icon">📊</div>
-<h3>Gráficos e Relatórios</h3>
-<p>Visualize suas emoções ao longo do tempo com gráficos interativos.</p>
-</div>
-<div class="feature">
-<div class="feature-icon">📱</div>
-<h3>Funciona no Celular</h3>
-<p>Instale como aplicativo no seu celular e use em qualquer lugar.</p>
-</div>
-<div class="feature">
-<div class="feature-icon">🔒</div>
-<h3>100% Seguro</h3>
-<p>Seus dados são criptografados e protegidos. Privacidade garantida.</p>
-</div>
-<div class="feature">
-<div class="feature-icon">💰</div>
-<h3>Programa de Afiliados</h3>
-<p>Indique amigos e ganhe 20% de comissão em cada venda realizada.</p>
-</div>
-</div>
-</section>
 
-<section class="como-funciona" id="como-funciona">
-<h2>Como <span>funciona?</span></h2>
-<p>Simples, rápido e preciso</p>
-<div class="steps">
-<div class="step">
-<div class="step-num">1</div>
-<h3>Crie sua conta</h3>
-<p>Cadastre-se gratuitamente em menos de 1 minuto.</p>
+<!-- FEATURES -->
+<div style="background:linear-gradient(135deg,#0f0c29,#1a1040);padding:90px 40px">
+<div class="section" style="padding:0">
+  <div class="section-tag">✨ Funcionalidades</div>
+  <h2>Por que usar a <span>Emotion Intelligence?</span></h2>
+  <p class="section-desc">A plataforma mais completa de análise emocional do Brasil</p>
+  <div class="features-grid">
+    <div class="feature">
+      <span class="feature-icon">🧠</span>
+      <h3>IA Avançada</h3>
+      <p>Detecta 15 emoções com alta precisão em português usando algoritmos de última geração.</p>
+      <span class="feature-tag tag-ai">Inteligência Artificial</span>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">💬</span>
+      <h3>Sofia — Psicóloga Virtual</h3>
+      <p>Converse com nossa IA especializada em saúde emocional. Empática, acolhedora e disponível 24/7.</p>
+      <span class="feature-tag tag-new">Novo!</span>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">🎤</span>
+      <h3>Análise por Voz</h3>
+      <p>Fale e nossa IA detecta instantaneamente a emoção na sua voz. Sem digitar nada.</p>
+      <span class="feature-tag tag-hot">Popular</span>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">📔</span>
+      <h3>Diário Emocional</h3>
+      <p>Registre seus sentimentos diariamente. A IA analisa automaticamente e acompanha sua evolução.</p>
+      <span class="feature-tag tag-new">Novo!</span>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">📊</span>
+      <h3>Gráficos e Relatórios</h3>
+      <p>Visualize suas emoções ao longo do tempo com gráficos interativos e relatórios semanais por email.</p>
+      <span class="feature-tag tag-ai">Analytics</span>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">🏆</span>
+      <h3>Gamificação</h3>
+      <p>Ganhe pontos e badges ao usar a plataforma. Suba no ranking e evolua emocionalmente!</p>
+      <span class="feature-tag tag-new">Novo!</span>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">📱</span>
+      <h3>PWA — App no Celular</h3>
+      <p>Instale como aplicativo no celular diretamente pelo navegador. Sem precisar de loja de apps.</p>
+      <span class="feature-tag tag-hot">Popular</span>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">🔑</span>
+      <h3>API Pública</h3>
+      <p>Integre análise emocional nos seus próprios sistemas com nossa API REST documentada.</p>
+      <span class="feature-tag tag-ai">Developer</span>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">💰</span>
+      <h3>Programa de Afiliados</h3>
+      <p>Indique amigos e ganhe 20% de comissão em cada venda. Renda passiva real!</p>
+      <span class="feature-tag tag-hot">💸 Lucre</span>
+    </div>
+  </div>
 </div>
-<div class="step">
-<div class="step-num">2</div>
-<h3>Digite ou fale</h3>
-<p>Escreva uma frase ou use o microfone para falar.</p>
 </div>
-<div class="step">
-<div class="step-num">3</div>
-<h3>Receba a análise</h3>
-<p>Nossa IA identifica a emoção instantaneamente.</p>
-</div>
-<div class="step">
-<div class="step-num">4</div>
-<h3>Acompanhe sua evolução</h3>
-<p>Veja gráficos e relatórios das suas emoções.</p>
-</div>
-</div>
-</section>
 
-<section class="planos-section">
-<h2>Planos e <span>Preços</span></h2>
-<p>Comece grátis e faça upgrade quando precisar</p>
-<div class="planos-grid">
-<div class="plano">
-<div class="plano-nome">Free</div>
-<div class="plano-preco">R$0<span>/mês</span></div>
-<ul>
-<li>10 análises por dia</li>
-<li>Histórico básico</li>
-<li>Gráficos básicos</li>
-<li>Análise por voz</li>
-</ul>
-<button class="btn-plano" onclick="window.location.href='/cadastro'">Começar Grátis</button>
+<!-- SOFIA SECTION -->
+<div class="sofia-section">
+  <div class="sofia-grid">
+    <div class="sofia-chat-preview">
+      <div class="sofia-chat-header">
+        <div class="sofia-avatar-preview">🧠</div>
+        <div>
+          <div style="font-weight:700;font-size:14px">Sofia</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.5)">🟢 Online agora</div>
+        </div>
+      </div>
+      <div class="sofia-chat-body">
+        <div class="preview-msg sofia">
+          Olá! Sou a Sofia, sua psicóloga virtual. Como você está se sentindo hoje? 💙
+        </div>
+        <div class="preview-msg user">
+          Estou me sentindo muito ansioso com o trabalho...
+        </div>
+        <div class="preview-msg sofia">
+          Entendo, a ansiedade no trabalho é muito comum. Vamos trabalhar isso juntos? Me conta mais sobre o que está te preocupando. Respira fundo — você não está sozinho. 🌬️
+        </div>
+        <div class="preview-msg user">
+          São os prazos... parece que nunca consigo terminar tudo a tempo.
+        </div>
+        <div class="preview-msg sofia">
+          Isso é muito desgastante! Que tal tentarmos uma técnica de priorização? Vou te guiar passo a passo. 🎯
+        </div>
+      </div>
+    </div>
+    <div class="sofia-info">
+      <div class="section-tag">🧠 IA Psicóloga</div>
+      <h2>Conheça a <span>Sofia</span><br>sua psicóloga virtual</h2>
+      <p>Sofia é uma IA especializada em saúde emocional, treinada para ser empática, acolhedora e profissional. Disponível 24 horas por dia, 7 dias por semana.</p>
+      <ul class="sofia-features">
+        <li>🎯 Análise emocional inteligente em tempo real</li>
+        <li>🌬️ Técnicas de respiração e mindfulness</li>
+        <li>📝 Terapia Cognitivo-Comportamental (TCC)</li>
+        <li>💭 Journaling guiado e diário emocional</li>
+        <li>📊 Acompanha sua evolução ao longo do tempo</li>
+        <li>🤝 Sugere ajuda profissional quando necessário</li>
+        <li>🔒 Privacidade total — suas conversas são suas</li>
+      </ul>
+      <a href="/cadastro" class="btn-primary" style="display:inline-block;margin-top:20px">
+        💬 Conversar com a Sofia
+      </a>
+    </div>
+  </div>
 </div>
-<div class="plano destaque">
-<div style="background:linear-gradient(90deg,#00d2ff,#3a7bd5);padding:5px 20px;border-radius:20px;font-size:12px;font-weight:bold;display:inline-block;margin-bottom:15px">⭐ MAIS POPULAR</div>
-<div class="plano-nome">Premium</div>
-<div class="plano-preco">R$49<span>/mês</span></div>
-<ul>
-<li>Análises ilimitadas</li>
-<li>Histórico completo</li>
-<li>Gráficos avançados</li>
-<li>Análise por voz</li>
-<li>Suporte prioritário</li>
-<li>API Access</li>
-</ul>
-<button class="btn-plano" onclick="window.location.href='/cadastro'">Assinar Premium</button>
-</div>
-<div class="plano">
-<div class="plano-nome">Enterprise</div>
-<div class="plano-preco">R$199<span>/mês</span></div>
-<ul>
-<li>Tudo do Premium</li>
-<li>Múltiplos usuários</li>
-<li>Dashboard corporativo</li>
-<li>Integração por API</li>
-<li>Suporte 24/7</li>
-<li>SLA garantido</li>
-</ul>
-<button class="btn-plano" onclick="window.location.href='/cadastro'">Assinar Enterprise</button>
-</div>
-</div>
-</section>
 
-<section class="depoimentos">
-<h2>O que nossos <span>usuários dizem</span></h2>
-<p>Milhares de pessoas já usam a Emotion Intelligence</p>
-<div class="depoimentos-grid">
-<div class="depoimento">
-<p>"Incrível! A IA detectou exatamente o que eu estava sentindo. Uso todos os dias para acompanhar meu estado emocional."</p>
-<div class="depoimento-autor">
-<div class="avatar">A</div>
-<div class="autor-info"><strong>Ana Silva</strong><span>Psicóloga</span></div>
+<!-- COMO FUNCIONA -->
+<div style="background:#0a0818;padding:90px 40px;text-align:center" id="como-funciona">
+  <div class="section-tag">🚀 Simples assim</div>
+  <h2 style="font-size:44px;font-weight:bold;margin-bottom:14px">Como <span style="background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent">funciona?</span></h2>
+  <p class="section-desc">Em menos de 1 minuto você está analisando suas emoções</p>
+  <div class="steps-grid">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>Crie sua conta</h3>
+      <p>Cadastre-se gratuitamente em menos de 1 minuto. Sem cartão de crédito.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>Digite ou fale</h3>
+      <p>Escreva uma frase ou use o microfone. Nossa IA analisa instantaneamente.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>Converse com Sofia</h3>
+      <p>Sua psicóloga virtual te ajuda a entender e trabalhar suas emoções.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h3>Escreva no diário</h3>
+      <p>Registre seus sentimentos e acompanhe sua evolução emocional.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <h3>Evolua e ganhe</h3>
+      <p>Acumule pontos, suba de badge e ganhe dinheiro indicando amigos!</p>
+    </div>
+  </div>
 </div>
-</div>
-<div class="depoimento">
-<p>"Uso para analisar as mensagens da minha equipe. Melhorou muito a comunicação e reduziu conflitos no trabalho."</p>
-<div class="depoimento-autor">
-<div class="avatar">C</div>
-<div class="autor-info"><strong>Carlos Mendes</strong><span>Gestor de RH</span></div>
-</div>
-</div>
-<div class="depoimento">
-<p>"A análise por voz é fantástica! Falo e em segundos sei qual é minha emoção dominante. Recomendo muito!"</p>
-<div class="depoimento-autor">
-<div class="avatar">M</div>
-<div class="autor-info"><strong>Maria Santos</strong><span>Coach Emocional</span></div>
-</div>
-</div>
-</div>
-</section>
 
-<section class="cta">
-<h2>Comece <span>gratuitamente</span> agora!</h2>
-<p>Sem cartão de crédito. Sem compromisso. Comece em 1 minuto.</p>
-<a href="/cadastro" class="btn-primary" style="display:inline-block;font-size:22px;padding:20px 60px">🚀 Criar Conta Grátis</a>
-</section>
+<!-- GAMIFICAÇÃO -->
+<div class="gam-section">
+  <div class="section-tag">🏆 Gamificação</div>
+  <h2 style="font-size:44px;font-weight:bold;margin-bottom:14px">Evolua e ganhe <span style="background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent">badges!</span></h2>
+  <p class="section-desc">Use a plataforma, acumule pontos e suba de nível. Quanto mais você usa, mais evolui!</p>
+  <div class="badges-row">
+    <div class="badge-card">
+      <div class="badge-icon">🌱</div>
+      <div class="badge-name">Iniciante</div>
+      <div class="badge-pts">0 pontos</div>
+    </div>
+    <div class="badge-card">
+      <div class="badge-icon">🌿</div>
+      <div class="badge-name">Explorador</div>
+      <div class="badge-pts">50 pontos</div>
+    </div>
+    <div class="badge-card">
+      <div class="badge-icon">🔥</div>
+      <div class="badge-name">Intermediário</div>
+      <div class="badge-pts">200 pontos</div>
+    </div>
+    <div class="badge-card">
+      <div class="badge-icon">⭐</div>
+      <div class="badge-name">Avançado</div>
+      <div class="badge-pts">500 pontos</div>
+    </div>
+    <div class="badge-card">
+      <div class="badge-icon">🏆</div>
+      <div class="badge-name">Especialista</div>
+      <div class="badge-pts">1000 pontos</div>
+    </div>
+    <div class="badge-card">
+      <div class="badge-icon">💎</div>
+      <div class="badge-name">Mestre</div>
+      <div class="badge-pts">2000 pontos</div>
+    </div>
+    <div class="badge-card">
+      <div class="badge-icon">👑</div>
+      <div class="badge-name">Lenda</div>
+      <div class="badge-pts">5000 pontos</div>
+    </div>
+  </div>
+</div>
 
+<!-- PLANOS -->
+<div class="planos-section">
+  <div style="text-align:center;margin-bottom:50px">
+    <div class="section-tag">💎 Planos</div>
+    <h2 style="font-size:44px;font-weight:bold;margin-bottom:14px">Planos e <span style="background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent">Preços</span></h2>
+    <p class="section-desc">Comece grátis e faça upgrade quando precisar</p>
+  </div>
+  <div class="planos-grid">
+    <div class="plano">
+      <span class="plano-icon">🆓</span>
+      <div class="plano-nome">Free</div>
+      <div class="plano-preco">R$0</div>
+      <div class="plano-periodo">para sempre</div>
+      <ul class="plano-features">
+        <li>✅ 10 análises por dia</li>
+        <li>✅ 5 chats com Sofia/dia</li>
+        <li>✅ 3 diários por dia</li>
+        <li>✅ Análise por voz</li>
+        <li>✅ Pontos e badges</li>
+        <li>✅ Link de afiliado</li>
+      </ul>
+      <button class="btn-plano btn-free-p" onclick="window.location.href='/cadastro'">
+        Começar Grátis
+      </button>
+    </div>
+    <div class="plano destaque">
+      <div class="plano-badge badge-pop">⭐ MAIS POPULAR</div>
+      <span class="plano-icon" style="margin-top:10px">💎</span>
+      <div class="plano-nome">Premium</div>
+      <div class="plano-preco">R$49</div>
+      <div class="plano-periodo">por mês</div>
+      <ul class="plano-features">
+        <li>✅ Análises ilimitadas</li>
+        <li>✅ Sofia ilimitada 🧠</li>
+        <li>✅ Diário ilimitado</li>
+        <li>✅ Relatório semanal</li>
+        <li>✅ API pública</li>
+        <li>✅ Suporte prioritário</li>
+      </ul>
+      <button class="btn-plano btn-prem-p" onclick="window.location.href='/cadastro'">
+        🚀 Assinar Premium
+      </button>
+    </div>
+    <div class="plano">
+      <div class="plano-badge badge-ent">👑 ENTERPRISE</div>
+      <span class="plano-icon" style="margin-top:10px">🏢</span>
+      <div class="plano-nome">Enterprise</div>
+      <div class="plano-preco" style="background:linear-gradient(90deg,var(--warning),#e67e22);-webkit-background-clip:text;-webkit-text-fill-color:transparent">R$199</div>
+      <div class="plano-periodo">por mês</div>
+      <ul class="plano-features">
+        <li>✅ Tudo do Premium</li>
+        <li>✅ Múltiplos usuários</li>
+        <li>✅ Dashboard corporativo</li>
+        <li>✅ Suporte 24/7</li>
+        <li>✅ SLA garantido</li>
+        <li>✅ NF fiscal</li>
+      </ul>
+      <button class="btn-plano btn-ent-p" onclick="window.location.href='/cadastro'">
+        👑 Assinar Enterprise
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- AFILIADOS -->
+<div class="afil-section">
+  <div class="section-tag">💰 Afiliados</div>
+  <h2 style="font-size:44px;font-weight:bold;margin-bottom:14px">Ganhe dinheiro <span style="background:linear-gradient(90deg,var(--success),#27ae60);-webkit-background-clip:text;-webkit-text-fill-color:transparent">indicando!</span></h2>
+  <p class="section-desc">Compartilhe seu link e ganhe 20% de comissão em cada venda. Renda passiva real!</p>
+  <div class="afil-grid">
+    <div class="afil-card">
+      <div class="afil-valor">R$9,80</div>
+      <div class="afil-label">por 1 Premium</div>
+    </div>
+    <div class="afil-card">
+      <div class="afil-valor">R$98</div>
+      <div class="afil-label">10 Premium/mês</div>
+    </div>
+    <div class="afil-card">
+      <div class="afil-valor">R$490</div>
+      <div class="afil-label">50 Premium/mês</div>
+    </div>
+    <div class="afil-card">
+      <div class="afil-valor">R$980</div>
+      <div class="afil-label">100 Premium/mês</div>
+    </div>
+  </div>
+  <a href="/cadastro" class="btn-primary" style="display:inline-block;margin-top:32px">
+    💰 Começar a ganhar agora
+  </a>
+</div>
+
+<!-- DEPOIMENTOS -->
+<div style="background:linear-gradient(135deg,#0f0c29,#1a1040);padding:90px 40px;text-align:center">
+  <div class="section-tag">💬 Depoimentos</div>
+  <h2 style="font-size:44px;font-weight:bold;margin-bottom:14px">O que nossos <span style="background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent">usuários dizem</span></h2>
+  <p class="section-desc">Pessoas reais, resultados reais</p>
+  <div class="dep-grid">
+    <div class="dep">
+      <div class="dep-stars">⭐⭐⭐⭐⭐</div>
+      <div class="dep-text">"A Sofia me ajudou a entender minha ansiedade de uma forma que nunca tinha conseguido antes. Uso todos os dias e já percebi uma melhora enorme!"</div>
+      <div class="dep-autor">
+        <div class="dep-avatar">A</div>
+        <div><div class="dep-nome">Ana Silva</div><div class="dep-cargo">Psicóloga — Usuária Premium</div></div>
+      </div>
+    </div>
+    <div class="dep">
+      <div class="dep-stars">⭐⭐⭐⭐⭐</div>
+      <div class="dep-text">"Implementamos no RH da empresa e os resultados foram surpreendentes. Equipe mais engajada, menos conflitos e melhor comunicação."</div>
+      <div class="dep-autor">
+        <div class="dep-avatar">C</div>
+        <div><div class="dep-nome">Carlos Mendes</div><div class="dep-cargo">Gestor de RH — Enterprise</div></div>
+      </div>
+    </div>
+    <div class="dep">
+      <div class="dep-stars">⭐⭐⭐⭐⭐</div>
+      <div class="dep-text">"A análise por voz é fantástica! Falo e em segundos sei qual é minha emoção. O diário emocional mudou completamente minha rotina."</div>
+      <div class="dep-autor">
+        <div class="dep-avatar">M</div>
+        <div><div class="dep-nome">Maria Santos</div><div class="dep-cargo">Coach Emocional — Premium</div></div>
+      </div>
+    </div>
+    <div class="dep">
+      <div class="dep-stars">⭐⭐⭐⭐⭐</div>
+      <div class="dep-text">"Já indiquei para 20 amigos e ganho quase R$200 por mês de comissão. O programa de afiliados é incrível e fácil de usar!"</div>
+      <div class="dep-autor">
+        <div class="dep-avatar">J</div>
+        <div><div class="dep-nome">João Pedro</div><div class="dep-cargo">Afiliado — Usuário Free</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta">
+  <div class="cta-content">
+    <h2>Comece <span style="background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent">gratuitamente</span> agora!</h2>
+    <p>Sem cartão de crédito. Sem compromisso. Em menos de 1 minuto você está analisando suas emoções.</p>
+    <div class="cta-features">
+      <span class="cta-feat">✅ 100% gratuito para começar</span>
+      <span class="cta-feat">✅ Sofia disponível 24/7</span>
+      <span class="cta-feat">✅ Sem cartão de crédito</span>
+      <span class="cta-feat">✅ Cancele quando quiser</span>
+    </div>
+    <a href="/cadastro" class="btn-primary" style="font-size:19px;padding:18px 52px">
+      🚀 Criar Conta Grátis
+    </a>
+  </div>
+</div>
+
+<!-- FOOTER -->
 <footer>
-<div class="footer-grid">
-<div class="footer-col">
-<h3>🧠 Emotion Intelligence</h3>
-<p>A plataforma de análise emocional por IA mais completa do Brasil.</p>
-</div>
-<div class="footer-col">
-<h3>Produto</h3>
-<a href="/cadastro">Criar Conta Grátis</a>
-<a href="/planos">Planos e Preços</a>
-<a href="/login">Fazer Login</a>
-</div>
-<div class="footer-col">
-<h3>Recursos</h3>
-<a href="/faq">FAQ</a>
-<a href="/contato">Contato</a>
-<a href="/afiliado">Programa de Afiliados</a>
-</div>
-<div class="footer-col">
-<h3>Legal</h3>
-<a href="/privacidade">Política de Privacidade</a>
-<a href="/termos">Termos de Uso</a>
-</div>
-</div>
-<div class="footer-bottom">
-<p>Emotion Intelligence Platform © 2026 — Todos os direitos reservados</p>
-</div>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h3>🧠 Emotion Intelligence</h3>
+      <p>A plataforma de análise emocional com IA mais completa do Brasil. Detecte emoções, converse com sua psicóloga virtual e evolua emocionalmente.</p>
+    </div>
+    <div class="footer-col">
+      <h3>Produto</h3>
+      <a href="/cadastro">Criar Conta Grátis</a>
+      <a href="/planos">Planos e Preços</a>
+      <a href="/login">Fazer Login</a>
+      <a href="#como-funciona">Como funciona</a>
+    </div>
+    <div class="footer-col">
+      <h3>Recursos</h3>
+      <a href="/faq">FAQ</a>
+      <a href="/contato">Contato</a>
+      <a href="/sobre">Sobre nós</a>
+      <a href="/afiliado">Programa de Afiliados</a>
+    </div>
+    <div class="footer-col">
+      <h3>Legal</h3>
+      <a href="/privacidade">Política de Privacidade</a>
+      <a href="/termos">Termos de Uso</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    🧠 Emotion Intelligence Platform © 2026 — Todos os direitos reservados
+  </div>
 </footer>
 
-<!--Start of Tawk.to Script-->
+<div class="toast" id="toast"></div>
+
+<!-- Tawk.to -->
 <script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+var Tawk_API=Tawk_API||{},Tawk_LoadStart=new Date();
 (function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/6a50994525b1321d4287f3fc/1jt5ddei4';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
+  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+  s1.async=true;
+  s1.src='https://embed.tawk.to/6a50994525b1321d4287f3fc/1jt5ddei4';
+  s1.charset='UTF-8';
+  s1.setAttribute('crossorigin','*');
+  s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
-<!--End of Tawk.to Script-->
 
 <script>
 var popupMostrado=false;
 document.addEventListener('mouseleave',function(e){
-if(e.clientY<=0&&!popupMostrado){
-popupMostrado=true;
-document.getElementById('popup').classList.add('show');
-}
+  if(e.clientY<=0&&!popupMostrado){
+    popupMostrado=true;
+    document.getElementById('popup').classList.add('show');
+  }
 });
+setTimeout(function(){
+  if(!popupMostrado){
+    popupMostrado=true;
+    document.getElementById('popup').classList.add('show');
+  }
+},30000);
 function fecharPopup(){
-document.getElementById('popup').classList.remove('show');
+  document.getElementById('popup').classList.remove('show');
+}
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('/static/sw.js').catch(function(){});
 }
 </script>
 </body>
