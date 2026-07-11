@@ -6,108 +6,157 @@
 <title>Termos de Uso — Emotion Intelligence</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#00d2ff;--secondary:#3a7bd5;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1)}
 body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh}
-nav{background:rgba(0,0,0,0.3);padding:20px 60px;display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:22px;font-weight:bold;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-.btn-back{background:#3a7bd5;padding:8px 20px;border-radius:20px;color:#fff;text-decoration:none;font-size:13px}
-.container{max-width:800px;margin:0 auto;padding:60px 20px}
-h1{font-size:42px;font-weight:bold;margin-bottom:10px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.data{color:rgba(255,255,255,0.4);margin-bottom:40px;font-size:14px}
-.section{background:rgba(255,255,255,0.05);border-radius:15px;padding:30px;margin-bottom:20px;border:1px solid rgba(255,255,255,0.1)}
-.section h2{font-size:22px;color:#00d2ff;margin-bottom:15px}
-.section p{color:rgba(255,255,255,0.7);line-height:1.8;margin-bottom:10px}
-.section ul{color:rgba(255,255,255,0.7);line-height:1.8;padding-left:20px}
-.section ul li{margin-bottom:8px}
-footer{text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:14px}
+nav{background:rgba(0,0,0,0.4);backdrop-filter:blur(10px);padding:15px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border)}
+.logo{font-size:20px;font-weight:bold;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+.nav-btn{padding:7px 16px;border-radius:20px;color:#fff;text-decoration:none;font-size:12px;font-weight:600;background:var(--secondary)}
+.container{max-width:820px;margin:0 auto;padding:50px 20px}
+h1{font-size:38px;font-weight:900;margin-bottom:8px;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center}
+.data{color:rgba(255,255,255,0.35);font-size:13px;margin-bottom:8px;text-align:center}
+.resumo{background:rgba(0,210,255,0.06);border:1px solid rgba(0,210,255,0.2);border-radius:14px;padding:16px 20px;margin-bottom:32px;font-size:13px;color:rgba(255,255,255,0.7);line-height:1.7}
+.section{background:var(--card);border-radius:16px;padding:26px;margin-bottom:14px;border:1px solid var(--border)}
+.section h2{font-size:17px;color:var(--primary);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.section p{color:rgba(255,255,255,0.65);line-height:1.8;margin-bottom:10px;font-size:14px}
+.section p:last-child{margin-bottom:0}
+.section ul{color:rgba(255,255,255,0.65);line-height:1.8;padding-left:18px;font-size:14px}
+.section ul li{margin-bottom:6px}
+.section ul li strong{color:rgba(255,255,255,0.85)}
+.aviso{background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);border-radius:12px;padding:14px 16px;font-size:13px;color:rgba(255,255,255,0.7);margin-top:10px}
+.footer{text-align:center;padding:30px;color:rgba(255,255,255,0.25);font-size:12px}
+.footer a{color:rgba(255,255,255,0.3);text-decoration:none;margin:0 8px}
+.footer a:hover{color:var(--primary)}
 </style>
 </head>
 <body>
 <nav>
-<a href="/" class="logo">🧠 Emotion Intelligence</a>
-<a href="/" class="btn-back">← Voltar</a>
+  <a href="/" class="logo">🧠 Emotion Intelligence</a>
+  <a href="/" class="nav-btn">← Voltar</a>
 </nav>
+
 <div class="container">
-<h1>Termos de Uso</h1>
-<p class="data">Última atualização: Julho de 2026</p>
+  <h1>📋 Termos de Uso</h1>
+  <div class="data">Última atualização: Julho de 2026</div>
 
-<div class="section">
-<h2>1. Aceitação dos Termos</h2>
-<p>Ao criar uma conta e utilizar a Emotion Intelligence Platform, você concorda com estes Termos de Uso. Se não concordar, não utilize nossos serviços.</p>
+  <div class="resumo">
+    <strong>Resumo:</strong> Ao usar a plataforma você concorda com estes termos. Use com responsabilidade, respeite outros usuários e não utilize para fins ilegais. A Sofia não substitui um psicólogo real.
+  </div>
+
+  <div class="section">
+    <h2>1️⃣ Aceitação dos Termos</h2>
+    <p>Ao criar uma conta e utilizar a Emotion Intelligence Platform, você concorda integralmente com estes Termos de Uso e com nossa <a href="/privacidade" style="color:var(--primary)">Política de Privacidade</a>. Se não concordar, não utilize nossos serviços.</p>
+  </div>
+
+  <div class="section">
+    <h2>2️⃣ Descrição do Serviço</h2>
+    <p>A Emotion Intelligence Platform oferece:</p>
+    <ul>
+      <li>Análise emocional de textos por IA</li>
+      <li>Análise emocional por reconhecimento de voz</li>
+      <li>Sofia — psicóloga virtual baseada em IA (Google Gemini)</li>
+      <li>Diário emocional com análise automática</li>
+      <li>Gráficos e relatórios emocionais</li>
+      <li>Sistema de gamificação (pontos e badges)</li>
+      <li>Programa de afiliados com comissão de 20%</li>
+      <li>API pública para desenvolvedores (planos pagos)</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>3️⃣ Cadastro e Conta</h2>
+    <ul>
+      <li>Você deve fornecer informações verdadeiras e atualizadas</li>
+      <li>Você é responsável pela segurança da sua senha</li>
+      <li>Uma conta por pessoa física</li>
+      <li>Menores de 18 anos precisam de autorização dos responsáveis</li>
+      <li>Não é permitido compartilhar sua conta com terceiros</li>
+      <li>Você deve notificar qualquer uso não autorizado da sua conta</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>4️⃣ Planos e Pagamentos</h2>
+    <ul>
+      <li><strong>Free:</strong> gratuito, com limites diários de uso</li>
+      <li><strong>Trial:</strong> 7 dias de Premium grátis, sem cartão</li>
+      <li><strong>Premium:</strong> R$49/mês — uso ilimitado</li>
+      <li><strong>Enterprise:</strong> R$199/mês — recursos corporativos</li>
+      <li>Pagamentos processados pelo MercadoPago</li>
+      <li>Preços podem ser alterados com 30 dias de aviso prévio</li>
+      <li>Cancelamentos em até 24h via email de suporte</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>5️⃣ Programa de Afiliados</h2>
+    <ul>
+      <li>Comissão de 20% por cada venda indicada</li>
+      <li>Calculada automaticamente pelo sistema</li>
+      <li>Pagamentos realizados mensalmente via transferência</li>
+      <li>Fraudes ou manipulações resultarão em cancelamento imediato</li>
+      <li>A empresa se reserva o direito de encerrar o programa</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>6️⃣ Uso da Sofia — IA Psicóloga</h2>
+    <p>A Sofia é uma ferramenta de apoio emocional baseada em IA.</p>
+    <div class="aviso">⚠️ <strong>IMPORTANTE:</strong> A Sofia NÃO substitui acompanhamento profissional de saúde mental. Em caso de sofrimento intenso, crise, pensamentos de automutilação ou suicídio, procure IMEDIATAMENTE um psicólogo, médico ou ligue para o CVV: 188.</div>
+    <ul style="margin-top:12px">
+      <li>As respostas da Sofia são geradas por IA e podem conter imprecisões</li>
+      <li>Não tome decisões médicas baseadas nas respostas da Sofia</li>
+      <li>As conversas são armazenadas para melhorar a experiência</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>7️⃣ Uso Aceitável</h2>
+    <p>É <strong>proibido</strong> utilizar a plataforma para:</p>
+    <ul>
+      <li>Atividades ilegais ou fraudulentas</li>
+      <li>Assédio, discriminação ou discurso de ódio</li>
+      <li>Spam ou divulgação não autorizada</li>
+      <li>Tentativas de acesso não autorizado ao sistema</li>
+      <li>Criação de múltiplas contas para burlar limites</li>
+      <li>Revenda ou compartilhamento não autorizado do serviço</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>8️⃣ Propriedade Intelectual</h2>
+    <p>Todo o conteúdo da plataforma — código, design, marca, algoritmos — é propriedade exclusiva da Emotion Intelligence Platform. É proibida a reprodução sem autorização expressa.</p>
+  </div>
+
+  <div class="section">
+    <h2>9️⃣ Limitação de Responsabilidade</h2>
+    <p>A Emotion Intelligence Platform não se responsabiliza por:</p>
+    <ul>
+      <li>Decisões tomadas com base nas análises da IA</li>
+      <li>Imprecisões nas respostas da Sofia</li>
+      <li>Indisponibilidade temporária do serviço</li>
+      <li>Perdas financeiras decorrentes do uso da plataforma</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>🔟 Modificações dos Termos</h2>
+    <p>Reservamos o direito de modificar estes termos a qualquer momento. Alterações serão comunicadas por email com 30 dias de antecedência. O uso continuado após as alterações implica aceitação.</p>
+  </div>
+
+  <div class="section">
+    <h2>📧 Contato</h2>
+    <p>Para dúvidas sobre os Termos de Uso:</p>
+    <p>📧 <strong>albertmenezes2006@gmail.com</strong><br>
+    🌐 <strong>https://emotion-platform-albert.onrender.com/contato</strong></p>
+  </div>
 </div>
 
-<div class="section">
-<h2>2. Descrição do Serviço</h2>
-<p>A Emotion Intelligence Platform é uma plataforma de análise emocional que utiliza Inteligência Artificial para identificar emoções em textos e voz. Oferecemos:</p>
-<ul>
-<li>Análise emocional de textos</li>
-<li>Análise emocional por voz</li>
-<li>Gráficos e relatórios emocionais</li>
-<li>Histórico de análises</li>
-<li>Programa de afiliados</li>
-</ul>
+<div class="footer">
+  <a href="/">Início</a>
+  <a href="/privacidade">Privacidade</a>
+  <a href="/faq">FAQ</a>
+  <a href="/contato">Contato</a>
+  <br><br>🧠 Emotion Intelligence Platform 2026
 </div>
-
-<div class="section">
-<h2>3. Cadastro e Conta</h2>
-<ul>
-<li>Você deve fornecer informações verdadeiras no cadastro</li>
-<li>Você é responsável pela segurança da sua senha</li>
-<li>Uma conta por pessoa</li>
-<li>Menores de 18 anos precisam de autorização dos responsáveis</li>
-</ul>
-</div>
-
-<div class="section">
-<h2>4. Planos e Pagamentos</h2>
-<ul>
-<li>O plano Free possui limite de 10 análises por dia</li>
-<li>O plano Premium oferece análises ilimitadas por R$49/mês</li>
-<li>O plano Enterprise oferece recursos corporativos por R$199/mês</li>
-<li>Pagamentos são processados pelo MercadoPago</li>
-<li>Não realizamos reembolsos após a ativação do plano</li>
-</ul>
-</div>
-
-<div class="section">
-<h2>5. Programa de Afiliados</h2>
-<ul>
-<li>Afiliados recebem 20% de comissão por cada venda indicada</li>
-<li>As comissões são calculadas automaticamente</li>
-<li>O pagamento das comissões será realizado mensalmente</li>
-<li>Fraudes resultarão no cancelamento imediato da conta</li>
-</ul>
-</div>
-
-<div class="section">
-<h2>6. Uso Aceitável</h2>
-<p>É proibido utilizar a plataforma para:</p>
-<ul>
-<li>Atividades ilegais ou fraudulentas</li>
-<li>Assédio ou discriminação</li>
-<li>Spam ou divulgação não autorizada</li>
-<li>Tentativas de hackear ou comprometer o sistema</li>
-</ul>
-</div>
-
-<div class="section">
-<h2>7. Limitação de Responsabilidade</h2>
-<p>A Emotion Intelligence Platform fornece análises baseadas em IA e não substitui avaliação profissional de saúde mental. Não nos responsabilizamos por decisões tomadas com base nas análises fornecidas.</p>
-</div>
-
-<div class="section">
-<h2>8. Modificações</h2>
-<p>Reservamos o direito de modificar estes termos a qualquer momento. As alterações serão comunicadas por email e entrarão em vigor após 30 dias.</p>
-</div>
-
-<div class="section">
-<h2>9. Contato</h2>
-<p>Para dúvidas sobre os Termos de Uso entre em contato:</p>
-<p>📧 <strong>albertmenezes2006@gmail.com</strong></p>
-</div>
-
-</div>
-<footer>
-<p>Emotion Intelligence Platform © 2026 — Todos os direitos reservados</p>
-</footer>
 </body>
 </html>

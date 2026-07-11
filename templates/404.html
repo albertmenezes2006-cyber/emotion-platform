@@ -3,31 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Página não encontrada — Emotion Intelligence</title>
+<title>404 — Emotion Intelligence</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center}
-.container{padding:40px 20px}
-.emoji{font-size:100px;margin-bottom:20px;animation:float 3s ease infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
-h1{font-size:120px;font-weight:bold;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
-h2{font-size:32px;margin:20px 0 10px}
-p{font-size:18px;color:rgba(255,255,255,0.6);margin-bottom:40px}
-.btns{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
-.btn{padding:15px 40px;border-radius:15px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);color:#fff;text-decoration:none;font-size:18px;font-weight:bold}
-.btn-sec{padding:15px 40px;border-radius:15px;border:2px solid rgba(255,255,255,0.3);color:#fff;text-decoration:none;font-size:18px}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px}
+.container{max-width:600px;width:100%}
+.emoji{font-size:90px;margin-bottom:16px;animation:float 3s ease infinite;display:block}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+.num{font-size:130px;font-weight:900;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:8px}
+h2{font-size:28px;margin-bottom:10px;font-weight:700}
+p{font-size:16px;color:rgba(255,255,255,0.55);margin-bottom:36px;line-height:1.6;max-width:400px;margin-left:auto;margin-right:auto}
+.btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn{padding:14px 32px;border-radius:14px;text-decoration:none;font-size:16px;font-weight:bold;transition:all .3s}
+.btn-primary{background:linear-gradient(90deg,#00d2ff,#3a7bd5);color:#fff}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(58,123,213,0.4)}
+.btn-sec{border:1px solid rgba(255,255,255,0.2);color:#fff}
+.btn-sec:hover{background:rgba(255,255,255,0.1)}
+.sugestoes{margin-top:40px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px 24px}
+.sugestoes p{font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:12px}
+.links-sugestao{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.link-sug{padding:6px 16px;border-radius:20px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);text-decoration:none;font-size:12px;transition:all .2s}
+.link-sug:hover{background:rgba(0,210,255,0.1);color:#00d2ff;border-color:rgba(0,210,255,0.3)}
 </style>
 </head>
 <body>
 <div class="container">
-<div class="emoji">😕</div>
-<h1>404</h1>
-<h2>Página não encontrada</h2>
-<p>Ops! A página que você procura não existe ou foi movida.</p>
-<div class="btns">
-<a href="/" class="btn">🏠 Ir para o Início</a>
-<a href="/cadastro" class="btn-sec">🚀 Criar Conta</a>
-</div>
+  <span class="emoji">😕</span>
+  <div class="num">404</div>
+  <h2>Página não encontrada</h2>
+  <p>Ops! A página que você procura não existe ou foi movida para outro endereço.</p>
+  <div class="btns">
+    <a href="/"         class="btn btn-primary">🏠 Ir para o Início</a>
+    <a href="/cadastro" class="btn btn-sec">🚀 Criar Conta</a>
+  </div>
+  <div class="sugestoes">
+    <p>Ou acesse uma dessas páginas:</p>
+    <div class="links-sugestao">
+      <a href="/login"      class="link-sug">🔑 Login</a>
+      <a href="/planos"     class="link-sug">⭐ Planos</a>
+      <a href="/faq"        class="link-sug">❓ FAQ</a>
+      <a href="/contato"    class="link-sug">📧 Contato</a>
+      <a href="/sobre"      class="link-sug">ℹ️ Sobre</a>
+      <a href="/privacidade"class="link-sug">🔒 Privacidade</a>
+    </div>
+  </div>
 </div>
 </body>
 </html>
