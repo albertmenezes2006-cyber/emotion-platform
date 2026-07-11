@@ -2603,15 +2603,7 @@ NOVA MENSAGEM DO USUÁRIO
 Responda como Sofia, com {'profundidade terapêutica completa (PREMIUM)' if eh_premium else 'acolhimento objetivo (FREE)'}:"""
 
     try:
-        modelo = genai.GenerativeModel(
-            "gemini-1.5-flash",
-            generation_config=genai.GenerationConfig(
-                temperature=0.75,
-                max_output_tokens=2048 if eh_premium else 512,
-                top_p=0.9,
-                top_k=40,
-            )
-        )
+        modelo = genai.GenerativeModel("gemini-1.5-flash")
         resposta = modelo.generate_content(prompt)
         texto_resposta = resposta.text
 
