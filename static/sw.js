@@ -1,10 +1,29 @@
+const CACHE_NAME = 'emotion-v14';
+
 self.addEventListener('install', function(e){
+    self.skipWaiting();
     e.waitUntil(
-        caches.open('emotion-v1').then(function(cache){
+        caches.open(CACHE_NAME).then(function(cache){
             return cache.addAll(['/','/login','/planos']);
         })
     );
 });
+
+self.addEventListener('activate', function(e){
+    e.waitUntil(
+        caches.keys().then(function(keys){
+            return Promise.all(
+                keys.filter(function(key){
+                    return key !== CACHE_NAME;
+                }).map(function(key){
+                    return caches.delete(key);
+                })
+            );
+        })
+    );
+    self.clients.claim();
+});
+
 self.addEventListener('fetch', function(e){
     e.respondWith(
         caches.match(e.request).then(function(response){
