@@ -1604,7 +1604,7 @@ async def cadastro(
     nome:             str = Form(...),
     email:            str = Form(...),
     senha:            str = Form(...),
-    confirmar_senha:  str = Form(...),
+    confirmar_senha: str = Form(None),
     db:               Session = Depends(get_db)
 ):
     ip = request.client.host if request.client else "unknown"
