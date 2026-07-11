@@ -2606,7 +2606,7 @@ Responda como Sofia, com {'profundidade terapêutica completa (PREMIUM)' if eh_p
         resposta = cliente_ia.generate_content(
             
             contents=prompt,
-            config=types.GenerateContentConfig(
+            config=genai.GenerationConfig(
                 temperature=0.75,
                 max_output_tokens=2048 if eh_premium else 512,
                 top_p=0.9,
