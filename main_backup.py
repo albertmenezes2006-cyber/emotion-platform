@@ -57,8 +57,8 @@ from passlib.context import CryptContext
 from datetime import datetime, date, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 from collections import defaultdict
-import google.generativeai as genai
-
+from google import genai
+from google.genai import types
 import unicodedata
 import mercadopago
 import sendgrid
@@ -2603,7 +2603,7 @@ Responda como Sofia, com {'profundidade terapêutica completa (PREMIUM)' if eh_p
 
     try:
         resposta = cliente_ia.models.generate_content(
-            
+            model="gemini-2.0-flash",
             contents=prompt,
             config=types.GenerateContentConfig(
                 temperature=0.75,
