@@ -57,8 +57,7 @@ from passlib.context import CryptContext
 from datetime import datetime, date, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 from collections import defaultdict
-from google import genai
-from google.genai import types
+import google.generativeai as genai
 
 import unicodedata
 import mercadopago
@@ -87,7 +86,8 @@ SECRET_KEY       = os.environ.get("SECRET_KEY", str(uuid.uuid4()))
 # CLIENTE GEMINI 2.0
 # ================================================================
 
-cliente_ia = genai.Client(api_key=GEMINI_API_KEY)
+genai.configure(api_key=GEMINI_API_KEY)
+cliente_ia = genai.GenerativeModel("gemini-1.5-flash", generation_config=genai.GenerationConfig(temperature=0.75, max_output_tokens=2048))
 
 # ================================================================
 # LIMITES POR PLANO
@@ -2603,11 +2603,8 @@ NOVA MENSAGEM DO USUÁRIO
 Responda como Sofia, com {'profundidade terapêutica completa (PREMIUM)' if eh_premium else 'acolhimento objetivo (FREE)'}:"""
 
     try:
-        resposta = cliente_ia.models.generate_content(
-            model="gemini-2.0-flash",
-            contents=prompt,
-            config=types.GenerateContentConfig(temperature=0.75, max_output_tokens=2048)
-        )
+        modelo = genai.GenerativeModel("gemini-1.5-flash")
+        resposta = modelo.generate_content(prompt)
         texto_resposta = resposta.text
 
     except Exception as e:

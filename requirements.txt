@@ -6,7 +6,7 @@ jinja2
 python-multipart
 mercadopago
 sendgrid
-google-generativeai
+google-genai
 apscheduler
 slowapi
 python-jose
