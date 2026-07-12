@@ -858,11 +858,74 @@ def verificar_conquistas(usuario, db: Session):
             emoji="📖",
             usuario_id=usuario.id
         ))
-    if usuario.pontos >= 1000 and "Milionário de Pontos" not in conquistas_existentes:
+    if usuario.pontos >= 1000 and "Milionario de Pontos" not in conquistas_existentes:
         novas.append(Conquista(
-            nome="Milionário de Pontos",
+            nome="Milionario de Pontos",
             descricao="Acumulou 1000 pontos na plataforma",
             emoji="💰",
+            usuario_id=usuario.id
+        ))
+    if total_analises >= 10 and "Explorador Emocional" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Explorador Emocional",
+            descricao="Completou 10 analises emocionais",
+            emoji="🔍",
+            usuario_id=usuario.id
+        ))
+    if total_analises >= 100 and "Mestre das Emocoes" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Mestre das Emocoes",
+            descricao="Completou 100 analises emocionais",
+            emoji="🏆",
+            usuario_id=usuario.id
+        ))
+    if total_mensagens >= 1 and "Primeiro Contato" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Primeiro Contato",
+            descricao="Enviou sua primeira mensagem para a Sofia",
+            emoji="💬",
+            usuario_id=usuario.id
+        ))
+    if total_mensagens >= 50 and "Confidente da Sofia" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Confidente da Sofia",
+            descricao="Trocou 50 mensagens com a Sofia",
+            emoji="🧠",
+            usuario_id=usuario.id
+        ))
+    if total_diarios >= 1 and "Primeiro Diario" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Primeiro Diario",
+            descricao="Escreveu sua primeira entrada no diario",
+            emoji="📝",
+            usuario_id=usuario.id
+        ))
+    if total_diarios >= 30 and "Escritor Emocional" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Escritor Emocional",
+            descricao="Escreveu 30 entradas no diario",
+            emoji="✍️",
+            usuario_id=usuario.id
+        ))
+    if usuario.pontos >= 500 and "Meio Caminho" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Meio Caminho",
+            descricao="Acumulou 500 pontos na plataforma",
+            emoji="⭐",
+            usuario_id=usuario.id
+        ))
+    if usuario.pontos >= 5000 and "Lenda da Plataforma" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Lenda da Plataforma",
+            descricao="Acumulou 5000 pontos — voce e uma lenda",
+            emoji="👑",
+            usuario_id=usuario.id
+        ))
+    if usuario.plano in ["premium","enterprise"] and "Investidor Emocional" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Investidor Emocional",
+            descricao="Fez upgrade para plano Premium ou Enterprise",
+            emoji="💎",
             usuario_id=usuario.id
         ))
 
@@ -1500,7 +1563,10 @@ def index(request: Request, ref: str = None, db: Session = Depends(get_db)):
     # Conquistas do usuário
     conquistas = db.query(Conquista).filter(
         Conquista.usuario_id == usuario.id
-    ).order_by(Conquista.criado_em.desc()).limit(5).all()
+    ).order_by(Conquista.criado_em.desc()).limit(12).all()
+    total_conquistas = db.query(Conquista).filter(
+        Conquista.usuario_id == usuario.id
+    ).count()
 
     # Próximo badge
     prox_badge = proximo_badge(usuario.pontos)
@@ -1568,6 +1634,7 @@ def index(request: Request, ref: str = None, db: Session = Depends(get_db)):
         "emocao_favorita":       emocao_favorita,
         "emocao_emoji":          get_emoji(emocao_favorita),
         "conquistas":            conquistas,
+        "total_conquistas":      total_conquistas,
         "proximo_badge":         prox_badge,
         "dias_cadastrado":       dias_cadastrado,
         "trial_dias_restantes":  trial_dias_restantes,
