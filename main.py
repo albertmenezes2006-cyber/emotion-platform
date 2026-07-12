@@ -1874,6 +1874,437 @@ ARTIGOS_BLOG = [
 """
     },
     {
+        "slug": "como-parar-de-se-preocupar",
+        "titulo": "Como Parar de se Preocupar: 9 Tecnicas que Funcionam de Verdade",
+        "resumo": "A preocupacao excessiva drena sua energia e paralisa sua vida. Descubra 9 tecnicas comprovadas para quebrar o ciclo da preocupacao e retomar o controle.",
+        "categoria": "Ansiedade",
+        "emoji": "🧩",
+        "tempo_leitura": "6 min",
+        "data": "02/06/2026",
+        "conteudo": """
+<p>A <strong>preocupacao excessiva</strong> e um dos habitos mentais mais desgastantes que existem. A mente fica presa em loops de "e se..." que consomem energia sem resolver nada.</p>
+
+<h2>Por que nos preocupamos tanto?</h2>
+<p>O cerebro humano evoluiu para antecipar ameacas. Mas no mundo moderno, esse sistema de alarme fica disparando para situacoes que nao sao de vida ou morte — o que cria ansiedade cronica.</p>
+
+<h2>9 Tecnicas para Parar de se Preocupar</h2>
+
+<h3>1. Agendamento de preocupacoes</h3>
+<p>Reserve 20 minutos por dia especificamente para se preocupar. Quando um pensamento ansioso surgir fora desse horario, diga: "Vou pensar nisso no meu horario de preocupacao."</p>
+
+<h3>2. Pergunte: isso e resolvivel?</h3>
+<p>Separe preocupacoes em dois grupos: as que voce pode resolver agora e as que estao fora do seu controle. Para as primeiras, aja. Para as segundas, pratique aceitacao.</p>
+
+<h3>3. Tecnica do pior cenario</h3>
+<p>Pergunte: qual e o pior que pode acontecer? E se acontecer, eu conseguiria lidar? Na maioria das vezes, a resposta e sim.</p>
+
+<h3>4. Mindfulness da preocupacao</h3>
+<p>Observe o pensamento ansioso sem se identificar com ele. Diga: "Estou tendo o pensamento de que..." Isso cria distancia do conteudo do pensamento.</p>
+
+<h3>5. Movimento fisico imediato</h3>
+<p>Quando a preocupacao surgir, mova o corpo por 5 minutos. Caminhada, agachamentos, pular corda. O movimento quebra o loop mental.</p>
+
+<h3>6. Escreva e destrua</h3>
+<p>Escreva todas as suas preocupacoes em um papel. Depois amasse e jogue fora. O ato fisico de descartar ajuda o cerebro a liberar.</p>
+
+<h3>7. Respiracao anti-ansiedade</h3>
+<p>Expire mais longo que inspira. Inspire por 4s, expire por 8s. Isso ativa o sistema nervoso parassimpatico e reduz a ansiedade rapidamente.</p>
+
+<h3>8. Contato com a natureza</h3>
+<p>20 minutos na natureza reduz o cortisol em ate 21% (estudo da Universidade de Michigan). Parque, jardim ou ate uma arvore ja ajudam.</p>
+
+<h3>9. Limite o consumo de noticias</h3>
+<p>Noticias negativas alimentam a preocupacao. Estabeleca horarios fixos e limitados para se informar.</p>
+
+<p>Use o <a href="/cadastro">diario emocional da Emotion Intelligence</a> para registrar suas preocupacoes e ver padroes ao longo do tempo.</p>
+"""
+    },
+    {
+        "slug": "sindrome-do-impostor",
+        "titulo": "Sindrome do Impostor: O que e e Como Superar",
+        "resumo": "Voce se sente uma fraude mesmo sendo competente? A sindrome do impostor afeta 70% das pessoas. Entenda o que e e como supera-la de vez.",
+        "categoria": "Autoconhecimento",
+        "emoji": "🎭",
+        "tempo_leitura": "6 min",
+        "data": "30/05/2026",
+        "conteudo": """
+<p>A <strong>sindrome do impostor</strong> e a sensacao persistente de que voce nao merece seu sucesso e que sera "descoberto" como uma fraude. Foi descrita pela primeira vez em 1978 pelas psicologas Pauline Clance e Suzanne Imes.</p>
+
+<h2>Voce tem sindrome do impostor?</h2>
+<ul>
+<li>Atribui seu sucesso a sorte, nao a competencia</li>
+<li>Tem medo de ser "desmascarado"</li>
+<li>Minimiza suas conquistas</li>
+<li>Sente que nao merece estar onde esta</li>
+<li>Compara seus bastidores com o palco dos outros</li>
+</ul>
+
+<h2>Por que acontece?</h2>
+<p>Geralmente surge em pessoas de alta performance, perfeccionistas ou que cresceram em ambientes onde o erro era punido. Paradoxalmente, quem tem sindrome do impostor costuma ser muito competente.</p>
+
+<h2>Como superar</h2>
+
+<h3>1. Nome e normaliza</h3>
+<p>Reconhecer que voce tem sindrome do impostor ja reduz seu poder. Diga: "Estou sentindo sindrome do impostor agora."</p>
+
+<h3>3. Colecione evidencias</h3>
+<p>Crie um arquivo de conquistas: feedbacks positivos, resultados, agradecimentos. Releia quando a duvida surgir.</p>
+
+<h3>4. Fale com outros</h3>
+<p>Voce vai descobrir que quase todo mundo sente isso. A sindrome prospera no silencio e murcha na conversa.</p>
+
+<h3>5. Redefina o fracasso</h3>
+<p>Erros sao dados, nao sentencas. Todo especialista foi iniciante. A curva de aprendizado e parte do processo.</p>
+
+<p>Registre suas conquistas diariamente na <a href="/cadastro">Emotion Intelligence</a> e construa evidencias reais do seu valor.</p>
+"""
+    },
+    {
+        "slug": "burnout-o-que-e-como-recuperar",
+        "titulo": "Burnout: O que e, Sintomas e Como se Recuperar",
+        "resumo": "O burnout e o esgotamento total — fisico, emocional e mental. Aprenda a identificar os sinais precocemente e os passos para a recuperacao.",
+        "categoria": "Saude Mental",
+        "emoji": "🔋",
+        "tempo_leitura": "7 min",
+        "data": "25/05/2026",
+        "conteudo": """
+<p>O <strong>burnout</strong> foi reconhecido pela OMS em 2019 como fenomeno ocupacional. E o resultado do estresse cronico no trabalho que nao foi gerenciado com exito.</p>
+
+<h2>3 dimensoes do Burnout</h2>
+<ul>
+<li><strong>Exaustao:</strong> sensacao de estar completamente drenado</li>
+<li><strong>Cinismo:</strong> distancia mental do trabalho, negatividade</li>
+<li><strong>Ineficacia:</strong> sensacao de nao conseguir realizar nada</li>
+</ul>
+
+<h2>Sinais de alerta precoce</h2>
+<ul>
+<li>Dificuldade para acordar mesmo apos dormir bem</li>
+<li>Irritabilidade crescente com colegas e familia</li>
+<li>Esquecimento e dificuldade de concentracao</li>
+<li>Sensacao de que nada que voce faz e suficiente</li>
+<li>Doencas fisicas frequentes (imunidade baixa)</li>
+</ul>
+
+<h2>Fases do Burnout</h2>
+<p>O burnout nao acontece de uma hora para outra. Ele evolui em fases: entusiasmo excessivo, estagnacao, frustracao, apatia e colapso. Identificar a fase e crucial.</p>
+
+<h2>Recuperacao</h2>
+
+<h3>1. Afastamento e descanso real</h3>
+<p>Descanso nao e fraqueza. E prerequisito para recuperacao. Sem descanso genuino, nao ha recuperacao possivel.</p>
+
+<h3>2. Redefinir limites</h3>
+<p>O burnout frequentemente vem da incapacidade de dizer nao. Recuperar-se exige estabelecer limites claros e mantê-los.</p>
+
+<h3>3. Acompanhamento profissional</h3>
+<p>Burnout serio requer psicoterapia e, em alguns casos, acompanhamento psiquiatrico. Nao e fraqueza — e inteligencia.</p>
+
+<h3>4. Reintroducao gradual</h3>
+<p>Voltar a pleno vapor imediatamente causa recaida. A reintroducao deve ser gradual e monitorada.</p>
+
+<p>Monitore seu nivel de energia diariamente na <a href="/cadastro">Emotion Intelligence</a> para identificar os sinais antes que seja tarde.</p>
+"""
+    },
+    {
+        "slug": "como-melhorar-relacionamento-amoroso",
+        "titulo": "Como Melhorar seu Relacionamento Amoroso com Inteligencia Emocional",
+        "resumo": "Relacionamentos saudaveis nao acontecem por acaso. Aprenda como aplicar inteligencia emocional para transformar sua vida amorosa.",
+        "categoria": "Relacionamentos",
+        "emoji": "💑",
+        "tempo_leitura": "7 min",
+        "data": "20/05/2026",
+        "conteudo": """
+<p>A maioria dos problemas em relacionamentos nao e sobre o que parece ser. Sao sobre necessidades emocionais nao comunicadas, feridas antigas sendo ativadas e padroes automaticos de reacao.</p>
+
+<h2>O que a ciencia diz sobre relacionamentos saudaveis</h2>
+<p>John Gottman estudou mais de 3.000 casais por 40 anos e descobriu que a ratio magica e de 5:1 — cinco interacoes positivas para cada negativa. Casais que mantem essa proporcao permanecem juntos.</p>
+
+<h2>Os 4 cavaleiros do Apocalipse (destruidores do relacionamento)</h2>
+<ul>
+<li><strong>Critica:</strong> atacar o carater do parceiro (voce e sempre assim)</li>
+<li><strong>Desprezo:</strong> sarcasmo, menosprezo, olhos revirados</li>
+<li><strong>Postura defensiva:</strong> contratacar em vez de ouvir</li>
+<li><strong>Bloqueio:</strong> se fechar, se recusar a engajar</li>
+</ul>
+
+<h2>Como a IE transforma relacionamentos</h2>
+
+<h3>1. Comunicacao nao-violenta</h3>
+<p>Em vez de acusar, expresse necessidades: "Quando voce chega tarde sem avisar, eu me sinto ansioso porque preciso de seguranca." Observacao + Sentimento + Necessidade + Pedido.</p>
+
+<h3>2. Reparo emocional</h3>
+<p>Quando a briga escalar, faca um reparo: "Preciso de uma pausa de 20 minutos para me acalmar." Isso evita que o conflito cause danos permanentes.</p>
+
+<h3>3. Curiosidade em vez de julgamento</h3>
+<p>Quando o parceiro age de forma estranha, pergunte com curiosidade genuina em vez de assumir o pior.</p>
+
+<h3>4. Rituais de conexao</h3>
+<p>Pequenos rituais diarios — cafe da manha juntos, abraco de boas-vindas, pergunta genuina sobre o dia — constroem o capital emocional que sustenta o relacionamento em momentos dificeis.</p>
+
+<p>Use a <a href="/cadastro">Emotion Intelligence</a> para entender melhor seus proprios padroes emocionais e levar mais autoconsciencia para o relacionamento.</p>
+"""
+    },
+    {
+        "slug": "meditacao-guiada-para-iniciantes",
+        "titulo": "Meditacao Guiada para Iniciantes: Seu Primeiro Passo",
+        "resumo": "Nunca meditou? Este guia completo vai te levar da teoria a pratica em poucos minutos. Sem religiao, sem misticismo — so ciencia e pratica.",
+        "categoria": "Mindfulness",
+        "emoji": "🕯️",
+        "tempo_leitura": "8 min",
+        "data": "15/05/2026",
+        "conteudo": """
+<p>A <strong>meditacao</strong> e frequentemente mal compreendida. Nao e esvaziar a mente, nao e religiao e nao requer horas de pratica. E simplesmente o treinamento da atencao.</p>
+
+<h2>O que a ciencia diz</h2>
+<ul>
+<li>8 semanas de meditacao aumentam a materia cinzenta no hipocampo (Harvard)</li>
+<li>Reduz cortisol em ate 30%</li>
+<li>Melhora foco, memoria e regulacao emocional</li>
+<li>Reduz sintomas de ansiedade e depressao</li>
+</ul>
+
+<h2>Sua primeira meditacao (5 minutos)</h2>
+
+<h3>Passo 1: Postura</h3>
+<p>Sente-se confortavelmente — pode ser na cadeira, com os pes no chao. Coluna ereta mas nao rigida. Maos sobre os joelhos.</p>
+
+<h3>Passo 2: Olhos</h3>
+<p>Feche os olhos ou mantenha um olhar suave para o chao a sua frente.</p>
+
+<h3>Passo 3: Respiracao</h3>
+<p>Leve toda a sua atencao para a sensacao da respiracao. O ar entrando pelas narinas. O peito ou barriga subindo e descendo.</p>
+
+<h3>Passo 4: Quando a mente vagar</h3>
+<p>E normal. Quando perceber que se perdeu em pensamentos, gentilmente retorne a respiracao. Sem julgamento. Isso e o exercicio — perceber e retornar.</p>
+
+<h3>Passo 5: Encerramento</h3>
+<p>Apos 5 minutos, abra os olhos lentamente. Observe como se sente.</p>
+
+<h2>Dicas para manter a pratica</h2>
+<ul>
+<li>Mesmo horario todo dia (manha e melhor para a maioria)</li>
+<li>Comece com 5 minutos e aumente gradualmente</li>
+<li>Nao julgue suas sessoes — toda sessao e boa</li>
+<li>Consistencia e mais importante que duracao</li>
+</ul>
+
+<p>Registre como se sente antes e depois de meditar na <a href="/cadastro">Emotion Intelligence</a> e observe sua evolucao ao longo das semanas.</p>
+"""
+    },
+    {
+        "slug": "como-lidar-com-criticas",
+        "titulo": "Como Lidar com Criticas sem se Destruir Emocionalmente",
+        "resumo": "Criticas doem. Mas com inteligencia emocional, voce pode transformar feedback em combustivel para crescimento sem se sentir destruido.",
+        "categoria": "Autoconhecimento",
+        "emoji": "🛡️",
+        "tempo_leitura": "5 min",
+        "data": "10/05/2026",
+        "conteudo": """
+<p>Receber criticas e inevitavel. Como voce responde a elas define se elas te destroem ou te fortalecem.</p>
+
+<h2>Por que criticas doem tanto?</h2>
+<p>Nosso cerebro processa rejeicao social nas mesmas areas que processa dor fisica (estudo da UCLA). Criticas ativam o sistema de ameaca — por isso a reacao defensiva e automatica.</p>
+
+<h2>Tipos de critica</h2>
+<ul>
+<li><strong>Critica construtiva:</strong> especifica, focada no comportamento, com intencao de ajudar</li>
+<li><strong>Critica destrutiva:</strong> vaga, focada no carater, com intencao de ferir</li>
+<li><strong>Critica projetada:</strong> diz mais sobre quem critica do que sobre voce</li>
+</ul>
+
+<h2>Como responder a criticas com IE</h2>
+
+<h3>1. Pause antes de reagir</h3>
+<p>Respire fundo. A primeira reacao e quase sempre defensiva. O espaco entre o estimulo e a resposta e onde mora a sua liberdade.</p>
+
+<h3>2. Separe o joio do trigo</h3>
+<p>Pergunte: ha algo de verdade nessa critica? Mesmo criticas mal formuladas podem conter informacoes uteis.</p>
+
+<h3>3. Considere a fonte</h3>
+<p>Voce se importaria com a opiniao dessa pessoa sobre outro assunto? Se nao, por que se importar com a opiniao sobre voce?</p>
+
+<h3>4. Agradeca e processe depois</h3>
+<p>Voce nao precisa concordar ou discordar na hora. Um simples "obrigado pelo feedback" ganha tempo para processar com calma.</p>
+
+<h3>5. Nao generalize</h3>
+<p>Uma critica sobre um comportamento especifico nao diz nada sobre seu valor como pessoa. Comportamentos mudam; carater e mais estavel.</p>
+
+<p>Use o <a href="/cadastro">diario emocional</a> para processar criticas dificeis e extrair o aprendizado sem a dor desnecessaria.</p>
+"""
+    },
+    {
+        "slug": "inteligencia-emocional-no-trabalho",
+        "titulo": "Inteligencia Emocional no Trabalho: Guia para Lideres e Colaboradores",
+        "resumo": "A IE e o fator que diferencia profissionais bons de extraordinarios. Aprenda como desenvolver IE no ambiente profissional e alavancar sua carreira.",
+        "categoria": "Produtividade",
+        "emoji": "💼",
+        "tempo_leitura": "8 min",
+        "data": "05/05/2026",
+        "conteudo": """
+<p>Daniel Goleman, ao estudar centenas de empresas, descobriu que <strong>90% dos top performers</strong> tem alta inteligencia emocional. O QI te leva a porta, a IE te faz entrar e ficar.</p>
+
+<h2>Por que IE importa mais que QI no trabalho</h2>
+<p>Habilidades tecnicas sao o prerequisito. Mas promocoes, lideranca e influencia dependem de como voce gerencia a si mesmo e se relaciona com outros.</p>
+
+<h2>IE para Lideres</h2>
+
+<h3>Autoconsciencia na lideranca</h3>
+<p>Lideres com alta autoconsciencia sabem como seu humor afeta a equipe. Eles checam o proprio estado antes de reunioes importantes.</p>
+
+<h3>Empatia na lideranca</h3>
+<p>Nao e concordar com tudo. E entender a perspectiva do outro antes de decidir. Lideres empaticos retêm talentos e constroem equipes resilientes.</p>
+
+<h3>Gestao de conflitos</h3>
+<p>Conflitos sao inevitaveis. Lideres emocionalmente inteligentes transformam conflitos em conversas produtivas sobre necessidades e solucoes.</p>
+
+<h2>IE para Colaboradores</h2>
+
+<h3>Gerenciar o chefe</h3>
+<p>Entender o estilo emocional do seu gestor e adaptar sua comunicacao a ele e uma habilidade poderosa e subutilizada.</p>
+
+<h3>Colaboracao eficaz</h3>
+<p>Equipes com alta IE colaboram melhor porque os membros reconhecem suas proprias emocoes e as dos colegas, evitando conflitos desnecessarios.</p>
+
+<h3>Resiliencia profissional</h3>
+<p>Como voce se recupera de erros, fracassos e feedbacks negativos define sua trajetoria a longo prazo.</p>
+
+<p>Desenvolva sua IE diariamente com a <a href="/cadastro">Emotion Intelligence Platform</a> e veja o impacto na sua vida profissional.</p>
+"""
+    },
+    {
+        "slug": "como-controlar-raiva",
+        "titulo": "Como Controlar a Raiva: Tecnicas Imediatas e de Longo Prazo",
+        "resumo": "A raiva nao controlada destroi relacionamentos e saude. Aprenda tecnicas imediatas para desativar a raiva e estrategias de longo prazo para muda-la.",
+        "categoria": "Tecnicas",
+        "emoji": "🌊",
+        "tempo_leitura": "6 min",
+        "data": "01/05/2026",
+        "conteudo": """
+<p>A <strong>raiva</strong> e uma das emocoes mais mal compreendidas. Ela nao e o problema — o problema e o que fazemos com ela quando nao sabemos gerencia-la.</p>
+
+<h2>O que acontece no corpo durante a raiva</h2>
+<p>A amigdala dispara um alarme. Cortisol e adrenalina inundam o sistema. A frequencia cardiaca sobe. O sangue vai para os musculos. O cortex pre-frontal (raciocinio) fica temporariamente comprometido.</p>
+<p>Por isso voce diz coisas que se arrepende: literalmente nao esta pensando com clareza.</p>
+
+<h2>Tecnicas imediatas (para o momento da raiva)</h2>
+
+<h3>1. Pausa de 90 segundos</h3>
+<p>A onda quimica da raiva dura 90 segundos. Se voce nao alimentar o pensamento, ela passa. Respire e aguarde 90 segundos antes de qualquer acao.</p>
+
+<h3>2. Respiracao 4-7-8</h3>
+<p>Inspire 4s, segure 7s, expire 8s. Ativa o sistema parassimpatico e reduz a intensidade da raiva em minutos.</p>
+
+<h3>3. Saida fisica</h3>
+<p>Se possivel, saia do ambiente por alguns minutos. Mudanca de cenario ajuda o cerebro a sair do modo de ameaca.</p>
+
+<h3>4. Nomeie a emocao</h3>
+<p>"Estou com raiva agora." Nomear reduz a atividade da amigdala (estudo da UCLA). Parece simples — e poderoso.</p>
+
+<h2>Estrategias de longo prazo</h2>
+
+<h3>Identifique seus gatilhos</h3>
+<p>O que especificamente dispara sua raiva? Injustica? Falta de respeito? Perda de controle? Conhecer os gatilhos permite antecipar e preparar respostas mais inteligentes.</p>
+
+<h3>Resolva o que esta por baixo</h3>
+<p>Raiva cronica geralmente cobre medo, magoa ou vergonha. Terapia ajuda a processar as emocoes subjacentes.</p>
+
+<p>Registre seus episodios de raiva na <a href="/cadastro">Emotion Intelligence</a> e identifique padroes que voce nao via antes.</p>
+"""
+    },
+    {
+        "slug": "depressao-sinais-e-ajuda",
+        "titulo": "Depressao: Sinais de Alerta e Como Buscar Ajuda",
+        "resumo": "A depressao afeta 300 milhoes de pessoas no mundo. Reconhecer os sinais precocemente pode salvar vidas. Saiba como identificar e onde buscar ajuda.",
+        "categoria": "Saude Mental",
+        "emoji": "🌧️",
+        "tempo_leitura": "7 min",
+        "data": "25/04/2026",
+        "conteudo": """
+<p><strong>Importante:</strong> Se voce esta em crise agora, ligue para o CVV: <strong>188</strong> (24 horas, gratuito). Voce nao precisa estar em risco de suicidio para ligar — qualquer sofrimento emocional e motivo suficiente.</p>
+
+<p>A <strong>depressao</strong> e uma das condicoes de saude mental mais comuns e mais mal compreendidas. Nao e fraqueza, nao e frescura e nao e algo que se supera "querendo".</p>
+
+<h2>Depressao vs Tristeza</h2>
+<p>Tristeza e uma resposta natural a eventos dificeis e passa com o tempo. Depressao e persistente (mais de 2 semanas), generalizada e interfere no funcionamento diario.</p>
+
+<h2>Sinais de alerta da depressao</h2>
+<ul>
+<li>Tristeza ou vazio persistente por mais de 2 semanas</li>
+<li>Perda de interesse em atividades que antes eram prazerosas</li>
+<li>Alteracoes significativas no sono (insonia ou sono excessivo)</li>
+<li>Alteracoes no apetite e peso</li>
+<li>Fadiga e perda de energia constantes</li>
+<li>Dificuldade de concentracao e tomada de decisao</li>
+<li>Sentimentos de inutilidade ou culpa excessiva</li>
+<li>Pensamentos de morte ou suicidio</li>
+</ul>
+
+<h2>O que fazer</h2>
+
+<h3>1. Busque ajuda profissional</h3>
+<p>Psicologo e/ou psiquiatra. A depressao tem tratamento eficaz — psicoterapia e/ou medicacao, dependendo da gravidade.</p>
+
+<h3>2. Onde buscar ajuda gratuita</h3>
+<ul>
+<li><strong>CVV:</strong> 188 (24h)</li>
+<li><strong>CAPS</strong> (Centro de Atencao Psicossocial): servico publico gratuito</li>
+<li><strong>UBS</strong> (Unidade Basica de Saude): encaminhamento pelo SUS</li>
+</ul>
+
+<h3>3. Apoio de pessoas proximas</h3>
+<p>Contar para alguem de confianca alivia o peso. Voce nao precisa carregar sozinho.</p>
+
+<p>A <a href="/cadastro">Emotion Intelligence</a> pode ser um complemento ao tratamento — nunca um substituto para cuidado profissional.</p>
+"""
+    },
+    {
+        "slug": "habitos-para-saude-mental",
+        "titulo": "10 Habitos Diarios para uma Saude Mental de Ferro",
+        "resumo": "Saude mental nao e ausencia de problemas — e ter recursos para lidar com eles. Esses 10 habitos constroem resiliencia emocional dia a dia.",
+        "categoria": "Bem-estar",
+        "emoji": "🏆",
+        "tempo_leitura": "7 min",
+        "data": "20/04/2026",
+        "conteudo": """
+<p>Saude mental nao e um estado permanente — e uma pratica diaria. Assim como voce escova os dentes para a saude bucal, existem habitos que mantem sua saude mental em dia.</p>
+
+<h2>10 Habitos para Saude Mental de Ferro</h2>
+
+<h3>1. Sono de qualidade (7-9 horas)</h3>
+<p>O sono e quando o cerebro se limpa de toxinas, consolida memorias e restaura o equilibrio emocional. E o habito de maior impacto na saude mental.</p>
+
+<h3>2. Movimento diario</h3>
+<p>30 minutos de exercicio por dia reduz sintomas de depressao tao efetivamente quanto antidepressivos em casos leves a moderados (estudo da Duke University).</p>
+
+<h3>3. Alimentacao anti-inflamatorio</h3>
+<p>O intestino e o segundo cerebro. 90% da serotonina e produzida no intestino. Dieta rica em fibras, probioticos e omega-3 impacta diretamente o humor.</p>
+
+<h3>4. Conexao social intencional</h3>
+<p>Nao quantidade, mas qualidade. Uma conversa genuina por dia com alguem que voce ama e suficiente para um impacto significativo.</p>
+
+<h3>5. Pratica de gratidao</h3>
+<p>Escrever 3 coisas pelas quais e grato antes de dormir ativa o sistema de recompensa do cerebro e muda gradualmente o foco atencional.</p>
+
+<h3>6. Limitar telas e redes sociais</h3>
+<p>Mais de 2 horas de redes sociais por dia esta associado a aumento de ansiedade e depressao em jovens. Estabeleca limites conscientes.</p>
+
+<h3>7. Tempo na natureza</h3>
+<p>20 minutos diarios na natureza reduzem o cortisol e aumentam o bem-estar. Nao precisa ser floresta — um parque ou jardim ja funcionam.</p>
+
+<h3>8. Proposito e significado</h3>
+<p>Ter algo pelo qual acordar — um projeto, uma causa, uma pessoa — e um dos fatores mais protetores para a saude mental.</p>
+
+<h3>9. Pratica contemplativa</h3>
+<p>Meditacao, oracao, journaling — qualquer pratica que te convide a voltar para dentro regularmente.</p>
+
+<h3>10. Registro emocional diario</h3>
+<p>Nomear suas emocoes diariamente aumenta a autoconsciencia e previne o acumulo que leva a explosoes ou colapsos.</p>
+
+<p>Comece hoje pelo habito 10: use a <a href="/cadastro">Emotion Intelligence</a> para registrar como voce esta se sentindo agora.</p>
+"""
+    },
+    {
         "slug": "superar-trauma-emocional",
         "titulo": "Superando Traumas Emocionais: Um Guia Compassivo",
         "resumo": "Traumas emocionais deixam marcas profundas, mas a cura e possivel. Entenda o que e trauma, como ele afeta o cerebro e os caminhos para a recuperacao.",
