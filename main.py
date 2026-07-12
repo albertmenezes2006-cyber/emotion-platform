@@ -1415,6 +1415,24 @@ async def head_root():
     return Response(status_code=200)
 
 
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    from fastapi.responses import FileResponse
+    import os
+    favicon_path = "static/favicon.svg"
+    if os.path.exists(favicon_path):
+        return FileResponse(favicon_path, media_type="image/svg+xml")
+    return Response(status_code=204)
+
+@app.get("/favicon.svg", include_in_schema=False)
+async def favicon_svg():
+    from fastapi.responses import FileResponse
+    import os
+    favicon_path = "static/favicon.svg"
+    if os.path.exists(favicon_path):
+        return FileResponse(favicon_path, media_type="image/svg+xml")
+    return Response(status_code=204)
+
 @app.exception_handler(StarletteHTTPException)
 async def custom_404(request: Request, exc: StarletteHTTPException):
     if exc.status_code == 404:
