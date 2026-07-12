@@ -1,7 +1,7 @@
 fastapi
 uvicorn
 sqlalchemy
-passlib[sha256_crypt]
+passlib
 jinja2
 python-multipart
 mercadopago
@@ -10,3 +10,4 @@ google-genai
 apscheduler
 slowapi
 python-jose
+# force redeploy sáb 11 jul 2026 13:25:30 -03

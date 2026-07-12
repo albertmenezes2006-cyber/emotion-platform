@@ -747,27 +747,1876 @@ def calcular_intensidade(texto: str) -> int:
 
 def get_db():
     db = SessionLocal()
-        try:
-        modelo = genai.GenerativeModel("gemini-1.5-flash")
-        resposta = modelo.generate_content(prompt)
-        texto_resposta = resposta.text
-    except Exception as e:
-        print(f"[Fallback Ativado] Erro: {e}")
-        fallbacks = {
-            "alegria": "### Que brilho no olhar! ✨
-Fico muito feliz em ver você assim. A alegria é contagiante! Que tal usar essa energia para concluir uma meta importante hoje?",
-            "tristeza": "### Sinto seu peso hoje... 💙
-Acolha sua tristeza, ela faz parte do processo. Estou aqui para te ouvir sem julgamentos. Respire fundo, você é resiliente.",
-            "raiva": "### Respire... 🌬️
-A raiva nos mostra onde nossos limites foram cruzados. Antes de agir, tente a técnica da respiração 4-7-8 que te ensinei. Vamos conversar sobre o que causou isso?",
-            "medo": "### Você não está só. 🤝
-O medo é um mestre cauteloso, mas não deixe que ele segure o leme da sua vida. Qual é o menor passo que você pode dar hoje?",
-            "neutro": "### Momento de pausa. ⚖️
-O estado neutro é excelente para tomarmos decisões lógicas. Como posso te ajudar a planejar sua semana hoje?"
-        }
-        texto_resposta = fallbacks.get(emocao_atual, "### Estou aqui por você! 💙
-O que você está sentindo é legítimo. Conte-me mais sobre o seu dia, quero te entender melhor.")
+    try:
+        yield db
+    finally:
+        db.close()
 
+
+def get_usuario_logado(request: Request, db: Session = Depends(get_db)):
+    session_id = request.cookies.get("session_id")
+    if not session_id or session_id not in sessoes:
+        return None
+    usuario_id = sessoes[session_id]
+    usuario    = db.query(Usuario).filter(Usuario.id == usuario_id).first()
+    if not usuario or not usuario.ativo:
+        return None
+    # Verifica trial expirado
+    if usuario.plano == "trial" and usuario.trial_expira:
+        if datetime.now() > usuario.trial_expira:
+            usuario.plano = "free"
+            db.commit()
+    # Atualiza último acesso
+    usuario.ultimo_acesso = datetime.now()
+    db.commit()
+    return usuario
+
+
+def get_limite(usuario, tipo: str) -> int:
+    plano = usuario.plano if usuario.plano in LIMITES else "free"
+    return LIMITES[plano][tipo]
+
+
+def contar_hoje(model, usuario_id: int, db: Session) -> int:
+    hoje = date.today()
+    return db.query(model).filter(
+        model.usuario_id == usuario_id,
+        model.criado_em  >= datetime.combine(hoje, datetime.min.time())
+    ).count()
+
+
+def contar_total_usuarios(db: Session) -> int:
+    return db.query(Usuario).count()
+
+
+def calcular_badge(pontos: int) -> str:
+    badge_atual = "🌱 Iniciante"
+    for limite, badge in BADGES:
+        if pontos >= limite:
+            badge_atual = badge
+    return badge_atual
+
+
+def proximo_badge(pontos: int) -> dict:
+    for limite, badge in BADGES:
+        if pontos < limite:
+            return {
+                "badge":  badge,
+                "faltam": limite - pontos,
+                "limite": limite
+            }
+    return {
+        "badge":  "👑 Máximo atingido!",
+        "faltam": 0,
+        "limite": 5000
+    }
+
+
+def adicionar_pontos(usuario, pontos: int, db: Session):
+    usuario.pontos += pontos
+    usuario.badge   = calcular_badge(usuario.pontos)
+    db.commit()
+    verificar_conquistas(usuario, db)
+
+
+def verificar_conquistas(usuario, db: Session):
+    conquistas_existentes = [
+        c.nome for c in db.query(Conquista).filter(
+            Conquista.usuario_id == usuario.id
+        ).all()
+    ]
+    novas = []
+    total_analises  = len(usuario.analises)
+    total_mensagens = len(usuario.mensagens)
+    total_diarios   = len(usuario.diarios)
+
+    if total_analises >= 1 and "Primeira Análise" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Primeira Análise",
+            descricao="Fez sua primeira análise emocional",
+            emoji="🎯",
+            usuario_id=usuario.id
+        ))
+    if total_analises >= 50 and "Analista Experiente" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Analista Experiente",
+            descricao="Completou 50 análises emocionais",
+            emoji="📊",
+            usuario_id=usuario.id
+        ))
+    if total_mensagens >= 10 and "Amigo da Sofia" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Amigo da Sofia",
+            descricao="Trocou 10 mensagens com a Sofia",
+            emoji="🤝",
+            usuario_id=usuario.id
+        ))
+    if total_diarios >= 7 and "Diarista Emocional" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Diarista Emocional",
+            descricao="Escreveu 7 entradas no diário",
+            emoji="📖",
+            usuario_id=usuario.id
+        ))
+    if usuario.pontos >= 1000 and "Milionário de Pontos" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Milionário de Pontos",
+            descricao="Acumulou 1000 pontos na plataforma",
+            emoji="💰",
+            usuario_id=usuario.id
+        ))
+
+    for c in novas:
+        db.add(c)
+    if novas:
+        db.commit()
+
+
+def registrar_log(
+    rota: str, metodo: str, ip: str,
+    status: int, usuario_id: int = None,
+    db: Session = None, duracao_ms: float = None,
+    user_agent: str = None
+):
+    if db:
+        log = LogAcesso(
+            rota=rota, metodo=metodo, ip=ip,
+            status=status, usuario_id=usuario_id,
+            duracao_ms=duracao_ms, user_agent=user_agent
+        )
+        db.add(log)
+        db.commit()
+
+# ================================================================
+# SESSÕES
+# ================================================================
+
+sessoes: dict = {}
+
+# ================================================================
+# EMAILS — SENDGRID COMPLETO
+# ================================================================
+
+def enviar_email(destinatario: str, assunto: str, html: str):
+    try:
+        sg      = sendgrid.SendGridAPIClient(api_key=SENDGRID_API_KEY)
+        message = Mail(
+            from_email=ADMIN_EMAIL,
+            to_emails=destinatario,
+            subject=assunto,
+            html_content=html
+        )
+        sg.send(message)
+        print(f"[Email] Enviado para {destinatario}: {assunto}")
+    except Exception as e:
+        print(f"[Email] Erro ao enviar para {destinatario}: {e}")
+
+
+def email_base(conteudo_interno: str) -> str:
+    return f"""
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body style="
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f0f4f8;
+        margin: 0;
+        padding: 20px;
+    ">
+        <div style="
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        ">
+            <div style="
+                background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+                padding: 40px;
+                text-align: center;
+            ">
+                <h1 style="color: white; margin: 0; font-size: 28px;">
+                    🧠 Emotion Intelligence
+                </h1>
+                <p style="color: rgba(255,255,255,0.8); margin: 10px 0 0;">
+                    v14.0 ULTIMATE
+                </p>
+            </div>
+            <div style="padding: 40px;">
+                {conteudo_interno}
+            </div>
+            <div style="
+                background: #f8f9fa;
+                padding: 20px;
+                text-align: center;
+                border-top: 1px solid #e9ecef;
+            ">
+                <p style="color: #6c757d; font-size: 12px; margin: 0;">
+                    © 2025 Emotion Intelligence Platform |
+                    <a href="{BASE_URL}/privacidade" style="color: #00d2ff;">
+                        Privacidade
+                    </a> |
+                    <a href="{BASE_URL}/termos" style="color: #00d2ff;">
+                        Termos
+                    </a>
+                </p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+
+
+def botao_email(texto: str, url: str, cor: str = "#00d2ff") -> str:
+    return f"""
+    <div style="text-align: center; margin: 30px 0;">
+        <a href="{url}" style="
+            background: linear-gradient(135deg, {cor}, #3a7bd5);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            display: inline-block;
+        ">{texto}</a>
+    </div>
+    """
+
+
+async def enviar_email_boas_vindas(nome: str, email: str, ref_code: str):
+    link_afiliado = f"{BASE_URL}/?ref={ref_code}"
+    conteudo = f"""
+    <h2 style="color: #333; margin-top: 0;">
+        Olá, {nome}! 👋
+    </h2>
+    <p style="color: #555; line-height: 1.6;">
+        Seja muito bem-vindo(a) ao <strong>Emotion Intelligence</strong>!
+        Estamos felizes em ter você aqui. 🎉
+    </p>
+    <div style="
+        background: #f8f9ff;
+        border-left: 4px solid #00d2ff;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+    ">
+        <h3 style="color: #333; margin-top: 0;">
+            🎁 Seu plano FREE inclui:
+        </h3>
+        <ul style="color: #555; line-height: 2;">
+            <li>✅ 10 análises emocionais por dia</li>
+            <li>✅ 5 conversas com a Sofia por dia</li>
+            <li>✅ 3 entradas no diário emocional por dia</li>
+            <li>✅ Sistema de pontos e badges</li>
+            <li>✅ Ranking global</li>
+        </ul>
+    </div>
+    <div style="
+        background: linear-gradient(135deg, #fff9e6, #fff3cd);
+        border: 1px solid #ffc107;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+    ">
+        <h3 style="color: #856404; margin-top: 0;">
+            💰 Programa de Afiliados
+        </h3>
+        <p style="color: #856404;">
+            Compartilhe seu link e ganhe
+            <strong>20% de comissão</strong> em cada venda!
+        </p>
+        <div style="
+            background: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            word-break: break-all;
+            color: #333;
+        ">
+            {link_afiliado}
+        </div>
+    </div>
+    {botao_email("🚀 Acessar Dashboard", BASE_URL)}
+    <p style="color: #888; font-size: 13px; text-align: center;">
+        Qualquer dúvida, estamos aqui! 💙
+    </p>
+    """
+    enviar_email(email, "🧠 Bem-vindo ao Emotion Intelligence!", email_base(conteudo))
+
+
+async def enviar_email_novo_cadastro(nome: str, email: str):
+    conteudo = f"""
+    <h2 style="color: #333; margin-top: 0;">
+        🎉 Novo usuário cadastrado!
+    </h2>
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td style="padding: 10px; border-bottom: 1px solid #eee; color: #666;">
+                <strong>Nome:</strong>
+            </td>
+            <td style="padding: 10px; border-bottom: 1px solid #eee; color: #333;">
+                {nome}
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border-bottom: 1px solid #eee; color: #666;">
+                <strong>Email:</strong>
+            </td>
+            <td style="padding: 10px; border-bottom: 1px solid #eee; color: #333;">
+                {email}
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; color: #666;">
+                <strong>Data:</strong>
+            </td>
+            <td style="padding: 10px; color: #333;">
+                {datetime.now().strftime("%d/%m/%Y às %H:%M")}
+            </td>
+        </tr>
+    </table>
+    {botao_email("👤 Ver Painel Admin", f"{BASE_URL}/admin", "#2ecc71")}
+    """
+    enviar_email(
+        ADMIN_EMAIL,
+        f"🎉 Novo cadastro: {nome}",
+        email_base(conteudo)
+    )
+
+
+async def enviar_email_premium(
+    nome: str, email: str, plano: str = "premium"
+):
+    valor = "R$49/mês" if plano == "premium" else "R$199/mês"
+    emoji_plano = "⭐" if plano == "premium" else "🏢"
+    conteudo = f"""
+    <h2 style="color: #333; margin-top: 0;">
+        Parabéns, {nome}! 🎉
+    </h2>
+    <p style="color: #555; line-height: 1.6;">
+        Seu plano <strong>{emoji_plano} {plano.capitalize()}</strong>
+        foi ativado com sucesso!
+    </p>
+    <div style="
+        background: linear-gradient(135deg, #f0fff4, #dcfce7);
+        border: 1px solid #86efac;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+    ">
+        <h3 style="color: #166534; margin-top: 0;">
+            🚀 Agora você tem acesso a:
+        </h3>
+        <ul style="color: #166534; line-height: 2;">
+            <li>✅ Análises emocionais <strong>ilimitadas</strong></li>
+            <li>✅ Chat ilimitado com a Sofia</li>
+            <li>✅ Diário emocional <strong>ilimitado</strong></li>
+            <li>✅ Relatórios semanais detalhados por email</li>
+            <li>✅ Respostas Premium da Sofia (8-15 linhas)</li>
+            <li>✅ Técnicas avançadas: TCC, EMDR, Mindfulness</li>
+            <li>✅ +5 pontos por mensagem (vs +2 no free)</li>
+            <li>✅ Prioridade no suporte</li>
+        </ul>
+    </div>
+    <p style="
+        text-align: center;
+        font-size: 24px;
+        color: #00d2ff;
+        font-weight: bold;
+    ">
+        +50 pontos de bônus adicionados! 🏆
+    </p>
+    {botao_email("🚀 Acessar Dashboard", BASE_URL)}
+    """
+    enviar_email(
+        email,
+        f"⭐ Plano {plano.capitalize()} ativado!",
+        email_base(conteudo)
+    )
+    # Notifica admin
+    conteudo_admin = f"""
+    <h2 style="color: #333; margin-top: 0;">
+        💰 Nova assinatura {plano.capitalize()}!
+    </h2>
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td style="padding: 10px; border-bottom: 1px solid #eee;">
+                <strong>Nome:</strong>
+            </td>
+            <td style="padding: 10px; border-bottom: 1px solid #eee;">
+                {nome}
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border-bottom: 1px solid #eee;">
+                <strong>Email:</strong>
+            </td>
+            <td style="padding: 10px; border-bottom: 1px solid #eee;">
+                {email}
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border-bottom: 1px solid #eee;">
+                <strong>Plano:</strong>
+            </td>
+            <td style="padding: 10px; border-bottom: 1px solid #eee;">
+                {plano.capitalize()} — {valor}
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;">
+                <strong>Data:</strong>
+            </td>
+            <td style="padding: 10px;">
+                {datetime.now().strftime("%d/%m/%Y às %H:%M")}
+            </td>
+        </tr>
+    </table>
+    {botao_email("Ver Painel Admin", f"{BASE_URL}/admin", "#2ecc71")}
+    """
+    enviar_email(
+        ADMIN_EMAIL,
+        f"💰 Nova assinatura {plano.capitalize()}: {nome}",
+        email_base(conteudo_admin)
+    )
+
+
+async def enviar_relatorio_semanal(usuario, db: Session):
+    try:
+        semana   = datetime.now() - timedelta(days=7)
+        analises = db.query(Analise).filter(
+            Analise.usuario_id == usuario.id,
+            Analise.criado_em  >= semana
+        ).all()
+
+        if not analises:
+            return
+
+        emocoes  = [a.emocao.lower() for a in analises]
+        contagem = {}
+        for e in emocoes:
+            contagem[e] = contagem.get(e, 0) + 1
+
+        mais_freq  = max(contagem, key=contagem.get)
+        lista_html = "".join([
+            f"<li style='padding: 5px 0;'>"
+            f"{get_emoji(e)} <strong>{e.capitalize()}</strong>: {c} vez(es)"
+            f"</li>"
+            for e, c in sorted(
+                contagem.items(), key=lambda x: x[1], reverse=True
+            )
+        ])
+
+        diarios_semana = db.query(Diario).filter(
+            Diario.usuario_id == usuario.id,
+            Diario.criado_em  >= semana
+        ).count()
+
+        msgs_semana = db.query(Mensagem).filter(
+            Mensagem.usuario_id == usuario.id,
+            Mensagem.criado_em  >= semana
+        ).count()
+
+        intensidade_media = round(
+            sum(a.intensidade for a in analises) / len(analises), 1
+        )
+
+        conteudo = f"""
+        <h2 style="color: #333; margin-top: 0;">
+            Olá, {usuario.nome}! 📊
+        </h2>
+        <p style="color: #555; line-height: 1.6;">
+            Aqui está seu relatório emocional da semana.
+            Você está fazendo um ótimo trabalho ao se conhecer melhor! 🌟
+        </p>
+        <div style="
+            display: grid;
+            gap: 15px;
+            margin: 20px 0;
+        ">
+            <div style="
+                background: #f0f8ff;
+                border-radius: 12px;
+                padding: 20px;
+                border-left: 4px solid #00d2ff;
+            ">
+                <h3 style="color: #00d2ff; margin: 0 0 10px;">
+                    📈 Resumo da Semana
+                </h3>
+                <ul style="color: #333; line-height: 2; margin: 0; padding-left: 20px;">
+                    <li>Total de análises: <strong>{len(analises)}</strong></li>
+                    <li>Entradas no diário: <strong>{diarios_semana}</strong></li>
+                    <li>Conversas com Sofia: <strong>{msgs_semana}</strong></li>
+                    <li>Intensidade média: <strong>{intensidade_media}/3</strong></li>
+                </ul>
+            </div>
+            <div style="
+                background: #fff8f0;
+                border-radius: 12px;
+                padding: 20px;
+                border-left: 4px solid #f39c12;
+            ">
+                <h3 style="color: #f39c12; margin: 0 0 10px;">
+                    🎭 Emoções Detectadas
+                </h3>
+                <ul style="color: #333; line-height: 1.8; margin: 0; padding-left: 20px;">
+                    {lista_html}
+                </ul>
+                <p style="color: #f39c12; margin: 10px 0 0;">
+                    <strong>Emoção mais frequente:</strong>
+                    {get_emoji(mais_freq)} {mais_freq.capitalize()}
+                </p>
+            </div>
+            <div style="
+                background: #f0fff4;
+                border-radius: 12px;
+                padding: 20px;
+                border-left: 4px solid #2ecc71;
+            ">
+                <h3 style="color: #2ecc71; margin: 0 0 10px;">
+                    🏆 Sua Conquista
+                </h3>
+                <p style="color: #333; margin: 0;">
+                    Pontos totais: <strong>{usuario.pontos}</strong><br>
+                    Badge atual: <strong>{usuario.badge}</strong>
+                </p>
+            </div>
+        </div>
+        {botao_email("📊 Ver Dashboard Completo", BASE_URL)}
+        <p style="
+            color: #888;
+            font-size: 13px;
+            text-align: center;
+            margin-top: 20px;
+        ">
+            Continue assim! Cada análise é um passo em direção
+            ao autoconhecimento. 💙
+        </p>
+        """
+        enviar_email(
+            usuario.email,
+            "📊 Seu relatório emocional semanal — Emotion Intelligence",
+            email_base(conteudo)
+        )
+        print(f"[Scheduler] Relatório enviado para {usuario.email}")
+    except Exception as e:
+        print(f"[Scheduler] Erro ao enviar relatório para {usuario.email}: {e}")
+
+# ================================================================
+# SCHEDULER — RELATÓRIO SEMANAL AUTOMÁTICO
+# ================================================================
+
+def job_relatorio_semanal():
+    db = SessionLocal()
+    try:
+        usuarios = db.query(Usuario).filter(
+            Usuario.plano.in_(["premium", "enterprise"]),
+            Usuario.ativo == True
+        ).all()
+        import asyncio
+        for u in usuarios:
+            try:
+                asyncio.run(enviar_relatorio_semanal(u, db))
+            except Exception as e:
+                print(f"[Scheduler] Erro: {e}")
+        print(f"[Scheduler] Relatórios enviados: {len(usuarios)}")
+    finally:
+        db.close()
+
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(
+    job_relatorio_semanal,
+    "cron",
+    day_of_week="sun",
+    hour=8,
+    minute=0
+)
+scheduler.start()
+
+# ================================================================
+# APP FASTAPI
+# ================================================================
+
+app       = FastAPI(
+    title="Emotion Intelligence Platform",
+    version="14.0",
+    description="Plataforma completa de inteligência emocional com IA"
+)
+templates = Jinja2Templates(directory="templates")
+
+try:
+    app.mount("/static", StaticFiles(directory="static"), name="static")
+except Exception:
+    pass
+
+# ================================================================
+# MIDDLEWARE DE LOG
+# ================================================================
+
+class LogMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        inicio   = time.time()
+        response = await call_next(request)
+        duracao  = round((time.time() - inicio) * 1000, 2)
+        print(
+            f"[{datetime.now().strftime('%H:%M:%S')}] "
+            f"{request.method} {request.url.path} "
+            f"→ {response.status_code} ({duracao}ms)"
+        )
+        return response
+
+
+app.add_middleware(LogMiddleware)
+
+# ================================================================
+# FIM DA PARTE 1
+# ================================================================
+# ================================================================
+# ROTAS — SISTEMA
+# ================================================================
+
+@app.get("/health")
+async def health(db: Session = Depends(get_db)):
+    try:
+        total_usuarios  = db.query(Usuario).count()
+        total_analises  = db.query(Analise).count()
+        total_mensagens = db.query(Mensagem).count()
+        total_diarios   = db.query(Diario).count()
+        uptime          = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        return {
+            "status":          "healthy",
+            "version":         "14.0 ULTIMATE",
+            "timestamp":       uptime,
+            "database":        "connected",
+            "usuarios":        total_usuarios,
+            "analises":        total_analises,
+            "mensagens":       total_mensagens,
+            "diarios":         total_diarios,
+            "ia":              "Google Gemini 2.0 Flash",
+            "pagamentos":      "MercadoPago",
+            "emails":          "SendGrid",
+        }
+    except Exception as e:
+        return {
+            "status":  "unhealthy",
+            "error":   str(e),
+            "version": "14.0 ULTIMATE"
+        }
+
+
+@app.head("/")
+async def head_root():
+    return Response(status_code=200)
+
+
+@app.exception_handler(StarletteHTTPException)
+async def custom_404(request: Request, exc: StarletteHTTPException):
+    if exc.status_code == 404:
+        return templates.TemplateResponse(
+            request, "404.html", status_code=404
+        )
+    return await http_exception_handler(request, exc)
+
+# ================================================================
+# ROTAS — INDEX E DASHBOARD
+# ================================================================
+
+@app.get("/", response_class=HTMLResponse)
+def index(request: Request, ref: str = None, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+
+    if not usuario:
+        total_usuarios  = contar_total_usuarios(db)
+        total_analises  = db.query(Analise).count()
+        total_mensagens = db.query(Mensagem).count()
+        response = templates.TemplateResponse(request, "index.html", {
+            "total_usuarios":  total_usuarios,
+            "total_analises":  total_analises,
+            "total_mensagens": total_mensagens,
+        })
+        if ref:
+            response.set_cookie(key="ref", value=ref, max_age=86400)
+        return response
+
+    # Usuário logado — mostra dashboard
+    analises_hoje  = contar_hoje(Analise,  usuario.id, db)
+    mensagens_hoje = contar_hoje(Mensagem, usuario.id, db)
+    diarios_hoje   = contar_hoje(Diario,   usuario.id, db)
+
+    # Últimas análises
+    ultimas_analises = db.query(Analise).filter(
+        Analise.usuario_id == usuario.id
+    ).order_by(Analise.criado_em.desc()).limit(5).all()
+
+    # Últimas mensagens
+    ultimas_mensagens = db.query(Mensagem).filter(
+        Mensagem.usuario_id == usuario.id
+    ).order_by(Mensagem.criado_em.desc()).limit(3).all()
+
+    # Ranking top 10
+    ranking = db.query(Usuario).filter(
+        Usuario.ativo == True
+    ).order_by(Usuario.pontos.desc()).limit(10).all()
+
+    # Estatísticas de emoções
+    todas_analises = db.query(Analise).filter(
+        Analise.usuario_id == usuario.id
+    ).all()
+
+    emocoes_contagem = {}
+    for a in todas_analises:
+        e = a.emocao.lower()
+        emocoes_contagem[e] = emocoes_contagem.get(e, 0) + 1
+
+    emocao_favorita = (
+        max(emocoes_contagem, key=emocoes_contagem.get)
+        if emocoes_contagem else "neutro"
+    )
+
+    # Conquistas do usuário
+    conquistas = db.query(Conquista).filter(
+        Conquista.usuario_id == usuario.id
+    ).order_by(Conquista.criado_em.desc()).limit(5).all()
+
+    # Próximo badge
+    prox_badge = proximo_badge(usuario.pontos)
+
+    # Dias cadastrado
+    dias_cadastrado = (datetime.now() - usuario.criado_em).days
+
+    # Trial info
+    trial_dias_restantes = None
+    if usuario.plano == "trial" and usuario.trial_expira:
+        delta = usuario.trial_expira - datetime.now()
+        trial_dias_restantes = max(0, delta.days)
+
+    return templates.TemplateResponse(request, "dashboard.html", {
+        "usuario":               usuario,
+        "analises_hoje":         analises_hoje,
+        "mensagens_hoje":        mensagens_hoje,
+        "diarios_hoje":          diarios_hoje,
+        "limite_analises":       get_limite(usuario, "analises"),
+        "limite_chat":           get_limite(usuario, "chat"),
+        "limite_diario":         get_limite(usuario, "diario"),
+        "ranking":               ranking,
+        "ultimas_analises":      ultimas_analises,
+        "ultimas_mensagens":     ultimas_mensagens,
+        "emocoes_contagem":      json.dumps(emocoes_contagem),
+        "emocao_favorita":       emocao_favorita,
+        "emocao_emoji":          get_emoji(emocao_favorita),
+        "conquistas":            conquistas,
+        "proximo_badge":         prox_badge,
+        "dias_cadastrado":       dias_cadastrado,
+        "trial_dias_restantes":  trial_dias_restantes,
+        "total_analises":        len(todas_analises),
+    })
+
+# ================================================================
+# ROTAS — LOGIN
+# ================================================================
+
+@app.get("/login", response_class=HTMLResponse)
+def login_page(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if usuario:
+        return RedirectResponse(url="/")
+    return templates.TemplateResponse(request, "login.html", {
+        "base_url": BASE_URL
+    })
+
+
+@app.post("/login")
+def login(
+    request:  Request,
+    email:    str = Form(...),
+    senha:    str = Form(...),
+    db:       Session = Depends(get_db)
+):
+    ip = request.client.host if request.client else "unknown"
+
+    # Rate limit
+    if not rate_limit(ip, limite=10, janela=60):
+        return templates.TemplateResponse(request, "login.html", {
+            "erro": "⚠️ Muitas tentativas. Aguarde 1 minuto e tente novamente."
+        })
+
+    # Validação básica
+    if not email or not senha:
+        return templates.TemplateResponse(request, "login.html", {
+            "erro": "⚠️ Preencha todos os campos."
+        })
+
+    usuario = db.query(Usuario).filter(
+        Usuario.email == email.lower().strip()
+    ).first()
+
+    if not usuario or not verificar_senha(senha, usuario.senha):
+        registrar_log("/login", "POST", ip, 401, db=db)
+        return templates.TemplateResponse(request, "login.html", {
+            "erro": "❌ Email ou senha incorretos. Tente novamente."
+        })
+
+    if not usuario.ativo:
+        return templates.TemplateResponse(request, "login.html", {
+            "erro": (
+                "🚫 Conta desativada. "
+                "Entre em contato com o suporte."
+            )
+        })
+
+    session_id          = str(uuid.uuid4())
+    sessoes[session_id] = usuario.id
+    registrar_log("/login", "POST", ip, 200, usuario.id, db)
+
+    response = RedirectResponse(url="/", status_code=302)
+    response.set_cookie(
+        key="session_id",
+        value=session_id,
+        httponly=True,
+        max_age=86400 * 7  # 7 dias
+    )
+    return response
+
+# ================================================================
+# ROTAS — CADASTRO
+# ================================================================
+
+@app.get("/cadastro", response_class=HTMLResponse)
+def cadastro_page(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if usuario:
+        return RedirectResponse(url="/")
+    return templates.TemplateResponse(request, "cadastro.html", {
+        "base_url": BASE_URL
+    })
+
+
+@app.post("/cadastro")
+async def cadastro(
+    background_tasks: BackgroundTasks,
+    request:          Request,
+    nome:             str = Form(...),
+    email:            str = Form(...),
+    senha:            str = Form(...),
+    confirmar_senha: str = Form(None),
+    db:               Session = Depends(get_db)
+):
+    ip = request.client.host if request.client else "unknown"
+
+    # Rate limit
+    if not rate_limit(ip, limite=5, janela=300):
+        return templates.TemplateResponse(request, "cadastro.html", {
+            "erro": "⚠️ Muitos cadastros. Aguarde 5 minutos."
+        })
+
+    # Validações
+    nome = nome.strip()
+    email = email.lower().strip()
+
+    if len(nome) < 2:
+        return templates.TemplateResponse(request, "cadastro.html", {
+            "erro": "⚠️ Nome deve ter pelo menos 2 caracteres."
+        })
+
+    if not validar_email(email):
+        return templates.TemplateResponse(request, "cadastro.html", {
+            "erro": "⚠️ Email inválido. Verifique e tente novamente."
+        })
+
+    valida, msg_erro = validar_senha(senha)
+    if not valida:
+        return templates.TemplateResponse(request, "cadastro.html", {
+            "erro": f"⚠️ {msg_erro}"
+        })
+
+    if senha != confirmar_senha:
+        return templates.TemplateResponse(request, "cadastro.html", {
+            "erro": "⚠️ As senhas não coincidem."
+        })
+
+    existe = db.query(Usuario).filter(Usuario.email == email).first()
+    if existe:
+        return templates.TemplateResponse(request, "cadastro.html", {
+            "erro": "⚠️ Este email já está cadastrado. Faça login."
+        })
+
+    ref_cookie = request.cookies.get("ref")
+    ref_code   = gerar_ref_code(nome)
+    api_token  = gerar_api_token(email)
+
+    novo = Usuario(
+        nome=nome,
+        email=email,
+        senha=hash_senha(senha),
+        plano="free",
+        ref_code=ref_code,
+        indicado_por=ref_cookie,
+        api_token=api_token
+    )
+    db.add(novo)
+    db.commit()
+    db.refresh(novo)
+
+    adicionar_pontos(novo, PONTOS_POR_ACAO["cadastro"], db)
+
+    background_tasks.add_task(
+        enviar_email_boas_vindas, nome, email, ref_code
+    )
+    background_tasks.add_task(
+        enviar_email_novo_cadastro, nome, email
+    )
+
+    registrar_log("/cadastro", "POST", ip, 200, novo.id, db)
+
+    session_id          = str(uuid.uuid4())
+    sessoes[session_id] = novo.id
+
+    response = RedirectResponse(url="/obrigado", status_code=302)
+    response.set_cookie(
+        key="session_id",
+        value=session_id,
+        httponly=True,
+        max_age=86400 * 7
+    )
+    return response
+
+# ================================================================
+# ROTAS — OBRIGADO / PÓS CADASTRO
+# ================================================================
+
+@app.get("/obrigado", response_class=HTMLResponse)
+def obrigado(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return RedirectResponse(url="/login")
+
+    link_afiliado = f"{BASE_URL}/?ref={usuario.ref_code}"
+
+    return templates.TemplateResponse(request, "obrigado.html", {
+        "usuario":       usuario,
+        "link_afiliado": link_afiliado,
+        "pontos_ganhos": PONTOS_POR_ACAO["cadastro"],
+    })
+
+# ================================================================
+# ROTAS — LOGOUT
+# ================================================================
+
+@app.get("/logout")
+def logout(request: Request):
+    session_id = request.cookies.get("session_id")
+    if session_id and session_id in sessoes:
+        del sessoes[session_id]
+    response = RedirectResponse(url="/login", status_code=302)
+    response.delete_cookie("session_id")
+    return response
+
+# ================================================================
+# ROTAS — PÁGINAS INSTITUCIONAIS
+# ================================================================
+
+@app.get("/privacidade", response_class=HTMLResponse)
+def privacidade(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    return templates.TemplateResponse(request, "privacidade.html", {
+        "usuario": usuario
+    })
+
+
+@app.get("/termos", response_class=HTMLResponse)
+def termos(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    return templates.TemplateResponse(request, "termos.html", {
+        "usuario": usuario
+    })
+
+
+@app.get("/faq", response_class=HTMLResponse)
+def faq(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    perguntas = [
+        {
+            "pergunta": "O que é o Emotion Intelligence?",
+            "resposta": (
+                "É uma plataforma de inteligência emocional com IA que ajuda "
+                "você a identificar, compreender e gerenciar suas emoções através "
+                "de análises avançadas, diário emocional e chat com a Sofia, "
+                "sua psicóloga virtual."
+            )
+        },
+        {
+            "pergunta": "A Sofia substitui um psicólogo real?",
+            "resposta": (
+                "Não. A Sofia é uma assistente virtual de apoio emocional. "
+                "Em casos de sofrimento intenso, crise ou necessidade de "
+                "diagnóstico, sempre recomendamos buscar um profissional de saúde mental."
+            )
+        },
+        {
+            "pergunta": "Como funciona o plano Free?",
+            "resposta": (
+                "O plano Free oferece 10 análises por dia, 5 conversas com a Sofia "
+                "e 3 entradas no diário emocional. Sem cartão de crédito necessário."
+            )
+        },
+        {
+            "pergunta": "Como funciona o programa de afiliados?",
+            "resposta": (
+                "Você recebe um link único. Quando alguém se cadastrar e assinar "
+                "um plano pago pelo seu link, você ganha 20% de comissão. "
+                "Os pagamentos são feitos mensalmente."
+            )
+        },
+        {
+            "pergunta": "Posso cancelar o plano Premium a qualquer momento?",
+            "resposta": (
+                "Sim! Você pode cancelar quando quiser sem multa. "
+                "Entre em contato com nosso suporte pelo chat ao vivo."
+            )
+        },
+        {
+            "pergunta": "Meus dados estão seguros?",
+            "resposta": (
+                "Sim. Suas senhas são criptografadas e seus dados nunca são "
+                "vendidos a terceiros. Leia nossa Política de Privacidade "
+                "para mais detalhes."
+            )
+        },
+        {
+            "pergunta": "O que é o Trial de 7 dias?",
+            "resposta": (
+                "O Trial Premium dá acesso a todos os recursos do plano Premium "
+                "por 7 dias, sem precisar de cartão de crédito. "
+                "Cada usuário pode ativar apenas uma vez."
+            )
+        },
+        {
+            "pergunta": "Como funciona o sistema de pontos?",
+            "resposta": (
+                "Você ganha pontos por cada ação: +10 no cadastro, +5 por análise, "
+                "+2 por mensagem (free) ou +5 (premium), +8 por entrada no diário, "
+                "+20 ao ativar trial e +50 ao assinar Premium."
+            )
+        },
+    ]
+    return templates.TemplateResponse(request, "faq.html", {
+        "usuario":   usuario,
+        "perguntas": perguntas
+    })
+
+
+@app.get("/contato", response_class=HTMLResponse)
+def contato(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    return templates.TemplateResponse(request, "contato.html", {
+        "usuario": usuario
+    })
+
+
+@app.get("/sobre", response_class=HTMLResponse)
+def sobre(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    total_usuarios = contar_total_usuarios(db)
+    total_analises = db.query(Analise).count()
+    return templates.TemplateResponse(request, "sobre.html", {
+        "usuario":       usuario,
+        "total_usuarios": total_usuarios,
+        "total_analises": total_analises,
+    })
+
+# ================================================================
+# ROTAS — PERFIL
+# ================================================================
+
+@app.get("/perfil", response_class=HTMLResponse)
+def perfil_page(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return RedirectResponse(url="/login")
+
+    total_analises  = db.query(Analise).filter(
+        Analise.usuario_id == usuario.id
+    ).count()
+    total_mensagens = db.query(Mensagem).filter(
+        Mensagem.usuario_id == usuario.id
+    ).count()
+    total_diarios   = db.query(Diario).filter(
+        Diario.usuario_id == usuario.id
+    ).count()
+    analises_hoje   = contar_hoje(Analise, usuario.id, db)
+    dias_cadastrado = (datetime.now() - usuario.criado_em).days
+    prox_badge      = proximo_badge(usuario.pontos)
+
+    # Conquistas
+    conquistas = db.query(Conquista).filter(
+        Conquista.usuario_id == usuario.id
+    ).order_by(Conquista.criado_em.desc()).all()
+
+    # Emoção favorita
+    todas_analises = db.query(Analise).filter(
+        Analise.usuario_id == usuario.id
+    ).all()
+    emocoes_contagem = {}
+    for a in todas_analises:
+        e = a.emocao.lower()
+        emocoes_contagem[e] = emocoes_contagem.get(e, 0) + 1
+
+    emocao_favorita = (
+        max(emocoes_contagem, key=emocoes_contagem.get)
+        if emocoes_contagem else "neutro"
+    )
+
+    # Trial info
+    trial_dias_restantes = None
+    if usuario.plano == "trial" and usuario.trial_expira:
+        delta = usuario.trial_expira - datetime.now()
+        trial_dias_restantes = max(0, delta.days)
+
+    return templates.TemplateResponse(request, "perfil.html", {
+        "usuario":             usuario,
+        "total_analises":      total_analises,
+        "total_mensagens":     total_mensagens,
+        "total_diarios":       total_diarios,
+        "analises_hoje":       analises_hoje,
+        "dias_cadastrado":     dias_cadastrado,
+        "proximo_badge":       prox_badge,
+        "api_token":           usuario.api_token,
+        "conquistas":          conquistas,
+        "emocao_favorita":     emocao_favorita,
+        "emocao_emoji":        get_emoji(emocao_favorita),
+        "trial_dias_restantes": trial_dias_restantes,
+        "link_afiliado":       f"{BASE_URL}/?ref={usuario.ref_code}",
+    })
+
+
+@app.post("/perfil")
+def perfil_update(
+    request:         Request,
+    nome:            str = Form(...),
+    bio:             str = Form(""),
+    senha:           str = Form(""),
+    confirmar_senha: str = Form(""),
+    db:              Session = Depends(get_db)
+):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return RedirectResponse(url="/login")
+
+    total_analises  = db.query(Analise).filter(
+        Analise.usuario_id == usuario.id
+    ).count()
+    total_mensagens = db.query(Mensagem).filter(
+        Mensagem.usuario_id == usuario.id
+    ).count()
+    total_diarios   = db.query(Diario).filter(
+        Diario.usuario_id == usuario.id
+    ).count()
+    analises_hoje   = contar_hoje(Analise, usuario.id, db)
+    dias_cadastrado = (datetime.now() - usuario.criado_em).days
+    conquistas      = db.query(Conquista).filter(
+        Conquista.usuario_id == usuario.id
+    ).all()
+
+    contexto_base = {
+        "usuario":         usuario,
+        "total_analises":  total_analises,
+        "total_mensagens": total_mensagens,
+        "total_diarios":   total_diarios,
+        "analises_hoje":   analises_hoje,
+        "dias_cadastrado": dias_cadastrado,
+        "conquistas":      conquistas,
+        "api_token":       usuario.api_token,
+        "link_afiliado":   f"{BASE_URL}/?ref={usuario.ref_code}",
+    }
+
+    if len(nome.strip()) < 2:
+        return templates.TemplateResponse(request, "perfil.html", {
+            **contexto_base,
+            "erro": "⚠️ Nome deve ter pelo menos 2 caracteres."
+        })
+
+    if senha:
+        valida, msg_erro = validar_senha(senha)
+        if not valida:
+            return templates.TemplateResponse(request, "perfil.html", {
+                **contexto_base,
+                "erro": f"⚠️ {msg_erro}"
+            })
+        if senha != confirmar_senha:
+            return templates.TemplateResponse(request, "perfil.html", {
+                **contexto_base,
+                "erro": "⚠️ As senhas não coincidem."
+            })
+        usuario.senha = hash_senha(senha)
+
+    usuario.nome = nome.strip()
+    usuario.bio  = bio.strip()[:500] if bio else None
+    db.commit()
+
+    return templates.TemplateResponse(request, "perfil.html", {
+        **contexto_base,
+        "sucesso": "✅ Perfil atualizado com sucesso!"
+    })
+
+# ================================================================
+# ROTAS — AFILIADOS
+# ================================================================
+
+@app.get("/afiliado", response_class=HTMLResponse)
+def afiliado_page(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return RedirectResponse(url="/login")
+
+    indicados = db.query(Usuario).filter(
+        Usuario.indicado_por == usuario.ref_code
+    ).all()
+
+    indicados_premium = [
+        u for u in indicados
+        if u.plano in ["premium", "enterprise"]
+    ]
+
+    comissao = sum(
+        49  if u.plano == "premium"    else
+        199 if u.plano == "enterprise" else 0
+        for u in indicados_premium
+    ) * COMISSAO_PERCENT // 100
+
+    link = f"{BASE_URL}/?ref={usuario.ref_code}"
+
+    # Histórico de indicados com detalhes
+    indicados_detalhes = [{
+        "nome":      u.nome,
+        "plano":     u.plano,
+        "criado_em": u.criado_em.strftime("%d/%m/%Y"),
+        "pontos":    u.pontos,
+        "comissao":  (
+            49  * COMISSAO_PERCENT // 100 if u.plano == "premium"    else
+            199 * COMISSAO_PERCENT // 100 if u.plano == "enterprise" else 0
+        )
+    } for u in indicados]
+
+    return templates.TemplateResponse(request, "afiliado.html", {
+        "usuario":            usuario,
+        "total_indicados":    len(indicados),
+        "indicados_premium":  len(indicados_premium),
+        "indicados":          indicados_detalhes,
+        "comissao":           comissao,
+        "link":               link,
+        "comissao_percent":   COMISSAO_PERCENT,
+        "link_whatsapp": (
+            f"https://wa.me/?text=Olhe%20essa%20plataforma%20incrível%20de%20"
+            f"inteligência%20emocional!%20{link}"
+        ),
+        "link_telegram": (
+            f"https://t.me/share/url?url={link}&text="
+            f"Plataforma%20incrível%20de%20inteligência%20emocional!"
+        ),
+        "link_twitter": (
+            f"https://twitter.com/intent/tweet?text="
+            f"Descobri%20essa%20plataforma%20incrível%20de%20inteligência%20"
+            f"emocional!%20{link}"
+        ),
+    })
+
+# ================================================================
+# ROTAS — PLANOS
+# ================================================================
+
+@app.get("/planos", response_class=HTMLResponse)
+def planos(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return RedirectResponse(url="/login")
+    return templates.TemplateResponse(request, "planos.html", {
+        "usuario": usuario,
+        "precos":  PRECOS,
+    })
+
+# ================================================================
+# ROTAS — TRIAL
+# ================================================================
+
+@app.post("/trial")
+def ativar_trial(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        raise HTTPException(status_code=401, detail="Não autorizado")
+
+    if usuario.trial_usado:
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                "❌ Trial já utilizado anteriormente. "
+                "Faça upgrade para o plano Premium para continuar. 💎"
+            )
+        )
+
+    if usuario.plano != "free":
+        raise HTTPException(
+            status_code=400,
+            detail="⚠️ Você já tem um plano ativo."
+        )
+
+    usuario.plano        = "trial"
+    usuario.trial_usado  = True
+    usuario.trial_expira = datetime.now() + timedelta(days=7)
+    db.commit()
+
+    adicionar_pontos(usuario, PONTOS_POR_ACAO["trial"], db)
+
+    return {
+        "mensagem":     "🎉 Trial Premium ativado com sucesso por 7 dias!",
+        "expira_em":    usuario.trial_expira.strftime("%d/%m/%Y às %H:%M"),
+        "pontos_ganhos": PONTOS_POR_ACAO["trial"],
+        "total_pontos": usuario.pontos,
+        "badge":        usuario.badge,
+        "beneficios": [
+            "✅ 50 análises por dia",
+            "✅ 20 conversas com Sofia por dia",
+            "✅ 10 entradas no diário por dia",
+            "✅ Respostas mais completas da Sofia",
+        ]
+    }
+
+# ================================================================
+# ROTAS — RANKING
+# ================================================================
+
+@app.get("/ranking")
+def ranking_route(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        raise HTTPException(status_code=401, detail="Não autorizado")
+
+    top = db.query(Usuario).filter(
+        Usuario.ativo == True
+    ).order_by(Usuario.pontos.desc()).limit(20).all()
+
+    posicao = next(
+        (i + 1 for i, u in enumerate(top) if u.id == usuario.id),
+        None
+    )
+
+    # Se não está no top 20, busca posição real
+    if posicao is None:
+        todos_ordenados = db.query(Usuario).filter(
+            Usuario.ativo == True
+        ).order_by(Usuario.pontos.desc()).all()
+        posicao = next(
+            (i + 1 for i, u in enumerate(todos_ordenados)
+             if u.id == usuario.id),
+            None
+        )
+
+    return {
+        "minha_posicao": posicao,
+        "meus_pontos":   usuario.pontos,
+        "meu_badge":     usuario.badge,
+        "total_usuarios": db.query(Usuario).filter(
+            Usuario.ativo == True
+        ).count(),
+        "ranking": [{
+            "posicao": i + 1,
+            "nome":    u.nome[:25],
+            "pontos":  u.pontos,
+            "badge":   u.badge,
+            "plano":   u.plano,
+            "emoji":   "👑" if i == 0 else "🥈" if i == 1 else "🥉" if i == 2 else "🏅",
+            "eu":      u.id == usuario.id,
+        } for i, u in enumerate(top)]
+    }
+
+# ================================================================
+# ROTAS — NOTIFICAÇÕES
+# ================================================================
+
+@app.get("/notificacoes")
+def ver_notificacoes(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        raise HTTPException(status_code=401, detail="Não autorizado")
+
+    notificacoes = db.query(Notificacao).filter(
+        Notificacao.usuario_id == usuario.id
+    ).order_by(Notificacao.criado_em.desc()).limit(20).all()
+
+    nao_lidas = db.query(Notificacao).filter(
+        Notificacao.usuario_id == usuario.id,
+        Notificacao.lida == False
+    ).count()
+
+    # Marca todas como lidas
+    db.query(Notificacao).filter(
+        Notificacao.usuario_id == usuario.id,
+        Notificacao.lida == False
+    ).update({"lida": True})
+    db.commit()
+
+    return {
+        "total":     len(notificacoes),
+        "nao_lidas": nao_lidas,
+        "notificacoes": [{
+            "titulo":    n.titulo,
+            "mensagem":  n.mensagem,
+            "lida":      n.lida,
+            "timestamp": n.criado_em.strftime("%d/%m/%Y %H:%M")
+        } for n in notificacoes]
+    }
+
+
+@app.get("/conquistas")
+def ver_conquistas(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        raise HTTPException(status_code=401, detail="Não autorizado")
+
+    conquistas = db.query(Conquista).filter(
+        Conquista.usuario_id == usuario.id
+    ).order_by(Conquista.criado_em.desc()).all()
+
+    todas_possiveis = [
+        {"nome": "Primeira Análise",    "emoji": "🎯", "descricao": "Fez a primeira análise emocional"},
+        {"nome": "Analista Experiente", "emoji": "📊", "descricao": "Completou 50 análises"},
+        {"nome": "Amigo da Sofia",      "emoji": "🤝", "descricao": "Trocou 10 mensagens com a Sofia"},
+        {"nome": "Diarista Emocional",  "emoji": "📖", "descricao": "Escreveu 7 entradas no diário"},
+        {"nome": "Milionário de Pontos","emoji": "💰", "descricao": "Acumulou 1000 pontos"},
+    ]
+
+    nomes_conquistados = [c.nome for c in conquistas]
+
+    return {
+        "total_conquistadas": len(conquistas),
+        "total_possiveis":    len(todas_possiveis),
+        "conquistas": [{
+            "nome":      c.nome,
+            "descricao": c.descricao,
+            "emoji":     c.emoji,
+            "timestamp": c.criado_em.strftime("%d/%m/%Y"),
+            "conquistada": True
+        } for c in conquistas],
+        "disponiveis": [{
+            "nome":      p["nome"],
+            "emoji":     p["emoji"],
+            "descricao": p["descricao"],
+            "conquistada": p["nome"] in nomes_conquistados
+        } for p in todas_possiveis]
+    }
+
+# ================================================================
+# FIM DA PARTE 2
+# ================================================================
+# ================================================================
+# ROTAS — ANÁLISE DE EMOÇÕES
+# ================================================================
+
+@app.get("/analyze")
+def analyze(
+    request: Request,
+    text:    str,
+    db:      Session = Depends(get_db)
+):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        raise HTTPException(status_code=401, detail="Não autorizado")
+
+    limite = get_limite(usuario, "analises")
+    total_hoje = contar_hoje(Analise, usuario.id, db)
+
+    if total_hoje >= limite:
+        raise HTTPException(
+            status_code=429,
+            detail=(
+                f"⚠️ Você atingiu o limite de {limite} análises por dia. "
+                f"{'Aguarde até amanhã ou faça upgrade para Premium! 💎' if usuario.plano == 'free' else 'Aguarde até amanhã!'}"
+            )
+        )
+
+    if len(text.strip()) < 3:
+        raise HTTPException(
+            status_code=400,
+            detail="⚠️ Texto muito curto. Digite pelo menos 3 caracteres."
+        )
+
+    emocao      = detectar_emocao(text)
+    intensidade = calcular_intensidade(text)
+    tecnica     = tecnicas_por_emocao.get(emocao, tecnicas_por_emocao["neutro"])
+
+    analise = Analise(
+        texto=text,
+        emocao=emocao.capitalize(),
+        emoji=get_emoji(emocao),
+        recomendacao=recomendacoes.get(emocao, recomendacoes["neutro"]),
+        intensidade=intensidade,
+        tecnica=tecnica,
+        usuario_id=usuario.id
+    )
+    db.add(analise)
+    db.commit()
+
+    adicionar_pontos(usuario, PONTOS_POR_ACAO["analise"], db)
+
+    # Verifica conquistas especiais
+    total_analises = db.query(Analise).filter(
+        Analise.usuario_id == usuario.id
+    ).count()
+
+    mensagem_especial = None
+    if total_analises == 1:
+        mensagem_especial = "🎯 Primeira análise! Conquista desbloqueada!"
+    elif total_analises == 50:
+        mensagem_especial = "📊 50 análises! Você é incrível!"
+    elif total_analises == 100:
+        mensagem_especial = "🏆 100 análises! Especialista emocional!"
+
+    return {
+        "texto":            text,
+        "emocao":           emocao.capitalize(),
+        "emoji":            get_emoji(emocao),
+        "recomendacao":     recomendacoes.get(emocao, recomendacoes["neutro"]),
+        "tecnica":          tecnica,
+        "intensidade":      intensidade,
+        "intensidade_label": (
+            "🔴 Alta" if intensidade == 3 else
+            "🟡 Média" if intensidade == 2 else
+            "🟢 Baixa"
+        ),
+        "pontos_ganhos":    PONTOS_POR_ACAO["analise"],
+        "total_pontos":     usuario.pontos,
+        "badge":            usuario.badge,
+        "analises_hoje":    total_hoje + 1,
+        "limite_analises":  limite,
+        "restantes":        limite - (total_hoje + 1),
+        "mensagem_especial": mensagem_especial,
+        "timestamp":        datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+    }
+
+
+@app.get("/historico")
+def ver_historico(
+    request: Request,
+    pagina:  int = 1,
+    db:      Session = Depends(get_db)
+):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        raise HTTPException(status_code=401, detail="Não autorizado")
+
+    por_pagina = 20
+    offset     = (pagina - 1) * por_pagina
+
+    total = db.query(Analise).filter(
+        Analise.usuario_id == usuario.id
+    ).count()
+
+    analises = db.query(Analise).filter(
+        Analise.usuario_id == usuario.id
+    ).order_by(
+        Analise.criado_em.desc()
+    ).offset(offset).limit(por_pagina).all()
+
+    # Estatísticas gerais
+    todas = db.query(Analise).filter(
+        Analise.usuario_id == usuario.id
+    ).all()
+
+    emocoes_contagem = {}
+    intensidade_total = 0
+    for a in todas:
+        e = a.emocao.lower()
+        emocoes_contagem[e] = emocoes_contagem.get(e, 0) + 1
+        intensidade_total   += a.intensidade
+
+    intensidade_media = round(
+        intensidade_total / len(todas), 1
+    ) if todas else 0
+
+    return {
+        "total":            total,
+        "pagina":           pagina,
+        "total_paginas":    (total + por_pagina - 1) // por_pagina,
+        "intensidade_media": intensidade_media,
+        "emocoes_contagem": emocoes_contagem,
+        "mais_frequente":   max(emocoes_contagem, key=emocoes_contagem.get) if emocoes_contagem else "neutro",
+        "analises": [{
+            "id":           a.id,
+            "texto":        a.texto,
+            "emocao":       a.emocao,
+            "emoji":        a.emoji,
+            "recomendacao": a.recomendacao,
+            "tecnica":      a.tecnica,
+            "intensidade":  a.intensidade,
+            "intensidade_label": (
+                "🔴 Alta" if a.intensidade == 3 else
+                "🟡 Média" if a.intensidade == 2 else
+                "🟢 Baixa"
+            ),
+            "timestamp":    a.criado_em.strftime("%d/%m/%Y %H:%M"),
+        } for a in analises]
+    }
+
+
+@app.get("/stats")
+def stats(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        raise HTTPException(status_code=401, detail="Não autorizado")
+
+    analises  = db.query(Analise).filter(
+        Analise.usuario_id == usuario.id
+    ).all()
+    mensagens = db.query(Mensagem).filter(
+        Mensagem.usuario_id == usuario.id
+    ).all()
+    diarios   = db.query(Diario).filter(
+        Diario.usuario_id == usuario.id
+    ).all()
+
+    if not analises:
+        return {
+            "mensagem":      "Nenhuma análise ainda. Comece agora! 🚀",
+            "total_analises": 0,
+            "pontos":         usuario.pontos,
+            "badge":          usuario.badge,
+        }
+
+    emocoes  = [a.emocao.lower() for a in analises]
+    contagem = {}
+    for e in emocoes:
+        contagem[e] = contagem.get(e, 0) + 1
+
+    # Por dia (últimos 7 dias)
+    por_dia = {}
+    for i in range(7):
+        dia = (datetime.now() - timedelta(days=i)).strftime("%d/%m")
+        por_dia[dia] = 0
+    for a in analises:
+        dia = a.criado_em.strftime("%d/%m")
+        if dia in por_dia:
+            por_dia[dia] += 1
+
+    # Por hora
+    por_hora = {}
+    for a in analises:
+        hora = a.criado_em.strftime("%H:00")
+        por_hora[hora] = por_hora.get(hora, 0) + 1
+
+    # Intensidade média
+    intensidade_media = round(
+        sum(a.intensidade for a in analises) / len(analises), 2
+    )
+
+    # Streak (dias consecutivos)
+    datas = sorted(set(
+        a.criado_em.date() for a in analises
+    ), reverse=True)
+    streak = 0
+    hoje   = date.today()
+    for i, d in enumerate(datas):
+        if d == hoje - timedelta(days=i):
+            streak += 1
+        else:
+            break
+
+    return {
+        "total_analises":    len(analises),
+        "total_mensagens":   len(mensagens),
+        "total_diarios":     len(diarios),
+        "emocoes_detectadas": contagem,
+        "mais_frequente":    max(contagem, key=contagem.get),
+        "emoji_frequente":   get_emoji(max(contagem, key=contagem.get)),
+        "por_dia":           por_dia,
+        "por_hora":          por_hora,
+        "intensidade_media": intensidade_media,
+        "streak_dias":       streak,
+        "pontos":            usuario.pontos,
+        "badge":             usuario.badge,
+        "plano":             usuario.plano,
+        "proximo_badge":     proximo_badge(usuario.pontos),
+        "conquistas":        db.query(Conquista).filter(
+            Conquista.usuario_id == usuario.id
+        ).count(),
+    }
+
+# ================================================================
+# ROTAS — IA PSICÓLOGA SOFIA 🧠 PREMIUM COMPLETO
+# ================================================================
+
+@app.post("/chat")
+async def chat(
+    request:  Request,
+    mensagem: str = Form(...),
+    db:       Session = Depends(get_db)
+):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        raise HTTPException(status_code=401, detail="Não autorizado")
+
+    limite     = get_limite(usuario, "chat")
+    total_hoje = contar_hoje(Mensagem, usuario.id, db)
+
+    if total_hoje >= limite:
+        raise HTTPException(
+            status_code=429,
+            detail=(
+                f"⚠️ Você atingiu o limite de {limite} mensagens por dia. "
+                f"{'Faça upgrade para Premium e tenha conversas ilimitadas! 💎' if usuario.plano == 'free' else 'Aguarde até amanhã!'}"
+            )
+        )
+
+    if len(mensagem.strip()) < 2:
+        raise HTTPException(
+            status_code=400,
+            detail="⚠️ Mensagem muito curta."
+        )
+
+    # Histórico das últimas mensagens
+    historico = db.query(Mensagem).filter(
+        Mensagem.usuario_id == usuario.id
+    ).order_by(Mensagem.criado_em.desc()).limit(8).all()
+
+    contexto = ""
+    for h in reversed(historico):
+        contexto += f"Usuário: {h.conteudo}\nSofia: {h.resposta}\n\n"
+
+    emocao_atual = detectar_emocao(mensagem)
+    eh_premium   = usuario.plano in ["premium", "enterprise"]
+
+    # Estatísticas do usuário para contexto
+    total_analises  = db.query(Analise).filter(
+        Analise.usuario_id == usuario.id
+    ).count()
+    total_diarios   = db.query(Diario).filter(
+        Diario.usuario_id == usuario.id
+    ).count()
+    total_mensagens = len(historico)
+
+    # Emoções recentes para padrão
+    analises_recentes = db.query(Analise).filter(
+        Analise.usuario_id == usuario.id
+    ).order_by(Analise.criado_em.desc()).limit(10).all()
+
+    emocoes_recentes = [a.emocao.lower() for a in analises_recentes]
+    padrao_emocional = ""
+    if emocoes_recentes:
+        contagem_recente = {}
+        for e in emocoes_recentes:
+            contagem_recente[e] = contagem_recente.get(e, 0) + 1
+        emocao_dominante = max(contagem_recente, key=contagem_recente.get)
+        padrao_emocional = (
+            f"Padrão emocional recente: {emocao_dominante} "
+            f"({contagem_recente[emocao_dominante]}x nas últimas análises)"
+        )
+
+    # Dias cadastrado
+    dias_na_plataforma = (datetime.now() - usuario.criado_em).days
+
+    if eh_premium:
+        instrucoes_plano = f"""
+MODO PREMIUM/ENTERPRISE ATIVO — Sessão terapêutica completa:
+
+ESTRUTURA DA RESPOSTA (siga rigorosamente):
+1. ACOLHIMENTO (1-2 linhas): valide o sentimento do usuário com empatia genuína
+2. REFLEXÃO (2-3 linhas): aprofunde a compreensão da emoção detectada ({emocao_atual})
+3. TÉCNICA TERAPÊUTICA (3-4 linhas): ensine e explique UMA técnica específica:
+   - Para tristeza/solidão: Auto-Compaixão de Kristin Neff ou Journaling
+   - Para raiva/frustração: Respiração 4-7-8 ou Técnica STOP
+   - Para medo/ansiedade: Grounding 5-4-3-2-1 ou Body Scan
+   - Para alegria/euforia: Ancoragem ou Diário de Gratidão
+   - Para confusão: Mind Mapping ou Técnica dos 3 Porquês
+   - Para vergonha: Observador Compassivo ou Carta para Si Mesmo
+   - Para amor/gratidão: Loving-Kindness (Metta) ou Carta de Gratidão
+4. EXERCÍCIO PRÁTICO (2-3 linhas): dê um exercício concreto para hoje
+5. PERGUNTAS ABERTAS (2 perguntas): para aprofundar o autoconhecimento
+6. REFLEXÃO FILOSÓFICA (1 linha): citação ou insight relevante
+7. ENCORAJAMENTO (1 linha): encerre com calor e positividade
+
+IMPORTANTE:
+- Se detectar sofrimento grave, crise ou ideação suicida: indique CAPS (Centro de Atenção Psicossocial), CVV (188 — 24h) e busca por psicólogo
+- Mencione o padrão emocional se relevante: {padrao_emocional}
+- Celebre conquistas quando pertinente (pontos, badges, streak)
+- Resposta entre 12 a 18 linhas
+- Use emojis com moderação e propósito
+"""
+    else:
+        instrucoes_plano = f"""
+MODO FREE — Resposta acolhedora e objetiva:
+- Resposta entre 4 a 6 linhas
+- 1. Acolha o sentimento com empatia (1 linha)
+- 2. Ofereça uma dica prática simples relacionada à emoção (2-3 linhas)
+- 3. Faça 1 pergunta aberta para reflexão (1 linha)
+- 4. Mencione gentilmente que o plano Premium oferece sessões terapêuticas completas com técnicas avançadas
+- Use linguagem calorosa e brasileira
+"""
+
+    prompt = f"""Você é Sofia, psicóloga virtual da plataforma Emotion Intelligence v14.0.
+
+═══════════════════════════════════
+PERFIL DA SOFIA
+═══════════════════════════════════
+- Psicóloga com abordagem integrativa (TCC + Humanista + Mindfulness)
+- Empática, acolhedora, profissional e genuinamente humana
+- Usa linguagem simples, calorosa e autenticamente brasileira
+- Domina técnicas: Respiração 4-7-8, Grounding 5-4-3-2-1, Body Scan,
+  Mindfulness, TCC, EMDR leve, Journaling, Loving-Kindness, Auto-Compaixão,
+  Ancoragem, Mind Mapping, Técnica STOP, Visualização
+- Reconhece padrões emocionais e os usa terapeuticamente
+- NUNCA substitui psicólogo real — quando grave, indica ajuda profissional
+- Responde SEMPRE em português brasileiro
+- Celebra o progresso do usuário na plataforma
+
+═══════════════════════════════════
+DADOS DO USUÁRIO
+═══════════════════════════════════
+- Nome: {usuario.nome}
+- Plano: {usuario.plano.upper()} {'⭐' if eh_premium else ''}
+- Pontos: {usuario.pontos} | Badge: {usuario.badge}
+- Dias na plataforma: {dias_na_plataforma}
+- Total de análises feitas: {total_analises}
+- Total de entradas no diário: {total_diarios}
+- Conversas anteriores com Sofia: {total_mensagens}
+- Emoção detectada nesta mensagem: {emocao_atual} {get_emoji(emocao_atual)}
+- {padrao_emocional}
+
+═══════════════════════════════════
+INSTRUÇÕES DO PLANO
+═══════════════════════════════════
+{instrucoes_plano}
+
+═══════════════════════════════════
+HISTÓRICO RECENTE DA CONVERSA
+═══════════════════════════════════
+{contexto if contexto else "Esta é a primeira mensagem do usuário com a Sofia."}
+
+═══════════════════════════════════
+NOVA MENSAGEM DO USUÁRIO
+═══════════════════════════════════
+{mensagem}
+
+Responda como Sofia, com {'profundidade terapêutica completa (PREMIUM)' if eh_premium else 'acolhimento objetivo (FREE)'}:"""
+
+    try:
+        resposta = cliente_ia.models.generate_content(
+            model="gemini-1.5-flash-8b",
+            contents=prompt,
+            config=types.GenerateContentConfig(temperature=0.75, max_output_tokens=2048)
+        )
+        texto_resposta = resposta.text
+
+    except Exception as e:
+        texto_resposta = (
+            "💙 Desculpe, estou com uma pequena dificuldade técnica agora. "
+            "Mas estou aqui por você! Tente novamente em alguns instantes. "
+            "Se precisar de apoio urgente, o CVV (188) atende 24h. 💙"
+        )
+        print(f"[Gemini] Erro: {e}")
 
     pontos_ganhos = (
         PONTOS_POR_ACAO["chat_premium"]
