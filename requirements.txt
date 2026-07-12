@@ -11,3 +11,4 @@ apscheduler
 slowapi
 python-jose
 # force redeploy sáb 11 jul 2026 13:25:30 -03
+reportlab

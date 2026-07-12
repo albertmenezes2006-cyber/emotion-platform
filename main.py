@@ -4076,6 +4076,212 @@ def exportar_csv(request: Request, db: Session = Depends(get_db)):
     )
 
 
+@app.get("/exportar/pdf")
+def exportar_pdf(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        raise HTTPException(status_code=401, detail="Nao autorizado")
+
+    try:
+        from reportlab.lib.pagesizes import A4
+        from reportlab.lib import colors
+        from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+        from reportlab.lib.units import cm
+        from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, HRFlowable
+        from reportlab.lib.enums import TA_CENTER, TA_LEFT
+        import io
+
+        buffer = io.BytesIO()
+        doc = SimpleDocTemplate(
+            buffer, pagesize=A4,
+            rightMargin=2*cm, leftMargin=2*cm,
+            topMargin=2*cm, bottomMargin=2*cm
+        )
+
+        styles = getSampleStyleSheet()
+        elementos = []
+
+        # Estilo titulo
+        estilo_titulo = ParagraphStyle(
+            'Titulo',
+            parent=styles['Title'],
+            fontSize=24,
+            textColor=colors.HexColor('#3a7bd5'),
+            spaceAfter=6,
+            alignment=TA_CENTER,
+        )
+        estilo_subtitulo = ParagraphStyle(
+            'Subtitulo',
+            parent=styles['Normal'],
+            fontSize=12,
+            textColor=colors.HexColor('#666666'),
+            spaceAfter=4,
+            alignment=TA_CENTER,
+        )
+        estilo_secao = ParagraphStyle(
+            'Secao',
+            parent=styles['Heading2'],
+            fontSize=14,
+            textColor=colors.HexColor('#3a7bd5'),
+            spaceBefore=16,
+            spaceAfter=8,
+        )
+        estilo_normal = ParagraphStyle(
+            'Normal2',
+            parent=styles['Normal'],
+            fontSize=10,
+            textColor=colors.HexColor('#333333'),
+            spaceAfter=4,
+        )
+
+        # Cabecalho
+        elementos.append(Paragraph("Emotion Intelligence Platform", estilo_titulo))
+        elementos.append(Paragraph("Relatorio Emocional Mensal", estilo_subtitulo))
+        elementos.append(Paragraph(
+            f"Gerado em: {datetime.now().strftime('%d/%m/%Y as %H:%M')}",
+            estilo_subtitulo
+        ))
+        elementos.append(HRFlowable(width="100%", thickness=2, color=colors.HexColor('#3a7bd5')))
+        elementos.append(Spacer(1, 0.5*cm))
+
+        # Dados do usuario
+        elementos.append(Paragraph("Dados do Usuario", estilo_secao))
+        dias_cadastrado = (datetime.now() - usuario.criado_em).days
+
+        dados_usuario = [
+            ["Campo", "Valor"],
+            ["Nome", usuario.nome],
+            ["Email", usuario.email],
+            ["Plano", usuario.plano.upper()],
+            ["Pontos", str(usuario.pontos)],
+            ["Badge", usuario.badge],
+            ["Dias na plataforma", str(dias_cadastrado)],
+        ]
+        tabela_usuario = Table(dados_usuario, colWidths=[5*cm, 11*cm])
+        tabela_usuario.setStyle(TableStyle([
+            ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#3a7bd5')),
+            ('TEXTCOLOR',  (0,0), (-1,0), colors.white),
+            ('FONTNAME',   (0,0), (-1,0), 'Helvetica-Bold'),
+            ('FONTSIZE',   (0,0), (-1,-1), 10),
+            ('BACKGROUND', (0,1), (-1,-1), colors.HexColor('#f8f9fa')),
+            ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, colors.HexColor('#f0f4ff')]),
+            ('GRID',       (0,0), (-1,-1), 0.5, colors.HexColor('#dddddd')),
+            ('PADDING',    (0,0), (-1,-1), 8),
+        ]))
+        elementos.append(tabela_usuario)
+        elementos.append(Spacer(1, 0.5*cm))
+
+        # Estatisticas gerais
+        analises  = db.query(Analise).filter(Analise.usuario_id == usuario.id).all()
+        mensagens = db.query(Mensagem).filter(Mensagem.usuario_id == usuario.id).count()
+        diarios   = db.query(Diario).filter(Diario.usuario_id == usuario.id).count()
+        conquistas = db.query(Conquista).filter(Conquista.usuario_id == usuario.id).count()
+
+        elementos.append(Paragraph("Estatisticas Gerais", estilo_secao))
+        dados_stats = [
+            ["Metrica", "Total"],
+            ["Analises de emocao", str(len(analises))],
+            ["Mensagens com Sofia", str(mensagens)],
+            ["Entradas no diario", str(diarios)],
+            ["Conquistas desbloqueadas", str(conquistas)],
+        ]
+        tabela_stats = Table(dados_stats, colWidths=[10*cm, 6*cm])
+        tabela_stats.setStyle(TableStyle([
+            ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#2ecc71')),
+            ('TEXTCOLOR',  (0,0), (-1,0), colors.white),
+            ('FONTNAME',   (0,0), (-1,0), 'Helvetica-Bold'),
+            ('FONTSIZE',   (0,0), (-1,-1), 10),
+            ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, colors.HexColor('#f0fff4')]),
+            ('GRID',       (0,0), (-1,-1), 0.5, colors.HexColor('#dddddd')),
+            ('PADDING',    (0,0), (-1,-1), 8),
+            ('ALIGN',      (1,0), (1,-1), 'CENTER'),
+        ]))
+        elementos.append(tabela_stats)
+        elementos.append(Spacer(1, 0.5*cm))
+
+        # Distribuicao de emocoes
+        if analises:
+            elementos.append(Paragraph("Distribuicao de Emocoes", estilo_secao))
+            emocoes_contagem = {}
+            for a in analises:
+                e = a.emocao.lower()
+                emocoes_contagem[e] = emocoes_contagem.get(e, 0) + 1
+
+            emocoes_sorted = sorted(emocoes_contagem.items(), key=lambda x: x[1], reverse=True)
+            total_analises = len(analises)
+
+            dados_emocoes = [["Emocao", "Quantidade", "Percentual"]]
+            for emocao, qtd in emocoes_sorted:
+                pct = round((qtd / total_analises) * 100, 1)
+                dados_emocoes.append([
+                    emocao.capitalize(),
+                    str(qtd),
+                    f"{pct}%"
+                ])
+
+            tabela_emocoes = Table(dados_emocoes, colWidths=[8*cm, 4*cm, 4*cm])
+            tabela_emocoes.setStyle(TableStyle([
+                ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#9b59b6')),
+                ('TEXTCOLOR',  (0,0), (-1,0), colors.white),
+                ('FONTNAME',   (0,0), (-1,0), 'Helvetica-Bold'),
+                ('FONTSIZE',   (0,0), (-1,-1), 10),
+                ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, colors.HexColor('#f9f0ff')]),
+                ('GRID',       (0,0), (-1,-1), 0.5, colors.HexColor('#dddddd')),
+                ('PADDING',    (0,0), (-1,-1), 8),
+                ('ALIGN',      (1,0), (-1,-1), 'CENTER'),
+            ]))
+            elementos.append(tabela_emocoes)
+            elementos.append(Spacer(1, 0.5*cm))
+
+            # Ultimas 10 analises
+            elementos.append(Paragraph("Ultimas Analises", estilo_secao))
+            ultimas = sorted(analises, key=lambda x: x.criado_em, reverse=True)[:10]
+            dados_ultimas = [["Data", "Texto", "Emocao"]]
+            for a in ultimas:
+                dados_ultimas.append([
+                    a.criado_em.strftime("%d/%m %H:%M"),
+                    a.texto[:60] + ("..." if len(a.texto) > 60 else ""),
+                    a.emocao.capitalize(),
+                ])
+            tabela_ultimas = Table(dados_ultimas, colWidths=[3*cm, 11*cm, 3*cm])
+            tabela_ultimas.setStyle(TableStyle([
+                ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#e67e22')),
+                ('TEXTCOLOR',  (0,0), (-1,0), colors.white),
+                ('FONTNAME',   (0,0), (-1,0), 'Helvetica-Bold'),
+                ('FONTSIZE',   (0,0), (-1,-1), 9),
+                ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, colors.HexColor('#fff8f0')]),
+                ('GRID',       (0,0), (-1,-1), 0.5, colors.HexColor('#dddddd')),
+                ('PADDING',    (0,0), (-1,-1), 6),
+            ]))
+            elementos.append(tabela_ultimas)
+
+        # Rodape
+        elementos.append(Spacer(1, 1*cm))
+        elementos.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor('#cccccc')))
+        elementos.append(Paragraph(
+            "Emotion Intelligence Platform v15.0 — emotion-platform-albert.onrender.com",
+            estilo_subtitulo
+        ))
+
+        doc.build(elementos)
+        buffer.seek(0)
+
+        nome_arquivo = f"relatorio_{usuario.nome.replace(' ','_')}_{datetime.now().strftime('%Y%m')}.pdf"
+        return Response(
+            content=buffer.getvalue(),
+            media_type="application/pdf",
+            headers={"Content-Disposition": f"attachment; filename={nome_arquivo}"}
+        )
+
+    except ImportError:
+        raise HTTPException(
+            status_code=500,
+            detail="Biblioteca PDF nao instalada. Tente novamente em instantes."
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erro ao gerar PDF: {str(e)}")
+
+
 @app.get("/api/v1/analyze")
 def api_analyze(
     text:    str,
