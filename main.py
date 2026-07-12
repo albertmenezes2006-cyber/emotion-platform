@@ -2009,20 +2009,48 @@ def perfil_page(request: Request, db: Session = Depends(get_db)):
         delta = usuario.trial_expira - datetime.now()
         trial_dias_restantes = max(0, delta.days)
 
+    # Score IE no perfil
+    total_msgs_perfil = db.query(Mensagem).filter(Mensagem.usuario_id == usuario.id).count()
+    variedade_perfil  = len(emocoes_contagem)
+    score_ie_perfil   = min(25, int((variedade_perfil/15)*25)) +                         min(25, int((min(total_analises,50)/50)*25)) +                         min(25, int((min(total_msgs_perfil+total_diarios,60)/60)*25)) +                         min(25, int((min(usuario.pontos,2000)/2000)*25))
+    if score_ie_perfil >= 80:
+        nivel_ie_perfil = "Mestre Emocional"
+        cor_ie_perfil   = "#9b59b6"
+    elif score_ie_perfil >= 60:
+        nivel_ie_perfil = "Avancado"
+        cor_ie_perfil   = "#2ecc71"
+    elif score_ie_perfil >= 40:
+        nivel_ie_perfil = "Intermediario"
+        cor_ie_perfil   = "#3498db"
+    elif score_ie_perfil >= 20:
+        nivel_ie_perfil = "Em Desenvolvimento"
+        cor_ie_perfil   = "#f39c12"
+    else:
+        nivel_ie_perfil = "Iniciante"
+        cor_ie_perfil   = "#e74c3c"
+
+    total_conquistas_perfil = db.query(Conquista).filter(
+        Conquista.usuario_id == usuario.id
+    ).count()
+
     return templates.TemplateResponse(request, "perfil.html", {
-        "usuario":             usuario,
-        "total_analises":      total_analises,
-        "total_mensagens":     total_mensagens,
-        "total_diarios":       total_diarios,
-        "analises_hoje":       analises_hoje,
-        "dias_cadastrado":     dias_cadastrado,
-        "proximo_badge":       prox_badge,
-        "api_token":           usuario.api_token,
-        "conquistas":          conquistas,
-        "emocao_favorita":     emocao_favorita,
-        "emocao_emoji":        get_emoji(emocao_favorita),
-        "trial_dias_restantes": trial_dias_restantes,
-        "link_afiliado":       f"{BASE_URL}/?ref={usuario.ref_code}",
+        "usuario":               usuario,
+        "total_analises":        total_analises,
+        "total_mensagens":       total_mensagens,
+        "total_diarios":         total_diarios,
+        "analises_hoje":         analises_hoje,
+        "dias_cadastrado":       dias_cadastrado,
+        "proximo_badge":         prox_badge,
+        "api_token":             usuario.api_token,
+        "conquistas":            conquistas,
+        "total_conquistas":      total_conquistas_perfil,
+        "emocao_favorita":       emocao_favorita,
+        "emocao_emoji":          get_emoji(emocao_favorita),
+        "trial_dias_restantes":  trial_dias_restantes,
+        "link_afiliado":         f"{BASE_URL}/?ref={usuario.ref_code}",
+        "score_ie":              score_ie_perfil,
+        "nivel_ie":              nivel_ie_perfil,
+        "cor_ie":                cor_ie_perfil,
     })
 
 
