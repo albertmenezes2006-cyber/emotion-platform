@@ -11,11 +11,40 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{{ artigo.titulo }} | Emotion Intelligence</title>
+<title>{{ artigo.titulo }} | Emotion Intelligence — IA Emocional #1 do Brasil</title>
 <meta name="description" content="{{ artigo.resumo }}">
-<meta name="keywords" content="inteligencia emocional, {{ artigo.categoria }}, saude mental">
+<meta name="keywords" content="inteligencia emocional, {{ artigo.categoria }}, saude mental, ansiedade, mindfulness, bem estar, psicologia, emocoes, autoconhecimento">
+<meta name="author" content="Emotion Intelligence Platform">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="article">
 <meta property="og:title" content="{{ artigo.titulo }}">
 <meta property="og:description" content="{{ artigo.resumo }}">
+<meta property="og:url" content="https://emotion-platform-albert.onrender.com/blog/{{ artigo.slug }}">
+<meta property="og:site_name" content="Emotion Intelligence">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ artigo.titulo }}">
+<meta name="twitter:description" content="{{ artigo.resumo }}">
+<link rel="canonical" href="https://emotion-platform-albert.onrender.com/blog/{{ artigo.slug }}">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{ artigo.titulo }}",
+  "description": "{{ artigo.resumo }}",
+  "author": {
+    "@type": "Organization",
+    "name": "Emotion Intelligence"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Emotion Intelligence Platform",
+    "url": "https://emotion-platform-albert.onrender.com"
+  },
+  "datePublished": "{{ artigo.data }}",
+  "url": "https://emotion-platform-albert.onrender.com/blog/{{ artigo.slug }}"
+}
+</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh}

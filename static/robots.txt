@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Allow: /blog
+Allow: /blog/
+Allow: /terapia
+Allow: /planos
+Allow: /sobre
+Allow: /faq
+Allow: /contato
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /perfil
+Disallow: /api/
+
+Sitemap: https://emotion-platform-albert.onrender.com/static/sitemap.xml
