@@ -2604,7 +2604,7 @@ Responda como Sofia, com {'profundidade terapêutica completa (PREMIUM)' if eh_p
 
     try:
         resposta = cliente_ia.models.generate_content(
-            model="gemini-2.0-flash",
+            model="gemini-1.5-flash-8b",
             contents=prompt,
             config=types.GenerateContentConfig(temperature=0.75, max_output_tokens=2048)
         )
