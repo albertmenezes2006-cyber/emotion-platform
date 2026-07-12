@@ -167,11 +167,31 @@ rate_limit_store = defaultdict(list)
 # BANCO DE DADOS
 # ================================================================
 
-DATABASE_URL = "sqlite:///./emotion.db"
-engine       = create_engine(
-    DATABASE_URL,
-    connect_args={"check_same_thread": False}
-)
+# PostgreSQL se disponivel, senao SQLite como fallback
+_db_url = os.getenv("DATABASE_URL", "sqlite:///./emotion.db")
+
+# Render retorna postgres:// mas SQLAlchemy precisa de postgresql://
+if _db_url.startswith("postgres://"):
+    _db_url = _db_url.replace("postgres://", "postgresql://", 1)
+
+DATABASE_URL = _db_url
+
+if DATABASE_URL.startswith("postgresql"):
+    engine = create_engine(
+        DATABASE_URL,
+        pool_size=5,
+        max_overflow=10,
+        pool_pre_ping=True,
+        pool_recycle=300,
+    )
+    print(f"[DB] Conectado ao PostgreSQL")
+else:
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args={"check_same_thread": False}
+    )
+    print(f"[DB] Usando SQLite local")
+
 SessionLocal = sessionmaker(
     autocommit=False,
     autoflush=False,
