@@ -1008,6 +1008,13 @@ body{
      TAB: GRÁFICOS
 ============================================================ -->
 <div class="tab-content" id="tab-graficos">
+
+  <!-- Insights Semanais -->
+  <div id="insightsSemanais" style="margin-bottom:20px;display:none">
+    <h3 style="margin-bottom:12px">💡 Insights da Semana</h3>
+    <div id="insightsList" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px"></div>
+  </div>
+
   <div class="grafico-grid">
     <div class="card">
       <h3>📈 Emoções por Frequência</h3>
@@ -1314,6 +1321,7 @@ function loadGraficos(){
         }
       });
       // Linha por dia
+      gerarInsights(data);
       if(data.por_dia){
         var dias    = Object.keys(data.por_dia);
         var qtds    = Object.values(data.por_dia);
@@ -1344,6 +1352,136 @@ function loadGraficos(){
         });
       }
     }).catch(function(){});
+}
+
+// ============================================================
+// INSIGHTS SEMANAIS
+// ============================================================
+function gerarInsights(data) {
+  if(!data.total_analises) return;
+
+  var insights = [];
+  var emocoes  = data.emocoes_detectadas || {};
+  var porDia   = data.por_dia || {};
+  var total    = data.total_analises;
+  var streak   = data.streak_dias || 0;
+
+  // Insight 1: emocao dominante
+  var maisFreq = data.mais_frequente || 'neutro';
+  var emoji    = data.emoji_frequente || '';
+  var pct      = emocoes[maisFreq] ? Math.round((emocoes[maisFreq]/total)*100) : 0;
+  insights.push({
+    icon: emoji,
+    titulo: 'Emoção Dominante',
+    texto: maisFreq.charAt(0).toUpperCase()+maisFreq.slice(1)+' em '+pct+'% das análises esta semana.',
+    cor: '#3498db'
+  });
+
+  // Insight 2: streak
+  if(streak >= 2) {
+    insights.push({
+      icon: '🔥',
+      titulo: 'Sequência Ativa',
+      texto: streak+' dias consecutivos registrando emoções. Continue assim!',
+      cor: '#e67e22'
+    });
+  } else {
+    insights.push({
+      icon: '📅',
+      titulo: 'Consistência',
+      texto: 'Registre emoções todos os dias para construir seu histórico emocional.',
+      cor: '#95a5a6'
+    });
+  }
+
+  // Insight 3: variedade
+  var qtdEmocoes = Object.keys(emocoes).length;
+  if(qtdEmocoes >= 5) {
+    insights.push({
+      icon: '🎭',
+      titulo: 'Alta Variedade',
+      texto: qtdEmocoes+' emoções diferentes detectadas. Você tem grande autoconsciência!',
+      cor: '#9b59b6'
+    });
+  } else {
+    insights.push({
+      icon: '🎭',
+      titulo: 'Variedade Emocional',
+      texto: 'Você registrou '+qtdEmocoes+' emoções. Explore mais situações do seu dia!',
+      cor: '#9b59b6'
+    });
+  }
+
+  // Insight 4: intensidade
+  var intMedia = data.intensidade_media || 0;
+  if(intMedia >= 2.5) {
+    insights.push({
+      icon: '⚡',
+      titulo: 'Alta Intensidade',
+      texto: 'Suas emoções estão bem intensas. Pratique técnicas de regulação emocional.',
+      cor: '#e74c3c'
+    });
+  } else if(intMedia >= 1.5) {
+    insights.push({
+      icon: '⚖️',
+      titulo: 'Intensidade Moderada',
+      texto: 'Bom equilíbrio emocional! Suas emoções estão em nível saudável.',
+      cor: '#2ecc71'
+    });
+  } else {
+    insights.push({
+      icon: '🌊',
+      titulo: 'Intensidade Baixa',
+      texto: 'Emoções tranquilas esta semana. Momento bom para reflexão e planejamento.',
+      cor: '#00d2ff'
+    });
+  }
+
+  // Insight 5: dia mais ativo
+  var melhorDia = '';
+  var melhorQtd = 0;
+  Object.keys(porDia).forEach(function(d) {
+    if(porDia[d] > melhorQtd) { melhorQtd = porDia[d]; melhorDia = d; }
+  });
+  if(melhorDia && melhorQtd > 0) {
+    insights.push({
+      icon: '📊',
+      titulo: 'Dia Mais Ativo',
+      texto: 'Dia '+melhorDia+' foi seu dia mais ativo com '+melhorQtd+' análises!',
+      cor: '#f39c12'
+    });
+  }
+
+  // Insight 6: dica personalizada
+  var dicas = {
+    'tristeza':   'Pratique Auto-Compaixão: coloque a mão no coração e diga "estou aqui por você".',
+    'ansiedade':  'Use o Grounding 5-4-3-2-1 para ancorar no presente quando a ansiedade surgir.',
+    'raiva':      'Respiração 4-7-8 ajuda a desativar a resposta de luta-ou-fuga do seu cérebro.',
+    'alegria':    'Ancore essa alegria! Escreva 3 motivos de gratidão enquanto está bem.',
+    'medo':       'Nomeie o medo com precisão. Nomear reduz sua intensidade no cérebro.',
+    'estresse':   'Técnica STOP: Pare, Respire, Observe, Prossiga. Faça isso 3x ao dia.',
+    'neutro':     'Faça um check-in emocional diário — pergunte-se "o que eu sinto agora?".',
+  };
+  var dica = dicas[maisFreq] || dicas['neutro'];
+  insights.push({
+    icon: '💡',
+    titulo: 'Dica Personalizada',
+    texto: dica,
+    cor: '#2ecc71'
+  });
+
+  // Renderizar
+  var div = document.getElementById('insightsList');
+  var html = '';
+  insights.forEach(function(ins) {
+    html += '<div style="background:rgba(255,255,255,0.05);border-radius:12px;padding:16px;border-left:3px solid '+ins.cor+'">' +
+      '<div style="font-size:24px;margin-bottom:6px">'+ins.icon+'</div>' +
+      '<div style="font-size:13px;font-weight:700;color:'+ins.cor+';margin-bottom:4px">'+ins.titulo+'</div>' +
+      '<div style="font-size:12px;color:var(--text-muted);line-height:1.5">'+ins.texto+'</div>' +
+      '</div>';
+  });
+  div.innerHTML = html;
+  document.getElementById('insightsSemanais').style.display = 'block';
 }
 
 // ============================================================
