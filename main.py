@@ -1496,6 +1496,45 @@ def index(request: Request, ref: str = None, db: Session = Depends(get_db)):
         delta = usuario.trial_expira - datetime.now()
         trial_dias_restantes = max(0, delta.days)
 
+    # Score de Inteligencia Emocional (0-100)
+    total_msgs    = db.query(Mensagem).filter(Mensagem.usuario_id == usuario.id).count()
+    total_diarios = db.query(Diario).filter(Diario.usuario_id == usuario.id).count()
+    total_analises_count = len(todas_analises)
+
+    # Componentes do score (cada um vale ate 25 pontos)
+    # 1. Variedade emocional (quantas emocoes diferentes — max 15)
+    variedade      = len(emocoes_contagem)
+    score_variedade = min(25, int((variedade / 15) * 25))
+
+    # 2. Consistencia (dias cadastrado com atividade — usa total de analises)
+    score_consistencia = min(25, int((min(total_analises_count, 50) / 50) * 25))
+
+    # 3. Engajamento (chat + diario)
+    engajamento    = min(total_msgs + total_diarios, 60)
+    score_engajamento = min(25, int((engajamento / 60) * 25))
+
+    # 4. Progresso (pontos — max 2000 para score maximo)
+    score_progresso = min(25, int((min(usuario.pontos, 2000) / 2000) * 25))
+
+    score_ie = score_variedade + score_consistencia + score_engajamento + score_progresso
+
+    # Nivel do score
+    if score_ie >= 80:
+        nivel_ie = "Mestre Emocional"
+        cor_ie   = "#9b59b6"
+    elif score_ie >= 60:
+        nivel_ie = "Avancado"
+        cor_ie   = "#2ecc71"
+    elif score_ie >= 40:
+        nivel_ie = "Intermediario"
+        cor_ie   = "#3498db"
+    elif score_ie >= 20:
+        nivel_ie = "Em Desenvolvimento"
+        cor_ie   = "#f39c12"
+    else:
+        nivel_ie = "Iniciante"
+        cor_ie   = "#e74c3c"
+
     return templates.TemplateResponse(request, "dashboard.html", {
         "usuario":               usuario,
         "analises_hoje":         analises_hoje,
@@ -1515,6 +1554,13 @@ def index(request: Request, ref: str = None, db: Session = Depends(get_db)):
         "dias_cadastrado":       dias_cadastrado,
         "trial_dias_restantes":  trial_dias_restantes,
         "total_analises":        len(todas_analises),
+        "score_ie":              score_ie,
+        "nivel_ie":              nivel_ie,
+        "cor_ie":                cor_ie,
+        "score_variedade":       score_variedade,
+        "score_consistencia":    score_consistencia,
+        "score_engajamento":     score_engajamento,
+        "score_progresso":       score_progresso,
     })
 
 # ================================================================

@@ -767,6 +767,13 @@ body{
       <div class="gam-value" id="chatHoje">{{ mensagens_hoje }}</div>
     </div>
   </div>
+  <div class="gam-item">
+    <span>🧠</span>
+    <div>
+      <div class="gam-label">Score IE</div>
+      <div class="gam-value" style="color:{{ cor_ie }};font-weight:700">{{ score_ie }}/100</div>
+    </div>
+  </div>
 </div>
 
 <!-- ============================================================
@@ -843,6 +850,63 @@ body{
       <h3>🔥 Sequência</h3>
       <div class="stat-number" id="totalPontos">{{ usuario.pontos }}</div>
       <div class="stat-label">pontos acumulados</div>
+    </div>
+  </div>
+
+  <!-- Score de Inteligencia Emocional -->
+  <div style="background:rgba(255,255,255,0.05);border-radius:16px;padding:24px;margin-top:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div>
+        <h3 style="margin:0;font-size:18px">🧠 Score de Inteligência Emocional</h3>
+        <p style="margin:4px 0 0;color:var(--text-muted);font-size:13px">
+          Baseado na sua jornada na plataforma
+        </p>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:42px;font-weight:900;color:{{ cor_ie }}">{{ score_ie }}</div>
+        <div style="font-size:11px;color:var(--text-muted)">de 100</div>
+      </div>
+    </div>
+
+    <!-- Barra de progresso geral -->
+    <div style="background:rgba(255,255,255,0.1);border-radius:8px;height:12px;margin-bottom:8px">
+      <div style="width:{{ score_ie }}%;height:100%;background:{{ cor_ie }};border-radius:8px;transition:width 1s ease"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:20px">
+      <span style="font-size:12px;color:{{ cor_ie }};font-weight:600">{{ nivel_ie }}</span>
+      <span style="font-size:12px;color:var(--text-muted)">{{ score_ie }}/100</span>
+    </div>
+
+    <!-- Sub-scores -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:12px">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">🎭 Variedade Emocional</div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:4px;height:6px">
+          <div style="width:{{ (score_variedade / 25 * 100)|int }}%;height:100%;background:#9b59b6;border-radius:4px"></div>
+        </div>
+        <div style="font-size:12px;color:#9b59b6;font-weight:600;margin-top:4px">{{ score_variedade }}/25</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:12px">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">📅 Consistência</div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:4px;height:6px">
+          <div style="width:{{ (score_consistencia / 25 * 100)|int }}%;height:100%;background:#3498db;border-radius:4px"></div>
+        </div>
+        <div style="font-size:12px;color:#3498db;font-weight:600;margin-top:4px">{{ score_consistencia }}/25</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:12px">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">💬 Engajamento</div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:4px;height:6px">
+          <div style="width:{{ (score_engajamento / 25 * 100)|int }}%;height:100%;background:#2ecc71;border-radius:4px"></div>
+        </div>
+        <div style="font-size:12px;color:#2ecc71;font-weight:600;margin-top:4px">{{ score_engajamento }}/25</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:12px">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">🏆 Progresso</div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:4px;height:6px">
+          <div style="width:{{ (score_progresso / 25 * 100)|int }}%;height:100%;background:#f39c12;border-radius:4px"></div>
+        </div>
+        <div style="font-size:12px;color:#f39c12;font-weight:600;margin-top:4px">{{ score_progresso }}/25</div>
+      </div>
     </div>
   </div>
 </div>
