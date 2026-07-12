@@ -4026,6 +4026,56 @@ def verificar_token(
     return usuario
 
 
+@app.get("/exportar/csv")
+def exportar_csv(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        raise HTTPException(status_code=401, detail="Nao autorizado")
+
+    import csv, io
+    analises = db.query(Analise).filter(
+        Analise.usuario_id == usuario.id
+    ).order_by(Analise.criado_em.desc()).all()
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["Data", "Texto", "Emocao", "Emoji", "Intensidade", "Recomendacao"])
+    for a in analises:
+        writer.writerow([
+            a.criado_em.strftime("%d/%m/%Y %H:%M"),
+            a.texto[:200],
+            a.emocao,
+            a.emoji,
+            getattr(a, "intensidade", ""),
+            getattr(a, "recomendacao", ""),
+        ])
+
+    diarios = db.query(Diario).filter(
+        Diario.usuario_id == usuario.id
+    ).order_by(Diario.criado_em.desc()).all()
+
+    writer.writerow([])
+    writer.writerow(["=== DIARIO EMOCIONAL ==="])
+    writer.writerow(["Data", "Titulo", "Conteudo", "Emocao", "Emoji"])
+    for d in diarios:
+        writer.writerow([
+            d.criado_em.strftime("%d/%m/%Y %H:%M"),
+            getattr(d, "titulo", ""),
+            d.conteudo[:300],
+            getattr(d, "emocao", ""),
+            getattr(d, "emoji", ""),
+        ])
+
+    output.seek(0)
+    nome_arquivo = f"emotion_intelligence_{usuario.nome.replace(' ','_')}_{datetime.now().strftime('%Y%m%d')}.csv"
+
+    return Response(
+        content=output.getvalue().encode("utf-8-sig"),
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename={nome_arquivo}"}
+    )
+
+
 @app.get("/api/v1/analyze")
 def api_analyze(
     text:    str,
