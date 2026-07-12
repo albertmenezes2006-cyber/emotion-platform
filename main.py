@@ -1689,6 +1689,218 @@ ARTIGOS_BLOG = [
 <p>Comece com apenas 5 minutos por dia. Consistência é mais importante que duração. Use aplicativos ou plataformas como a <a href="/cadastro">Emotion Intelligence</a> para registrar como você se sente antes e depois da prática.</p>
 """
     },
+    {
+        "slug": "como-aumentar-autoestima",
+        "titulo": "Como Aumentar a Autoestima de Forma Duradoura",
+        "resumo": "Autoestima saudavel nao e arrogancia — e a base para relacionamentos saudaveis e realizacao pessoal. Aprenda estrategias comprovadas para fortalecer sua autoestima.",
+        "categoria": "Autoconhecimento",
+        "emoji": "💪",
+        "tempo_leitura": "6 min",
+        "data": "25/06/2026",
+        "conteudo": """
+<p>A <strong>autoestima</strong> e a avaliacao que fazemos de nos mesmos — o quanto nos sentimos validos, capazes e merecedores de amor e respeito. Ela e a base invisivel sobre a qual construimos nossa vida.</p>
+
+<h2>O que e autoestima saudavel?</h2>
+<p>Autoestima saudavel nao e achar que somos perfeitos ou superiores aos outros. E aceitar a nos mesmos com nossas qualidades E limitacoes, sem nos depreciarmos nem nos inflacionar.</p>
+
+<h2>Sinais de baixa autoestima</h2>
+<ul>
+<li>Dificuldade em dizer nao</li>
+<li>Medo constante de rejeicao e critica</li>
+<li>Comparacao excessiva com os outros</li>
+<li>Sabotagem de oportunidades</li>
+<li>Autocritica destrutiva e persistente</li>
+</ul>
+
+<h2>7 Estrategias para Fortalecer sua Autoestima</h2>
+
+<h3>1. Questione o critico interno</h3>
+<p>Quando ouvir uma voz interna negativa, pergunte: Isso e fato ou opiniao? O que eu diria a um amigo que pensasse isso sobre si mesmo?</p>
+
+<h3>2. Celebre pequenas vitorias</h3>
+<p>Anote diariamente 3 coisas que fez bem. Nosso cerebro tende ao negativo — precisamos treinar o olhar para o positivo.</p>
+
+<h3>3. Estabeleca limites saudaveis</h3>
+<p>Dizer nao quando necessario e um ato de amor proprio. Limites saudaveis comunicam: eu me respeito e respeito o outro.</p>
+
+<h3>4. Cuide do seu corpo</h3>
+<p>Exercicio, sono e alimentacao afetam diretamente como nos sentimos sobre nos mesmos. O corpo e a mente sao um sistema integrado.</p>
+
+<h3>5. Rodeie-se de pessoas que te elevam</h3>
+<p>Relacionamentos toxicos corroem a autoestima. Escolha companhias que te vejam com clareza e te encorajem a crescer.</p>
+
+<h3>6. Pratique a auto-compaixao</h3>
+<p>Trate-se com a mesma gentileza que trataria um amigo querido. Errar e humano — a diferenca esta em como voce se trata depois.</p>
+
+<h3>7. Busque realizacoes alinhadas aos seus valores</h3>
+<p>Conquistas que refletem o que voce realmente valoriza constroem autoestima genuina — diferente do sucesso externo vazio.</p>
+
+<p>💡 Use o <a href="/cadastro">diario emocional da Emotion Intelligence</a> para monitorar seus padroes de autoestima ao longo do tempo.</p>
+"""
+    },
+    {
+        "slug": "sono-e-emocoes",
+        "titulo": "A Conexao Entre Sono e Saude Emocional",
+        "resumo": "Dormir mal afeta diretamente suas emocoes, tomada de decisao e saude mental. Descubra a ciencia por tras do sono e como melhorar sua qualidade de vida.",
+        "categoria": "Bem-estar",
+        "emoji": "😴",
+        "tempo_leitura": "5 min",
+        "data": "20/06/2026",
+        "conteudo": """
+<p>O <strong>sono</strong> e frequentemente o primeiro habito que sacrificamos quando estamos ocupados. Mas a ciencia e clara: dormir mal tem consequencias devastadoras para nossa saude emocional.</p>
+
+<h2>O que acontece no cerebro durante o sono</h2>
+<p>Durante o sono, especialmente na fase REM, o cerebro processa e consolida memorias emocionais, reduz a reatividade da amigdala e restaura o equilibrio neuroquimico.</p>
+
+<h2>Privacao de sono e emocoes</h2>
+<p>Estudos da UC Berkeley mostram que apenas uma noite mal dormida aumenta em 60% a reatividade emocional. Ficamos mais irritaveis, ansiosos e propensos a conflitos.</p>
+
+<h2>Sinais de que o sono esta afetando sua saude emocional</h2>
+<ul>
+<li>Irritabilidade sem motivo aparente pela manha</li>
+<li>Dificuldade de concentracao e tomada de decisao</li>
+<li>Emocoes intensas e dificeis de regular</li>
+<li>Sensacao de overwhelm por situacoes cotidianas</li>
+</ul>
+
+<h2>Como melhorar seu sono</h2>
+
+<h3>Higiene do sono</h3>
+<p>Durma e acorde sempre no mesmo horario. Seu cerebro ama rotina — o ritmo circadiano e biologico.</p>
+
+<h3>Ambiente ideal</h3>
+<p>Quarto escuro, fresco (18-20 graus) e silencioso. Use mascara de dormir e tampoes se necessario.</p>
+
+<h3>Protocolo pre-sono</h3>
+<p>Evite telas 1h antes de dormir. Leia, medite ou escreva no diario. O journaling emocional antes de dormir descarrega a mente.</p>
+
+<h3>Limite cafeina</h3>
+<p>A cafeina tem meia-vida de 6 horas. Um cafe as 15h ainda afeta seu sono a meia-noite.</p>
+
+<p>💡 Registre seu humor pela manha na <a href="/cadastro">Emotion Intelligence</a> e observe a correlacao com a qualidade do seu sono.</p>
+"""
+    },
+    {
+        "slug": "relacionamentos-e-inteligencia-emocional",
+        "titulo": "Como a Inteligencia Emocional Transforma seus Relacionamentos",
+        "resumo": "Relacionamentos saudaveis sao construidos sobre pilares emocionais solidos. Aprenda como desenvolver IE para se conectar mais profundamente com as pessoas.",
+        "categoria": "Relacionamentos",
+        "emoji": "❤️",
+        "tempo_leitura": "7 min",
+        "data": "15/06/2026",
+        "conteudo": """
+<p>A maioria dos conflitos nos relacionamentos nao e sobre o que parece ser — e sobre necessidades emocionais nao atendidas e comunicacao mal gerenciada. A <strong>inteligencia emocional</strong> e a chave para mudar isso.</p>
+
+<h2>Por que relacionamentos falham</h2>
+<p>John Gottman, pesquisador que estudou mais de 3000 casais, identificou 4 comportamentos que destroem relacionamentos: critica, desprezo, postura defensiva e isolamento emocional.</p>
+
+<h2>Como a IE transforma relacionamentos</h2>
+
+<h3>1. Voce para de reagir e comeca a responder</h3>
+<p>Com IE desenvolvida, voce tem um espaco entre o estimulo e a resposta. Esse espaco e onde mora a liberdade de escolha.</p>
+
+<h3>2. Voce comunica necessidades sem atacar</h3>
+<p>Em vez de Voce nunca me ouve, voce aprende a dizer Eu preciso me sentir ouvido. Mesma necessidade, impacto completamente diferente.</p>
+
+<h3>3. Voce escuta para entender, nao para responder</h3>
+<p>A escuta ativa — presenca total sem julgamento — e o maior presente que voce pode dar a alguem.</p>
+
+<h3>4. Voce reconhece seus gatilhos</h3>
+<p>Saber o que te ativa emocionalmente evita que voce projete seus medos e feridas nos outros.</p>
+
+<h2>Pratica para hoje</h2>
+<p>Na proxima conversa dificil, antes de responder, respire fundo e pergunte: O que a outra pessoa precisa agora? O que EU preciso agora?</p>
+
+<p>💡 Analise suas emocoes apos conversas dificeis na <a href="/cadastro">Emotion Intelligence</a> para identificar padroes relacionais.</p>
+"""
+    },
+    {
+        "slug": "produtividade-e-bem-estar-emocional",
+        "titulo": "Produtividade e Bem-estar: Como as Emocoes Afetam seu Trabalho",
+        "resumo": "Emocoes e produtividade estao profundamente conectadas. Entenda como gerenciar seu estado emocional para trabalhar melhor e com mais satisfacao.",
+        "categoria": "Produtividade",
+        "emoji": "⚡",
+        "tempo_leitura": "6 min",
+        "data": "10/06/2026",
+        "conteudo": """
+<p>Durante decadas, o mundo corporativo tentou separar emocoes do trabalho. A ciencia provou que isso e impossivel — e contraproducente. <strong>Emocoes e desempenho sao inseparaveis.</strong></p>
+
+<h2>Como emocoes afetam a produtividade</h2>
+<p>O estado emocional influencia diretamente nossa capacidade de concentracao, criatividade, tomada de decisao e colaboracao. Funcionarios felizes sao 31% mais produtivos (Harvard Business Review).</p>
+
+<h2>As emocoes mais prejudiciais ao trabalho</h2>
+
+<h3>Ansiedade cronica</h3>
+<p>Estreita o pensamento e consome recursos cognitivos. A mente ansiosa nao consegue focar — esta sempre monitorando ameacas.</p>
+
+<h3>Raiva reprimida</h3>
+<p>Drena energia e prejudica relacionamentos profissionais. Raiva nao expressa vira ressentimento.</p>
+
+<h3>Tedio cronico</h3>
+<p>Sinal de que o trabalho nao esta alinhado com seus valores e forcas. Ignora-lo leva ao burnout silencioso.</p>
+
+<h2>Estrategias para gerenciar emocoes no trabalho</h2>
+
+<h3>Micro-pausas emocionais</h3>
+<p>A cada 90 minutos, faca uma pausa de 5 minutos. Respire, mova o corpo, beba agua. Nosso cerebro funciona em ciclos ultradiano de 90 min.</p>
+
+<h3>Diario emocional profissional</h3>
+<p>Ao fim de cada dia, anote: Como me senti hoje? O que drenou minha energia? O que me energizou? Padroes emergem em semanas.</p>
+
+<h3>Comunicacao emocional assertiva</h3>
+<p>Aprenda a expressar discordancias sem agressividade e necessidades sem passividade. Assertividade e a via do meio.</p>
+
+<p>💡 Use a <a href="/cadastro">Emotion Intelligence</a> para rastrear como suas emocoes variam ao longo da semana de trabalho.</p>
+"""
+    },
+    {
+        "slug": "superar-trauma-emocional",
+        "titulo": "Superando Traumas Emocionais: Um Guia Compassivo",
+        "resumo": "Traumas emocionais deixam marcas profundas, mas a cura e possivel. Entenda o que e trauma, como ele afeta o cerebro e os caminhos para a recuperacao.",
+        "categoria": "Cura Emocional",
+        "emoji": "🌱",
+        "tempo_leitura": "8 min",
+        "data": "05/06/2026",
+        "conteudo": """
+<p><strong>Trauma</strong> nao e o evento em si — e a ferida que ele deixa no sistema nervoso. Qualquer experiencia que sobrecarregue nossa capacidade de processar pode ser traumatica.</p>
+
+<h2>O que acontece no cerebro traumatizado</h2>
+<p>O trauma ativa o sistema de ameaca do cerebro (amigdala) e pode deixa-lo em estado de alerta permanente. O hipocampo, responsavel pela memoria, e afetado — por isso memorias traumaticas sao fragmentadas e nao lineares.</p>
+
+<h2>Tipos de trauma</h2>
+<ul>
+<li><strong>Trauma agudo:</strong> evento unico e intenso (acidente, violencia, perda subita)</li>
+<li><strong>Trauma cronico:</strong> exposicao prolongada (abuso, negligencia, bullying)</li>
+<li><strong>Trauma complexo:</strong> multiplos traumas interpessoais, geralmente na infancia</li>
+<li><strong>Trauma vicario:</strong> absorvido por testemunhar o sofrimento de outros</li>
+</ul>
+
+<h2>Sinais de trauma nao processado</h2>
+<ul>
+<li>Flashbacks e pesadelos recorrentes</li>
+<li>Evitacao de situacoes que lembram o evento</li>
+<li>Hipervigilancia e sobressalto excessivo</li>
+<li>Dificuldade de confiar e se conectar com outros</li>
+<li>Sensacao de estar desconectado de si mesmo</li>
+</ul>
+
+<h2>Caminhos para a cura</h2>
+
+<h3>Psicoterapia especializada</h3>
+<p>EMDR, TCC focada em trauma e Somatic Experiencing sao abordagens com forte evidencia cientifica para tratamento de trauma.</p>
+
+<h3>Regulacao do sistema nervoso</h3>
+<p>Tecnicas de respiracao, movimento e mindfulness ajudam a regular o sistema nervoso e criar sensacao de seguranca no corpo.</p>
+
+<h3>Conexao segura</h3>
+<p>Relacionamentos seguros e preditivos sao curativos. Nao precisamos curar sozinhos — somos seres de conexao.</p>
+
+<h2>Uma palavra importante</h2>
+<p>Trauma serio requer acompanhamento profissional. Se voce se identifica com o que descrevemos, por favor busque um psicologo. O CVV (188) atende 24h para crises.</p>
+
+<p>💡 A <a href="/cadastro">Emotion Intelligence</a> pode ser um complemento ao seu processo terapeutico — nunca um substituto.</p>
+"""
+    },
 ]
 
 
