@@ -2611,12 +2611,120 @@ Responda como Sofia, com {'profundidade terapêutica completa (PREMIUM)' if eh_p
         texto_resposta = resposta.text
 
     except Exception as e:
-        texto_resposta = (
-            "💙 Desculpe, estou com uma pequena dificuldade técnica agora. "
-            "Mas estou aqui por você! Tente novamente em alguns instantes. "
-            "Se precisar de apoio urgente, o CVV (188) atende 24h. 💙"
-        )
-        print(f"[Gemini] Erro: {e}")
+        erro_str = str(e).lower()
+        is_quota = "429" in erro_str or "resource_exhausted" in erro_str or "quota" in erro_str
+        print(f"[Gemini] Erro Sofia: {e}")
+        import random as _random
+
+        _fallbacks = {
+            "alegria": (
+                f"😊 Que lindo, {usuario.nome}! Sua alegria merece ser celebrada! "
+                "A gratidão amplifica emoções positivas — escreva 3 coisas que estão te fazendo bem hoje. "
+                "Isso ancora essa energia boa dentro de você! "
+                "O que mais está contribuindo para essa sensação maravilhosa? 🌟"
+            ),
+            "tristeza": (
+                f"💙 {usuario.nome}, sinto muito que você esteja passando por isso. "
+                "A tristeza é válida — ela nos diz que algo importa para nós. "
+                "Tente o Acolhimento: coloque a mão no coração, respire fundo 3 vezes "
+                "e diga: 'Estou aqui, estou me ouvindo.' "
+                "O que você precisaria ouvir agora de alguém que te ama?"
+            ),
+            "ansiedade": (
+                f"🌿 {usuario.nome}, vamos fazer o Grounding 5-4-3-2-1 juntos: "
+                "nomeie 5 coisas que você VÊ, 4 que pode TOCAR, 3 que OUVE, "
+                "2 que CHEIRA e 1 que SABOREIA. "
+                "Isso traz sua mente de volta ao presente agora. "
+                "Como está seu corpo físico nesse momento? 💙"
+            ),
+            "raiva": (
+                f"🔥 {usuario.nome}, sua raiva é válida — algo importante foi tocado. "
+                "Tente a Respiração 4-7-8: inspire por 4s, segure por 7s, expire por 8s. "
+                "Faça 3 vezes. Isso ativa o sistema parassimpático e reduz a intensidade. "
+                "O que exatamente mais te incomoda nessa situação?"
+            ),
+            "medo": (
+                f"🤗 {usuario.nome}, o medo é um sinal do seu instinto de proteção. "
+                "Tente nomear com precisão: 'Estou com medo de ___'. "
+                "Nomear reduz a intensidade da emoção no cérebro. "
+                "Esse medo é sobre algo passado, presente ou futuro?"
+            ),
+            "estresse": (
+                f"💆 {usuario.nome}, o estresse desgasta. Técnica STOP agora: "
+                "Pare, Respire fundo, Observe seus pensamentos sem julgamento, "
+                "Prossiga com mais clareza. "
+                "Pausas de 2 minutos fazem grande diferença! "
+                "O que está pesando mais em você agora?"
+            ),
+            "amor": (
+                f"❤️ {usuario.nome}, que sentimento lindo! "
+                "Prática Loving-Kindness: feche os olhos e envie mentalmente amor "
+                "para você, depois para quem você ama. "
+                "Sobre quem ou o quê você está sentindo esse amor?"
+            ),
+            "confusão": (
+                f"🧩 {usuario.nome}, sentir-se confuso é normal quando há muito para processar. "
+                "Tente o Mind Mapping: escreva no centro o que te confunde "
+                "e ramifique os pensamentos ao redor. Externalizar organiza a mente. "
+                "Se pudesse resolver UMA coisa primeiro, qual seria?"
+            ),
+            "vergonha": (
+                f"🌱 {usuario.nome}, a vergonha não define quem você é. "
+                "Prática do Observador Compassivo: imagine um amigo querido "
+                "passando pelo mesmo — o que você diria a ele? "
+                "Diga isso para si mesmo agora. 💙"
+            ),
+            "solidão": (
+                f"🤝 {usuario.nome}, você não precisa carregar isso sozinho. "
+                "Estou aqui com você. "
+                "Tente o Journaling: escreva uma carta para alguém que sente falta. "
+                "Isso conecta você com suas necessidades reais. "
+                "O que está faltando nas suas conexões agora?"
+            ),
+            "euforia": (
+                f"⚡ {usuario.nome}, essa energia alta pode ser incrível! "
+                "Prática de Ancoragem: respire fundo e observe seu corpo — "
+                "onde você sente essa euforia fisicamente? "
+                "Canalizar essa energia de forma intencional é poderoso. "
+                "O que você quer criar ou realizar com essa energia hoje?"
+            ),
+            "frustração": (
+                f"💪 {usuario.nome}, a frustração aparece quando algo importante "
+                "não saiu como esperado. Isso significa que você se importa! "
+                "Tente os 3 Porquês: pergunte 'Por quê estou frustrado?' "
+                "três vezes seguidas para chegar à raiz. "
+                "O que você esperava que acontecesse de diferente?"
+            ),
+            "gratidão": (
+                f"🙏 {usuario.nome}, a gratidão é uma das emoções mais transformadoras! "
+                "Prática: escreva uma carta de gratidão para alguém importante "
+                "ou para si mesmo pelo que superou. "
+                "Isso fortalece conexões e bem-estar. "
+                "Pelo que você está mais grato hoje?"
+            ),
+            "esperança": (
+                f"🌅 {usuario.nome}, a esperança é combustível para o futuro! "
+                "Visualização: feche os olhos por 2 minutos e imagine "
+                "vividamente o que você espera se tornando realidade. "
+                "O que precisa acontecer primeiro para chegar lá?"
+            ),
+            "neutro": (
+                f"🌟 {usuario.nome}, obrigada por compartilhar comigo. "
+                "Check-in emocional: de 1 a 10, como está sua energia hoje? "
+                "E o que faria essa nota subir pelo menos 1 ponto? "
+                "Estou aqui para te ouvir 💙"
+            ),
+        }
+
+        _emocao_key = emocao_atual.lower()
+        _base = _fallbacks.get(_emocao_key, _fallbacks["neutro"])
+
+        if is_quota:
+            _aviso = "\n\n_(Estou em manutencao momentanea, mas continuo aqui por voce!)_"
+        else:
+            _aviso = ""
+
+        texto_resposta = _base + _aviso
 
     pontos_ganhos = (
         PONTOS_POR_ACAO["chat_premium"]
