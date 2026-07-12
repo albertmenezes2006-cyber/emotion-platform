@@ -1692,6 +1692,153 @@ ARTIGOS_BLOG = [
 ]
 
 
+# ================================================================
+# MODO TERAPIA ESTRUTURADA — 7 DIAS
+# ================================================================
+
+PROGRAMA_7_DIAS = [
+    {
+        "dia": 1,
+        "titulo": "Autoconhecimento Emocional",
+        "descricao": "Hoje vamos mapear suas emoções mais frequentes e entender seus gatilhos.",
+        "emoji": "🔍",
+        "cor": "#3498db",
+        "exercicios": [
+            {
+                "nome": "Check-in Emocional",
+                "instrucao": "Feche os olhos por 2 minutos. Pergunte a si mesmo: O que estou sentindo agora? Onde sinto isso no corpo?",
+                "duracao": "5 min",
+                "tipo": "reflexao"
+            },
+            {
+                "nome": "Roda das Emocoes",
+                "instrucao": "Liste as 5 emocoes que voce mais sentiu nesta semana e o que as causou.",
+                "duracao": "10 min",
+                "tipo": "escrita"
+            }
+        ],
+        "reflexao": "As emocoes sao mensageiros, nao inimigos.",
+        "tecnica_principal": "Observacao Emocional"
+    },
+    {
+        "dia": 2,
+        "titulo": "Respiracao e Regulacao",
+        "descricao": "Aprenda a usar a respiracao para regular suas emocoes.",
+        "emoji": "🌬️",
+        "cor": "#2ecc71",
+        "exercicios": [
+            {
+                "nome": "Respiracao 4-7-8",
+                "instrucao": "Inspire por 4s, segure por 7s, expire por 8s. Repita 4 vezes.",
+                "duracao": "5 min",
+                "tipo": "pratica"
+            }
+        ],
+        "reflexao": "A respiracao e a ponte entre mente e corpo.",
+        "tecnica_principal": "Respiracao 4-7-8"
+    },
+    {
+        "dia": 3,
+        "titulo": "Mindfulness e Presenca",
+        "descricao": "Desenvolva a capacidade de estar plenamente presente.",
+        "emoji": "🧘",
+        "cor": "#9b59b6",
+        "exercicios": [
+            {
+                "nome": "Grounding 5-4-3-2-1",
+                "instrucao": "Nomeie 5 coisas que ve, 4 que toca, 3 que ouve, 2 que cheira, 1 que saboreia.",
+                "duracao": "5 min",
+                "tipo": "pratica"
+            }
+        ],
+        "reflexao": "Esteja aqui, agora.",
+        "tecnica_principal": "Grounding"
+    },
+    {
+        "dia": 4,
+        "titulo": "Auto-Compaixao",
+        "descricao": "Aprenda a ser gentil consigo mesmo.",
+        "emoji": "💙",
+        "cor": "#e74c3c",
+        "exercicios": [
+            {
+                "nome": "Carta para Si Mesmo",
+                "instrucao": "Escreva uma carta para voce como se fosse seu melhor amigo escrevendo.",
+                "duracao": "15 min",
+                "tipo": "escrita"
+            }
+        ],
+        "reflexao": "Voce merece sua propria gentileza.",
+        "tecnica_principal": "Auto-Compaixao"
+    },
+    {
+        "dia": 5,
+        "titulo": "Gestao da Raiva",
+        "descricao": "Transforme emocoes dificeis em energia construtiva.",
+        "emoji": "🔥",
+        "cor": "#e67e22",
+        "exercicios": [
+            {
+                "nome": "Tecnica STOP",
+                "instrucao": "Pare, Respire, Observe, Prossiga.",
+                "duracao": "Imediato",
+                "tipo": "pratica"
+            }
+        ],
+        "reflexao": "A raiva aponta para o que voce valoriza.",
+        "tecnica_principal": "STOP"
+    },
+    {
+        "dia": 6,
+        "titulo": "Conexao e Empatia",
+        "descricao": "Fortaleca suas conexoes.",
+        "emoji": "🤝",
+        "cor": "#1abc9c",
+        "exercicios": [
+            {
+                "nome": "Loving-Kindness",
+                "instrucao": "Envie mentalmente votos de bem-estar para voce e outros.",
+                "duracao": "10 min",
+                "tipo": "meditacao"
+            }
+        ],
+        "reflexao": "Somos seres de conexao.",
+        "tecnica_principal": "Metta"
+    },
+    {
+        "dia": 7,
+        "titulo": "Integracao e Gratidao",
+        "descricao": "Consolide sua jornada.",
+        "emoji": "🌟",
+        "cor": "#f39c12",
+        "exercicios": [
+            {
+                "nome": "Diario de Gratidao",
+                "instrucao": "Liste 3 coisas pelas quais e grato hoje.",
+                "duracao": "5 min",
+                "tipo": "escrita"
+            }
+        ],
+        "reflexao": "A gratidao e a memoria do coracao.",
+        "tecnica_principal": "Gratidao"
+    }
+]
+
+@app.get("/terapia", response_class=HTMLResponse)
+def terapia_page(request: Request, dia: int = 1, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return RedirectResponse(url="/login")
+    dia = max(1, min(7, dia))
+    programa_dia = PROGRAMA_7_DIAS[dia - 1]
+    return templates.TemplateResponse(request, "terapia.html", {
+        "usuario":     usuario,
+        "dia":         dia,
+        "programa":    programa_dia,
+        "total_dias":  7,
+        "todos_dias":  PROGRAMA_7_DIAS,
+    })
+
 @app.get("/blog", response_class=HTMLResponse)
 def blog_page(request: Request):
     return templates.TemplateResponse(request, "blog.html", {
