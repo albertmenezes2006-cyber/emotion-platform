@@ -699,6 +699,7 @@ body{
   <div class="nav-right">
     <span style="color:rgba(255,255,255,0.5);font-size:12px">Olá, {{ usuario.nome }}!</span>
     <button onclick="toggleTheme()" class="nav-btn" style="background:rgba(255,255,255,0.1);border:none;cursor:pointer;font-size:16px" id="themeBtn">🌙</button>
+    <button onclick="ativarNotificacoes()" class="nav-btn" style="background:rgba(255,255,255,0.1);border:none;cursor:pointer;font-size:12px;font-weight:600" id="btnNotif" title="Ativar notificacoes">🔔</button>
     <span class="version-badge">v15.0</span>
     <a href="/perfil"   class="nav-btn btn-perfil">👤 Perfil</a>
     <a href="/afiliado" class="nav-btn btn-afiliado">💰 Afiliados</a>
@@ -1870,6 +1871,86 @@ function toggleTheme() {
     document.body.classList.add('light-mode');
     var btn = document.getElementById('themeBtn');
     if(btn) btn.innerHTML = '☀️';
+  }
+})();
+
+// ============================================================
+// NOTIFICACOES PUSH
+// ============================================================
+function ativarNotificacoes() {
+  var btn = document.getElementById('btnNotif');
+
+  if(!('Notification' in window)) {
+    alert('Seu navegador nao suporta notificacoes.');
+    return;
+  }
+
+  if(Notification.permission === 'granted') {
+    // Ja tem permissao — envia notificacao de teste
+    enviarNotifLocal('Notificacoes ativas', 'Voce ja recebe lembretes do Emotion Intelligence!');
+    btn.innerHTML = '🔔✅';
+    return;
+  }
+
+  if(Notification.permission === 'denied') {
+    alert('Notificacoes bloqueadas. Habilite nas configuracoes do navegador.');
+    return;
+  }
+
+  Notification.requestPermission().then(function(permission) {
+    if(permission === 'granted') {
+      btn.innerHTML = '🔔✅';
+      btn.style.background = 'rgba(46,204,113,0.3)';
+      localStorage.setItem('notif_ativa', '1');
+      enviarNotifLocal(
+        '🧠 Notificacoes ativadas!',
+        'Voce recebera lembretes diarios para registrar suas emocoes.'
+      );
+      agendarLembreteDiario();
+    } else {
+      btn.innerHTML = '🔕';
+    }
+  });
+}
+
+function enviarNotifLocal(titulo, corpo) {
+  if(Notification.permission === 'granted') {
+    var n = new Notification(titulo, {
+      body:  corpo,
+      icon:  '/static/favicon.svg',
+      badge: '/static/favicon.svg',
+    });
+    n.onclick = function(){ window.focus(); n.close(); };
+    setTimeout(function(){ n.close(); }, 6000);
+  }
+}
+
+function agendarLembreteDiario() {
+  // Lembrete via localStorage + check ao abrir o app
+  var agora = new Date();
+  var amanha = new Date(agora);
+  amanha.setDate(amanha.getDate() + 1);
+  amanha.setHours(9, 0, 0, 0);
+  localStorage.setItem('proximo_lembrete', amanha.getTime());
+}
+
+// Checar se deve mostrar lembrete ao carregar
+(function() {
+  var btn = document.getElementById('btnNotif');
+  if(localStorage.getItem('notif_ativa') === '1') {
+    if(btn) { btn.innerHTML = '🔔✅'; btn.style.background = 'rgba(46,204,113,0.2)'; }
+  }
+
+  var proximo = localStorage.getItem('proximo_lembrete');
+  if(proximo && Notification.permission === 'granted') {
+    var agora = Date.now();
+    if(agora >= parseInt(proximo)) {
+      enviarNotifLocal(
+        '🧠 Lembrete Emocional',
+        'Que tal registrar como voce esta se sentindo hoje? Clique para abrir.'
+      );
+      agendarLembreteDiario();
+    }
   }
 })();
 </script>
