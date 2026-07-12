@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — Inteligência Emocional | Emotion Intelligence</title>
+<meta name="description" content="Artigos sobre inteligência emocional, ansiedade, mindfulness e bem-estar mental. Conteúdo baseado em evidências científicas.">
+<meta name="keywords" content="inteligencia emocional, ansiedade, mindfulness, bem-estar, saude mental, psicologia">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh}
+.navbar{background:rgba(0,0,0,0.4);backdrop-filter:blur(10px);padding:15px 30px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,255,255,0.1)}
+.navbar h1{font-size:20px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-right{display:flex;gap:8px;flex-wrap:wrap}
+.nav-btn{padding:7px 16px;border-radius:20px;color:#fff;text-decoration:none;font-size:12px;font-weight:600;transition:all .2s}
+.nav-btn:hover{transform:translateY(-1px)}
+.btn-home{background:#3a7bd5}
+.btn-cadastro{background:linear-gradient(90deg,#00d2ff,#3a7bd5)}
+.btn-login{background:rgba(255,255,255,0.1)}
+.container{max-width:1100px;margin:0 auto;padding:40px 20px}
+.hero{text-align:center;margin-bottom:50px}
+.hero h2{font-size:36px;font-weight:900;margin-bottom:12px;background:linear-gradient(90deg,#00d2ff,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:16px;color:rgba(255,255,255,0.6);max-width:600px;margin:0 auto}
+.artigos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-bottom:50px}
+.artigo-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:28px;transition:all .3s;text-decoration:none;color:#fff;display:block}
+.artigo-card:hover{transform:translateY(-6px);background:rgba(255,255,255,0.08);border-color:rgba(0,210,255,0.3);box-shadow:0 20px 40px rgba(0,0,0,0.3)}
+.artigo-emoji{font-size:40px;margin-bottom:14px}
+.artigo-categoria{display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;background:rgba(0,210,255,0.15);color:#00d2ff;margin-bottom:12px}
+.artigo-titulo{font-size:18px;font-weight:700;margin-bottom:10px;line-height:1.4}
+.artigo-resumo{font-size:13px;color:rgba(255,255,255,0.6);line-height:1.6;margin-bottom:16px}
+.artigo-meta{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(255,255,255,0.4)}
+.btn-ler{display:inline-block;margin-top:16px;padding:10px 22px;border-radius:10px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);color:#fff;font-size:13px;font-weight:600;text-decoration:none}
+.cta{background:rgba(0,210,255,0.08);border:1px solid rgba(0,210,255,0.2);border-radius:20px;padding:40px;text-align:center;margin-top:20px}
+.cta h3{font-size:24px;margin-bottom:12px}
+.cta p{color:rgba(255,255,255,0.6);margin-bottom:24px}
+.cta-btn{display:inline-block;padding:14px 32px;border-radius:12px;background:linear-gradient(90deg,#00d2ff,#a855f7);color:#fff;font-size:16px;font-weight:700;text-decoration:none}
+.footer{text-align:center;padding:30px;color:rgba(255,255,255,0.3);font-size:12px}
+.footer a{color:rgba(255,255,255,0.4);text-decoration:none;margin:0 8px}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <h1>🧠 Emotion Intelligence</h1>
+  <div class="nav-right">
+    <a href="/" class="nav-btn btn-home">🏠 Home</a>
+    <a href="/cadastro" class="nav-btn btn-cadastro">🚀 Começar Grátis</a>
+    <a href="/login" class="nav-btn btn-login">Entrar</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="hero">
+    <h2>📚 Blog de Inteligência Emocional</h2>
+    <p>Artigos baseados em evidências científicas sobre emoções, mindfulness, ansiedade e bem-estar mental.</p>
+  </div>
+
+  <div class="artigos-grid">
+    {% for artigo in artigos %}
+    <a href="/blog/{{ artigo.slug }}" class="artigo-card">
+      <div class="artigo-emoji">{{ artigo.emoji }}</div>
+      <div class="artigo-categoria">{{ artigo.categoria }}</div>
+      <div class="artigo-titulo">{{ artigo.titulo }}</div>
+      <div class="artigo-resumo">{{ artigo.resumo }}</div>
+      <div class="artigo-meta">
+        <span>📅 {{ artigo.data }}</span>
+        <span>⏱️ {{ artigo.tempo_leitura }}</span>
+      </div>
+      <div class="btn-ler">Ler artigo →</div>
+    </a>
+    {% endfor %}
+  </div>
+
+  <div class="cta">
+    <h3>🧠 Analise suas emoções com IA</h3>
+    <p>Junte-se a milhares de pessoas que já usam a Emotion Intelligence para desenvolver sua inteligência emocional.</p>
+    <a href="/cadastro" class="cta-btn">🚀 Começar Grátis Agora</a>
+  </div>
+</div>
+
+<div class="footer">
+  <a href="/">Home</a>
+  <a href="/sobre">Sobre</a>
+  <a href="/privacidade">Privacidade</a>
+  <a href="/termos">Termos</a>
+  <a href="/contato">Contato</a>
+  <br><br>
+  🧠 Emotion Intelligence Platform 2026 — v15.0 ULTIMATE
+</div>
+</body>
+</html>

@@ -1478,6 +1478,214 @@ async def head_root():
     return Response(status_code=200)
 
 
+# ================================================================
+# BLOG — ARTIGOS SEO
+# ================================================================
+
+ARTIGOS_BLOG = [
+    {
+        "slug": "o-que-e-inteligencia-emocional",
+        "titulo": "O que é Inteligência Emocional e por que ela importa",
+        "resumo": "Descubra o conceito de inteligência emocional, seus 5 pilares e como desenvolvê-la no dia a dia para melhorar sua vida pessoal e profissional.",
+        "categoria": "Fundamentos",
+        "emoji": "🧠",
+        "tempo_leitura": "5 min",
+        "data": "10/07/2026",
+        "conteudo": """
+<p>A <strong>inteligência emocional</strong> (IE) é a capacidade de reconhecer, compreender e gerenciar nossas próprias emoções e as emoções dos outros. O conceito foi popularizado pelo psicólogo Daniel Goleman nos anos 90 e revolucionou a forma como enxergamos o sucesso humano.</p>
+
+<h2>Os 5 Pilares da Inteligência Emocional</h2>
+
+<h3>1. Autoconsciência</h3>
+<p>É a capacidade de reconhecer suas próprias emoções no momento em que surgem. Pessoas com alta autoconsciência entendem como seus sentimentos afetam seus pensamentos e comportamentos.</p>
+
+<h3>2. Autorregulação</h3>
+<p>Envolve controlar impulsos e emoções perturbadoras. Não significa suprimir sentimentos, mas canalizá-los de forma construtiva.</p>
+
+<h3>3. Motivação</h3>
+<p>Pessoas emocionalmente inteligentes são motivadas por razões além de dinheiro ou status. Elas têm paixão pelo trabalho em si e persistem diante de obstáculos.</p>
+
+<h3>4. Empatia</h3>
+<p>É a habilidade de entender as emoções dos outros. A empatia é fundamental para construir relacionamentos saudáveis e liderar equipes.</p>
+
+<h3>5. Habilidades Sociais</h3>
+<p>Envolve gerenciar relacionamentos, inspirar outros e comunicar-se com clareza e eficácia.</p>
+
+<h2>Como Desenvolver sua IE</h2>
+<p>A boa notícia é que a inteligência emocional pode ser desenvolvida com prática. Ferramentas como o <strong>diário emocional</strong>, a <strong>meditação mindfulness</strong> e o acompanhamento profissional são excelentes pontos de partida.</p>
+
+<p>Na <strong>Emotion Intelligence Platform</strong>, você pode analisar suas emoções diariamente, conversar com a Sofia (nossa psicóloga virtual) e acompanhar sua evolução através do Score de IE personalizado.</p>
+"""
+    },
+    {
+        "slug": "tecnicas-para-controlar-ansiedade",
+        "titulo": "7 Técnicas Cientificamente Comprovadas para Controlar a Ansiedade",
+        "resumo": "A ansiedade afeta milhões de brasileiros. Conheça 7 técnicas baseadas em evidências científicas que você pode aplicar agora mesmo para reduzir a ansiedade.",
+        "categoria": "Técnicas",
+        "emoji": "🌿",
+        "tempo_leitura": "7 min",
+        "data": "08/07/2026",
+        "conteudo": """
+<p>A <strong>ansiedade</strong> é a emoção mais comum do século XXI. Segundo a OMS, o Brasil é o país mais ansioso do mundo. Mas existem técnicas eficazes para gerenciá-la.</p>
+
+<h2>1. Respiração 4-7-8</h2>
+<p>Inspire por 4 segundos, segure por 7 e expire por 8. Esta técnica ativa o sistema nervoso parassimpático e reduz a resposta de estresse em minutos.</p>
+
+<h2>2. Grounding 5-4-3-2-1</h2>
+<p>Nomeie 5 coisas que você VÊ, 4 que pode TOCAR, 3 que OUVE, 2 que CHEIRA e 1 que SABOREIA. Esta técnica ancora você no momento presente.</p>
+
+<h2>3. Técnica STOP</h2>
+<p><strong>S</strong>top — pare o que está fazendo. <strong>T</strong>ake a breath — respire fundo. <strong>O</strong>bserve — observe seus pensamentos sem julgamento. <strong>P</strong>roceed — prossiga com mais clareza.</p>
+
+<h2>4. Body Scan</h2>
+<p>Deite-se confortavelmente e leve sua atenção progressivamente de cada parte do corpo, da cabeça aos pés, observando sensações sem julgamento.</p>
+
+<h2>5. Journaling Emocional</h2>
+<p>Escrever sobre suas emoções reduz sua intensidade. Pesquisas mostram que 15-20 minutos de escrita expressiva por dia reduzem significativamente os níveis de ansiedade.</p>
+
+<h2>6. Movimento Físico</h2>
+<p>O exercício físico libera endorfinas e reduz o cortisol (hormônio do estresse). Mesmo uma caminhada de 20 minutos já faz diferença.</p>
+
+<h2>7. Mindfulness</h2>
+<p>A prática de mindfulness — atenção plena ao momento presente — tem vasta evidência científica no tratamento da ansiedade. Comece com 5 minutos por dia.</p>
+
+<p>💡 <strong>Dica:</strong> Use a <a href="/cadastro">Emotion Intelligence Platform</a> para registrar sua ansiedade diariamente e conversar com a Sofia sobre técnicas personalizadas para o seu perfil.</p>
+"""
+    },
+    {
+        "slug": "como-lidar-com-tristeza",
+        "titulo": "Como Lidar com a Tristeza de Forma Saudável",
+        "resumo": "A tristeza é uma emoção humana natural e necessária. Aprenda a atravessá-la de forma saudável sem suprimi-la ou ficar preso nela.",
+        "categoria": "Emoções",
+        "emoji": "💙",
+        "tempo_leitura": "6 min",
+        "data": "05/07/2026",
+        "conteudo": """
+<p>A <strong>tristeza</strong> é frequentemente vista como uma emoção negativa a ser evitada. Mas na verdade, ela é uma das emoções mais importantes que temos — ela nos diz que algo ou alguém é importante para nós.</p>
+
+<h2>Por que sentimos tristeza?</h2>
+<p>A tristeza surge em resposta a perdas, decepções, separações e situações de impotência. Ela é um sinal do nosso sistema emocional dizendo: "isso importa para mim".</p>
+
+<h2>Tristeza vs Depressão</h2>
+<p>É importante diferenciar tristeza de depressão. A tristeza é uma resposta natural a eventos específicos e tende a diminuir com o tempo. A depressão é persistente, generalizada e requer atenção profissional.</p>
+
+<h2>Como atravessar a tristeza de forma saudável</h2>
+
+<h3>1. Valide sua emoção</h3>
+<p>Permita-se sentir. Diga para si mesmo: "É natural que eu esteja triste. Minha emoção é válida."</p>
+
+<h3>2. Prática de Auto-Compaixão</h3>
+<p>Coloque a mão no coração, respire fundo e diga: "Estou sofrendo agora. O sofrimento faz parte da vida humana. Que eu seja gentil comigo mesmo."</p>
+
+<h3>3. Expresse a tristeza</h3>
+<p>Chore se precisar. Escreva no diário. Fale com alguém de confiança. A expressão emocional é fundamental para o processamento.</p>
+
+<h3>4. Não se isole completamente</h3>
+<p>Embora seja natural querer se recolher, o isolamento prolongado pode aprofundar a tristeza. Mantenha pelo menos uma conexão social.</p>
+
+<h2>Quando buscar ajuda</h2>
+<p>Se a tristeza persistir por mais de duas semanas, interferir no trabalho, sono ou alimentação, busque um psicólogo. O CVV (188) também está disponível 24h.</p>
+"""
+    },
+    {
+        "slug": "diario-emocional-beneficios",
+        "titulo": "Diário Emocional: 8 Benefícios Comprovados pela Ciência",
+        "resumo": "Manter um diário emocional tem benefícios cientificamente comprovados para a saúde mental. Descubra como essa prática simples pode transformar sua vida.",
+        "categoria": "Bem-estar",
+        "emoji": "📔",
+        "tempo_leitura": "5 min",
+        "data": "01/07/2026",
+        "conteudo": """
+<p>O <strong>diário emocional</strong> é uma das ferramentas mais simples e poderosas para o desenvolvimento da inteligência emocional. Pesquisas da Universidade de Texas mostram que escrever sobre emoções reduz sua intensidade e melhora o bem-estar.</p>
+
+<h2>8 Benefícios Comprovados</h2>
+
+<h3>1. Reduz o estresse e a ansiedade</h3>
+<p>Externalizar pensamentos no papel reduz a ruminação mental — aquele ciclo de pensamentos que ficam rodando na cabeça.</p>
+
+<h3>2. Aumenta a autoconsciência</h3>
+<p>Ao escrever regularmente, você começa a identificar padrões emocionais, gatilhos e reações automáticas.</p>
+
+<h3>3. Melhora o processamento emocional</h3>
+<p>Nomear e descrever emoções ativa o córtex pré-frontal, reduzindo a resposta da amígdala (centro do medo).</p>
+
+<h3>4. Fortalece a memória e clareza mental</h3>
+<p>O ato de escrever organiza pensamentos caóticos, aumentando a clareza e a capacidade de tomar decisões.</p>
+
+<h3>5. Melhora o sono</h3>
+<p>Escrever preocupações antes de dormir "descarrega" a mente, facilitando o adormecer.</p>
+
+<h3>6. Aumenta a gratidão</h3>
+<p>Incluir registros de gratidão no diário está associado a maiores níveis de felicidade e satisfação com a vida.</p>
+
+<h3>7. Ajuda no autoconhecimento</h3>
+<p>Com o tempo, o diário se torna um espelho da sua evolução emocional e pessoal.</p>
+
+<h3>8. Fortalece o sistema imunológico</h3>
+<p>Estudos de James Pennebaker (UT Austin) mostram que a escrita expressiva melhora marcadores imunológicos.</p>
+
+<h2>Como começar hoje</h2>
+<p>Não precisa escrever muito. Comece com 5-10 minutos por dia. Na <a href="/cadastro">Emotion Intelligence Platform</a>, o diário emocional analisa automaticamente sua emoção predominante e sugere técnicas personalizadas.</p>
+"""
+    },
+    {
+        "slug": "mindfulness-para-iniciantes",
+        "titulo": "Mindfulness para Iniciantes: Guia Completo",
+        "resumo": "Aprenda o que é mindfulness, seus benefícios científicos e como começar uma prática de atenção plena mesmo sem experiência anterior.",
+        "categoria": "Mindfulness",
+        "emoji": "🧘",
+        "tempo_leitura": "8 min",
+        "data": "28/06/2026",
+        "conteudo": """
+<p><strong>Mindfulness</strong> (ou atenção plena) é a prática de prestar atenção intencionalmente ao momento presente, sem julgamento. Originada na meditação budista, foi adaptada para o contexto clínico por Jon Kabat-Zinn nos anos 70.</p>
+
+<h2>Benefícios Científicos do Mindfulness</h2>
+<ul>
+<li>Redução de 43% nos sintomas de ansiedade (Harvard Medical School)</li>
+<li>Melhora na concentração e memória de trabalho</li>
+<li>Redução do cortisol (hormônio do estresse)</li>
+<li>Melhora na qualidade do sono</li>
+<li>Aumento da empatia e compaixão</li>
+</ul>
+
+<h2>Como Praticar Mindfulness</h2>
+
+<h3>Meditação da Respiração (5 minutos)</h3>
+<p>Sente-se confortavelmente. Feche os olhos. Foque na sensação do ar entrando e saindo pelas narinas. Quando a mente divagar, gentilmente retorne à respiração sem se julgar.</p>
+
+<h3>Mindfulness nas Atividades Diárias</h3>
+<p>Pratique atenção plena enquanto lava a louça, toma banho ou come. Preste total atenção às sensações, sabores, texturas e sons.</p>
+
+<h3>Caminhada Consciente</h3>
+<p>Caminhe devagar, prestando atenção a cada passo, à sensação dos pés no chão, aos sons ao redor e à sua respiração.</p>
+
+<h2>Dicas para Iniciantes</h2>
+<p>Comece com apenas 5 minutos por dia. Consistência é mais importante que duração. Use aplicativos ou plataformas como a <a href="/cadastro">Emotion Intelligence</a> para registrar como você se sente antes e depois da prática.</p>
+"""
+    },
+]
+
+
+@app.get("/blog", response_class=HTMLResponse)
+def blog_page(request: Request):
+    return templates.TemplateResponse(request, "blog.html", {
+        "artigos": ARTIGOS_BLOG,
+        "total":   len(ARTIGOS_BLOG),
+    })
+
+
+@app.get("/blog/{slug}", response_class=HTMLResponse)
+def artigo_page(slug: str, request: Request):
+    artigo = next((a for a in ARTIGOS_BLOG if a["slug"] == slug), None)
+    if not artigo:
+        raise HTTPException(status_code=404, detail="Artigo nao encontrado")
+    outros = [a for a in ARTIGOS_BLOG if a["slug"] != slug][:3]
+    return templates.TemplateResponse(request, "artigo.html", {
+        "artigo": artigo,
+        "outros": outros,
+    })
+
+
 @app.get("/favicon.ico", include_in_schema=False)
 async def favicon():
     from fastapi.responses import FileResponse
