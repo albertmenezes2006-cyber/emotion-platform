@@ -685,6 +685,32 @@ def get_emoji(emocao: str) -> str:
 # DETECÇÃO DE EMOÇÃO
 # ================================================================
 
+# Mapa de emojis para emocoes
+EMOJI_PARA_EMOCAO = {
+    "😄": "alegria", "😊": "alegria", "🥰": "alegria", "😁": "alegria",
+    "😂": "alegria", "🤣": "alegria", "😃": "alegria", "😀": "alegria",
+    "🎉": "euforia", "🥳": "euforia", "⚡": "euforia", "🔥": "euforia",
+    "😢": "tristeza", "😭": "tristeza", "😔": "solidao", "😞": "tristeza",
+    "💔": "tristeza", "😿": "tristeza", "🥺": "tristeza",
+    "😡": "raiva", "🤬": "raiva", "😤": "raiva", "💢": "raiva",
+    "😨": "medo", "😰": "medo", "😱": "medo", "🫣": "medo",
+    "😰": "ansiedade", "😟": "ansiedade", "😧": "ansiedade",
+    "❤️": "amor", "🥰": "amor", "💕": "amor", "💖": "amor",
+    "🙏": "gratidao", "🤗": "gratidao", "😇": "gratidao",
+    "🌅": "esperanca", "✨": "esperanca", "🌟": "esperanca",
+    "😲": "surpresa", "😮": "surpresa", "🤯": "surpresa",
+    "🤢": "nojo", "🤮": "nojo", "😖": "nojo",
+    "🕊️": "calma", "😌": "calma", "🧘": "calma", "😴": "calma",
+    "😕": "confusao", "🤔": "confusao", "😵": "confusao",
+    "😳": "vergonha", "🫠": "vergonha", "😬": "vergonha",
+    "😐": "neutro", "😑": "neutro", "🫤": "neutro",
+    "😓": "estresse", "😩": "estresse", "😫": "estresse",
+    "😔": "solidao", "🥹": "solidao",
+}
+
+def emocao_por_emoji(emoji_input: str) -> str:
+    return EMOJI_PARA_EMOCAO.get(emoji_input.strip(), "neutro")
+
 def normalizar_texto(texto: str) -> str:
     texto = texto.lower()
     texto = ''.join(
@@ -1684,6 +1710,55 @@ def artigo_page(slug: str, request: Request):
         "artigo": artigo,
         "outros": outros,
     })
+
+
+@app.post("/analisar/emoji")
+async def analisar_emoji(
+    request: Request,
+    emoji:   str = Form(...),
+    db:      Session = Depends(get_db)
+):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        raise HTTPException(status_code=401, detail="Nao autorizado")
+
+    limite     = get_limite(usuario, "analises")
+    total_hoje = contar_hoje(Analise, usuario.id, db)
+    if total_hoje >= limite:
+        raise HTTPException(
+            status_code=429,
+            detail=f"Limite de {limite} analises por dia atingido."
+        )
+
+    emocao     = emocao_por_emoji(emoji)
+    texto      = f"Humor registrado via emoji: {emoji}"
+    intensidade = 2
+
+    nova = Analise(
+        texto=texto,
+        emocao=emocao,
+        emoji=get_emoji(emocao),
+        recomendacao=recomendacoes.get(emocao, ""),
+        tecnica=tecnicas_por_emocao.get(emocao, ""),
+        intensidade=intensidade,
+        usuario_id=usuario.id
+    )
+    db.add(nova)
+    db.commit()
+
+    pontos_ganhos = PONTOS_POR_ACAO.get("analise_premium", 5) if usuario.plano in ["premium","enterprise"] else PONTOS_POR_ACAO.get("analise_free", 2)
+    adicionar_pontos(usuario, pontos_ganhos, db)
+    verificar_conquistas(usuario, db)
+
+    return {
+        "emocao":       emocao,
+        "emoji":        get_emoji(emocao),
+        "emoji_input":  emoji,
+        "recomendacao": recomendacoes.get(emocao, ""),
+        "tecnica":      tecnicas_por_emocao.get(emocao, ""),
+        "pontos_ganhos": pontos_ganhos,
+        "total_pontos": usuario.pontos,
+    }
 
 
 @app.get("/favicon.ico", include_in_schema=False)
