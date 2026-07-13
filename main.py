@@ -2352,6 +2352,289 @@ ARTIGOS_BLOG = [
 <p>💡 A <a href="/cadastro">Emotion Intelligence</a> pode ser um complemento ao seu processo terapeutico — nunca um substituto.</p>
 """
     },
+    {
+        "slug": "ansiedade-no-trabalho",
+        "titulo": "Como Controlar a Ansiedade no Trabalho",
+        "categoria": "Ansiedade",
+        "tempo_leitura": "8 min",
+        "emoji": "😰",
+        "data": "10/06/2026",
+        "resumo": "A ansiedade no trabalho afeta 1 em cada 3 profissionais. Aprenda tecnicas praticas para manter a calma e a produtividade.",
+        "imagem": "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?w=800",
+        "conteudo": """
+<h2>A Ansiedade no Trabalho e uma Epidemia Silenciosa</h2>
+<p>Segundo a OMS, transtornos de ansiedade custam a economia global <strong>1 trilhao de dolares por ano</strong> em perda de produtividade. No Brasil, a ansiedade e o transtorno mental mais comum, afetando 9,3% da populacao.</p>
+<h2>Sinais de Ansiedade no Trabalho</h2>
+<ul>
+<li>Dificuldade de concentracao e mente acelerada</li>
+<li>Procrastinacao por medo de errar</li>
+<li>Sensacao constante de urgencia mesmo sem prazo</li>
+<li>Tensao muscular e dores de cabeca frequentes</li>
+<li>Dificuldade de desligar apos o trabalho</li>
+</ul>
+<h2>Tecnicas Imediatas</h2>
+<h3>1. Respiracao 4-7-8</h3>
+<p>Inspire por 4 segundos, segure por 7, expire por 8. Repita 3 vezes. Ativa o sistema parassimpatico e reduz a ansiedade em minutos.</p>
+<h3>2. Tecnica dos 5-4-3-2-1</h3>
+<p>Nomeie 5 coisas que voce ve, 4 que toca, 3 que ouve, 2 que cheira, 1 que saboreia. Ancora voce no presente.</p>
+<h3>3. Regra dos 2 minutos</h3>
+<p>Se uma tarefa leva menos de 2 minutos, faca agora. Reduz o acumulo de pendencias que alimentam a ansiedade.</p>
+<h2>Estrategias de Longo Prazo</h2>
+<p>Estabeleca horarios para checar emails. Use a Matriz de Eisenhower para priorizar tarefas. Aplique a tecnica Pomodoro: 25 min foco + 5 min pausa.</p>
+<h2>Quando Pedir Ajuda</h2>
+<p>Se a ansiedade afeta seu desempenho por mais de 2 semanas, procure um psicologo. Ansiedade tem tratamento eficaz.</p>
+<p>Use a <a href="/cadastro">Emotion Intelligence</a> para monitorar seus padroes emocionais no trabalho.</p>
+"""
+    },
+    {
+        "slug": "autoconhecimento-emocional",
+        "titulo": "Autoconhecimento Emocional: O Guia Completo",
+        "categoria": "Autoconhecimento",
+        "tempo_leitura": "10 min",
+        "emoji": "🔍",
+        "data": "11/06/2026",
+        "resumo": "Autoconhecimento emocional e a base de toda inteligencia emocional. Descubra como se conhecer profundamente.",
+        "imagem": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800",
+        "conteudo": """
+<h2>Por Que o Autoconhecimento E a Base de Tudo</h2>
+<p>Socrates dizia Conhece-te a ti mesmo ha 2.500 anos. A ciencia moderna confirma: pessoas com alto autoconhecimento tomam melhores decisoes e tem relacionamentos mais saudaveis.</p>
+<h2>Os 4 Niveis do Autoconhecimento</h2>
+<h3>1. Reconhecimento (O que estou sentindo?)</h3>
+<p>O primeiro passo e nomear a emocao. Pesquisas da UCLA mostram que nomear emocoes reduz sua intensidade.</p>
+<h3>2. Compreensao (Por que estou sentindo isso?)</h3>
+<p>Identificar o gatilho que ativou a emocao. Nem sempre e obvio.</p>
+<h3>3. Padroes (Quando isso se repete?)</h3>
+<p>Reconhecer padroes ao longo do tempo revela suas necessidades emocionais nao atendidas.</p>
+<h3>4. Valores (O que isso diz sobre mim?)</h3>
+<p>Emocoes sao mensageiras dos seus valores. Raiva sinaliza valor violado. Tristeza indica perda de algo importante.</p>
+<h2>Praticas para Desenvolver Autoconhecimento</h2>
+<p>Diario emocional diario por 5-10 minutos. Check-ins emocionais 3 vezes ao dia. Feedback honesto de pessoas proximas.</p>
+<p>Use a <a href="/cadastro">Emotion Intelligence</a> para registrar e entender seus padroes emocionais com ajuda de IA.</p>
+"""
+    },
+    {
+        "slug": "como-ser-mais-empatico",
+        "titulo": "Como Desenvolver Empatia: Guia Pratico",
+        "categoria": "Relacionamentos",
+        "tempo_leitura": "7 min",
+        "emoji": "🤝",
+        "data": "12/06/2026",
+        "resumo": "Empatia nao e um dom, e uma habilidade que pode ser desenvolvida. Aprenda como cultivar empatia genuina.",
+        "imagem": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800",
+        "conteudo": """
+<h2>Empatia: O Que E e O Que Nao E</h2>
+<p>Empatia e a capacidade de compreender e compartilhar os sentimentos de outra pessoa. Nao e concordar, nao e resolver problemas, nao e sentir pena.</p>
+<h2>Os 3 Tipos de Empatia</h2>
+<h3>Empatia Cognitiva</h3>
+<p>Entender intelectualmente a perspectiva do outro.</p>
+<h3>Empatia Emocional</h3>
+<p>Sentir com o outro — sua alegria e sua alegria, sua dor e sua dor.</p>
+<h3>Empatia Compassiva</h3>
+<p>Entender, sentir E agir para ajudar. E a forma mais completa.</p>
+<h2>Como Desenvolver Empatia na Pratica</h2>
+<h3>Escuta ativa real</h3>
+<p>Quando alguem fala, resista ao impulso de pensar na sua resposta. Foque 100% no que a pessoa esta dizendo.</p>
+<h3>Leia ficcao</h3>
+<p>Estudos da Universidade de Toronto mostraram que leitores de ficcao literaria tem maior empatia.</p>
+<h3>Reduza o julgamento</h3>
+<p>Toda vez que voce se pegar julgando alguem, pause e pergunte: O que pode ter levado essa pessoa a agir assim?</p>
+<p>Use a <a href="/cadastro">Emotion Intelligence</a> para desenvolver sua inteligencia emocional.</p>
+"""
+    },
+    {
+        "slug": "terapia-online-vale-a-pena",
+        "titulo": "Terapia Online Vale a Pena? A Verdade Completa",
+        "categoria": "Saude Mental",
+        "tempo_leitura": "8 min",
+        "emoji": "💻",
+        "data": "13/06/2026",
+        "resumo": "Terapia online cresceu 400% pos-pandemia. Ela e tao eficaz quanto a presencial? Tudo que voce precisa saber.",
+        "imagem": "https://images.unsplash.com/photo-1590650153855-d9e808231d41?w=800",
+        "conteudo": """
+<h2>Terapia Online: A Revolucao da Saude Mental</h2>
+<p>A pandemia acelerou em decadas a adocao da terapia online. O que era visto com ceticismo em 2019 tornou-se mainstream — e os resultados surpreenderam ate os mais ceticos.</p>
+<h2>O Que Diz a Ciencia</h2>
+<p>Uma meta-analise publicada no Journal of Psychological Disorders analisou 92 estudos e concluiu: <strong>a terapia online e tao eficaz quanto a presencial</strong> para a maioria dos transtornos.</p>
+<h2>Vantagens Reais</h2>
+<ul>
+<li>Acesso a psicologos de qualquer cidade do Brasil</li>
+<li>Geralmente 20-40% mais barato que presencial</li>
+<li>Horarios mais flexiveis</li>
+<li>Muitos pacientes se abrem mais em casa</li>
+</ul>
+<h2>Limitacoes Importantes</h2>
+<ul>
+<li>Crises severas podem requerer atendimento presencial</li>
+<li>Conexao de internet instavel prejudica o processo</li>
+</ul>
+<h2>Como Escolher um Psicologo Online</h2>
+<p>Verifique o registro no CRP. Plataformas como Zenklub, Vittude e Psicologia Viva tem psicologos verificados.</p>
+<p>Use a <a href="/cadastro">Emotion Intelligence</a> para registrar como voce se sente entre as sessoes.</p>
+"""
+    },
+    {
+        "slug": "como-lidar-com-rejeicao",
+        "titulo": "Como Lidar com a Rejeicao sem se Destruir",
+        "categoria": "Autoconhecimento",
+        "tempo_leitura": "7 min",
+        "emoji": "💔",
+        "data": "14/06/2026",
+        "resumo": "Rejeicao doi porque o cerebro a processa como dor fisica. Entenda a neurociencia e aprenda a superar.",
+        "imagem": "https://images.unsplash.com/photo-1541199249251-f713e6145474?w=800",
+        "conteudo": """
+<h2>Por Que a Rejeicao Doi Tanto</h2>
+<p>Nao e fraqueza, e biologia. Neuroimagens mostram que a rejeicao social ativa as <strong>mesmas regioes cerebrais que a dor fisica</strong>.</p>
+<h2>Os Erros Mais Comuns Apos a Rejeicao</h2>
+<h3>Ruminacao excessiva</h3>
+<p>Ficar revivendo a cena repetidamente prolonga a dor sem trazer clareza.</p>
+<h3>Generalizacao</h3>
+<p>Ninguem me quer, sempre acontece isso comigo. Uma rejeicao especifica vira uma verdade absoluta.</p>
+<h3>Isolamento</h3>
+<p>Quando mais precisamos de conexao, mais nos isolamos. O isolamento amplifica a dor.</p>
+<h2>Estrategias Para Superar</h2>
+<h3>1. Valide a dor sem se afogar nela</h3>
+<p>E normal doer. Mas depois, escolha conscientemente redirecionar a atencao.</p>
+<h3>2. Separe rejeicao de identidade</h3>
+<p>Voce nao foi rejeitado — uma ideia ou possibilidade foi. Seu valor como pessoa nao esta em jogo.</p>
+<h3>3. Acao imediata</h3>
+<p>A melhor cura para rejeicao e a acao — ela restaura o senso de agencia e autoconfianca.</p>
+<p>Use a <a href="/cadastro">Emotion Intelligence</a> para processar rejeicoes e identificar padroes.</p>
+"""
+    },
+    {
+        "slug": "saude-mental-pos-pandemia",
+        "titulo": "Saude Mental Pos-Pandemia: Como se Recuperar",
+        "categoria": "Saude Mental",
+        "tempo_leitura": "9 min",
+        "emoji": "🌱",
+        "data": "15/06/2026",
+        "resumo": "A pandemia deixou sequelas emocionais em milhoes de pessoas. Ansiedade, luto e burnout aumentaram. Saiba como se recuperar.",
+        "imagem": "https://images.unsplash.com/photo-1584483766114-2cea6facdf57?w=800",
+        "conteudo": """
+<h2>O Legado Emocional da Pandemia</h2>
+<p>A COVID-19 nao foi apenas uma crise de saude fisica. A OMS reportou aumento de <strong>25% nos casos de ansiedade e depressao</strong> no primeiro ano da pandemia.</p>
+<h2>As Sequelas Mais Comuns</h2>
+<h3>Ansiedade social pos-pandemia</h3>
+<p>Apos meses de isolamento, muitas pessoas intensificaram a ansiedade em situacoes sociais.</p>
+<h3>Luto nao reconhecido</h3>
+<p>Nao apenas perda de pessoas, mas de empregos, planos e normalidade.</p>
+<h3>Burnout pandemico</h3>
+<p>A fusao do trabalho com o lar, sem fronteiras claras, esgotou milhoes.</p>
+<h2>Estrategias de Recuperacao</h2>
+<p>Reconheca o que voce perdeu. Reintroduza gradualmente o social. Reconstrua rotinas com intencao. Processe o que ficou para tras.</p>
+<p>Use a <a href="/cadastro">Emotion Intelligence</a> para monitorar sua recuperacao emocional pos-pandemia.</p>
+"""
+    },
+    {
+        "slug": "como-aumentar-resiliencia",
+        "titulo": "Como Aumentar sua Resiliencia Emocional",
+        "categoria": "Desenvolvimento Pessoal",
+        "tempo_leitura": "8 min",
+        "emoji": "💪",
+        "data": "16/06/2026",
+        "resumo": "Resiliencia nao e nao sofrer, e se recuperar mais rapido. Descubra como desenvolve-la com praticas comprovadas.",
+        "imagem": "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800",
+        "conteudo": """
+<h2>O Mito da Resiliencia</h2>
+<p>Resiliencia nao e nao sentir dor. E a capacidade de se dobrar sem quebrar e de se recuperar apos adversidades com aprendizado.</p>
+<h2>Os 5 Pilares da Resiliencia</h2>
+<h3>1. Regulacao Emocional</h3>
+<p>Nao suprimir emocoes, mas processa-las de forma saudavel.</p>
+<h3>2. Mentalidade de Crescimento</h3>
+<p>Ver adversidades como desafios temporarios e oportunidades de aprendizado.</p>
+<h3>3. Rede de Apoio</h3>
+<p>Ninguem e resiliente sozinho. Investir em relacionamentos de qualidade e investir na capacidade de superar crises.</p>
+<h3>4. Proposito</h3>
+<p>Pessoas com senso claro de proposito suportam adversidades maiores.</p>
+<h3>5. Autocuidado Nao-Negociavel</h3>
+<p>Sono, exercicio e alimentacao sao a base biologica da resiliencia.</p>
+<h2>Pratica Diaria</h2>
+<p>Ao final de cada dia dificil, escreva: 1 coisa que voce superou, 1 recurso interno que usou, 1 aprendizado.</p>
+<p>Use o <a href="/cadastro">diario emocional da Emotion Intelligence</a> para construir seu registro de resiliencia.</p>
+"""
+    },
+    {
+        "slug": "tecnicas-de-respiracao",
+        "titulo": "Tecnicas de Respiracao para Ansiedade e Estresse",
+        "categoria": "Mindfulness",
+        "tempo_leitura": "6 min",
+        "emoji": "🌬️",
+        "data": "17/06/2026",
+        "resumo": "A respiracao e a unica funcao autonoma que controlamos conscientemente. 5 tecnicas comprovadas para reduzir ansiedade.",
+        "imagem": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
+        "conteudo": """
+<h2>Por Que a Respiracao Funciona</h2>
+<p>A respiracao e unica: e a unica funcao autonoma do corpo que podemos controlar conscientemente. Respirar lentamente ativa o nervo vago — o nervo da calma.</p>
+<h2>5 Tecnicas Comprovadas</h2>
+<h3>1. Respiracao 4-7-8</h3>
+<p>Inspire pelo nariz por 4s, segure por 7s, expire pela boca por 8s. Repita 4 vezes. Excelente para dormir e ansiedade aguda.</p>
+<h3>2. Respiracao Box (Metodo Navy SEAL)</h3>
+<p>Inspire 4s, segure 4s, expire 4s, segure 4s. Usada por operacoes especiais para manter calma sob pressao extrema.</p>
+<h3>3. Respiracao Diafragmatica</h3>
+<p>Mao no abdomen, inspire fazendo-o expandir (nao o peito). 10 respiracoes. Ativa o sistema parassimpatico.</p>
+<h3>4. Respiracao Alternada (Yoga)</h3>
+<p>Alterne as narinas a cada respiracao. 5 ciclos. Equilibra os hemisferios cerebrais.</p>
+<h3>5. Expiracao Prolongada</h3>
+<p>Sempre expire mais longo que inspira. Inspire 4s, expire 6-8s. Ativa o nervo vago eficientemente.</p>
+<p>Registre como se sente antes e depois das tecnicas na <a href="/cadastro">Emotion Intelligence</a>.</p>
+"""
+    },
+    {
+        "slug": "relacionamento-toxico-sinais",
+        "titulo": "10 Sinais de Relacionamento Toxico (e Como Sair)",
+        "categoria": "Relacionamentos",
+        "tempo_leitura": "9 min",
+        "emoji": "⚠️",
+        "data": "18/06/2026",
+        "resumo": "Relacionamentos toxicos nao comecam toxicos. Aprenda a reconhecer os sinais e os passos para sair com seguranca.",
+        "imagem": "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800",
+        "conteudo": """
+<h2>Por Que E Dificil Reconhecer</h2>
+<p>Relacionamentos toxicos raramente comecam assim. Evoluem gradualmente — o que os psicologos chamam de escalada da toxicidade.</p>
+<h2>10 Sinais de Alerta</h2>
+<ol>
+<li>Voce se sente constantemente mal sobre si mesmo</li>
+<li>Controle e ciumo excessivos</li>
+<li>Comunicacao baseada em culpa e manipulacao</li>
+<li>Seus sentimentos sao sempre invalidados</li>
+<li>Voce tem medo de expressar sua opiniao</li>
+<li>Isolamento dos amigos e familia</li>
+<li>O relacionamento e assimetrico — voce da muito mais</li>
+<li>Voce se sente preso, nao escolhendo ficar</li>
+<li>Humor da casa depende do humor dele/dela</li>
+<li>Voce perdeu quem era antes do relacionamento</li>
+</ol>
+<h2>Como Sair com Seguranca</h2>
+<p>Planeje antes de agir. Estabeleca suporte. Prepare-se para manipulacao na saida.</p>
+<p>Em caso de violencia, ligue 180 ou 190. Use a <a href="/cadastro">Emotion Intelligence</a> para monitorar como seus relacionamentos afetam suas emocoes.</p>
+"""
+    },
+    {
+        "slug": "como-perdoar-e-seguir-em-frente",
+        "titulo": "Como Perdoar e Seguir em Frente (Mesmo Quando E Dificil)",
+        "categoria": "Desenvolvimento Pessoal",
+        "tempo_leitura": "8 min",
+        "emoji": "🕊️",
+        "data": "19/06/2026",
+        "resumo": "Perdoar nao e esquecer nem concordar, e se libertar. A ciencia comprova que o perdao reduz ansiedade e depressao.",
+        "imagem": "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=800",
+        "conteudo": """
+<h2>O Maior Mito Sobre o Perdao</h2>
+<p>Perdoar nao e dizer que o que aconteceu foi aceitavel. Nao e esquecer. Nao e reconciliar-se com a pessoa. <strong>Perdao e um ato de autocuidado radical.</strong></p>
+<h2>O Que a Ciencia Comprova</h2>
+<p>Pesquisas da Universidade de Stanford mostraram que pessoas que praticam o perdao tem menor pressao arterial, menos ansiedade e depressao, melhor qualidade de sono e sistema imunologico mais forte.</p>
+<h2>O Processo Real do Perdao</h2>
+<h3>Fase 1: Reconheca a magoa completamente</h3>
+<p>Nao minimize. Sinta a raiva, a tristeza, a traicao. O perdao genuino so vem apos honrar o que voce sentiu.</p>
+<h3>Fase 2: Escolha perdoar</h3>
+<p>O perdao comeca com uma decisao, nao com um sentimento. Voce decide que nao vai mais deixar esse evento ter poder sobre voce.</p>
+<h3>Fase 3: Desenvolva empatia</h3>
+<p>Nao para justificar, mas para compreender. O que levou essa pessoa a agir assim?</p>
+<h3>Fase 4: Estabeleca o que muda</h3>
+<p>Perdoar nao significa voltar a mesma dinamica. O perdao libera o passado; os limites protegem o futuro.</p>
+<p>Registre sua jornada de perdao no <a href="/cadastro">diario emocional da Emotion Intelligence</a>.</p>
+"""
+    },
 ]
 
 
