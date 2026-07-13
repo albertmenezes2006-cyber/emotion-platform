@@ -3156,6 +3156,15 @@ Responda EXATAMENTE neste formato JSON:
     adicionar_pontos(usuario, pontos, db)
     db.commit()
 
+    # Notifica Telegram se emocao negativa intensa
+    if emocao in ["tristeza", "medo", "ansiedade", "raiva", "depressao"] and confianca >= 80:
+        enviar_telegram(
+            f"⚠️ <b>Emocao intensa detectada por foto</b>\n"
+            f"👤 {usuario.nome}\n"
+            f"😔 Emocao: {emocao} ({confianca}% confianca)\n"
+            f"🕐 {datetime.now().strftime('%d/%m/%Y %H:%M')}"
+        )
+
     return {
         "emocao":     emocao,
         "emoji":      emoji,
@@ -5244,12 +5253,6 @@ async def sucesso(
             f"📧 {usuario.email}\n"
             f"🕐 {datetime.now().strftime('%d/%m/%Y %H:%M')}"
         )
-        enviar_telegram(
-            "💰 <b>Nova assinatura Premium!</b>\n"
-            f"👤 {usuario.nome}\n"
-            f"📧 {usuario.email}\n"
-            f"🕐 {datetime.now().strftime('%d/%m/%Y %H:%M')}"
-        )
         background_tasks.add_task(
             enviar_email_premium,
             usuario.nome,
@@ -5257,104 +5260,12 @@ async def sucesso(
             "premium"
         )
 
-    nome = usuario.nome if usuario else "usuário"
+    nome = usuario.nome if usuario else "usuario"
 
-    return HTMLResponse(f"""
-    <!DOCTYPE html>
-    <html lang="pt-BR">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Pagamento Aprovado — Emotion Intelligence</title>
-        <style>
-            * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-            body {{
-                font-family: 'Segoe UI', sans-serif;
-                background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-                min-height: 100vh;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-            }}
-            .card {{
-                background: rgba(255,255,255,0.05);
-                backdrop-filter: blur(20px);
-                border: 1px solid rgba(255,255,255,0.1);
-                border-radius: 24px;
-                padding: 60px 50px;
-                text-align: center;
-                max-width: 500px;
-                width: 90%;
-                animation: fadeIn 0.6s ease;
-            }}
-            @keyframes fadeIn {{
-                from {{ opacity: 0; transform: translateY(30px); }}
-                to   {{ opacity: 1; transform: translateY(0); }}
-            }}
-            .icon {{ font-size: 80px; margin-bottom: 20px; }}
-            h1 {{
-                font-size: 32px;
-                margin-bottom: 15px;
-                background: linear-gradient(90deg, #00d2ff, #3a7bd5);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-            }}
-            p {{
-                color: rgba(255,255,255,0.7);
-                font-size: 16px;
-                line-height: 1.6;
-                margin-bottom: 15px;
-            }}
-            .bonus {{
-                background: linear-gradient(135deg, rgba(0,210,255,0.1), rgba(58,123,213,0.1));
-                border: 1px solid rgba(0,210,255,0.3);
-                border-radius: 12px;
-                padding: 20px;
-                margin: 25px 0;
-            }}
-            .bonus h3 {{
-                color: #00d2ff;
-                font-size: 20px;
-                margin-bottom: 10px;
-            }}
-            .btn {{
-                display: inline-block;
-                background: linear-gradient(90deg, #00d2ff, #3a7bd5);
-                color: white;
-                padding: 15px 40px;
-                border-radius: 50px;
-                text-decoration: none;
-                font-size: 16px;
-                font-weight: bold;
-                margin-top: 10px;
-                transition: transform 0.2s;
-            }}
-            .btn:hover {{ transform: scale(1.05); }}
-        </style>
-    </head>
-    <body>
-        <div class="card">
-            <div class="icon">✅</div>
-            <h1>Pagamento Aprovado!</h1>
-            <p>Parabéns, <strong>{nome}</strong>! 🎉<br>
-            Seu plano Premium foi ativado com sucesso!</p>
-            <div class="bonus">
-                <h3>🎁 Seus benefícios Premium:</h3>
-                <p style="text-align:left; color: rgba(255,255,255,0.8);">
-                    ✅ Análises emocionais ilimitadas<br>
-                    ✅ Chat ilimitado com Sofia<br>
-                    ✅ Diário emocional ilimitado<br>
-                    ✅ Sessões terapêuticas completas<br>
-                    ✅ Relatórios semanais por email<br>
-                    ✅ +{PONTOS_POR_ACAO['premium']} pontos de bônus adicionados! 🏆
-                </p>
-            </div>
-            <a href="/" class="btn">🚀 Acessar Dashboard</a>
-        </div>
-    </body>
-    </html>
-    """)
+    return templates.TemplateResponse(request, "sucesso.html", {
+        "usuario": usuario,
+        "nome": nome,
+    })
 
 
 @app.get("/falha", response_class=HTMLResponse)
