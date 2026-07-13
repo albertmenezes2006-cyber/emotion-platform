@@ -318,6 +318,17 @@ class Conquista(Base):
     usuario = relationship("Usuario", back_populates="conquistas")
 
 
+class Cupom(Base):
+    __tablename__ = "cupons"
+    id           = Column(Integer, primary_key=True, index=True)
+    codigo       = Column(String, unique=True, index=True)
+    desconto_pct = Column(Integer, default=10)
+    ativo        = Column(Boolean, default=True)
+    usos_maximos = Column(Integer, default=100)
+    usos_atuais  = Column(Integer, default=0)
+    expira_em    = Column(DateTime, nullable=True)
+    criado_em    = Column(DateTime, default=datetime.now)
+
 class Notificacao(Base):
     __tablename__ = "notificacoes"
 
@@ -5835,6 +5846,291 @@ def exportar_csv(request: Request, db: Session = Depends(get_db)):
     )
 
 
+
+# ================================================================
+# ROTA — CERTIFICADO DE IE EM PDF (Premium)
+# ================================================================
+
+
+# ================================================================
+# ROTAS — CUPONS DE DESCONTO
+# ================================================================
+
+@app.post("/cupom/validar")
+def validar_cupom(
+    request: Request,
+    codigo: str = Form(...),
+    db: Session = Depends(get_db)
+):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        raise HTTPException(status_code=401, detail="Nao autorizado")
+
+    cupom = db.query(Cupom).filter(
+        Cupom.codigo == codigo.upper().strip(),
+        Cupom.ativo == True
+    ).first()
+
+    if not cupom:
+        raise HTTPException(status_code=404, detail="Cupom invalido ou expirado")
+
+    if cupom.expira_em and cupom.expira_em < datetime.now():
+        raise HTTPException(status_code=400, detail="Cupom expirado")
+
+    if cupom.usos_atuais >= cupom.usos_maximos:
+        raise HTTPException(status_code=400, detail="Cupom esgotado")
+
+    preco_original = 49
+    desconto = int(preco_original * cupom.desconto_pct / 100)
+    preco_final = preco_original - desconto
+
+    return {
+        "valido": True,
+        "codigo": cupom.codigo,
+        "desconto_pct": cupom.desconto_pct,
+        "desconto_valor": desconto,
+        "preco_original": preco_original,
+        "preco_final": preco_final,
+        "mensagem": f"Cupom aplicado! {cupom.desconto_pct}% de desconto — R${preco_final}/mes"
+    }
+
+@app.post("/admin/cupom/criar")
+def criar_cupom(
+    request: Request,
+    codigo: str = Form(...),
+    desconto_pct: int = Form(...),
+    usos_maximos: int = Form(100),
+    dias_validade: int = Form(30),
+    db: Session = Depends(get_db)
+):
+    usuario = get_usuario_logado(request, db)
+    if not usuario or usuario.email != ADMIN_EMAIL:
+        raise HTTPException(status_code=403, detail="Apenas admin")
+
+    existente = db.query(Cupom).filter(Cupom.codigo == codigo.upper()).first()
+    if existente:
+        raise HTTPException(status_code=400, detail="Cupom ja existe")
+
+    cupom = Cupom(
+        codigo=codigo.upper().strip(),
+        desconto_pct=desconto_pct,
+        usos_maximos=usos_maximos,
+        expira_em=datetime.now() + timedelta(days=dias_validade)
+    )
+    db.add(cupom)
+    db.commit()
+
+    return {
+        "mensagem": f"Cupom {cupom.codigo} criado com sucesso!",
+        "codigo": cupom.codigo,
+        "desconto_pct": cupom.desconto_pct,
+        "expira_em": cupom.expira_em.strftime("%d/%m/%Y")
+    }
+
+@app.get("/admin/cupons")
+def listar_cupons(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario or usuario.email != ADMIN_EMAIL:
+        raise HTTPException(status_code=403, detail="Apenas admin")
+
+    cupons = db.query(Cupom).order_by(Cupom.criado_em.desc()).all()
+    return [{
+        "codigo": c.codigo,
+        "desconto_pct": c.desconto_pct,
+        "usos": f"{c.usos_atuais}/{c.usos_maximos}",
+        "ativo": c.ativo,
+        "expira_em": c.expira_em.strftime("%d/%m/%Y") if c.expira_em else "Sem limite"
+    } for c in cupons]
+
+@app.post("/admin/cupom/{codigo}/toggle")
+def toggle_cupom(codigo: str, request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario or usuario.email != ADMIN_EMAIL:
+        raise HTTPException(status_code=403, detail="Apenas admin")
+
+    cupom = db.query(Cupom).filter(Cupom.codigo == codigo.upper()).first()
+    if not cupom:
+        raise HTTPException(status_code=404, detail="Cupom nao encontrado")
+
+    cupom.ativo = not cupom.ativo
+    db.commit()
+    return {"codigo": cupom.codigo, "ativo": cupom.ativo}
+@app.get("/certificado")
+def gerar_certificado(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        raise HTTPException(status_code=401, detail="Nao autorizado")
+    if usuario.plano not in ["premium", "enterprise"]:
+        raise HTTPException(status_code=403, detail="Certificado disponivel apenas para Premium e Enterprise")
+
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib import colors
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.units import cm
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, HRFlowable
+    from reportlab.lib.enums import TA_CENTER
+    import io
+
+    total_analises = db.query(Analise).filter(Analise.usuario_id == usuario.id).count()
+    total_dias = (datetime.now() - usuario.criado_em).days if usuario.criado_em else 0
+    score_ie = min(100, int((total_analises * 2 + usuario.pontos * 0.1 + total_dias * 0.5)))
+    emocoes = db.query(Analise.emocao).filter(Analise.usuario_id == usuario.id).all()
+    emocao_principal = "Equilibrio Emocional"
+    if emocoes:
+        from collections import Counter
+        contagem = Counter([e[0] for e in emocoes if e[0]])
+        if contagem:
+            emocao_principal = contagem.most_common(1)[0][0].capitalize()
+
+    buf = io.BytesIO()
+    doc = SimpleDocTemplate(
+        buf, pagesize=A4,
+        rightMargin=2*cm, leftMargin=2*cm,
+        topMargin=2*cm, bottomMargin=2*cm
+    )
+
+    estilos = getSampleStyleSheet()
+    elementos = []
+
+    # Estilo titulo
+    titulo_style = ParagraphStyle(
+        "titulo",
+        parent=estilos["Normal"],
+        fontSize=32,
+        fontName="Helvetica-Bold",
+        textColor=colors.HexColor("#1a1a2e"),
+        alignment=TA_CENTER,
+        spaceAfter=10
+    )
+    subtitulo_style = ParagraphStyle(
+        "subtitulo",
+        parent=estilos["Normal"],
+        fontSize=14,
+        fontName="Helvetica",
+        textColor=colors.HexColor("#555555"),
+        alignment=TA_CENTER,
+        spaceAfter=6
+    )
+    destaque_style = ParagraphStyle(
+        "destaque",
+        parent=estilos["Normal"],
+        fontSize=22,
+        fontName="Helvetica-Bold",
+        textColor=colors.HexColor("#00d2ff"),
+        alignment=TA_CENTER,
+        spaceAfter=10
+    )
+    normal_center = ParagraphStyle(
+        "normal_center",
+        parent=estilos["Normal"],
+        fontSize=11,
+        fontName="Helvetica",
+        textColor=colors.HexColor("#333333"),
+        alignment=TA_CENTER,
+        spaceAfter=6
+    )
+    score_style = ParagraphStyle(
+        "score",
+        parent=estilos["Normal"],
+        fontSize=64,
+        fontName="Helvetica-Bold",
+        textColor=colors.HexColor("#3a7bd5"),
+        alignment=TA_CENTER,
+        spaceAfter=4
+    )
+    rodape_style = ParagraphStyle(
+        "rodape",
+        parent=estilos["Normal"],
+        fontSize=9,
+        fontName="Helvetica",
+        textColor=colors.HexColor("#999999"),
+        alignment=TA_CENTER,
+        spaceAfter=4
+    )
+
+    # Conteudo
+    elementos.append(Spacer(1, 0.5*cm))
+    elementos.append(Paragraph("🧠 Emotion Intelligence", titulo_style))
+    elementos.append(Paragraph("Plataforma de Inteligencia Emocional com IA", subtitulo_style))
+    elementos.append(Spacer(1, 0.5*cm))
+    elementos.append(HRFlowable(width="100%", thickness=2, color=colors.HexColor("#00d2ff")))
+    elementos.append(Spacer(1, 0.8*cm))
+
+    elementos.append(Paragraph("CERTIFICADO DE", normal_center))
+    elementos.append(Paragraph("Inteligencia Emocional", destaque_style))
+    elementos.append(Spacer(1, 0.3*cm))
+
+    elementos.append(Paragraph("Este certificado e concedido a", normal_center))
+    elementos.append(Spacer(1, 0.2*cm))
+    elementos.append(Paragraph(usuario.nome, ParagraphStyle(
+        "nome_usuario",
+        parent=estilos["Normal"],
+        fontSize=28,
+        fontName="Helvetica-Bold",
+        textColor=colors.HexColor("#1a1a2e"),
+        alignment=TA_CENTER,
+        spaceAfter=10
+    )))
+    elementos.append(Spacer(1, 0.3*cm))
+
+    elementos.append(Paragraph(
+        f"Por completar sua jornada de autoconhecimento emocional com <br/>"
+        f"<b>{total_analises} analises emocionais</b> ao longo de <b>{total_dias} dias</b>.",
+        normal_center
+    ))
+    elementos.append(Spacer(1, 0.8*cm))
+
+    elementos.append(HRFlowable(width="60%", thickness=1, color=colors.HexColor("#dddddd")))
+    elementos.append(Spacer(1, 0.5*cm))
+    elementos.append(Paragraph("Score de Inteligencia Emocional", normal_center))
+    elementos.append(Paragraph(str(min(score_ie, 100)), score_style))
+    elementos.append(Paragraph("de 100 pontos", normal_center))
+    elementos.append(Spacer(1, 0.3*cm))
+    elementos.append(Paragraph(f"Emocao predominante: <b>{emocao_principal}</b>", normal_center))
+    elementos.append(Spacer(1, 0.5*cm))
+
+    elementos.append(HRFlowable(width="60%", thickness=1, color=colors.HexColor("#dddddd")))
+    elementos.append(Spacer(1, 0.5*cm))
+
+    # Competencias
+    elementos.append(Paragraph("Competencias Desenvolvidas", ParagraphStyle(
+        "comp_titulo",
+        parent=estilos["Normal"],
+        fontSize=13,
+        fontName="Helvetica-Bold",
+        textColor=colors.HexColor("#333333"),
+        alignment=TA_CENTER,
+        spaceAfter=10
+    )))
+
+    competencias = [
+        "✓ Autoconsciencia Emocional",
+        "✓ Autorregulacao e Gestao Emocional",
+        "✓ Empatia e Habilidades Sociais",
+        "✓ Motivacao Intrinseca",
+        "✓ Resiliencia Emocional",
+    ]
+    for comp in competencias:
+        elementos.append(Paragraph(comp, normal_center))
+
+    elementos.append(Spacer(1, 0.8*cm))
+    elementos.append(HRFlowable(width="100%", thickness=2, color=colors.HexColor("#00d2ff")))
+    elementos.append(Spacer(1, 0.5*cm))
+
+    data_emissao = datetime.now().strftime("%d de %B de %Y")
+    elementos.append(Paragraph(f"Emitido em {data_emissao}", rodape_style))
+    elementos.append(Paragraph(f"Codigo de verificacao: EI-{usuario.id:06d}-{datetime.now().strftime('%Y%m')}", rodape_style))
+    elementos.append(Paragraph("emotion-platform-albert.onrender.com", rodape_style))
+
+    doc.build(elementos)
+    buf.seek(0)
+
+    nome_arquivo = f"certificado_ie_{usuario.nome.replace(' ', '_').lower()}.pdf"
+    return Response(
+        content=buf.read(),
+        media_type="application/pdf",
+        headers={"Content-Disposition": f"attachment; filename={nome_arquivo}"}
+    )
 @app.get("/exportar/pdf")
 def exportar_pdf(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
