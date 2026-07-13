@@ -1008,6 +1008,69 @@ def verificar_conquistas(usuario, db: Session):
             emoji="👑",
             usuario_id=usuario.id
         ))
+    if total_analises >= 7 and "Semana Completa" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Semana Completa",
+            descricao="7 dias consecutivos de analises emocionais",
+            emoji="📅",
+            usuario_id=usuario.id
+        ))
+    if total_analises >= 200 and "Centenario Duplo" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Centenario Duplo",
+            descricao="Completou 200 analises emocionais",
+            emoji="🎖️",
+            usuario_id=usuario.id
+        ))
+    if total_diarios >= 50 and "Cronicador Emocional" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Cronicador Emocional",
+            descricao="Escreveu 50 entradas no diario",
+            emoji="📚",
+            usuario_id=usuario.id
+        ))
+    if usuario.pontos >= 2000 and "Investidor Emocional Pro" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Investidor Emocional Pro",
+            descricao="Acumulou 2000 pontos na plataforma",
+            emoji="💎",
+            usuario_id=usuario.id
+        ))
+    if total_mensagens >= 100 and "Guru da Sofia" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Guru da Sofia",
+            descricao="Trocou 100 mensagens com a Sofia",
+            emoji="🧙",
+            usuario_id=usuario.id
+        ))
+    if usuario.plano in ["premium", "enterprise"] and "Assinante Premium" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Assinante Premium",
+            descricao="Tornou-se um assinante Premium",
+            emoji="⭐",
+            usuario_id=usuario.id
+        ))
+    if total_analises >= 30 and "Veterano Emocional" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Veterano Emocional",
+            descricao="Completou 30 analises emocionais",
+            emoji="🎗️",
+            usuario_id=usuario.id
+        ))
+    if total_diarios >= 14 and "Duas Semanas" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Duas Semanas",
+            descricao="14 entradas no diario emocional",
+            emoji="🗓️",
+            usuario_id=usuario.id
+        ))
+    if usuario.pontos >= 100 and "Primeiros Passos" not in conquistas_existentes:
+        novas.append(Conquista(
+            nome="Primeiros Passos",
+            descricao="Acumulou seus primeiros 100 pontos",
+            emoji="👣",
+            usuario_id=usuario.id
+        ))
     if usuario.plano in ["premium","enterprise"] and "Investidor Emocional" not in conquistas_existentes:
         novas.append(Conquista(
             nome="Investidor Emocional",
@@ -3499,6 +3562,16 @@ async def cadastro(
 
     ref_cookie = request.cookies.get("ref")
     ref_code   = gerar_ref_code(nome)
+    # Incrementa contador de indicados do afiliado
+    if ref_cookie:
+        afiliado = db.query(Usuario).filter(Usuario.ref_code == ref_cookie).first()
+        if afiliado:
+            enviar_telegram(
+                f"🔗 <b>Novo indicado pelo afiliado</b>\n"
+                f"👤 Afiliado: {afiliado.nome}\n"
+                f"🆕 Indicado: {nome}\n"
+                f"🕐 {datetime.now().strftime('%d/%m/%Y %H:%M')}"
+            )
     api_token  = gerar_api_token(email)
 
     novo = Usuario(
