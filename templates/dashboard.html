@@ -713,6 +713,7 @@ body{
     <a href="/terapia"  class="nav-btn" style="background:rgba(46,204,113,0.3)">🌱 Terapia</a>
     <a href="/blog"     class="nav-btn" style="background:rgba(155,89,182,0.3)">📚 Blog</a>
     <a href="/afiliado" class="nav-btn btn-afiliado">💰 Afiliados</a>
+    <a href="/premium"  class="nav-btn" style="background:linear-gradient(90deg,#f39c12,#e67e22);font-weight:bold">💎 Premium</a>
     <a href="/planos"   class="nav-btn btn-planos">⭐ Planos</a>
     <a href="/faq"      class="nav-btn btn-faq">❓ FAQ</a>
     {% if usuario.email == "albertmenezes2006@gmail.com" %}
@@ -854,6 +855,28 @@ body{
 <div class="tab-content active" id="tab-analise">
   <div class="section">
     <h2>🔍 Analisar Emoção</h2>
+    <!-- Analise por foto -->
+    <div style="background:rgba(0,210,255,0.05);border:1px solid rgba(0,210,255,0.15);border-radius:16px;padding:16px;margin-bottom:12px">
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">📸 Análise por foto — tire uma selfie e detectamos sua emoção:</p>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <input type="file" id="inputFoto" accept="image/*" capture="user" style="display:none" onchange="analisarFoto(this)">
+        <button onclick="document.getElementById('inputFoto').click()" style="background:linear-gradient(90deg,#00d2ff,#3a7bd5);border:none;border-radius:12px;padding:10px 20px;color:#fff;font-size:13px;font-weight:bold;cursor:pointer;display:flex;align-items:center;gap:8px">
+          📸 Tirar Selfie / Enviar Foto
+        </button>
+        <div id="fotoStatus" style="font-size:12px;color:var(--text-muted)"></div>
+      </div>
+      <div id="fotoResultado" style="display:none;margin-top:12px;background:rgba(255,255,255,0.05);border-radius:12px;padding:14px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span id="fotoEmoji" style="font-size:48px"></span>
+          <div>
+            <div id="fotoEmocao" style="font-size:16px;font-weight:bold;color:var(--primary)"></div>
+            <div id="fotoConfianca" style="font-size:12px;color:var(--text-muted)"></div>
+            <div id="fotoDescricao" style="font-size:13px;color:rgba(255,255,255,0.7);margin-top:4px"></div>
+            <div id="fotoDica" style="font-size:12px;color:var(--success);margin-top:6px;font-style:italic"></div>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- Analise rapida por emoji -->
     <div style="margin-bottom:16px">
       <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">⚡ Registro rápido por emoji — clique em como você está:</p>
@@ -1611,6 +1634,51 @@ function gerarInsights(data) {
 // ============================================================
 // ANALISE POR EMOJI
 // ============================================================
+async function analisarFoto(input) {
+  if (!input.files || !input.files[0]) return;
+  const file = input.files[0];
+  const status = document.getElementById('fotoStatus');
+  const resultado = document.getElementById('fotoResultado');
+
+  status.textContent = '⏳ Analisando sua foto com IA...';
+  resultado.style.display = 'none';
+
+  const form = new FormData();
+  form.append('foto', file);
+
+  try {
+    const r = await fetch('/analisar/foto', { method: 'POST', body: form });
+    const data = await r.json();
+
+    if (data.emocao) {
+      document.getElementById('fotoEmoji').textContent = data.emoji || '🤔';
+      document.getElementById('fotoEmocao').textContent = data.emocao.charAt(0).toUpperCase() + data.emocao.slice(1);
+      document.getElementById('fotoConfianca').textContent = 'Confiança: ' + data.confianca + '%';
+      document.getElementById('fotoDescricao').textContent = data.descricao || '';
+      document.getElementById('fotoDica').textContent = '💡 ' + (data.dica || '');
+      resultado.style.display = 'block';
+      status.textContent = '✅ Análise concluída! +' + data.pontos + ' pontos';
+
+      // Atualiza pontos
+      const pp = document.getElementById('pontosPlacar');
+      const tp = document.getElementById('totalPontos');
+      if (pp) pp.textContent = data.total_pontos;
+      if (tp) tp.textContent = data.total_pontos;
+
+      showToast('📸 Emoção detectada: ' + data.emocao + ' ' + (data.emoji || ''));
+    } else {
+      status.textContent = '⚠️ ' + (data.detail || 'Erro ao analisar foto.');
+      showToast('⚠️ Erro ao analisar foto', 'error');
+    }
+  } catch(e) {
+    status.textContent = '⚠️ Erro de conexão.';
+    showToast('⚠️ Erro de conexão', 'error');
+  }
+
+  // Limpa input para permitir nova foto
+  input.value = '';
+}
+
 function analisarEmoji(emoji) {
   // Visual: destaca emoji clicado
   document.querySelectorAll('.emoji-btn').forEach(function(b){

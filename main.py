@@ -37,7 +37,7 @@
 
 from fastapi import (
     FastAPI, HTTPException, Request, Depends,
-    Form, BackgroundTasks, Header
+    Form, BackgroundTasks, Header, UploadFile, File
 )
 from fastapi.responses import (
     HTMLResponse, RedirectResponse, Response, JSONResponse
@@ -3003,6 +3003,112 @@ async def analisar_emoji(
     }
 
 
+
+# ================================================================
+# ROTA — ANALISE DE EMOCAO POR FOTO (Gemini Vision)
+# ================================================================
+
+@app.post("/analisar/foto")
+async def analisar_foto(
+    request: Request,
+    foto: UploadFile = File(...),
+    db: Session = Depends(get_db)
+):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        raise HTTPException(status_code=401, detail="Nao autorizado")
+
+    # Verifica limite
+    hoje = date.today()
+    analises_hoje = db.query(Analise).filter(
+        Analise.usuario_id == usuario.id,
+        Analise.criado_em >= datetime.combine(hoje, datetime.min.time())
+    ).count()
+    limite = LIMITES[usuario.plano]["analises"]
+    if analises_hoje >= limite:
+        raise HTTPException(status_code=429, detail=f"Limite de {limite} analises/dia atingido")
+
+    # Valida tipo de arquivo
+    tipos_validos = ["image/jpeg", "image/png", "image/webp", "image/gif"]
+    if foto.content_type not in tipos_validos:
+        raise HTTPException(status_code=400, detail="Formato invalido. Use JPEG, PNG ou WEBP")
+
+    # Le bytes da imagem
+    foto_bytes = await foto.read()
+    if len(foto_bytes) > 5 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="Imagem muito grande. Maximo 5MB")
+
+    try:
+        import base64
+        foto_b64 = base64.standard_b64encode(foto_bytes).decode("utf-8")
+
+        prompt_foto = """Analise a expressao facial e linguagem corporal nesta imagem.
+Identifique a emocao principal dentre: alegria, tristeza, raiva, medo, surpresa, nojo, ansiedade, calma, confianca, curiosidade, amor, gratidao, frustracao, vergonha, neutro.
+Responda EXATAMENTE neste formato JSON:
+{
+  "emocao": "nome_da_emocao",
+  "confianca": 85,
+  "descricao": "Descricao curta do que voce observou na imagem",
+  "dica": "Uma dica pratica relacionada a esta emocao"
+}"""
+
+        resposta = cliente_ia.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=[
+                types.Part.from_bytes(data=foto_bytes, mime_type=foto.content_type),
+                types.Part.from_text(text=prompt_foto)
+            ],
+            config=types.GenerateContentConfig(
+                temperature=0.3,
+                max_output_tokens=512
+            )
+        )
+
+        texto = resposta.text.strip()
+        # Limpa markdown se houver
+        if "```" in texto:
+            texto = texto.split("```")[1]
+            if texto.startswith("json"):
+                texto = texto[4:]
+        texto = texto.strip()
+
+        resultado = json.loads(texto)
+        emocao = resultado.get("emocao", "neutro").lower()
+        confianca = resultado.get("confianca", 70)
+        descricao = resultado.get("descricao", "")
+        dica = resultado.get("dica", "")
+
+    except Exception as e:
+        print(f"[FOTO] Erro Gemini: {e}")
+        emocao = "neutro"
+        confianca = 50
+        descricao = "Nao foi possivel analisar a imagem com precisao"
+        dica = "Tente uma foto com rosto bem iluminado e visivel"
+
+    # Salva no banco
+    emoji = get_emoji(emocao)
+    pontos = PONTOS_POR_ACAO.get("analise_free", 2)
+    nova_analise = Analise(
+        usuario_id=usuario.id,
+        texto=f"[FOTO] {foto.filename or 'imagem'}",
+        emocao=emocao,
+        emoji=emoji,
+        pontos_ganhos=pontos
+    )
+    db.add(nova_analise)
+    adicionar_pontos(usuario, pontos, db)
+    db.commit()
+
+    return {
+        "emocao":     emocao,
+        "emoji":      emoji,
+        "confianca":  confianca,
+        "descricao":  descricao,
+        "dica":       dica,
+        "pontos":     pontos,
+        "badge":      usuario.badge,
+        "total_pontos": usuario.pontos
+    }
 @app.get("/robots.txt", include_in_schema=False)
 async def robots():
     from fastapi.responses import FileResponse
@@ -3010,8 +3116,21 @@ async def robots():
 
 @app.get("/sitemap.xml", include_in_schema=False)
 async def sitemap():
-    from fastapi.responses import FileResponse
-    return FileResponse("static/sitemap.xml", media_type="application/xml")
+    urls_fixas = [
+        "/", "/login", "/cadastro", "/blog", "/planos", "/premium",
+        "/sobre", "/contato", "/faq", "/privacidade", "/termos",
+        "/terapia", "/ranking", "/afiliado",
+    ]
+    slugs = [a["slug"] for a in ARTIGOS_BLOG]
+    hoje = datetime.now().strftime("%Y-%m-%d")
+    linhas = ['<?xml version="1.0" encoding="UTF-8"?>']
+    linhas.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
+    for u in urls_fixas:
+        linhas.append(f'  <url><loc>{BASE_URL}{u}</loc><lastmod>{hoje}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>')
+    for s in slugs:
+        linhas.append(f'  <url><loc>{BASE_URL}/blog/{s}</loc><lastmod>{hoje}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>')
+    linhas.append('</urlset>')
+    return Response(content=chr(10).join(linhas), media_type="application/xml")
 
 @app.get("/favicon.ico", include_in_schema=False)
 async def favicon():
