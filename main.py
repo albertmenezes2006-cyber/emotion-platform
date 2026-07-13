@@ -1497,76 +1497,114 @@ async def enviar_relatorio_semanal(usuario, db: Session):
             sum(a.intensidade for a in analises) / len(analises), 1
         )
 
+        # Score IE
+        total_all = db.query(Analise).filter(Analise.usuario_id == usuario.id).count()
+        total_dias = (datetime.now() - usuario.criado_em).days if usuario.criado_em else 1
+        score_ie = min(100, int(total_all * 1.5 + usuario.pontos * 0.05 + total_dias * 0.3))
+
+        # Tendencia emocional
+        emocoes_positivas = ["alegria","amor","gratidao","euforia","esperanca","calma","confianca"]
+        emocoes_negativas = ["tristeza","raiva","medo","ansiedade","frustracao","vergonha","nojo"]
+        pos_count = sum(1 for e in emocoes if e in emocoes_positivas)
+        neg_count = sum(1 for e in emocoes if e in emocoes_negativas)
+        total_e = len(emocoes) or 1
+        pct_pos = int(pos_count / total_e * 100)
+        pct_neg = int(neg_count / total_e * 100)
+        tendencia = "positiva" if pos_count > neg_count else "negativa" if neg_count > pos_count else "equilibrada"
+        cor_tend = "#2ecc71" if tendencia == "positiva" else "#e74c3c" if tendencia == "negativa" else "#f39c12"
+
+        # Dica personalizada baseada na emocao mais frequente
+        dicas_map = {
+            "tristeza": "Que tal escrever 3 coisas pelas quais voce e grato hoje? A gratidao e um dos antidotos mais poderosos para a tristeza.",
+            "ansiedade": "Experimente a tecnica 4-7-8: inspire 4s, segure 7s, expire 8s. Faca 3 vezes quando sentir ansiedade.",
+            "raiva": "Quando sentir raiva, espere 90 segundos antes de reagir. A onda quimica da raiva dura so 90 segundos.",
+            "medo": "Nomeie seu medo especificamente. Pesquisas mostram que dar nome a uma emocao reduz sua intensidade em ate 50%.",
+            "alegria": "Registre esse momento no diario! Revisitar momentos de alegria fortalece a resiliencia emocional.",
+            "neutro": "Momentos neutros sao otimos para praticas de mindfulness. Que tal 5 minutos de meditacao hoje?",
+        }
+        dica_semana = dicas_map.get(mais_freq, dicas_map["neutro"])
+
         conteudo = f"""
-        <h2 style="color: #333; margin-top: 0;">
-            Olá, {usuario.nome}! 📊
-        </h2>
-        <p style="color: #555; line-height: 1.6;">
-            Aqui está seu relatório emocional da semana.
-            Você está fazendo um ótimo trabalho ao se conhecer melhor! 🌟
-        </p>
-        <div style="
-            display: grid;
-            gap: 15px;
-            margin: 20px 0;
-        ">
-            <div style="
-                background: #f0f8ff;
-                border-radius: 12px;
-                padding: 20px;
-                border-left: 4px solid #00d2ff;
-            ">
-                <h3 style="color: #00d2ff; margin: 0 0 10px;">
-                    📈 Resumo da Semana
-                </h3>
-                <ul style="color: #333; line-height: 2; margin: 0; padding-left: 20px;">
-                    <li>Total de análises: <strong>{len(analises)}</strong></li>
-                    <li>Entradas no diário: <strong>{diarios_semana}</strong></li>
-                    <li>Conversas com Sofia: <strong>{msgs_semana}</strong></li>
-                    <li>Intensidade média: <strong>{intensidade_media}/3</strong></li>
-                </ul>
-            </div>
-            <div style="
-                background: #fff8f0;
-                border-radius: 12px;
-                padding: 20px;
-                border-left: 4px solid #f39c12;
-            ">
-                <h3 style="color: #f39c12; margin: 0 0 10px;">
-                    🎭 Emoções Detectadas
-                </h3>
-                <ul style="color: #333; line-height: 1.8; margin: 0; padding-left: 20px;">
-                    {lista_html}
-                </ul>
-                <p style="color: #f39c12; margin: 10px 0 0;">
-                    <strong>Emoção mais frequente:</strong>
-                    {get_emoji(mais_freq)} {mais_freq.capitalize()}
-                </p>
-            </div>
-            <div style="
-                background: #f0fff4;
-                border-radius: 12px;
-                padding: 20px;
-                border-left: 4px solid #2ecc71;
-            ">
-                <h3 style="color: #2ecc71; margin: 0 0 10px;">
-                    🏆 Sua Conquista
-                </h3>
-                <p style="color: #333; margin: 0;">
-                    Pontos totais: <strong>{usuario.pontos}</strong><br>
-                    Badge atual: <strong>{usuario.badge}</strong>
-                </p>
+        <div style="background:linear-gradient(135deg,#667eea,#764ba2);padding:30px;border-radius:16px;text-align:center;margin-bottom:24px">
+            <h1 style="color:#fff;margin:0 0 8px;font-size:28px">📊 Relatório Semanal</h1>
+            <p style="color:rgba(255,255,255,0.85);margin:0;font-size:16px">Olá, {usuario.nome}! Aqui está sua semana emocional.</p>
+        </div>
+
+        <!-- SCORE IE -->
+        <div style="background:#f8f9ff;border-radius:16px;padding:24px;margin-bottom:20px;text-align:center;border:2px solid #e8ecff">
+            <p style="color:#666;margin:0 0 8px;font-size:14px">🧠 Seu Score de Inteligência Emocional</p>
+            <div style="font-size:64px;font-weight:900;color:#667eea;line-height:1">{score_ie}</div>
+            <p style="color:#666;margin:4px 0 16px;font-size:13px">de 100 pontos</p>
+            <div style="background:#e8ecff;border-radius:8px;height:10px;overflow:hidden">
+                <div style="width:{score_ie}%;height:100%;background:linear-gradient(90deg,#667eea,#764ba2);border-radius:8px"></div>
             </div>
         </div>
+
+        <!-- STATS GRID -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+            <div style="background:#f0fff4;border-radius:12px;padding:16px;text-align:center;border-left:4px solid #2ecc71">
+                <div style="font-size:32px;font-weight:bold;color:#2ecc71">{len(analises)}</div>
+                <div style="font-size:12px;color:#666;margin-top:4px">Análises na semana</div>
+            </div>
+            <div style="background:#f0f8ff;border-radius:12px;padding:16px;text-align:center;border-left:4px solid #3498db">
+                <div style="font-size:32px;font-weight:bold;color:#3498db">{msgs_semana}</div>
+                <div style="font-size:12px;color:#666;margin-top:4px">Conversas com Sofia</div>
+            </div>
+            <div style="background:#fff8f0;border-radius:12px;padding:16px;text-align:center;border-left:4px solid #f39c12">
+                <div style="font-size:32px;font-weight:bold;color:#f39c12">{diarios_semana}</div>
+                <div style="font-size:12px;color:#666;margin-top:4px">Entradas no diário</div>
+            </div>
+            <div style="background:#fdf0ff;border-radius:12px;padding:16px;text-align:center;border-left:4px solid #9b59b6">
+                <div style="font-size:32px;font-weight:bold;color:#9b59b6">{usuario.pontos}</div>
+                <div style="font-size:12px;color:#666;margin-top:4px">Pontos totais</div>
+            </div>
+        </div>
+
+        <!-- TENDENCIA -->
+        <div style="background:#fff;border:1px solid #eee;border-radius:12px;padding:20px;margin-bottom:20px">
+            <h3 style="color:#333;margin:0 0 12px">📈 Tendência Emocional da Semana</h3>
+            <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">
+                <div style="flex:1">
+                    <div style="font-size:12px;color:#666;margin-bottom:4px">😊 Positivas ({pct_pos}%)</div>
+                    <div style="background:#eee;border-radius:4px;height:8px"><div style="width:{pct_pos}%;height:100%;background:#2ecc71;border-radius:4px"></div></div>
+                </div>
+                <div style="flex:1">
+                    <div style="font-size:12px;color:#666;margin-bottom:4px">😔 Negativas ({pct_neg}%)</div>
+                    <div style="background:#eee;border-radius:4px;height:8px"><div style="width:{pct_neg}%;height:100%;background:#e74c3c;border-radius:4px"></div></div>
+                </div>
+            </div>
+            <p style="margin:0;font-size:14px;color:{cor_tend};font-weight:bold">
+                Tendência {tendencia} — emoção dominante: {get_emoji(mais_freq)} {mais_freq.capitalize()}
+            </p>
+        </div>
+
+        <!-- EMOCOES -->
+        <div style="background:#fff8f0;border-radius:12px;padding:20px;margin-bottom:20px;border-left:4px solid #f39c12">
+            <h3 style="color:#f39c12;margin:0 0 12px">🎭 Emoções Detectadas</h3>
+            <ul style="color:#333;line-height:2;margin:0;padding-left:20px">
+                {lista_html}
+            </ul>
+        </div>
+
+        <!-- DICA PERSONALIZADA -->
+        <div style="background:linear-gradient(135deg,#e8f5e9,#f1f8e9);border-radius:12px;padding:20px;margin-bottom:20px;border-left:4px solid #4caf50">
+            <h3 style="color:#2e7d32;margin:0 0 10px">💡 Dica Personalizada para Você</h3>
+            <p style="color:#333;margin:0;line-height:1.7">{dica_semana}</p>
+        </div>
+
+        <!-- CONQUISTA -->
+        <div style="background:#f0fff4;border-radius:12px;padding:20px;margin-bottom:24px;text-align:center;border:1px solid #86efac">
+            <div style="font-size:36px;margin-bottom:8px">{usuario.badge}</div>
+            <p style="color:#166534;margin:0;font-weight:600">Badge atual: {usuario.badge}</p>
+            <p style="color:#166534;margin:4px 0 0;font-size:13px">{usuario.pontos} pontos acumulados</p>
+        </div>
+
         {botao_email("📊 Ver Dashboard Completo", BASE_URL)}
-        <p style="
-            color: #888;
-            font-size: 13px;
-            text-align: center;
-            margin-top: 20px;
-        ">
-            Continue assim! Cada análise é um passo em direção
-            ao autoconhecimento. 💙
+        {botao_email("🧠 Falar com Sofia", BASE_URL + "/chat", "#9b59b6")}
+
+        <p style="color:#888;font-size:13px;text-align:center;margin-top:20px;line-height:1.6">
+            Continue sua jornada! Cada análise é um passo em direção ao autoconhecimento. 💙<br>
+            <a href="{BASE_URL}/planos" style="color:#667eea">Upgrade para Premium</a> para relatórios ainda mais detalhados.
         </p>
         """
         enviar_email(
