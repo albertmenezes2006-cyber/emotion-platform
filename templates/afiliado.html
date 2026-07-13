@@ -237,6 +237,52 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29
   {% endif %}
 </div>
 
+<!-- CALCULADORA -->
+<div class="card" style="background:linear-gradient(135deg,rgba(46,204,113,0.06),rgba(39,174,96,0.03))">
+  <h2>🧮 Calculadora de Ganhos</h2>
+  <p style="color:var(--text-muted);font-size:13px;margin-bottom:20px">Simule quanto você pode ganhar por mês</p>
+  <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:20px">
+    <div style="flex:1;min-width:200px">
+      <label style="font-size:13px;color:var(--text-muted);display:block;margin-bottom:8px">Indicados Premium por mês:</label>
+      <input type="range" id="sliderIndicados" min="1" max="200" value="10"
+        oninput="calcularGanhos()"
+        style="width:100%;accent-color:var(--success)">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:4px">
+        <span>1</span><span>50</span><span>100</span><span>200</span>
+      </div>
+    </div>
+    <div style="text-align:center;min-width:140px">
+      <div id="numIndicados" style="font-size:36px;font-weight:900;color:var(--success)">10</div>
+      <div style="font-size:12px;color:var(--text-muted)">indicados/mês</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px">
+    <div style="background:rgba(0,0,0,0.2);border-radius:14px;padding:16px;text-align:center;border:1px solid rgba(46,204,113,0.2)">
+      <div id="ganhoMes" style="font-size:26px;font-weight:bold;color:var(--success)">R$98</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:4px">por mês</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:14px;padding:16px;text-align:center;border:1px solid rgba(46,204,113,0.2)">
+      <div id="ganhoAno" style="font-size:26px;font-weight:bold;color:var(--success)">R$1.176</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:4px">por ano</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:14px;padding:16px;text-align:center;border:1px solid rgba(243,156,18,0.3)">
+      <div id="ganhoDia" style="font-size:26px;font-weight:bold;color:var(--warning)">R$3,27</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:4px">por dia</div>
+    </div>
+  </div>
+</div>
+
+<!-- QR CODE -->
+<div class="card" style="text-align:center">
+  <h2>📱 QR Code do seu Link</h2>
+  <p style="color:var(--text-muted);font-size:13px;margin-bottom:16px">Imprima ou mostre na tela — facilita compartilhar presencialmente</p>
+  <div id="qrcode" style="display:inline-block;background:#fff;padding:16px;border-radius:16px;margin-bottom:16px"></div>
+  <br>
+  <button onclick="baixarQR()" style="padding:10px 24px;background:linear-gradient(90deg,var(--primary),var(--secondary));border:none;border-radius:12px;color:#fff;font-size:13px;font-weight:bold;cursor:pointer">
+    ⬇️ Baixar QR Code
+  </button>
+</div>
+
 <!-- DICAS -->
 <div class="card">
   <h2>💡 Dicas para ganhar mais</h2>
@@ -272,12 +318,48 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29
   <a href="/faq">FAQ</a>
   <a href="/contato">Contato</a>
   <br><br>
-  🧠 Emotion Intelligence Platform 2026 — v13.0
+  🧠 Emotion Intelligence Platform 2026 — v18.0
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
+// QR CODE
+function gerarQR() {
+  var link = getLink();
+  var qrDiv = document.getElementById('qrcode');
+  if (!qrDiv) return;
+  var url = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(link);
+  qrDiv.innerHTML = '<img src="' + url + '" alt="QR Code" style="border-radius:8px" id="qrImg">';
+}
+
+function baixarQR() {
+  var img = document.getElementById('qrImg');
+  if (!img) return;
+  var a = document.createElement('a');
+  a.href = img.src;
+  a.download = 'qrcode-afiliado.png';
+  a.click();
+}
+
+// CALCULADORA
+function calcularGanhos() {
+  var n = parseInt(document.getElementById('sliderIndicados').value);
+  var mes = n * 9.80;
+  var ano = mes * 12;
+  var dia = mes / 30;
+  document.getElementById('numIndicados').textContent = n;
+  document.getElementById('ganhoMes').textContent = 'R$' + mes.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  document.getElementById('ganhoAno').textContent = 'R$' + ano.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  document.getElementById('ganhoDia').textContent = 'R$' + dia.toFixed(2);
+}
+
+// Inicia ao carregar
+window.addEventListener('load', function() {
+  gerarQR();
+  calcularGanhos();
+});
+
 function showToast(msg){
   var t=document.getElementById('toast');
   t.textContent=msg;

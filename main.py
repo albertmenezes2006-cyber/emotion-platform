@@ -786,15 +786,51 @@ def detectar_emocao(texto: str) -> str:
     texto_norm = normalizar_texto(texto)
     pontuacao  = {}
 
+    # Negacoes — invertem a emocao
+    negacoes = ["nao ", "nem ", "nunca ", "jamais ", "sem "]
+    tem_negacao = any(n in texto_norm for n in negacoes)
+
     for emocao, palavras_list in palavras_emocoes.items():
         pontos = 0
         for palavra in palavras_list:
             palavra_norm = normalizar_texto(palavra)
             if palavra_norm in texto_norm:
                 # Palavras maiores valem mais
-                pontos += len(palavra_norm.split())
+                base = len(palavra_norm.split())
+                # Bonus para frases exatas
+                if len(palavra_norm.split()) > 1:
+                    base *= 2
+                # Penaliza emocoes positivas se tem negacao
+                if tem_negacao and emocao in ["alegria", "amor", "gratidao", "euforia", "esperanca"]:
+                    base = max(1, base - 2)
+                pontos += base
         if pontos > 0:
             pontuacao[emocao] = pontos
+
+    # Bonus por emojis no texto original
+    emoji_emocao = {
+        "alegria":   ["😄","😊","🎉","😁","🥳","❤️","🥰"],
+        "tristeza":  ["😢","😭","💔","😔","😞"],
+        "raiva":     ["😡","🤬","😤","💢","👊"],
+        "medo":      ["😨","😱","😰","🫣"],
+        "ansiedade": ["😰","😟","😬","🫠"],
+        "amor":      ["❤️","🥰","💕","💖","😍"],
+        "surpresa":  ["😮","😲","🤯","😯"],
+        "nojo":      ["🤢","🤮","😖"],
+        "gratidao":  ["🙏","💙","🫶"],
+        "calma":     ["😌","🧘","🌿","☮️"],
+    }
+    for emocao, emojis in emoji_emocao.items():
+        for e in emojis:
+            if e in texto:
+                pontuacao[emocao] = pontuacao.get(emocao, 0) + 3
+
+    # Detecta intensidade lexical para boost
+    palavras_intensas = ["odeio", "detesto", "amo", "adoro", "apaixonado", "desesperado", "eufórico"]
+    for p in palavras_intensas:
+        if normalizar_texto(p) in texto_norm:
+            for emocao in pontuacao:
+                pontuacao[emocao] = int(pontuacao[emocao] * 1.3)
 
     if not pontuacao:
         return "neutro"
@@ -807,24 +843,30 @@ def calcular_intensidade(texto: str) -> int:
         "muito", "demais", "extremamente", "super", "mega",
         "completamente", "totalmente", "absurdamente", "profundamente",
         "imensamente", "terrivelmente", "incrivelmente", "demasiadamente",
-        "excessivamente", "extraordinariamente", "infinitamente"
+        "excessivamente", "extraordinariamente", "infinitamente",
+        "horrivel", "maravilhoso", "incrivel", "devastado", "apaixonado",
+        "odeio", "adoro", "desesperado", "eufórico", "arrasado"
     ]
     texto_lower = texto.lower()
     tem_intensificador = any(i in texto_lower for i in intensificadores)
-    tem_exclamacao     = texto.count('!') >= 2
+    tem_exclamacao     = texto.count("!") >= 2
     tem_maiusculas     = sum(1 for c in texto if c.isupper()) > len(texto) * 0.3
     texto_longo        = len(texto) > 150
+    tem_repeticao      = any(c*3 in texto_lower for c in "aeiourstmnl")
+    tem_emoji_intenso  = any(e in texto for e in ["😱","🤯","💔","😭","🥳","🤬","😍"])
 
     score = sum([
         tem_intensificador,
         tem_exclamacao,
         tem_maiusculas,
-        texto_longo
+        texto_longo,
+        tem_repeticao,
+        tem_emoji_intenso
     ])
 
-    if score >= 2:
+    if score >= 3:
         return 3
-    if score == 1:
+    if score >= 1:
         return 2
     return 1
 
