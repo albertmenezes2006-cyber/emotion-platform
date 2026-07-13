@@ -80,6 +80,8 @@ ADMIN_EMAIL      = os.environ.get("ADMIN_EMAIL", "albertmenezes2006@gmail.com")
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 BASE_URL         = os.environ.get("BASE_URL", "http://localhost:8000")
 GEMINI_API_KEY   = os.environ.get("GEMINI_API_KEY")
+TELEGRAM_TOKEN   = os.environ.get("TELEGRAM_TOKEN", "8909749074:AAGNoB-JPZVC0Vl1dYeiN__1ktxza6GZ0s4")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "7757404855")
 API_SECRET       = os.environ.get("API_SECRET", str(uuid.uuid4()))
 SECRET_KEY       = os.environ.get("SECRET_KEY", str(uuid.uuid4()))
 
@@ -1133,6 +1135,22 @@ def botao_email(texto: str, url: str, cor: str = "#00d2ff") -> str:
         ">{texto}</a>
     </div>
     """
+
+
+def enviar_telegram(mensagem: str):
+    try:
+        import urllib.request
+        import urllib.parse
+        url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
+        dados = urllib.parse.urlencode({
+            "chat_id": TELEGRAM_CHAT_ID,
+            "text": mensagem,
+            "parse_mode": "HTML"
+        }).encode()
+        req = urllib.request.Request(url, data=dados)
+        urllib.request.urlopen(req, timeout=5)
+    except Exception as e:
+        print(f"[TELEGRAM] Erro: {e}")
 
 
 async def enviar_email_boas_vindas(nome: str, email: str, ref_code: str):
@@ -3492,6 +3510,12 @@ async def cadastro(
     background_tasks.add_task(
         enviar_email_boas_vindas, nome, email, ref_code
     )
+    enviar_telegram(
+        "🎉 <b>Novo cadastro!</b>\n"
+        f"👤 Nome: {nome}\n"
+        f"📧 Email: {email}\n"
+        f"🕐 {datetime.now().strftime('%d/%m/%Y %H:%M')}"
+    )
     background_tasks.add_task(
         enviar_email_novo_cadastro, nome, email
     )
@@ -5214,6 +5238,12 @@ async def sucesso(
         usuario.plano = "premium"
         db.commit()
         adicionar_pontos(usuario, PONTOS_POR_ACAO["premium"], db)
+        enviar_telegram(
+            "💰 <b>Nova assinatura Premium!</b>\n"
+            f"👤 {usuario.nome}\n"
+            f"📧 {usuario.email}\n"
+            f"🕐 {datetime.now().strftime('%d/%m/%Y %H:%M')}"
+        )
         background_tasks.add_task(
             enviar_email_premium,
             usuario.nome,
