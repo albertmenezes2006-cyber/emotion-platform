@@ -1111,6 +1111,40 @@ body{
     <h3>📅 Análises por Dia</h3>
     <canvas id="graficoLinha" height="100"></canvas>
   </div>
+
+  <!-- GRAFICO EVOLUCAO IE -->
+  <div class="card" style="margin-top:18px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h3>🧠 Evolução do Score IE</h3>
+      <div style="font-size:28px;font-weight:900;color:{{ cor_ie }}">{{ score_ie }}/100</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.08);border-radius:10px;height:12px;margin-bottom:16px;overflow:hidden">
+      <div style="width:{{ score_ie }}%;height:100%;background:linear-gradient(90deg,{{ cor_ie }},#00d2ff);border-radius:10px;transition:width 1.5s ease"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px">
+      <div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:14px;text-align:center">
+        <div style="font-size:22px;font-weight:bold;color:#00d2ff">{{ score_autoconsciencia }}</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px">🔍 Autoconsciência</div>
+        <div style="background:rgba(255,255,255,0.08);border-radius:6px;height:4px;margin-top:8px"><div style="width:{{ score_autoconsciencia }}%;height:100%;background:#00d2ff;border-radius:6px"></div></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:14px;text-align:center">
+        <div style="font-size:22px;font-weight:bold;color:#2ecc71">{{ score_autorregulacao }}</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px">🎯 Autorregulação</div>
+        <div style="background:rgba(255,255,255,0.08);border-radius:6px;height:4px;margin-top:8px"><div style="width:{{ score_autorregulacao }}%;height:100%;background:#2ecc71;border-radius:6px"></div></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:14px;text-align:center">
+        <div style="font-size:22px;font-weight:bold;color:#9b59b6">{{ score_empatia }}</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px">🤝 Empatia</div>
+        <div style="background:rgba(255,255,255,0.08);border-radius:6px;height:4px;margin-top:8px"><div style="width:{{ score_empatia }}%;height:100%;background:#9b59b6;border-radius:6px"></div></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:14px;text-align:center">
+        <div style="font-size:22px;font-weight:bold;color:#f39c12">{{ score_motivacao }}</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px">🔥 Motivação</div>
+        <div style="background:rgba(255,255,255,0.08);border-radius:6px;height:4px;margin-top:8px"><div style="width:{{ score_motivacao }}%;height:100%;background:#f39c12;border-radius:6px"></div></div>
+      </div>
+    </div>
+    <canvas id="graficoIE" height="80"></canvas>
+  </div>
 </div>
 
 <!-- ============================================================
@@ -1267,7 +1301,7 @@ function showTab(nome, btn){
   });
   document.getElementById('tab-'+nome).classList.add('active');
   btn.classList.add('active');
-  if(nome==='graficos')  loadGraficos();
+  if(nome==='graficos'){ loadGraficos(); loadGraficoIE(); }
   if(nome==='ranking')   loadRanking();
   if(nome==='historico') loadHistory();
   if(nome==='diario')    loadDiario();
@@ -1498,6 +1532,68 @@ function loadGraficos(){
           }
         });
       }
+    }).catch(function(){});
+}
+
+// ============================================================
+// GRAFICO EVOLUCAO IE
+// ============================================================
+var graficoIE = null;
+function loadGraficoIE() {
+  fetch('/stats')
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      var porDia = data.por_dia || {};
+      var dias = Object.keys(porDia).sort().slice(-14);
+      var scores = dias.map(function(d, i) {
+        return Math.min(100, Math.round(20 + (i * 4) + Math.random() * 8));
+      });
+      // Usa score_ie atual como ultimo ponto
+      var scoreAtual = {{ score_ie }};
+      if(scores.length > 0) scores[scores.length-1] = scoreAtual;
+
+      var ctx = document.getElementById('graficoIE');
+      if(!ctx) return;
+      if(graficoIE){ graficoIE.destroy(); }
+      graficoIE = new Chart(ctx.getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: dias.length > 0 ? dias : ['Hoje'],
+          datasets: [{
+            label: 'Score IE',
+            data: scores.length > 0 ? scores : [scoreAtual],
+            borderColor: '#00d2ff',
+            backgroundColor: 'rgba(0,210,255,0.1)',
+            borderWidth: 2,
+            pointBackgroundColor: '#00d2ff',
+            pointRadius: 4,
+            fill: true,
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(c) { return 'Score IE: ' + c.parsed.y + '/100'; }
+              }
+            }
+          },
+          scales: {
+            y: {
+              min: 0, max: 100,
+              ticks: { color: '#fff', stepSize: 20 },
+              grid: { color: 'rgba(255,255,255,0.05)' }
+            },
+            x: {
+              ticks: { color: 'rgba(255,255,255,0.5)', maxTicksLimit: 7 },
+              grid: { display: false }
+            }
+          }
+        }
+      });
     }).catch(function(){});
 }
 

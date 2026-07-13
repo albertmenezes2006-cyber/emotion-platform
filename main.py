@@ -5015,6 +5015,17 @@ def gamificacao(request: Request, db: Session = Depends(get_db)):
 # ROTAS — CHECKOUT E PAGAMENTOS
 # ================================================================
 
+@app.get("/checkout-page", response_class=HTMLResponse)
+def checkout_page(request: Request, plano: str = "premium", db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return RedirectResponse(url="/login")
+    return templates.TemplateResponse(request, "checkout.html", {
+        "usuario": usuario,
+        "plano": plano,
+        "precos": PRECOS,
+    })
+
 @app.get("/checkout")
 def checkout(
     request: Request,
