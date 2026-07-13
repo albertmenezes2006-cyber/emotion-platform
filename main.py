@@ -5244,6 +5244,12 @@ async def sucesso(
             f"📧 {usuario.email}\n"
             f"🕐 {datetime.now().strftime('%d/%m/%Y %H:%M')}"
         )
+        enviar_telegram(
+            "💰 <b>Nova assinatura Premium!</b>\n"
+            f"👤 {usuario.nome}\n"
+            f"📧 {usuario.email}\n"
+            f"🕐 {datetime.now().strftime('%d/%m/%Y %H:%M')}"
+        )
         background_tasks.add_task(
             enviar_email_premium,
             usuario.nome,
