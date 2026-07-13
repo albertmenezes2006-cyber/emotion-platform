@@ -402,9 +402,20 @@ input::placeholder{color:rgba(255,255,255,0.3)}
        style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;background:linear-gradient(90deg,#e74c3c,#c0392b);color:#fff;font-weight:600;font-size:13px;text-decoration:none">
       📄 Relatório PDF
     </a>
+    {% if usuario.plano in ['premium', 'enterprise'] %}
+    <a href="/certificado"
+       style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;background:linear-gradient(90deg,#f39c12,#e67e22);color:#fff;font-weight:600;font-size:13px;text-decoration:none">
+      🎓 Certificado IE
+    </a>
+    {% else %}
+    <a href="/premium"
+       style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;background:rgba(243,156,18,0.15);border:1px solid rgba(243,156,18,0.3);color:#f39c12;font-weight:600;font-size:13px;text-decoration:none">
+      🎓 Certificado IE (Premium)
+    </a>
+    {% endif %}
   </div>
   <p style="font-size:12px;color:var(--text-muted);margin-top:10px">
-    Baixe todo seu histórico emocional em planilha ou relatório PDF completo.
+    Baixe todo seu historico emocional em planilha, relatorio PDF ou certificado de IE.
   </p>
 </div>
 

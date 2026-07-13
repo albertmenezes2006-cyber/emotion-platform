@@ -343,6 +343,34 @@ class Notificacao(Base):
 # Criar todas as tabelas
 Base.metadata.create_all(bind=engine)
 
+# Cria cupons padrao se nao existirem
+def criar_cupons_padrao():
+    db = SessionLocal()
+    try:
+        cupons_padrao = [
+            {"codigo": "BEMVINDO10", "desconto_pct": 10, "usos_maximos": 1000, "dias": 365},
+            {"codigo": "EVOLUCAO20", "desconto_pct": 20, "usos_maximos": 500,  "dias": 365},
+            {"codigo": "PROMO30",    "desconto_pct": 30, "usos_maximos": 100,  "dias": 30},
+        ]
+        for c in cupons_padrao:
+            existe = db.query(Cupom).filter(Cupom.codigo == c["codigo"]).first()
+            if not existe:
+                novo = Cupom(
+                    codigo=c["codigo"],
+                    desconto_pct=c["desconto_pct"],
+                    usos_maximos=c["usos_maximos"],
+                    expira_em=datetime.now() + timedelta(days=c["dias"])
+                )
+                db.add(novo)
+        db.commit()
+        print("[STARTUP] Cupons padrao criados/verificados")
+    except Exception as e:
+        print(f"[STARTUP] Erro cupons: {e}")
+    finally:
+        db.close()
+
+criar_cupons_padrao()
+
 # ================================================================
 # SEGURANÇA
 # ================================================================
