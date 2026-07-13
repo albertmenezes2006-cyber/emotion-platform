@@ -1811,7 +1811,7 @@ async def health(db: Session = Depends(get_db)):
         uptime          = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         return {
             "status":          "healthy",
-            "version":         "14.0 ULTIMATE",
+            "version": "19.0 ULTIMATE",
             "timestamp":       uptime,
             "database":        "connected",
             "usuarios":        total_usuarios,
@@ -1826,7 +1826,7 @@ async def health(db: Session = Depends(get_db)):
         return {
             "status":  "unhealthy",
             "error":   str(e),
-            "version": "14.0 ULTIMATE"
+            "version": "19.0 ULTIMATE"
         }
 
 
@@ -3085,7 +3085,8 @@ PROGRAMA_7_DIAS = [
 def terapia_page(request: Request, dia: int = 1, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
     if not usuario:
-        return RedirectResponse(url="/login")
+        # Terapia publica para SEO — redireciona para cadastro se nao logado
+        return RedirectResponse(url="/cadastro?next=terapia")
     dia = max(1, min(7, dia))
     programa_dia = PROGRAMA_7_DIAS[dia - 1]
     return templates.TemplateResponse(request, "terapia.html", {
