@@ -1438,12 +1438,161 @@ def job_relatorio_semanal():
         db.close()
 
 
+
+async def enviar_email_dia1(nome: str, email: str):
+    conteudo = f"""
+    <h2 style="color:#333;margin-top:0">Ola, {nome}! Como foi seu primeiro dia? 🌟</h2>
+    <p style="color:#555;line-height:1.6">
+        Esperamos que sua primeira analise emocional tenha sido reveladora!
+        Hoje queremos compartilhar uma dica poderosa:
+    </p>
+    <div style="background:#f8f9ff;border-left:4px solid #00d2ff;padding:20px;border-radius:8px;margin:20px 0">
+        <h3 style="color:#333;margin-top:0">💡 Dica do Dia: O Poder de Nomear Emocoes</h3>
+        <p style="color:#555;line-height:1.6">
+            Pesquisadores da UCLA descobriram que simplesmente <strong>nomear uma emocao</strong>
+            reduz sua intensidade em ate 50%. O cerebro racional assume o controle quando voce
+            coloca palavras no que sente.
+        </p>
+        <p style="color:#555">
+            Experimente agora: como voce esta se sentindo? Tente ser especifico —
+            nao apenas triste, mas decepcionado? Saudoso? Frustrado?
+        </p>
+    </div>
+    <div style="background:linear-gradient(135deg,#f0fff4,#dcfce7);border:1px solid #86efac;padding:20px;border-radius:8px;margin:20px 0">
+        <h3 style="color:#166534;margin-top:0">📊 Sua Missao de Hoje</h3>
+    </div>
+    {botao_email('📊 Fazer Analise Agora', BASE_URL + '/analyze')}
+    """
+    enviar_email(email, '💡 Dica do Dia 1 — O poder de nomear emocoes', email_base(conteudo))
+
+
+async def enviar_email_dia3(nome: str, email: str):
+    conteudo = f"""
+    <h2 style="color:#333;margin-top:0">Voce ja conhece seu Score IE, {nome}? 🧠</h2>
+    <p style="color:#555;line-height:1.6">
+        Voce esta no seu <strong>3o dia</strong> na Emotion Intelligence — parabens pela consistencia!
+    </p>
+    <div style="background:linear-gradient(135deg,#667eea,#764ba2);padding:24px;border-radius:12px;margin:20px 0;text-align:center">
+        <h3 style="color:#fff;margin-top:0">🎯 Score de Inteligencia Emocional</h3>
+        <p style="color:rgba(255,255,255,0.9);line-height:1.6">
+            Seu <strong>Score IE</strong> mede 4 dimensoes: Autoconsciencia, Autorregulacao,
+            Empatia e Motivacao. Quanto mais voce usa a plataforma, mais preciso ele fica.
+        </p>
+        <p style="color:rgba(255,255,255,0.8);font-size:14px">
+            Usuarios que acompanham seu Score IE evoluem <strong>3x mais rapido</strong>
+            em inteligencia emocional.
+        </p>
+    </div>
+    <div style="background:#fff9e6;border:1px solid #ffc107;padding:20px;border-radius:8px;margin:20px 0">
+        <h3 style="color:#856404;margin-top:0">⭐ Quer resultados ainda mais rapidos?</h3>
+        <p style="color:#856404;line-height:1.6">
+            Com o plano <strong>Premium</strong> voce tem analises ilimitadas, chat ilimitado
+            com a Sofia e relatorios semanais detalhados por email.
+        </p>
+        <p style="color:#856404">Por apenas <strong>R$49/mes</strong> — menos que uma sessao de terapia.</p>
+    </div>
+    {botao_email('🧠 Ver meu Score IE', BASE_URL + '/perfil')}
+    {botao_email('⭐ Conhecer o Premium', BASE_URL + '/planos', '#f39c12')}
+    """
+    enviar_email(email, '🧠 Dia 3 — Descubra seu Score de Inteligencia Emocional', email_base(conteudo))
+
+
+async def enviar_email_dia7(nome: str, email: str):
+    conteudo = f"""
+    <h2 style="color:#333;margin-top:0">1 semana de jornada emocional, {nome}! 🎉</h2>
+    <p style="color:#555;line-height:1.6">
+        Voce completou sua primeira semana na Emotion Intelligence!
+        Isso ja coloca voce entre os <strong>top 20% de usuarios</strong> mais consistentes.
+    </p>
+    <div style="background:#f8f9ff;border-left:4px solid #00d2ff;padding:20px;border-radius:8px;margin:20px 0">
+        <h3 style="color:#333;margin-top:0">📈 O que uma semana de autoconhecimento faz</h3>
+        <ul style="color:#555;line-height:2">
+            <li>✅ Voce ja tem um padrao emocional mapeado</li>
+            <li>✅ Seus gatilhos emocionais estao ficando mais claros</li>
+            <li>✅ Sua autoconsciencia aumentou significativamente</li>
+            <li>✅ Voce criou o habito mais importante para saude mental</li>
+        </ul>
+    </div>
+    <div style="background:linear-gradient(135deg,#fff9e6,#fff3cd);border:1px solid #ffc107;padding:24px;border-radius:12px;margin:20px 0;text-align:center">
+        <h3 style="color:#856404;margin-top:0">🚀 Pronto para o proximo nivel?</h3>
+        <p style="color:#856404;line-height:1.6">
+            Usuarios Premium tem acesso a <strong>relatorios semanais detalhados</strong>,
+            analises ilimitadas e respostas mais profundas da Sofia.
+        </p>
+        <p style="font-size:28px;font-weight:bold;color:#f39c12">R$49/mes</p>
+        <p style="color:#856404;font-size:13px">Cancele quando quiser. Sem fidelidade.</p>
+    </div>
+    {botao_email('📊 Ver meu Historico', BASE_URL + '/historico')}
+    {botao_email('⭐ Assinar Premium', BASE_URL + '/planos', '#f39c12')}
+    """
+    enviar_email(email, '🎉 1 semana de jornada emocional — veja sua evolucao!', email_base(conteudo))
+
+
+async def enviar_email_dia14(nome: str, email: str):
+    conteudo = f"""
+    <h2 style="color:#333;margin-top:0">Presente especial para voce, {nome}! 🎁</h2>
+    <p style="color:#555;line-height:1.6">
+        2 semanas de jornada emocional! Voce e incrivel pela dedicacao.
+        Como agradecimento, temos um presente exclusivo:
+    </p>
+    <div style="background:linear-gradient(135deg,#667eea,#764ba2);padding:32px;border-radius:16px;margin:20px 0;text-align:center">
+        <p style="color:rgba(255,255,255,0.8);font-size:14px;margin-bottom:8px">CUPOM EXCLUSIVO</p>
+        <h2 style="color:#fff;font-size:48px;margin:0;letter-spacing:4px">EVOLUCAO20</h2>
+        <p style="color:rgba(255,255,255,0.9);margin-top:8px"><strong>20% de desconto</strong> no plano Premium</p>
+        <p style="color:rgba(255,255,255,0.7);font-size:13px">Valido por 48 horas</p>
+    </div>
+    <div style="background:#f8f9ff;padding:20px;border-radius:8px;margin:20px 0">
+        <h3 style="color:#333;margin-top:0">💎 Premium com desconto = R$39,20/mes</h3>
+        <ul style="color:#555;line-height:2">
+            <li>✅ Analises emocionais ilimitadas</li>
+            <li>✅ Chat ilimitado com Sofia IA</li>
+            <li>✅ Relatorios semanais por email</li>
+            <li>✅ Tecnicas avancadas: TCC, EMDR, Mindfulness</li>
+            <li>✅ +50 pontos de bonus</li>
+        </ul>
+    </div>
+    {botao_email('🎁 Usar Cupom Agora', BASE_URL + '/planos', '#667eea')}
+    <p style="color:#888;font-size:12px;text-align:center">Cupom valido por 48h a partir do recebimento deste email.</p>
+    """
+    enviar_email(email, '🎁 Presente especial: 20% OFF no Premium (48h apenas!)', email_base(conteudo))
+
+
+def job_onboarding_emails():
+    from sqlalchemy.orm import Session
+    db: Session = SessionLocal()
+    try:
+        agora = datetime.now()
+        usuarios = db.query(Usuario).filter(Usuario.plano == 'free').all()
+        import asyncio
+        for u in usuarios:
+            if not u.criado_em:
+                continue
+            dias = (agora - u.criado_em).days
+            if dias == 1:
+                asyncio.run(enviar_email_dia1(u.nome, u.email))
+            elif dias == 3:
+                asyncio.run(enviar_email_dia3(u.nome, u.email))
+            elif dias == 7:
+                asyncio.run(enviar_email_dia7(u.nome, u.email))
+            elif dias == 14:
+                asyncio.run(enviar_email_dia14(u.nome, u.email))
+    except Exception as e:
+        print(f'[ONBOARDING] Erro: {e}')
+    finally:
+        db.close()
+
 scheduler = BackgroundScheduler()
 scheduler.add_job(
     job_relatorio_semanal,
     "cron",
     day_of_week="sun",
     hour=8,
+    minute=0
+)
+scheduler.add_job(
+    job_onboarding_emails,
+    "cron",
+    hour=9,
     minute=0
 )
 scheduler.start()
