@@ -3867,8 +3867,6 @@ def planos(request: Request, db: Session = Depends(get_db)):
 @app.get("/premium", response_class=HTMLResponse)
 def premium_page(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
-    if not usuario:
-        return RedirectResponse(url="/login")
     return templates.TemplateResponse(request, "premium.html", {
         "usuario": usuario,
         "precos":  PRECOS,
