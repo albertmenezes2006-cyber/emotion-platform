@@ -32,17 +32,70 @@
   "@type": "Article",
   "headline": "{{ artigo.titulo }}",
   "description": "{{ artigo.resumo }}",
+  "image": "{{ artigo.imagem if artigo.imagem else 'https://emotion-platform-albert.onrender.com/static/favicon.svg' }}",
   "author": {
     "@type": "Organization",
-    "name": "Emotion Intelligence"
+    "name": "Emotion Intelligence",
+    "url": "https://emotion-platform-albert.onrender.com"
   },
   "publisher": {
     "@type": "Organization",
     "name": "Emotion Intelligence Platform",
-    "url": "https://emotion-platform-albert.onrender.com"
+    "url": "https://emotion-platform-albert.onrender.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://emotion-platform-albert.onrender.com/static/favicon.svg"
+    }
   },
   "datePublished": "{{ artigo.data }}",
-  "url": "https://emotion-platform-albert.onrender.com/blog/{{ artigo.slug }}"
+  "dateModified": "{{ artigo.data }}",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://emotion-platform-albert.onrender.com/blog/{{ artigo.slug }}"
+  },
+  "url": "https://emotion-platform-albert.onrender.com/blog/{{ artigo.slug }}",
+  "inLanguage": "pt-BR",
+  "keywords": "{{ artigo.categoria }}, inteligencia emocional, saude mental, bem estar emocional",
+  "timeRequired": "PT{{ artigo.tempo_leitura.replace(' min','') if artigo.tempo_leitura else '5' }}M"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://emotion-platform-albert.onrender.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Blog",
+      "item": "https://emotion-platform-albert.onrender.com/blog"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "{{ artigo.titulo }}",
+      "item": "https://emotion-platform-albert.onrender.com/blog/{{ artigo.slug }}"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Emotion Intelligence",
+  "url": "https://emotion-platform-albert.onrender.com",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://emotion-platform-albert.onrender.com/blog?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
 }
 </script>
 <style>

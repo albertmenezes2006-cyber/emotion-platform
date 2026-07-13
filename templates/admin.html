@@ -166,6 +166,7 @@ tr:hover td{background:rgba(255,255,255,0.03)}
 <div class="tabs">
   <button class="tab-btn active" onclick="showTab('visao',this)">📊 Visão Geral</button>
   <button class="tab-btn" onclick="showTab('usuarios',this)">👥 Usuários</button>
+  <button class="tab-btn" onclick="showTab('cupons',this)">🎟️ Cupons</button>
   <button class="tab-btn" onclick="showTab('logs',this)">📋 Logs</button>
 </div>
 
@@ -299,6 +300,59 @@ tr:hover td{background:rgba(255,255,255,0.03)}
           </td>
         </tr>
         {% endfor %}
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- TAB CUPONS -->
+<div class="tab-content" id="tab-cupons">
+  <div class="card" style="margin-bottom:20px">
+    <h2>🎟️ Criar Novo Cupom</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:16px">
+      <div>
+        <label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:6px">Codigo do Cupom</label>
+        <input id="cupomCodigo" type="text" placeholder="EX: PROMO20"
+          style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,0.05);color:#fff;font-size:14px;text-transform:uppercase">
+      </div>
+      <div>
+        <label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:6px">Desconto (%)</label>
+        <input id="cupomDesconto" type="number" value="20" min="1" max="100"
+          style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,0.05);color:#fff;font-size:14px">
+      </div>
+      <div>
+        <label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:6px">Usos Maximos</label>
+        <input id="cupomUsos" type="number" value="100" min="1"
+          style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,0.05);color:#fff;font-size:14px">
+      </div>
+      <div>
+        <label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:6px">Validade (dias)</label>
+        <input id="cupomDias" type="number" value="30" min="1"
+          style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,0.05);color:#fff;font-size:14px">
+      </div>
+    </div>
+    <button onclick="criarCupom()"
+      style="margin-top:16px;padding:12px 28px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:bold;cursor:pointer">
+      ➕ Criar Cupom
+    </button>
+  </div>
+  <div class="card">
+    <h2>🎟️ Cupons Ativos</h2>
+    <div style="overflow-x:auto;margin-top:16px">
+      <table style="width:100%;border-collapse:collapse">
+        <thead>
+          <tr>
+            <th>Codigo</th>
+            <th>Desconto</th>
+            <th>Usos</th>
+            <th>Status</th>
+            <th>Expira</th>
+            <th>Acao</th>
+          </tr>
+        </thead>
+        <tbody id="cuponsTabela">
+          <tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:20px">Carregando...</td></tr>
+        </tbody>
       </table>
     </div>
   </div>
@@ -471,6 +525,72 @@ new Chart(document.getElementById('graficoUso').getContext('2d'),{
   },
   options:{plugins:{legend:{labels:{color:'#fff',font:{size:12}},position:'bottom'}}}
 });
+
+
+// ============================================================
+// CUPONS
+// ============================================================
+function criarCupom() {
+  const codigo = document.getElementById('cupomCodigo').value.trim();
+  const desconto = document.getElementById('cupomDesconto').value;
+  const usos = document.getElementById('cupomUsos').value;
+  const dias = document.getElementById('cupomDias').value;
+  if (!codigo) { showToast('Digite o codigo do cupom', 'error'); return; }
+  const form = new FormData();
+  form.append('codigo', codigo);
+  form.append('desconto_pct', desconto);
+  form.append('usos_maximos', usos);
+  form.append('dias_validade', dias);
+  fetch('/admin/cupom/criar', { method: 'POST', body: form })
+    .then(r => r.json())
+    .then(data => {
+      if (data.mensagem) {
+        showToast(data.mensagem);
+        document.getElementById('cupomCodigo').value = '';
+        carregarCupons();
+      } else {
+        showToast(data.detail || 'Erro ao criar cupom', 'error');
+      }
+    }).catch(() => showToast('Erro de conexao', 'error'));
+}
+
+function carregarCupons() {
+  fetch('/admin/cupons')
+    .then(r => r.json())
+    .then(cupons => {
+      const tbody = document.getElementById('cuponsTabela');
+      if (!tbody) return;
+      tbody.innerHTML = cupons.map(c => `
+        <tr>
+          <td><strong style="color:var(--primary)">${c.codigo}</strong></td>
+          <td>${c.desconto_pct}%</td>
+          <td>${c.usos}</td>
+          <td><span style="color:${c.ativo ? '#2ecc71' : '#e74c3c'}">${c.ativo ? 'Ativo' : 'Inativo'}</span></td>
+          <td>${c.expira_em}</td>
+          <td>
+            <button onclick="toggleCupom('${c.codigo}')"
+              style="padding:4px 12px;border-radius:8px;border:none;cursor:pointer;font-size:12px;
+              background:${c.ativo ? 'rgba(231,76,60,0.2)' : 'rgba(46,204,113,0.2)'};
+              color:${c.ativo ? '#e74c3c' : '#2ecc71'}">
+              ${c.ativo ? 'Desativar' : 'Ativar'}
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }).catch(() => {});
+}
+
+function toggleCupom(codigo) {
+  fetch('/admin/cupom/' + codigo + '/toggle', { method: 'POST' })
+    .then(r => r.json())
+    .then(data => {
+      showToast('Cupom ' + data.codigo + ': ' + (data.ativo ? 'Ativado' : 'Desativado'));
+      carregarCupons();
+    }).catch(() => showToast('Erro', 'error'));
+}
+
+// Carrega cupons ao abrir admin
+carregarCupons();
 </script>
 </body>
 </html>
