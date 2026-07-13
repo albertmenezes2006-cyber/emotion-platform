@@ -4154,6 +4154,18 @@ def ranking_route(request: Request, db: Session = Depends(get_db)):
 # ROTAS — NOTIFICAÇÕES
 # ================================================================
 
+@app.post("/notificacoes/marcar-lidas")
+def marcar_notifs_lidas(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        raise HTTPException(status_code=401, detail="Nao autorizado")
+    db.query(Notificacao).filter(
+        Notificacao.usuario_id == usuario.id,
+        Notificacao.lida == False
+    ).update({"lida": True})
+    db.commit()
+    return {"ok": True}
+
 @app.get("/notificacoes")
 def ver_notificacoes(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
@@ -4547,21 +4559,52 @@ async def chat(
             "Mencione gentilmente que Premium tem sessoes terapeuticas completas."
         )
 
-    # Historico compacto - ultimas 3 trocas
+    # Historico compacto - ultimas 6 trocas (memoria ampliada)
     historico_curto = ""
-    for h in reversed(historico[-3:]):
-        historico_curto += f"U: {h.conteudo[:80]}\nS: {h.resposta[:100]}\n"
+    for h in reversed(historico[-6:]):
+        historico_curto += f"U: {h.conteudo[:100]}\nS: {h.resposta[:120]}\n"
+
+    # Analises recentes para contexto emocional
+    analises_recentes = db.query(Analise).filter(
+        Analise.usuario_id == usuario.id
+    ).order_by(Analise.criado_em.desc()).limit(5).all()
+
+    padrao_emocional = ""
+    if analises_recentes:
+        emocoes_recentes = [a.emocao for a in analises_recentes if a.emocao]
+        if emocoes_recentes:
+            from collections import Counter
+            mais_comum = Counter(emocoes_recentes).most_common(2)
+            padrao_emocional = " | ".join([f"{e}({c}x)" for e,c in mais_comum])
+
+    # Diarios recentes
+    diarios_recentes = db.query(Diario).filter(
+        Diario.usuario_id == usuario.id
+    ).order_by(Diario.criado_em.desc()).limit(2).all()
+
+    contexto_diario = ""
+    if diarios_recentes:
+        contexto_diario = " | ".join([d.conteudo[:60] for d in diarios_recentes])
+
+    total_sessoes = len(historico) // 2 + 1
 
     prompt = (
-        f"Sofia, psicologa virtual brasileira (TCC+Mindfulness). "
-        f"Empatica, calorosa, humana. Nunca substitui psicologo real.\n\n"
-        f"USUARIO: {usuario.nome} | {usuario.plano.upper()} | "
-        f"{usuario.pontos} pts | Badge: {usuario.badge} | "
-        f"Emocao: {emocao_atual} {get_emoji(emocao_atual)}\n\n"
-        f"INSTRUCOES: {instrucoes_plano}\n\n"
-        f"HISTORICO:\n{historico_curto if historico_curto else 'Primeira mensagem.'}\n"
-        f"MENSAGEM: {mensagem}\n\n"
-        f"Responda como Sofia em portugues brasileiro:"
+        f"Voce e Sofia, psicologa virtual brasileira especializada em TCC, Mindfulness e EMDR. "
+        f"Empatica, calorosa, direta e humana. NUNCA substitui psicologo real.\n\n"
+        f"PERFIL DO USUARIO:\n"
+        f"- Nome: {usuario.nome}\n"
+        f"- Plano: {usuario.plano.upper()}\n"
+        f"- Sessao #{total_sessoes} com voce\n"
+        f"- Emocao atual: {emocao_atual} {get_emoji(emocao_atual)}\n"
+        f"- Padrao emocional recente: {padrao_emocional or 'sem dados'}\n"
+        f"- Diario recente: {contexto_diario or 'sem entradas'}\n"
+        f"- Pontos: {usuario.pontos} | Badge: {usuario.badge}\n\n"
+        f"INSTRUCOES DE RESPOSTA: {instrucoes_plano}\n\n"
+        f"MEMORIA DA CONVERSA:\n{historico_curto if historico_curto else 'Inicio da conversa.'}\n\n"
+        f"MENSAGEM ATUAL: {mensagem}\n\n"
+        f"Responda como Sofia em portugues brasileiro coloquial. "
+        f"Use o nome do usuario. Seja especifica ao contexto dele. "
+        f"Termine com uma pergunta reflexiva aberta:"
     )
 
     try:

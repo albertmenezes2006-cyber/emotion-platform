@@ -711,7 +711,25 @@ body{
   <div class="nav-right">
     <span style="color:rgba(255,255,255,0.5);font-size:12px">Olá, {{ usuario.nome }}!</span>
     <button onclick="toggleTheme()" class="nav-btn" style="background:rgba(255,255,255,0.1);border:none;cursor:pointer;font-size:16px" id="themeBtn">🌙</button>
-    <button onclick="ativarNotificacoes()" class="nav-btn" style="background:rgba(255,255,255,0.1);border:none;cursor:pointer;font-size:12px;font-weight:600" id="btnNotif" title="Ativar notificacoes">🔔</button>
+    <div style="position:relative;display:inline-block">
+      <button onclick="toggleNotifDropdown()" class="nav-btn" style="background:rgba(255,255,255,0.1);border:none;cursor:pointer;font-size:16px;font-weight:600;padding:7px 12px" id="btnNotif" title="Notificacoes">🔔</button>
+      <span id="notifBadge" style="display:none;position:absolute;top:-4px;right:-4px;background:#e74c3c;color:#fff;border-radius:50%;width:16px;height:16px;font-size:10px;font-weight:bold;display:flex;align-items:center;justify-content:center;line-height:1">0</span>
+      <!-- DROPDOWN NOTIFICACOES -->
+      <div id="notifDropdown" style="display:none;position:absolute;top:44px;right:0;width:300px;background:#1a1a2e;border:1px solid rgba(255,255,255,0.1);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.5);z-index:9999;overflow:hidden">
+        <div style="padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:14px;font-weight:bold">🔔 Notificações</span>
+          <button onclick="marcarTodasLidas()" style="font-size:11px;color:rgba(0,210,255,0.8);background:none;border:none;cursor:pointer">Marcar todas lidas</button>
+        </div>
+        <div id="notifLista" style="max-height:320px;overflow-y:auto">
+          <div style="padding:20px;text-align:center;color:rgba(255,255,255,0.4);font-size:13px">
+            Nenhuma notificação ainda
+          </div>
+        </div>
+        <div style="padding:10px 16px;border-top:1px solid rgba(255,255,255,0.08);text-align:center">
+          <a href="/notificacoes" style="font-size:12px;color:rgba(0,210,255,0.7);text-decoration:none">Ver todas →</a>
+        </div>
+      </div>
+    </div>
     <span class="version-badge">v15.0</span>
     <a href="/perfil"   class="nav-btn btn-perfil">👤 Perfil</a>
     <a href="/terapia"  class="nav-btn" style="background:rgba(46,204,113,0.3)">🌱 Terapia</a>
@@ -1400,26 +1418,83 @@ document.getElementById('btnMic').addEventListener('click', startVoice);
 
 function startVoice(){
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SR){ showToast('Use o Chrome para voz!','error'); return; }
+  if(!SR){ showToast('Voz disponivel no Chrome e Edge!','error'); return; }
   var r = new SR();
   r.lang            = 'pt-BR';
-  r.interimResults  = false;
+  r.interimResults  = true;
+  r.continuous      = false;
+  r.maxAlternatives = 3;
   var mic = document.getElementById('btnMic');
+  var status = document.getElementById('statusMic');
+  var input  = document.getElementById('textInput');
   mic.classList.add('gravando');
-  document.getElementById('statusMic').textContent = '🔴 Gravando... Fale agora!';
+  mic.textContent = '⏹️';
+  status.textContent = '🔴 Ouvindo... fale naturalmente!';
+  status.style.color = '#e74c3c';
+
+  var timeout = setTimeout(function(){
+    r.stop();
+    status.textContent = '⏰ Tempo esgotado. Tente novamente.';
+    mic.classList.remove('gravando');
+    mic.textContent = '🎙️';
+  }, 15000);
+
   r.start();
+
   r.onresult = function(e){
-    var t = e.results[0][0].transcript;
-    document.getElementById('textInput').value  = t;
-    document.getElementById('statusMic').textContent = '✅ Detectado: ' + t;
-    mic.classList.remove('gravando');
-    analyzeText();
+    var interim = '';
+    var final_t = '';
+    for(var i = e.resultIndex; i < e.results.length; i++){
+      if(e.results[i].isFinal){
+        // Pega a melhor alternativa
+        var melhor = e.results[i][0].transcript;
+        var confianca = e.results[i][0].confidence;
+        // Tenta alternativas se confianca baixa
+        if(confianca < 0.7 && e.results[i].length > 1){
+          melhor = e.results[i][1].transcript;
+        }
+        final_t += melhor;
+      } else {
+        interim += e.results[i][0].transcript;
+      }
+    }
+    if(interim) input.value = interim + '...';
+    if(final_t){
+      input.value = final_t;
+      status.textContent = '✅ "' + final_t.substring(0,40) + (final_t.length>40?'...':'"');
+      status.style.color = '#2ecc71';
+      clearTimeout(timeout);
+      mic.classList.remove('gravando');
+      mic.textContent = '🎙️';
+      showToast('Voz captada com sucesso!');
+      setTimeout(function(){ analyzeText(); }, 500);
+    }
   };
-  r.onerror = function(){
-    document.getElementById('statusMic').textContent = '❌ Erro. Tente novamente.';
+
+  r.onerror = function(e){
+    clearTimeout(timeout);
+    var msgs = {
+      'no-speech':    '😶 Nao ouvi nada. Fale mais perto!',
+      'audio-capture':'🎤 Microfone nao encontrado.',
+      'not-allowed':  '🚫 Microfone bloqueado. Permita nas configuracoes.',
+      'network':      '🌐 Erro de rede. Tente novamente.',
+    };
+    status.textContent = msgs[e.error] || '❌ Erro: ' + e.error;
+    status.style.color = '#e74c3c';
     mic.classList.remove('gravando');
+    mic.textContent = '🎙️';
   };
-  r.onend = function(){ mic.classList.remove('gravando'); };
+
+  r.onend = function(){
+    clearTimeout(timeout);
+    mic.classList.remove('gravando');
+    mic.textContent = '🎙️';
+    if(!input.value || input.value.endsWith('...')){
+      status.textContent = '❌ Nada captado. Tente novamente.';
+      status.style.color = '#e74c3c';
+      input.value = '';
+    }
+  };
 }
 
 // ============================================================
@@ -2151,6 +2226,79 @@ function toggleTheme() {
 // ============================================================
 // NOTIFICACOES PUSH
 // ============================================================
+// ============================================================
+// NOTIFICACOES IN-APP
+// ============================================================
+var notifAbertas = false;
+
+function toggleNotifDropdown() {
+  var dropdown = document.getElementById('notifDropdown');
+  notifAbertas = !notifAbertas;
+  dropdown.style.display = notifAbertas ? 'block' : 'none';
+  if(notifAbertas) {
+    carregarNotificacoes();
+    // Fecha ao clicar fora
+    setTimeout(function() {
+      document.addEventListener('click', fecharNotifFora);
+    }, 100);
+  }
+}
+
+function fecharNotifFora(e) {
+  var dropdown = document.getElementById('notifDropdown');
+  var btn = document.getElementById('btnNotif');
+  if(dropdown && !dropdown.contains(e.target) && !btn.contains(e.target)) {
+    dropdown.style.display = 'none';
+    notifAbertas = false;
+    document.removeEventListener('click', fecharNotifFora);
+  }
+}
+
+function carregarNotificacoes() {
+  fetch('/notificacoes')
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      var lista = document.getElementById('notifLista');
+      var badge = document.getElementById('notifBadge');
+      if(!lista) return;
+
+      var notifs = data.notificacoes || [];
+      var naoLidas = notifs.filter(function(n){ return !n.lida; }).length;
+
+      if(naoLidas > 0) {
+        badge.style.display = 'flex';
+        badge.textContent = naoLidas > 9 ? '9+' : naoLidas;
+      } else {
+        badge.style.display = 'none';
+      }
+
+      if(notifs.length === 0) {
+        lista.innerHTML = '<div style="padding:20px;text-align:center;color:rgba(255,255,255,0.4);font-size:13px">Nenhuma notificacao ainda</div>';
+        return;
+      }
+
+      lista.innerHTML = notifs.slice(0,10).map(function(n) {
+        return '<div style="padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer;transition:background .2s;background:' + (n.lida ? 'transparent' : 'rgba(0,210,255,0.05)') + '"' +
+          ' onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='' + (n.lida ? 'transparent' : 'rgba(0,210,255,0.05)') + ''">' +
+          '<div style="font-size:13px;font-weight:' + (n.lida ? '400' : '600') + ';color:#fff;margin-bottom:4px">' +
+          (n.lida ? '' : '<span style="color:#00d2ff;margin-right:6px">●</span>') + n.titulo + '</div>' +
+          '<div style="font-size:11px;color:rgba(255,255,255,0.5)">' + n.mensagem.substring(0,60) + '</div>' +
+          '</div>';
+      }).join('');
+    }).catch(function(){});
+}
+
+function marcarTodasLidas() {
+  fetch('/notificacoes/marcar-lidas', { method: 'POST' })
+    .then(function(){ carregarNotificacoes(); })
+    .catch(function(){});
+}
+
+// Carrega badge ao iniciar
+setTimeout(function() { carregarNotificacoes(); }, 2000);
+// Atualiza a cada 5 min
+setInterval(function() { carregarNotificacoes(); }, 300000);
+
 function ativarNotificacoes() {
   var btn = document.getElementById('btnNotif');
 
