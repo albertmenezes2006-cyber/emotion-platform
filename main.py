@@ -3965,6 +3965,13 @@ def ativar_trial(request: Request, db: Session = Depends(get_db)):
 
     adicionar_pontos(usuario, PONTOS_POR_ACAO["trial"], db)
 
+    enviar_telegram(
+        "🔥 <b>Trial ativado</b>\n"
+        f"👤 {usuario.nome}\n"
+        f"📧 {usuario.email}\n"
+        f"🕐 {datetime.now().strftime('%d/%m/%Y %H:%M')}"
+    )
+
     return {
         "mensagem":     "🎉 Trial Premium ativado com sucesso por 7 dias!",
         "expira_em":    usuario.trial_expira.strftime("%d/%m/%Y às %H:%M"),
@@ -5939,6 +5946,25 @@ def toggle_cupom(codigo: str, request: Request, db: Session = Depends(get_db)):
     cupom.ativo = not cupom.ativo
     db.commit()
     return {"codigo": cupom.codigo, "ativo": cupom.ativo}
+@app.get("/compartilhar/{analise_id}")
+def compartilhar_analise(analise_id: int, request: Request, db: Session = Depends(get_db)):
+    analise = db.query(Analise).filter(Analise.id == analise_id).first()
+    if not analise:
+        raise HTTPException(status_code=404, detail="Analise nao encontrada")
+    usuario = db.query(Usuario).filter(Usuario.id == analise.usuario_id).first()
+    nome = usuario.nome.split()[0] if usuario else "Alguem"
+    emocao = analise.emocao or "neutro"
+    emoji = analise.emoji or "🧠"
+    texto_share = f"{nome} se sentiu {emocao} {emoji} — registrado na Emotion Intelligence"
+    url_share = f"{BASE_URL}/cadastro"
+    return {
+        "texto": texto_share,
+        "url": url_share,
+        "whatsapp": f"https://wa.me/?text={texto_share} {url_share}",
+        "twitter": f"https://twitter.com/intent/tweet?text={texto_share}&url={url_share}",
+        "telegram": f"https://t.me/share/url?url={url_share}&text={texto_share}"
+    }
+
 @app.get("/certificado")
 def gerar_certificado(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
