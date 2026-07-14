@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>API Developer — Emotion Intelligence Platform</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#0f0f1a;color:#fff;min-height:100vh}
+.hero{background:linear-gradient(135deg,#1a1a2e,#16213e);padding:60px 20px;text-align:center;border-bottom:1px solid #333}
+.hero h1{font-size:2.5rem;margin-bottom:10px;color:#667eea}
+.container{max-width:900px;margin:0 auto;padding:40px 20px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-bottom:40px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+.card{background:#1a1a2e;border-radius:16px;padding:25px;border:1px solid #333}
+.card h3{color:#667eea;margin-bottom:15px;font-size:1.1rem}
+.plano-box{border:2px solid #333;border-radius:12px;padding:20px;margin-bottom:15px;cursor:pointer;transition:.3s}
+.plano-box:hover,.plano-box.ativo{border-color:#667eea}
+.plano-box h4{margin-bottom:5px}
+.preco{font-size:1.5rem;font-weight:700;color:#667eea}
+.code-block{background:#111;border-radius:8px;padding:20px;font-family:monospace;font-size:.85rem;overflow-x:auto;margin:10px 0;border-left:3px solid #667eea}
+.endpoint{background:#111;border-radius:8px;padding:15px;margin:10px 0}
+.method{display:inline-block;padding:3px 10px;border-radius:5px;font-size:.75rem;font-weight:700;margin-right:10px}
+.post{background:#4CAF50;color:#fff}
+.get{background:#2196F3;color:#fff}
+.btn{padding:12px 25px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700;transition:.3s}
+.btn:hover{transform:translateY(-2px)}
+.key-item{background:#111;border-radius:8px;padding:12px;margin:8px 0;display:flex;justify-content:space-between;align-items:center;font-family:monospace;font-size:.85rem}
+input{width:100%;padding:10px;background:#111;border:1px solid #333;border-radius:8px;color:#fff;margin:8px 0}
+.badge{display:inline-block;padding:3px 10px;border-radius:10px;font-size:.75rem;font-weight:700;background:#667eea;color:#fff}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="badge">API v1.0</div>
+  <h1>🔑 Emotion Intelligence API</h1>
+  <p style="color:#aaa;margin-top:10px">Integre análise emocional com IA em qualquer aplicação</p>
+</div>
+<div class="container">
+  <div class="grid">
+    <div class="card">
+      <h3>📦 Planos API</h3>
+      <div class="plano-box ativo" onclick="selecionarPlano('developer',this)">
+        <h4>Developer</h4>
+        <div class="preco">R$79<small>/mês</small></div>
+        <div style="color:#aaa;font-size:.85rem">1.000 requisições/mês</div>
+      </div>
+      <div class="plano-box" onclick="selecionarPlano('business_api',this)">
+        <h4>Business</h4>
+        <div class="preco">R$199<small>/mês</small></div>
+        <div style="color:#aaa;font-size:.85rem">10.000 requisições/mês</div>
+      </div>
+      {% if usuario %}
+      <button class="btn" onclick="assinar()" style="width:100%;margin-top:10px">🚀 Assinar API</button>
+      {% else %}
+      <a href="/login" class="btn" style="display:block;text-align:center;margin-top:10px;text-decoration:none">🔐 Login para assinar</a>
+      {% endif %}
+    </div>
+    <div class="card">
+      <h3>🗝️ Minhas API Keys</h3>
+      {% if minhas_keys %}
+        {% for key in minhas_keys %}
+        <div class="key-item">
+          <span>{{key.chave[:20]}}...</span>
+          <span style="color:{{'#38ef7d' if key.ativa else '#f5576c'}}">{{key.requisicoes_mes}}/{{key.limite_mes}}</span>
+        </div>
+        {% endfor %}
+      {% else %}
+      <p style="color:#888">Nenhuma key ainda.</p>
+      {% endif %}
+      {% if usuario %}
+      <div style="margin-top:15px">
+        <input type="text" id="nome_key" placeholder="Nome da key (ex: Meu App)">
+        <button class="btn" onclick="criarKey()" style="width:100%;margin-top:5px">+ Criar API Key</button>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:30px">
+    <h3>📡 Endpoints disponíveis</h3>
+    <div class="endpoint">
+      <span class="method post">POST</span>
+      <strong>/api/v1/analisar</strong>
+      <div class="code-block">
+// Request
+{
+  "texto": "Estou me sentindo muito ansioso hoje"
+}
+
+// Response
+{
+  "ok": true,
+  "emocao": "ansiedade",
+  "emoji": "😰",
+  "intensidade": 2,
+  "texto_analisado": "Estou me sentindo muito ansioso hoje"
+}
+      </div>
+    </div>
+    <h3 style="margin-top:20px">🔐 Autenticação</h3>
+    <div class="code-block">
+// Header obrigatório
+Authorization: Bearer eip_sua_api_key_aqui
+
+// Exemplo cURL
+curl -X POST https://emotion-platform-albert.onrender.com/api/v1/analisar \
+  -H "Authorization: Bearer eip_xxx" \
+  -H "Content-Type: application/json" \
+  -d '{"texto": "Estou feliz hoje!"}'
+    </div>
+  </div>
+</div>
+<script>
+let planoSelecionado='developer';
+function selecionarPlano(p,el){
+  planoSelecionado=p;
+  document.querySelectorAll('.plano-box').forEach(e=>e.classList.remove('ativo'));
+  el.classList.add('ativo');
+}
+async function assinar(){
+  const r=await fetch('/checkout/api/processar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plano:planoSelecionado})});
+  const d=await r.json();
+  if(d.ok) window.location.href=d.url;
+  else alert('Erro: '+d.erro);
+}
+async function criarKey(){
+  const nome=document.getElementById('nome_key').value||'Minha API';
+  const r=await fetch('/api/v1/keys/criar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nome})});
+  const d=await r.json();
+  if(d.ok){ alert('Key criada: '+d.chave); location.reload(); }
+  else alert('Erro: '+d.erro);
+}
+</script>
+</body>
+</html>

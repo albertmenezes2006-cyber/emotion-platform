@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presente Enviado! — Emotion Intelligence Platform</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#0f0f1a;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center}
+.card{background:#1a1a2e;border-radius:20px;padding:50px;text-align:center;max-width:500px;border:2px solid #ffd200}
+.emoji{font-size:5rem;margin-bottom:20px}
+h1{font-size:2rem;color:#ffd200;margin-bottom:10px}
+.codigo-box{background:#111;border-radius:12px;padding:20px;margin:25px 0;border:2px dashed #ffd200}
+.codigo{font-size:2rem;font-weight:700;color:#ffd200;letter-spacing:4px}
+.btn{display:inline-block;padding:14px 30px;background:linear-gradient(135deg,#f7971e,#ffd200);color:#000;border-radius:12px;text-decoration:none;font-weight:700;margin:10px;cursor:pointer;border:none;font-size:1rem}
+p{color:#aaa;margin:10px 0}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="emoji">🎁</div>
+  <h1>Presente Enviado!</h1>
+  <p>O pagamento foi aprovado. Compartilhe o código abaixo:</p>
+  <div class="codigo-box">
+    <div style="color:#aaa;font-size:.85rem;margin-bottom:10px">CÓDIGO DO PRESENTE</div>
+    <div class="codigo">{{codigo}}</div>
+    {% if presente and presente.destinatario_email %}
+    <div style="color:#aaa;font-size:.85rem;margin-top:10px">Para: {{presente.destinatario_email}}</div>
+    {% endif %}
+  </div>
+  <p>O destinatário usa este código em <strong>/perfil</strong> para resgatar o presente.</p>
+  <p style="color:#888;font-size:.85rem">Válido por 90 dias</p>
+  <button class="btn" onclick="copiar()">📋 Copiar Código</button>
+  <a href="/dashboard" class="btn" style="background:#333;color:#fff">🏠 Ir ao Dashboard</a>
+</div>
+<script>
+function copiar(){
+  navigator.clipboard.writeText('{{codigo}}');
+  alert('Código copiado!');
+}
+</script>
+</body>
+</html>
