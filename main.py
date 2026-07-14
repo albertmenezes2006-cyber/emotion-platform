@@ -437,6 +437,33 @@ class TransacaoCredito(Base):
 
 Base.metadata.create_all(bind=engine)
 
+def rodar_migracoes():
+    """Migração automática — adiciona colunas novas sem quebrar dados existentes"""
+    try:
+        with engine.connect() as conn:
+            migracoes = [
+                "ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS creditos_analise INTEGER DEFAULT 0",
+                "ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS creditos_sofia INTEGER DEFAULT 0",
+                "ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS plano_anual_ate TIMESTAMP",
+                "ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS plano_api VARCHAR",
+                "ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS whitelabel_id INTEGER",
+                "ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS total_gasto FLOAT DEFAULT 0.0",
+                "ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS fonte_receita VARCHAR",
+            ]
+            for sql in migracoes:
+                try:
+                    conn.execute(text(sql))
+                    conn.commit()
+                    print(f"✅ Migração: {sql[:60]}...")
+                except Exception as e:
+                    print(f"⚠️ Migração skip: {e}")
+        print("✅ Migrações concluídas!")
+    except Exception as e:
+        print(f"⚠️ Erro migrações: {e}")
+
+rodar_migracoes()
+
+
 # Cria cupons padrao se nao existirem
 def criar_cupons_padrao():
     db = SessionLocal()
