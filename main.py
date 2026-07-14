@@ -2119,7 +2119,7 @@ def resgatar_presente(codigo: str, usuario_id: int, db) -> dict:
 # --- PLANO ANUAL ---
 @app.get("/checkout/anual", response_class=HTMLResponse)
 async def checkout_anual(request: Request, db: Session = Depends(get_db)):
-    usuario = await get_usuario_logado(request, db)
+    usuario = get_usuario_logado(request, db)
     if not usuario:
         return RedirectResponse("/login", status_code=302)
     return templates.TemplateResponse("checkout_anual.html", {
@@ -2132,7 +2132,7 @@ async def checkout_anual(request: Request, db: Session = Depends(get_db)):
 
 @app.post("/checkout/anual/processar")
 async def processar_checkout_anual(request: Request, db: Session = Depends(get_db)):
-    usuario = await get_usuario_logado(request, db)
+    usuario = get_usuario_logado(request, db)
     if not usuario:
         return JSONResponse({"ok": False, "erro": "Nao autenticado"}, status_code=401)
     try:
@@ -2164,7 +2164,7 @@ async def processar_checkout_anual(request: Request, db: Session = Depends(get_d
 # --- CRÉDITOS ---
 @app.get("/checkout/creditos", response_class=HTMLResponse)
 async def checkout_creditos(request: Request, pacote: str = "M", db: Session = Depends(get_db)):
-    usuario = await get_usuario_logado(request, db)
+    usuario = get_usuario_logado(request, db)
     if not usuario:
         return RedirectResponse("/login", status_code=302)
     pacote = pacote.upper()
@@ -2181,7 +2181,7 @@ async def checkout_creditos(request: Request, pacote: str = "M", db: Session = D
 
 @app.post("/checkout/creditos/processar")
 async def processar_checkout_creditos(request: Request, db: Session = Depends(get_db)):
-    usuario = await get_usuario_logado(request, db)
+    usuario = get_usuario_logado(request, db)
     if not usuario:
         return JSONResponse({"ok": False, "erro": "Nao autenticado"}, status_code=401)
     body = await request.json()
@@ -2218,7 +2218,7 @@ async def processar_checkout_creditos(request: Request, db: Session = Depends(ge
 # --- SESSÃO SOFIA AVULSA ---
 @app.get("/checkout/sofia", response_class=HTMLResponse)
 async def checkout_sofia(request: Request, db: Session = Depends(get_db)):
-    usuario = await get_usuario_logado(request, db)
+    usuario = get_usuario_logado(request, db)
     if not usuario:
         return RedirectResponse("/login", status_code=302)
     return templates.TemplateResponse("checkout_sofia.html", {
@@ -2230,7 +2230,7 @@ async def checkout_sofia(request: Request, db: Session = Depends(get_db)):
 
 @app.post("/checkout/sofia/processar")
 async def processar_checkout_sofia(request: Request, db: Session = Depends(get_db)):
-    usuario = await get_usuario_logado(request, db)
+    usuario = get_usuario_logado(request, db)
     if not usuario:
         return JSONResponse({"ok": False, "erro": "Nao autenticado"}, status_code=401)
     try:
@@ -2262,7 +2262,7 @@ async def processar_checkout_sofia(request: Request, db: Session = Depends(get_d
 # --- RELATÓRIO AVULSO ---
 @app.get("/checkout/relatorio", response_class=HTMLResponse)
 async def checkout_relatorio(request: Request, db: Session = Depends(get_db)):
-    usuario = await get_usuario_logado(request, db)
+    usuario = get_usuario_logado(request, db)
     if not usuario:
         return RedirectResponse("/login", status_code=302)
     from datetime import datetime
@@ -2282,7 +2282,7 @@ async def checkout_relatorio(request: Request, db: Session = Depends(get_db)):
 
 @app.post("/checkout/relatorio/processar")
 async def processar_checkout_relatorio(request: Request, db: Session = Depends(get_db)):
-    usuario = await get_usuario_logado(request, db)
+    usuario = get_usuario_logado(request, db)
     if not usuario:
         return JSONResponse({"ok": False, "erro": "Nao autenticado"}, status_code=401)
     from datetime import datetime
@@ -2322,7 +2322,7 @@ async def processar_checkout_relatorio(request: Request, db: Session = Depends(g
 # --- PRESENTE / GIFT ---
 @app.get("/presente", response_class=HTMLResponse)
 async def pagina_presente(request: Request, db: Session = Depends(get_db)):
-    usuario = await get_usuario_logado(request, db)
+    usuario = get_usuario_logado(request, db)
     if not usuario:
         return RedirectResponse("/login", status_code=302)
     return templates.TemplateResponse("presente.html", {
@@ -2337,7 +2337,7 @@ async def pagina_presente(request: Request, db: Session = Depends(get_db)):
 
 @app.post("/presente/processar")
 async def processar_presente(request: Request, db: Session = Depends(get_db)):
-    usuario = await get_usuario_logado(request, db)
+    usuario = get_usuario_logado(request, db)
     if not usuario:
         return JSONResponse({"ok": False, "erro": "Nao autenticado"}, status_code=401)
     body = await request.json()
@@ -2387,7 +2387,7 @@ async def processar_presente(request: Request, db: Session = Depends(get_db)):
 
 @app.get("/presente/sucesso", response_class=HTMLResponse)
 async def presente_sucesso(request: Request, codigo: str, db: Session = Depends(get_db)):
-    usuario = await get_usuario_logado(request, db)
+    usuario = get_usuario_logado(request, db)
     presente = db.query(Presente).filter(Presente.codigo == codigo).first()
     return templates.TemplateResponse("presente_sucesso.html", {
         "request": request,
@@ -2398,7 +2398,7 @@ async def presente_sucesso(request: Request, codigo: str, db: Session = Depends(
 
 @app.post("/presente/resgatar")
 async def resgatar_presente_route(request: Request, db: Session = Depends(get_db)):
-    usuario = await get_usuario_logado(request, db)
+    usuario = get_usuario_logado(request, db)
     if not usuario:
         return JSONResponse({"ok": False, "erro": "Nao autenticado"}, status_code=401)
     body = await request.json()
@@ -2409,23 +2409,24 @@ async def resgatar_presente_route(request: Request, db: Session = Depends(get_db
 # --- API PÚBLICA MONETIZADA ---
 @app.get("/api/v1/docs", response_class=HTMLResponse)
 async def api_docs(request: Request, db: Session = Depends(get_db)):
-    usuario = await get_usuario_logado(request, db)
+    usuario = get_usuario_logado(request, db)
     minhas_keys = []
     if usuario:
         minhas_keys = db.query(ApiKey).filter(ApiKey.usuario_id == usuario.id).all()
-    return templates.TemplateResponse("api_docs.html", {
-        "request": request,
-        "usuario": usuario,
-        "minhas_keys": minhas_keys,
-        "planos_api": {
-            "developer":    {"preco": 79.00,  "limite": 1000,  "nome": "Developer"},
-            "business_api": {"preco": 199.00, "limite": 10000, "nome": "Business"},
-        }
-    })
+    planos_api_lista = [
+        {"key": "developer",    "nome": "Developer", "preco": 79.00,  "limite": "1.000 req/mes"},
+        {"key": "business_api", "nome": "Business",  "preco": 199.00, "limite": "10.000 req/mes"},
+    ]
+    from jinja2 import Environment, FileSystemLoader
+    _env2 = Environment(loader=FileSystemLoader("templates"))
+    _t2 = _env2.get_template("api_docs.html")
+    _html2 = _t2.render(request=request, usuario=usuario, minhas_keys=minhas_keys, planos_api=planos_api_lista)
+    from fastapi.responses import HTMLResponse as _HR2
+    return _HR2(_html2)
 
 @app.post("/api/v1/keys/criar")
 async def criar_api_key(request: Request, db: Session = Depends(get_db)):
-    usuario = await get_usuario_logado(request, db)
+    usuario = get_usuario_logado(request, db)
     if not usuario:
         return JSONResponse({"ok": False, "erro": "Nao autenticado"}, status_code=401)
     body = await request.json()
@@ -2443,7 +2444,7 @@ async def criar_api_key(request: Request, db: Session = Depends(get_db)):
 
 @app.post("/api/v1/analisar")
 async def api_analisar(request: Request, db: Session = Depends(get_db)):
-    """Endpoint público da API monetizada"""
+    """Endpoint publico da API monetizada"""
     auth = request.headers.get("Authorization", "")
     if not auth.startswith("Bearer "):
         return JSONResponse({"error": "Authorization header required"}, status_code=401)
@@ -2469,26 +2470,28 @@ async def api_analisar(request: Request, db: Session = Depends(get_db)):
 # --- CHECKOUT API DEVELOPER ---
 @app.get("/checkout/api", response_class=HTMLResponse)
 async def checkout_api(request: Request, plano: str = "developer", db: Session = Depends(get_db)):
-    usuario = await get_usuario_logado(request, db)
+    usuario = get_usuario_logado(request, db)
     if not usuario:
         return RedirectResponse("/login", status_code=302)
-    planos_api = {
-        "developer":    {"nome": "API Developer", "preco": 79.00,  "limite": "1.000 req/mês"},
-        "business_api": {"nome": "API Business",  "preco": 199.00, "limite": "10.000 req/mês"},
-    }
+    todos_planos_lista = [
+        {"key": "developer",    "nome": "API Developer", "preco": 79.00,  "limite": "1.000 req/mes"},
+        {"key": "business_api", "nome": "API Business",  "preco": 199.00, "limite": "10.000 req/mes"},
+    ]
+    planos_api = {"developer": {"nome": "API Developer", "preco": 79.00, "limite": "1.000 req/mes"}, "business_api": {"nome": "API Business", "preco": 199.00, "limite": "10.000 req/mes"}}
     if plano not in planos_api:
         plano = "developer"
+    dados_plano = planos_api[plano]
     return templates.TemplateResponse("checkout_api.html", {
         "request": request,
         "usuario": usuario,
         "plano": plano,
-        "dados": planos_api[plano],
-        "todos_planos": planos_api
+        "dados": dados_plano,
+        "todos_planos": todos_planos_lista
     })
 
 @app.post("/checkout/api/processar")
 async def processar_checkout_api(request: Request, db: Session = Depends(get_db)):
-    usuario = await get_usuario_logado(request, db)
+    usuario = get_usuario_logado(request, db)
     if not usuario:
         return JSONResponse({"ok": False, "erro": "Nao autenticado"}, status_code=401)
     body = await request.json()
@@ -2524,24 +2527,25 @@ async def processar_checkout_api(request: Request, db: Session = Depends(get_db)
 # --- WHITE-LABEL ---
 @app.get("/whitelabel", response_class=HTMLResponse)
 async def pagina_whitelabel(request: Request, db: Session = Depends(get_db)):
-    usuario = await get_usuario_logado(request, db)
-    return templates.TemplateResponse("whitelabel.html", {
-        "request": request,
-        "usuario": usuario,
-        "preco": 299.00,
-        "features": [
-            "Marca 100% personalizada",
-            "Até 50 usuários incluídos",
-            "Painel admin dedicado",
-            "Suporte prioritário",
-            "Domínio customizado",
-            "Relatórios para RH",
-        ]
-    })
+    usuario = get_usuario_logado(request, db)
+    features_wl = [
+        "Marca 100% personalizada",
+        "Ate 50 usuarios incluidos",
+        "Painel admin dedicado",
+        "Suporte prioritario",
+        "Dominio customizado",
+        "Relatorios para RH",
+    ]
+    from jinja2 import Environment, FileSystemLoader
+    _env = Environment(loader=FileSystemLoader("templates"))
+    _t = _env.get_template("whitelabel.html")
+    _html = _t.render(request=request, usuario=usuario, preco=299.00, features=features_wl)
+    from fastapi.responses import HTMLResponse as _HR
+    return _HR(_html)
 
 @app.post("/checkout/whitelabel/processar")
 async def processar_checkout_whitelabel(request: Request, db: Session = Depends(get_db)):
-    usuario = await get_usuario_logado(request, db)
+    usuario = get_usuario_logado(request, db)
     if not usuario:
         return JSONResponse({"ok": False, "erro": "Nao autenticado"}, status_code=401)
     body = await request.json()
@@ -2687,7 +2691,7 @@ async def webhook_mp_v2(request: Request, db: Session = Depends(get_db)):
 # --- MINHA CARTEIRA (créditos do usuário) ---
 @app.get("/carteira", response_class=HTMLResponse)
 async def carteira(request: Request, db: Session = Depends(get_db)):
-    usuario = await get_usuario_logado(request, db)
+    usuario = get_usuario_logado(request, db)
     if not usuario:
         return RedirectResponse("/login", status_code=302)
     transacoes = db.query(TransacaoCredito).filter(
