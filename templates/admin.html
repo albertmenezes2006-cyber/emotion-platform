@@ -205,7 +205,7 @@ tr:hover td{background:rgba(255,255,255,0.03)}
           <th>Plano</th>
           <th>Análises</th>
         </tr>
-        {% for u in usuarios|sort(attribute='pontos',reverse=True)[:5] %}
+        {% for u in usuarios|sort(attribute="pontos",reverse=True) %}{% if loop.index <= 5 %}
         <tr>
           <td>
             {% if loop.index == 1 %}🥇
@@ -220,6 +220,7 @@ tr:hover td{background:rgba(255,255,255,0.03)}
           <td><span class="badge badge-{{ u.plano }}">{{ u.plano|upper }}</span></td>
           <td>{{ u.total_analises }}</td>
         </tr>
+        {% endif %}
         {% endfor %}
       </table>
     </div>

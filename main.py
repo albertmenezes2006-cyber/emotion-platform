@@ -3012,13 +3012,7 @@ async def checkout_anual(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
     if not usuario:
         return RedirectResponse("/login", status_code=302)
-    return templates.TemplateResponse("checkout_anual.html", {
-        "request": request,
-        "usuario": usuario,
-        "preco": 399.00,
-        "economia": "R$189",
-        "parcelas": "12x R$33,25"
-    })
+    return render_template("checkout_anual.html", request=request, usuario=usuario, preco=399.00, economia="R$189", parcelas="12x R$33,25")
 
 @app.post("/checkout/anual/processar")
 async def processar_checkout_anual(request: Request, db: Session = Depends(get_db)):
@@ -3065,13 +3059,7 @@ async def checkout_creditos(request: Request, pacote: str = "M", db: Session = D
         {"key": k, "nome": v["nome"], "preco": v["preco"], "analises": v["analises"], "sofia": v["sofia"], "economia": v.get("economia","")}
         for k, v in PACOTES_CREDITOS.items()
     ]
-    return templates.TemplateResponse("checkout_creditos.html", {
-        "request": request,
-        "usuario": usuario,
-        "pacote": pacote,
-        "dados": dados,
-        "todos_pacotes": todos_pacotes_lista
-    })
+    return render_template("checkout_creditos.html", request=request, usuario=usuario, pacote=pacote, dados=dados, todos_pacotes=todos_pacotes_lista)
 
 @app.post("/checkout/creditos/processar")
 async def processar_checkout_creditos(request: Request, db: Session = Depends(get_db)):
@@ -3115,12 +3103,7 @@ async def checkout_sofia(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
     if not usuario:
         return RedirectResponse("/login", status_code=302)
-    return templates.TemplateResponse("checkout_sofia.html", {
-        "request": request,
-        "usuario": usuario,
-        "preco": 4.90,
-        "msgs": 10
-    })
+    return render_template("checkout_sofia.html", request=request, usuario=usuario, preco=4.90, msgs=10)
 
 @app.post("/checkout/sofia/processar")
 async def processar_checkout_sofia(request: Request, db: Session = Depends(get_db)):
@@ -3166,13 +3149,7 @@ async def checkout_relatorio(request: Request, db: Session = Depends(get_db)):
         RelatorioPago.usuario_id == usuario.id,
         RelatorioPago.mes_ref == mes_atual
     ).first()
-    return templates.TemplateResponse("checkout_relatorio.html", {
-        "request": request,
-        "usuario": usuario,
-        "preco": 9.90,
-        "mes_label": mes_label,
-        "ja_comprou": ja_comprou is not None
-    })
+    return render_template("checkout_relatorio.html", request=request, usuario=usuario, preco=9.90, mes_label=mes_label, ja_comprou=ja_comprou is not None)
 
 @app.post("/checkout/relatorio/processar")
 async def processar_checkout_relatorio(request: Request, db: Session = Depends(get_db)):
@@ -3224,11 +3201,7 @@ async def pagina_presente(request: Request, db: Session = Depends(get_db)):
         {"plano": "anual",    "nome": "Premium Anual",  "preco": 399.00},
         {"plano": "creditos", "nome": "100 Creditos",   "preco": 24.90},
     ]
-    return templates.TemplateResponse("presente.html", {
-        "request": request,
-        "usuario": usuario,
-        "opcoes": opcoes_presente
-    })
+    return render_template("presente.html", request=request, usuario=usuario, opcoes=opcoes_presente)
 
 @app.post("/presente/processar")
 async def processar_presente(request: Request, db: Session = Depends(get_db)):
@@ -3615,16 +3588,7 @@ async def carteira(request: Request, db: Session = Depends(get_db)):
         {"key": k, "nome": v["nome"], "preco": v["preco"], "analises": v["analises"], "sofia": v["sofia"], "economia": v.get("economia","")}
         for k, v in PACOTES_CREDITOS.items()
     ]
-    return templates.TemplateResponse("carteira.html", {
-        "request": request,
-        "usuario": usuario,
-        "transacoes": transacoes,
-        "minhas_keys": minhas_keys,
-        "meus_presentes": meus_presentes,
-        "creditos_analise": getattr(usuario, "creditos_analise", 0) or 0,
-        "creditos_sofia": getattr(usuario, "creditos_sofia", 0) or 0,
-        "pacotes": pacotes_lista
-    })
+    return render_template("carteira.html", request=request, usuario=usuario, transacoes=transacoes, minhas_keys=minhas_keys, meus_presentes=meus_presentes, creditos_analise=getattr(usuario,"creditos_analise",0) or 0, creditos_sofia=getattr(usuario,"creditos_sofia",0) or 0, pacotes=pacotes_lista)
 
 
 
@@ -4831,13 +4795,7 @@ def pagina_score_ie(request: Request, db: Session = Depends(get_db)):
         palavra = get_palavra_do_dia()
     except:
         palavra = {"palavra": "Saudade", "origem": "Portuguesa", "emoji": "🥺", "definicao": "Melancolia nostalgica", "exemplo": "Sinto saudade", "tecnica": "Honre a saudade"}
-    return templates.TemplateResponse("score_ie.html", {
-        "request": request,
-        "usuario": usuario,
-        "score": score_data,
-        "alertas": alertas,
-        "palavra": palavra,
-    })
+    return render_template("score_ie.html", request=request, usuario=usuario, score=score_data, alertas=alertas, palavra=palavra)
 
 @app.get("/api/score-ie")
 def api_score_ie(request: Request, db: Session = Depends(get_db)):
@@ -5261,22 +5219,14 @@ def pagina_analises(request: Request, db: Session = Depends(get_db)):
     analises = db.query(Analise).filter(
         Analise.usuario_id == usuario.id
     ).order_by(Analise.criado_em.desc()).limit(50).all()
-    return templates.TemplateResponse("analises.html", {
-        "request": request,
-        "usuario": usuario,
-        "analises": analises,
-        "total": len(analises)
-    })
+    return render_template("analises.html", request=request, usuario=usuario, analises=analises, total=len(analises))
 
 @app.get("/configuracoes", response_class=HTMLResponse)
 def pagina_configuracoes(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
     if not usuario:
         return RedirectResponse("/login", status_code=302)
-    return templates.TemplateResponse("configuracoes.html", {
-        "request": request,
-        "usuario": usuario,
-    })
+    return render_template("configuracoes.html", request=request, usuario=usuario)
 
 @app.post("/configuracoes/salvar")
 def salvar_configuracoes(
@@ -5301,6 +5251,15 @@ def pagina_exportar(request: Request, db: Session = Depends(get_db)):
     if not usuario:
         return RedirectResponse("/login", status_code=302)
     return RedirectResponse("/exportar/csv", status_code=302)
+
+
+def render_template(nome: str, **kwargs) -> HTMLResponse:
+    """Renderiza template sem cache do Jinja2"""
+    from jinja2 import Environment, FileSystemLoader
+    env = Environment(loader=FileSystemLoader("templates"))
+    t = env.get_template(nome)
+    html = t.render(**kwargs)
+    return HTMLResponse(html)
 
 @app.get("/health")
 async def health(db: Session = Depends(get_db)):

@@ -35,8 +35,8 @@ body{font-family:'Segoe UI',sans-serif;background:#0f0f1a;color:#fff;min-height:
     ℹ️ Créditos nunca expiram (válidos por 1 ano) • Use no seu ritmo • Sem renovação automática
   </div>
   <div class="pacotes">
-    {% for key, p in todos_pacotes.items() %}
-    <div class="pacote {% if key == 'M' %}popular ativo{% endif %} {% if key == pacote %}ativo{% endif %}" onclick="selecionarPacote('{{key}}')">
+    {% for p in todos_pacotes %}
+    <div class="pacote {% if p.key == 'M' %}popular ativo{% endif %} {% if p.key == pacote %}ativo{% endif %}" onclick="selecionarPacote('{{p.key}}')">
       <h3>{{p.nome}}</h3>
       <div class="qtd">{{p.analises}}</div>
       <div style="color:#aaa;font-size:.85rem">análises + {{p.sofia}} msgs Sofia</div>
