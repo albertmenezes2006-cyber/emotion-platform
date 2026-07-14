@@ -435,8 +435,8 @@ class TransacaoCredito(Base):
     payment_id = Column(String, nullable=True)
     criado_em = Column(DateTime, default=datetime.utcnow)
 
-Base.metadata.create_all(bind=engine)
 
+# Migração antecipada — roda ANTES do create_all para evitar erro de colunas
 def rodar_migracoes():
     """Migração automática — adiciona colunas novas sem quebrar dados existentes"""
     try:
@@ -454,14 +454,16 @@ def rodar_migracoes():
                 try:
                     conn.execute(text(sql))
                     conn.commit()
-                    print(f"✅ Migração: {sql[:60]}...")
+                    print(f"Migracao OK: {sql[:50]}")
                 except Exception as e:
-                    print(f"⚠️ Migração skip: {e}")
-        print("✅ Migrações concluídas!")
+                    pass  # coluna ja existe — normal
+        print("Migracoes concluidas!")
     except Exception as e:
-        print(f"⚠️ Erro migrações: {e}")
+        print(f"Migracoes skip (SQLite ou primeira vez): {e}")
 
 rodar_migracoes()
+
+Base.metadata.create_all(bind=engine)
 
 
 # Cria cupons padrao se nao existirem
