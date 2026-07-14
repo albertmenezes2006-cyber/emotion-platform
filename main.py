@@ -463,6 +463,19 @@ def rodar_migracoes():
 
 rodar_migracoes()
 
+
+class PerfilSofia(Base):
+    """Perfil psicologico do usuario construido pela Sofia ao longo do tempo"""
+    __tablename__ = "perfis_sofia"
+    id = Column(Integer, primary_key=True)
+    usuario_id = Column(Integer, ForeignKey("usuarios.id"), unique=True)
+    resumo = Column(String, nullable=True)  # Resumo do perfil psicologico
+    temas_principais = Column(String, nullable=True)  # Temas mais discutidos
+    tecnicas_usadas = Column(String, nullable=True)  # Tecnicas aplicadas
+    progresso = Column(String, nullable=True)  # Evolucao observada
+    alertas = Column(String, nullable=True)  # Pontos de atencao
+    atualizado_em = Column(DateTime, default=datetime.utcnow)
+
 Base.metadata.create_all(bind=engine)
 
 
@@ -3048,12 +3061,16 @@ async def checkout_creditos(request: Request, pacote: str = "M", db: Session = D
     if pacote not in PACOTES_CREDITOS:
         pacote = "M"
     dados = PACOTES_CREDITOS[pacote]
+    todos_pacotes_lista = [
+        {"key": k, "nome": v["nome"], "preco": v["preco"], "analises": v["analises"], "sofia": v["sofia"], "economia": v.get("economia","")}
+        for k, v in PACOTES_CREDITOS.items()
+    ]
     return templates.TemplateResponse("checkout_creditos.html", {
         "request": request,
         "usuario": usuario,
         "pacote": pacote,
         "dados": dados,
-        "todos_pacotes": PACOTES_CREDITOS
+        "todos_pacotes": todos_pacotes_lista
     })
 
 @app.post("/checkout/creditos/processar")
@@ -3202,14 +3219,15 @@ async def pagina_presente(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
     if not usuario:
         return RedirectResponse("/login", status_code=302)
+    opcoes_presente = [
+        {"plano": "premium",  "nome": "Premium 1 mes", "preco": 49.00},
+        {"plano": "anual",    "nome": "Premium Anual",  "preco": 399.00},
+        {"plano": "creditos", "nome": "100 Creditos",   "preco": 24.90},
+    ]
     return templates.TemplateResponse("presente.html", {
         "request": request,
         "usuario": usuario,
-        "opcoes": [
-            {"plano": "premium", "nome": "Premium 1 mês", "preco": 49.00},
-            {"plano": "anual",   "nome": "Premium Anual", "preco": 399.00},
-            {"plano": "creditos","nome": "100 Créditos",  "preco": 24.90},
-        ]
+        "opcoes": opcoes_presente
     })
 
 @app.post("/presente/processar")
@@ -3593,6 +3611,10 @@ async def carteira(request: Request, db: Session = Depends(get_db)):
     ).order_by(TransacaoCredito.criado_em.desc()).limit(20).all()
     minhas_keys = db.query(ApiKey).filter(ApiKey.usuario_id == usuario.id).all()
     meus_presentes = db.query(Presente).filter(Presente.remetente_id == usuario.id).all()
+    pacotes_lista = [
+        {"key": k, "nome": v["nome"], "preco": v["preco"], "analises": v["analises"], "sofia": v["sofia"], "economia": v.get("economia","")}
+        for k, v in PACOTES_CREDITOS.items()
+    ]
     return templates.TemplateResponse("carteira.html", {
         "request": request,
         "usuario": usuario,
@@ -3601,7 +3623,7 @@ async def carteira(request: Request, db: Session = Depends(get_db)):
         "meus_presentes": meus_presentes,
         "creditos_analise": getattr(usuario, "creditos_analise", 0) or 0,
         "creditos_sofia": getattr(usuario, "creditos_sofia", 0) or 0,
-        "pacotes": PACOTES_CREDITOS
+        "pacotes": pacotes_lista
     })
 
 
@@ -4796,9 +4818,19 @@ def pagina_score_ie(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
     if not usuario:
         return RedirectResponse("/login", status_code=302)
-    score_data = calcular_score_ie_v3(usuario.id, db)
-    alertas = verificar_alertas_inteligentes(usuario.id, db)
-    palavra = get_palavra_do_dia()
+    try:
+        score_data = calcular_score_ie_v3(usuario.id, db)
+    except Exception as e:
+        print(f"Erro score IE: {e}")
+        score_data = {"score_total": 0, "dimensoes": {}, "nivel": "Iniciante", "emoji_nivel": "🌱", "mensagem": "Faca sua primeira analise!", "ponto_forte": "", "ponto_fraco": "", "total_analises": 0, "total_diarios": 0, "total_msgs": 0}
+    try:
+        alertas = verificar_alertas_inteligentes(usuario.id, db)
+    except:
+        alertas = []
+    try:
+        palavra = get_palavra_do_dia()
+    except:
+        palavra = {"palavra": "Saudade", "origem": "Portuguesa", "emoji": "🥺", "definicao": "Melancolia nostalgica", "exemplo": "Sinto saudade", "tecnica": "Honre a saudade"}
     return templates.TemplateResponse("score_ie.html", {
         "request": request,
         "usuario": usuario,
@@ -5210,6 +5242,65 @@ def sofia_responder_orquestrador(prompt_completo: str, usar_cache: bool = False)
     resultado = chamar_ia(prompt_completo, max_tokens=1500, temperatura=0.75, usar_cache=usar_cache)
     return resultado
 
+
+
+@app.get("/dashboard", response_class=HTMLResponse)
+def dashboard_redirect(request: Request, db: Session = Depends(get_db)):
+    """Rota dashboard — redireciona para pagina principal logada"""
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return RedirectResponse("/login", status_code=302)
+    return RedirectResponse("/", status_code=302)
+
+
+@app.get("/analises", response_class=HTMLResponse)
+def pagina_analises(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return RedirectResponse("/login", status_code=302)
+    analises = db.query(Analise).filter(
+        Analise.usuario_id == usuario.id
+    ).order_by(Analise.criado_em.desc()).limit(50).all()
+    return templates.TemplateResponse("analises.html", {
+        "request": request,
+        "usuario": usuario,
+        "analises": analises,
+        "total": len(analises)
+    })
+
+@app.get("/configuracoes", response_class=HTMLResponse)
+def pagina_configuracoes(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return RedirectResponse("/login", status_code=302)
+    return templates.TemplateResponse("configuracoes.html", {
+        "request": request,
+        "usuario": usuario,
+    })
+
+@app.post("/configuracoes/salvar")
+def salvar_configuracoes(
+    request: Request,
+    nome: str = Form(None),
+    bio: str = Form(None),
+    db: Session = Depends(get_db)
+):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return JSONResponse({"ok": False}, status_code=401)
+    if nome:
+        usuario.nome = nome
+    if bio:
+        usuario.bio = bio
+    db.commit()
+    return JSONResponse({"ok": True, "mensagem": "Configuracoes salvas!"})
+
+@app.get("/exportar", response_class=HTMLResponse)
+def pagina_exportar(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return RedirectResponse("/login", status_code=302)
+    return RedirectResponse("/exportar/csv", status_code=302)
 
 @app.get("/health")
 async def health(db: Session = Depends(get_db)):
@@ -7942,11 +8033,11 @@ async def chat(
     # Histórico das últimas mensagens
     historico = db.query(Mensagem).filter(
         Mensagem.usuario_id == usuario.id
-    ).order_by(Mensagem.criado_em.desc()).limit(12).all()
+    ).order_by(Mensagem.criado_em.desc()).limit(20).all()
 
     contexto = ""
     for h in reversed(historico):
-        contexto += f"Usuário: {h.conteudo}\nSofia: {h.resposta}\n\n"
+        contexto += f"Usuario: {h.conteudo}\nSofia: {h.resposta}\n\n"
 
     # GEMINI detecta emocao da mensagem para Sofia
     try:
@@ -8001,9 +8092,34 @@ async def chat(
         )
 
     # Historico compacto - ultimas 6 trocas (memoria ampliada)
+    # Memoria completa da conversa atual
     historico_curto = ""
-    for h in reversed(historico[-6:]):
-        historico_curto += f"U: {h.conteudo[:100]}\nS: {h.resposta[:120]}\n"
+    for h in reversed(historico[-12:]):
+        historico_curto += f"Usuario: {h.conteudo}\nSofia: {h.resposta[:200]}\n\n"
+    
+    # Resumo do perfil emocional do usuario
+    todas_analises = db.query(Analise).filter(
+        Analise.usuario_id == usuario.id
+    ).order_by(Analise.criado_em.desc()).limit(30).all()
+    
+    from collections import Counter as _Counter
+    if todas_analises:
+        emocoes_todas = [a.emocao for a in todas_analises if a.emocao]
+        counter_todas = _Counter(emocoes_todas)
+        top3_emocoes = counter_todas.most_common(3)
+        perfil_emocional = " | ".join([f"{e}({c}x)" for e,c in top3_emocoes])
+    else:
+        perfil_emocional = "primeira sessao"
+    
+    # Temas recorrentes nas conversas
+    todos_temas = []
+    for h in historico:
+        if h.conteudo:
+            todos_temas.append(h.conteudo[:50])
+    temas_recentes = " | ".join(todos_temas[-5:]) if todos_temas else "nenhum"
+    
+    # Primeira mensagem do usuario (origem)
+    primeira_msg = historico[-1].conteudo if historico else "primeira vez"
 
     # Analises recentes para contexto emocional
     analises_recentes = db.query(Analise).filter(
@@ -8171,13 +8287,25 @@ async def chat(
         f"• Plano: {usuario.plano.upper()}\n"
         f"• Sessao #{total_sessoes} com voce\n"
         f"• Ha {dias_plataforma} dias na plataforma\n"
+        f"• Historico emocional (top 3): {perfil_emocional}\n"
         f"• Padrao emocional recente: {padrao_emocional or 'primeira sessao'}\n"
+        f"• Temas recorrentes: {temas_recentes}\n"
+        f"• Primeira mensagem: {primeira_msg}\n"
         f"• Diario recente: {contexto_diario or 'sem entradas'}\n"
         f"• Score IE: {score_str}\n"
         f"• Badge: {usuario.badge}\n"
         f"• Pontos: {usuario.pontos}\n\n"
-        "=== MEMORIA DA CONVERSA (ultimas 12 trocas) ===\n"
-        f"{historico_curto if historico_curto else 'Inicio da conversa — apresente-se com carinho.'}\n\n"
+        "=== REGRAS DE COMPORTAMENTO ===\n"
+        "• NAO repita 'Ola' ou apresentacao em cada mensagem\n"
+        "• USE o historico para dar continuidade natural a conversa\n"
+        "• REFERENCIE o que foi dito antes quando relevante\n"
+        "• Se e a primeira mensagem: apresente-se brevemente\n"
+        "• Se nao e a primeira: continue a conversa naturalmente\n"
+        "• NUNCA misture ingles no meio do portugues\n"
+        "• Seja direta e humana, sem ser robotica\n"
+        "• Varie as tecnicas — nao repita a mesma toda vez\n\n"
+        "=== MEMORIA DA CONVERSA ATUAL (ultimas 12 trocas) ===\n"
+        f"{historico_curto if historico_curto else 'PRIMEIRA CONVERSA — apresente-se com carinho e pergunte como a pessoa esta.'}\n\n"
         f"=== MODO ATUAL: {modo_sofia} ===\n"
         f"{instrucoes_modo}\n\n"
         "=== INSTRUCOES GERAIS DE RESPOSTA ===\n"
