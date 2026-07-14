@@ -4972,47 +4972,111 @@ IA_KEYS = {
     "deepseek":   os.getenv("DEEPSEEK_API_KEY", ""),
 }
 
-# MODELOS POR IA
+# MODELOS POR IA — TODOS OS MELHORES DISPONIVEIS
 IA_MODELOS = {
-    "groq":       "llama-3.3-70b-versatile",
-    "mistral":    "mistral-small-latest",
-    "openrouter": "meta-llama/llama-3.3-70b-instruct:free",
-    "gemini":     "gemini-2.0-flash",
+    # SOFIA — IAs principais (melhor qualidade para terapia)
+    "groq_llama70b":    "llama-3.3-70b-versatile",
+    "groq_llama8b":     "llama-3.1-8b-instant",
+    "groq_mixtral":     "mixtral-8x7b-32768",
+    "groq_gemma":       "gemma2-9b-it",
+    "mistral_small":    "mistral-small-latest",
+    "mistral_tiny":     "open-mistral-7b",
+    "mistral_nemo":     "open-mistral-nemo",
+    # OPENROUTER — acesso a 250+ modelos
+    "or_llama70b":      "meta-llama/llama-3.3-70b-instruct:free",
+    "or_llama405b":     "meta-llama/llama-3.1-405b-instruct:free",
+    "or_llama8b":       "meta-llama/llama-3.1-8b-instruct:free",
+    "or_mistral":       "mistralai/mistral-7b-instruct:free",
+    "or_gemma":         "google/gemma-2-9b-it:free",
+    "or_phi":           "microsoft/phi-3-mini-128k-instruct:free",
+    "or_qwen":          "qwen/qwen-2-7b-instruct:free",
+    "or_deepseek":      "deepseek/deepseek-r1:free",
+    "or_nous":          "nousresearch/hermes-3-llama-3.1-405b:free",
+    "or_dolphin":       "cognitivecomputations/dolphin-mixtral-8x22b:free",
+    # GEMINI — fallback final
+    "gemini":           "gemini-2.0-flash",
 }
+
+# ORDEM DE PRIORIDADE PARA SOFIA
+ORDEM_SOFIA = [
+    # GROQ primeiro — mais rapido e qualidade alta
+    ("groq", "groq_llama70b"),
+    ("groq", "groq_mixtral"),
+    ("groq", "groq_gemma"),
+    ("groq", "groq_llama8b"),
+    # MISTRAL segundo — muito bom para portugues
+    ("mistral", "mistral_small"),
+    ("mistral", "mistral_nemo"),
+    ("mistral", "mistral_tiny"),
+    # OPENROUTER terceiro — 250+ modelos
+    ("openrouter", "or_llama70b"),
+    ("openrouter", "or_llama405b"),
+    ("openrouter", "or_deepseek"),
+    ("openrouter", "or_nous"),
+    ("openrouter", "or_mistral"),
+    ("openrouter", "or_gemma"),
+    ("openrouter", "or_qwen"),
+    ("openrouter", "or_phi"),
+    ("openrouter", "or_dolphin"),
+    ("openrouter", "or_llama8b"),
+    # GEMINI — fallback final
+    ("gemini", "gemini"),
+]
+
+# ORDEM PARA TRADUCAO/DETECCAO DE EMOCAO (modelos leves)
+ORDEM_DETECCAO = [
+    ("groq", "groq_llama8b"),
+    ("groq", "groq_gemma"),
+    ("mistral", "mistral_tiny"),
+    ("openrouter", "or_llama8b"),
+    ("openrouter", "or_phi"),
+    ("openrouter", "or_gemma"),
+    ("gemini", "gemini"),
+]
 
 # Cache de respostas para economizar quota
 _cache_respostas = {}
 
-def chamar_ia(prompt: str, max_tokens: int = 1000, temperatura: float = 0.75) -> dict:
+def chamar_ia(prompt: str, max_tokens: int = 1000, temperatura: float = 0.75, usar_cache: bool = False) -> dict:
     """Chama IAs em ordem de prioridade com failover automatico"""
     
-    # Checar cache
-    cache_key = prompt[:150]
-    if cache_key in _cache_respostas:
-        return {"texto": _cache_respostas[cache_key], "ia": "cache", "ok": True}
+    # Cache apenas para deteccao de emocao (nao para Sofia)
+    if usar_cache:
+        cache_key = prompt[:150]
+        if cache_key in _cache_respostas:
+            return {"texto": _cache_respostas[cache_key], "ia": "cache", "ok": True}
     
-    # Ordem de prioridade
-    ordem = ["groq", "mistral", "openrouter", "gemini"]
+    # Usar ordem correta baseada no tipo
+    if max_tokens > 500:
+        # Sofia — usar ordem completa com todos os modelos
+        ordem_usar = ORDEM_SOFIA
+    else:
+        # Deteccao/traducao — usar modelos leves
+        ordem_usar = ORDEM_DETECCAO
     
-    for ia_nome in ordem:
+    for ia_provider, ia_modelo_key in ordem_usar:
         try:
-            resultado = _chamar_ia_especifica(ia_nome, prompt, max_tokens, temperatura)
+            modelo = IA_MODELOS.get(ia_modelo_key, "")
+            resultado = _chamar_ia_especifica(ia_provider, prompt, max_tokens, temperatura, modelo_override=modelo)
             if resultado["ok"]:
-                # Salvar no cache
-                _cache_respostas[cache_key] = resultado["texto"]
-                # Limpar cache se muito grande
-                if len(_cache_respostas) > 500:
-                    keys = list(_cache_respostas.keys())
-                    for k in keys[:100]:
-                        del _cache_respostas[k]
+                resultado["modelo"] = ia_modelo_key
+                # Salvar no cache apenas se solicitado
+                if usar_cache:
+                    cache_key = prompt[:150]
+                    _cache_respostas[cache_key] = resultado["texto"]
+                    if len(_cache_respostas) > 500:
+                        keys = list(_cache_respostas.keys())
+                        for k in keys[:100]:
+                            del _cache_respostas[k]
+                print(f"[IA] Respondeu: {ia_provider}/{ia_modelo_key}")
                 return resultado
         except Exception as e:
-            print(f"[IA] {ia_nome} falhou: {e}")
+            print(f"[IA] {ia_provider}/{ia_modelo_key} falhou: {e}")
             continue
     
     return {"texto": "", "ia": "none", "ok": False}
 
-def _chamar_ia_especifica(ia_nome: str, prompt: str, max_tokens: int, temperatura: float) -> dict:
+def _chamar_ia_especifica(ia_nome: str, prompt: str, max_tokens: int, temperatura: float, modelo_override: str = "") -> dict:
     """Chama uma IA especifica"""
     key = IA_KEYS.get(ia_nome, "")
     if not key:
@@ -5024,8 +5088,9 @@ def _chamar_ia_especifica(ia_nome: str, prompt: str, max_tokens: int, temperatur
             "Authorization": f"Bearer {key}",
             "Content-Type": "application/json"
         }
+        modelo_groq = modelo_override if modelo_override else IA_MODELOS["groq_llama70b"]
         data = {
-            "model": IA_MODELOS["groq"],
+            "model": modelo_groq,
             "messages": [{"role": "user", "content": prompt}],
             "max_tokens": max_tokens,
             "temperature": temperatura
@@ -5048,8 +5113,9 @@ def _chamar_ia_especifica(ia_nome: str, prompt: str, max_tokens: int, temperatur
             "Authorization": f"Bearer {key}",
             "Content-Type": "application/json"
         }
+        modelo_mistral = modelo_override if modelo_override else IA_MODELOS["mistral_small"]
         data = {
-            "model": IA_MODELOS["mistral"],
+            "model": modelo_mistral,
             "messages": [{"role": "user", "content": prompt}],
             "max_tokens": max_tokens,
             "temperature": temperatura
@@ -5074,8 +5140,9 @@ def _chamar_ia_especifica(ia_nome: str, prompt: str, max_tokens: int, temperatur
             "HTTP-Referer": "https://emotion-platform-albert.onrender.com",
             "X-Title": "Emotion Intelligence Platform"
         }
+        modelo_or = modelo_override if modelo_override else IA_MODELOS["or_llama70b"]
         data = {
-            "model": IA_MODELOS["openrouter"],
+            "model": modelo_or,
             "messages": [{"role": "user", "content": prompt}],
             "max_tokens": max_tokens,
             "temperature": temperatura
@@ -5138,9 +5205,9 @@ def detectar_emocao_orquestrador(texto: str) -> str:
     # Fallback local
     return detectar_emocao(texto)
 
-def sofia_responder_orquestrador(prompt_completo: str) -> dict:
+def sofia_responder_orquestrador(prompt_completo: str, usar_cache: bool = False) -> dict:
     """Sofia responde usando o melhor orquestrador disponivel"""
-    resultado = chamar_ia(prompt_completo, max_tokens=1500, temperatura=0.75)
+    resultado = chamar_ia(prompt_completo, max_tokens=1500, temperatura=0.75, usar_cache=usar_cache)
     return resultado
 
 
@@ -8148,10 +8215,11 @@ async def chat(
 
     try:
         # ORQUESTRADOR — usa melhor IA disponivel
-        resultado_ia = sofia_responder_orquestrador(prompt)
+        resultado_ia = sofia_responder_orquestrador(prompt, usar_cache=False)
         if resultado_ia["ok"]:
             texto_resposta = resultado_ia["texto"]
-            print(f"[Sofia] Respondeu via: {resultado_ia['ia']}")
+            ia_usada_sofia = resultado_ia.get("ia", "orquestrador")
+            print(f"[Sofia] Respondeu via: {ia_usada_sofia}")
         else:
             # Fallback Gemini direto
             resposta = cliente_ia.models.generate_content(
