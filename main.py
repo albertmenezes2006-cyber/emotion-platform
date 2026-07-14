@@ -845,21 +845,40 @@ tecnicas_por_emocao = {
 
 def get_emoji(emocao: str) -> str:
     emojis = {
-        "alegria":   "😄",
-        "tristeza":  "😢",
-        "raiva":     "😡",
-        "medo":      "😨",
-        "surpresa":  "😲",
-        "nojo":      "🤢",
-        "amor":      "❤️",
-        "esperanca": "🌅",
-        "gratidao":  "🙏",
-        "solidao":   "😔",
-        "euforia":   "🎉",
-        "calma":     "🕊️",
-        "confusao":  "😕",
-        "vergonha":  "😳",
-        "neutro":    "😐",
+        "alegria":    "😄",
+        "tristeza":   "😢",
+        "raiva":      "😡",
+        "medo":       "😨",
+        "surpresa":   "😲",
+        "nojo":       "🤢",
+        "amor":       "❤️",
+        "esperanca":  "🌅",
+        "gratidao":   "🙏",
+        "solidao":    "😔",
+        "euforia":    "🎉",
+        "calma":      "🕊️",
+        "confusao":   "😕",
+        "vergonha":   "😳",
+        "neutro":     "😐",
+        "ansiedade":  "😰",
+        "estresse":   "😓",
+        "empolgacao": "🚀",
+        "saudade":    "🥺",
+        "orgulho":    "💪",
+        "ciumes":     "😒",
+        "frustracao": "😤",
+        "alivio":     "😮‍💨",
+        "entusiasmo": "✨",
+        "melancolia": "🌧️",
+        "nostalgia":  "📸",
+        "panico":     "😱",
+        "timidez":    "🙈",
+        "curiosidade":"🤔",
+        "tedio":      "😴",
+        "animacao":   "🎊",
+        "desespero":  "😩",
+        "paz":        "☮️",
+        "contentamento": "😊",
     }
     return emojis.get(emocao, "😐")
 
@@ -903,54 +922,431 @@ def normalizar_texto(texto: str) -> str:
     return texto
 
 
-def detectar_emocao(texto: str) -> str:
-    texto_norm = normalizar_texto(texto)
-    pontuacao  = {}
+# ============================================================
+# DICIONARIO UNIVERSAL DE GIRIAS E EXPRESSOES (200+ entradas)
+# ============================================================
+GIRIAS_NORMALIZACAO = {
+    # Estados negativos
+    "ta mal": "estou mal",
+    "to mal": "estou mal",
+    "tô mal": "estou mal",
+    "na bad": "triste deprimido",
+    "na bad foda": "muito triste deprimido",
+    "destruido": "destruido arrasado",
+    "destruída": "destruida arrasada",
+    "arrasado": "arrasado triste",
+    "lasquei": "errei fracassei",
+    "fodeu": "deu errado fracasso",
+    "ferrou": "deu errado problema",
+    "tá horrivel": "situacao horrivel ruim",
+    "ta horrivel": "situacao horrivel ruim",
+    "péssimo": "pessimo muito ruim",
+    "horrivel": "horrivel muito ruim",
+    "uma merda": "muito ruim pessimo",
+    "saco cheio": "cansado entediado frustrado",
+    "cheio": "cansado farto",
+    "de saco cheio": "cansado frustrado",
+    "travei": "travei ansioso paralisado",
+    "trava": "ansioso paralisado",
+    "surtar": "surtar ansioso nervoso",
+    "surtei": "surtei ansioso nervoso",
+    "bate aquela": "sinto aquela emocao",
+    "bate uma": "sinto aquela emocao",
+    "ta pesado": "situacao pesada dificil",
+    "tá pesado": "situacao pesada dificil",
+    "to pesado": "sentindo pesado",
+    "tô pesado": "sentindo pesado",
+    "esgotado": "esgotado cansado estresse",
+    "esgotada": "esgotada cansada estresse",
+    "cansado de tudo": "cansado frustrado desistindo",
+    "sem energia": "sem energia cansado",
+    "sem animo": "sem animo triste desanimado",
+    "sem ânimo": "sem animo triste desanimado",
+    "pra baixo": "triste desanimado para baixo",
+    "pra baixo mesmo": "muito triste deprimido",
+    "no fundo do poco": "muito triste deprimido",
+    "no fundo": "triste deprimido",
+    "caindo": "caindo tristeza depressao",
+    "afundando": "afundando triste deprimido",
+    "perdido": "perdido confuso desorientado",
+    "perdida": "perdida confusa desorientada",
+    "vazio": "vazio solidao depressao",
+    "vazia": "vazia solidao depressao",
+    "buraco negro": "depressao tristeza profunda",
+    "tremedeira": "ansioso nervoso medo",
+    "tremendo": "nervoso ansioso medo",
+    "suando frio": "ansioso medo nervoso",
+    "coração acelerado": "ansioso medo nervoso",
+    "coracao acelerado": "ansioso medo nervoso",
+    "aperto no peito": "ansioso medo tristeza",
+    "no sufoco": "ansioso sufocando pressao",
+    "sufocando": "ansioso sufocando angustia",
+    "nao aguento mais": "nao aguento mais exausto frustrado",
+    "não aguento mais": "nao aguento mais exausto frustrado",
+    "largado": "desmotivado triste abandonado",
+    "largada": "desmotivada triste abandonada",
+    "esquecido": "esquecido solidao abandonado",
+    "invisible": "invisivel ignorado solidao",
+    "invisivel": "invisivel ignorado solidao",
+    "ninguem me entende": "solidao incompreendido frustrado",
+    "ningem": "ninguem solidao",
+    "raivoso": "raivoso raiva bravo",
+    "com raiva": "com raiva raiva bravo",
+    "irritado": "irritado raiva frustrado",
+    "irritada": "irritada raiva frustrada",
+    "bravo": "bravo raiva irritado",
+    "brava": "brava raiva irritada",
+    "chateado": "chateado triste frustrado",
+    "chateada": "chateada triste frustrada",
+    # Estados positivos
+    "feliz demais": "muito feliz alegria euforia",
+    "na vibe": "animado feliz bem",
+    "boa vibe": "boa energia feliz animado",
+    "na vibe boa": "animado feliz bem",
+    "top demais": "otimo excelente alegria",
+    "no alto": "feliz euforia animado",
+    "voando": "feliz euforia animado",
+    "nas nuvens": "feliz apaixonado euforia",
+    "apaixonado": "apaixonado amor feliz",
+    "apaixonada": "apaixonada amor feliz",
+    "doido de feliz": "muito feliz euforia",
+    "doida de feliz": "muito feliz euforia",
+    "realizando": "realizando conquista orgulho",
+    "realizado": "realizado orgulho feliz",
+    "realizada": "realizada orgulho feliz",
+    "grato": "grato gratidao feliz",
+    "grata": "grata gratidao feliz",
+    "aliviado": "aliviado alivio bem",
+    "aliviada": "aliviada alivio bem",
+    "tranquilo": "tranquilo calmo paz",
+    "tranquila": "tranquila calma paz",
+    "sereno": "sereno calmo paz",
+    "serena": "serena calma paz",
+    "confiante": "confiante seguro otimista",
+    "motivado": "motivado animado empolgado",
+    "motivada": "motivada animada empolgada",
+    "empolgado": "empolgado animado euforia",
+    "empolgada": "empolgada animada euforia",
+    "orgulhoso": "orgulhoso orgulho conquista",
+    "orgulhosa": "orgulhosa orgulho conquista",
+    "esperancoso": "esperancoso esperanca otimista",
+    "esperançoso": "esperancoso esperanca otimista",
+    # Girias especificas BR
+    "tá bom": "esta bom satisfeito",
+    "ta bom": "esta bom satisfeito",
+    "ta otimo": "esta otimo muito bem alegria",
+    "tá ótimo": "esta otimo muito bem alegria",
+    "show": "otimo excelente alegria",
+    "show de bola": "otimo excelente alegria",
+    "massa": "otimo legal alegria",
+    "irado": "otimo incrivel surpresa alegria",
+    "maneiro": "legal bom satisfeito",
+    "dahora": "otimo legal alegria",
+    "d+ ": "demais muito intenso",
+    "fds": "frustrado raiva surpresa",
+    "wtf": "surpresa confusao raiva",
+    "nossa": "surpresa espanto",
+    "caramba": "surpresa espanto",
+    "cara": "expressao neutra",
+    "vixe": "surpresa espanto",
+    "eita": "surpresa espanto",
+    "que saudade": "saudade nostalgia tristeza",
+    "tanta saudade": "muita saudade nostalgia tristeza",
+    "com saudade": "saudade nostalgia tristeza",
+    "to com saudade": "saudade nostalgia tristeza",
+    "to morrendo": "morrendo de algo intenso",
+    "morrendo de rir": "muito alegre rindo euforia",
+    "morrendo de medo": "muito medo panico ansiedade",
+    "morrendo de vergonha": "muita vergonha envergonhado",
+    "morrendo de saudade": "muita saudade nostalgia tristeza",
+    "chorando": "chorando tristeza emocao",
+    "chorei": "chorei tristeza emocao",
+    "chora": "tristeza emocao choro",
+    "llorando": "tristeza emocao choro",  # espanhol
+    "feliz": "feliz alegria bem",
+    "triste": "triste tristeza mal",
+    "ansioso": "ansioso ansiedade nervoso",
+    "ansiosa": "ansiosa ansiedade nervosa",
+    "nervoso": "nervoso ansioso agitado",
+    "nervosa": "nervosa ansiosa agitada",
+    "estressado": "estressado estresse esgotado",
+    "estressada": "estressada estresse esgotada",
+    "deprimido": "deprimido depressao tristeza",
+    "deprimida": "deprimida depressao tristeza",
+    # Ingles comum
+    "i am happy": "estou feliz alegria",
+    "i feel sad": "me sinto triste tristeza",
+    "i am sad": "estou triste tristeza",
+    "feeling good": "me sentindo bem alegria",
+    "feeling bad": "me sentindo mal tristeza",
+    "i am anxious": "estou ansioso ansiedade",
+    "so happy": "muito feliz euforia alegria",
+    "so sad": "muito triste tristeza",
+    "i love": "eu amo amor feliz",
+    "i hate": "eu odeio raiva",
+    "stressed": "estressado estresse",
+    "depressed": "deprimido depressao tristeza",
+    "anxious": "ansioso ansiedade",
+    "lonely": "solitario solidao tristeza",
+    "excited": "empolgado animado euforia",
+    "grateful": "grato gratidao feliz",
+    "angry": "raivoso raiva irritado",
+    "scared": "assustado medo ansiedade",
+    "lost": "perdido confuso",
+    "tired": "cansado esgotado",
+    "overwhelmed": "sobrecarregado estresse ansiedade",
+    # Espanhol comum
+    "estoy bien": "estou bem alegria",
+    "estoy mal": "estou mal triste",
+    "me siento": "me sinto emocao",
+    "feliz": "feliz alegria",
+    "triste": "triste tristeza",
+    "enojado": "irritado raiva",
+    "asustado": "assustado medo",
+    "solo": "solitario solidao",
+    "cansado": "cansado esgotado",
+}
 
-    # Negacoes — invertem a emocao
-    negacoes = ["nao ", "nem ", "nunca ", "jamais ", "sem "]
+# Mapa de emocoes expandido para deteccao local
+PALAVRAS_EMOCOES_EXPANDIDO = {
+    "alegria": [
+        "feliz","contente","animado","alegre","satisfeito","otimo","maravilhoso",
+        "incrivel","fantastico","perfeito","excelente","bom","bem","ótimo","ótima",
+        "felicidade","alegria","prazer","diversao","risada","sorriso","gargalhada",
+        "radiante","luminoso","encantado","deslumbrado","eufórico","entusiasmado",
+        "exultante","jubiloso","radiante","vivaz","glorioso","magnifico",
+        "show","massa","irado","dahora","top","maneiro","dashow","sensacional",
+    ],
+    "tristeza": [
+        "triste","mal","ruim","pessimo","horrivel","deprimido","chateado","decepcionado",
+        "frustrado","abatido","desanimado","melancólico","saudoso","angustiado",
+        "desolado","inconsolável","lamentoso","lacrimoso","sofrido","magoado",
+        "machucado","ferido","partido","arrasado","destroçado","devastado",
+        "chorando","chorei","lagrimas","choro","desabafar","dor","sofrimento",
+        "pena","lamento","tristeza","depressao","desespero","abandono","rejeicao",
+        "na bad","destruido","destruída","pra baixo","no fundo","caindo","afundando",
+    ],
+    "raiva": [
+        "raiva","irritado","bravo","furioso","nervoso","indignado","revoltado",
+        "com raiva","muito irritado","odeio","detesto","nao suporto","me irrita",
+        "raivoso","irado","pistola","fodendo","absurdo","injusto","ridiculo",
+        "idiota","burro","insuportavel","inaceitavel","revolta","indignacao",
+        "coleroso","fulo","agressivo","violento","explosivo","impaciente",
+        "fds","wtf","raiva","odeio","chateado","irritante",
+    ],
+    "medo": [
+        "medo","assustado","apavorado","aterrorizado","com medo","temer",
+        "pavor","terror","horror","fobia","fobia","temor","receio","susto",
+        "arrepio","calafrio","panico","aflicao","angustia",
+        "morrendo de medo","com muito medo","apavorada","aterrorizada",
+        "scared","afraid","frightened","terrified","petrificado",
+    ],
+    "ansiedade": [
+        "ansioso","ansiosa","ansiedade","nervoso","agitado","preocupado","inquieto",
+        "apreensivo","tenso","angustiado","aflito","estressado","estresse",
+        "aperto no peito","coração acelerado","tremendo","suando","paralisado",
+        "travado","trava","surtar","surtei","palpitacao","falta de ar",
+        "overwhelmed","anxious","worried","stressed","anxious","nervous",
+        "tremedeira","mao suada","cabeca rodando","zonzo",
+    ],
+    "amor": [
+        "amor","amo","adoro","apaixonado","amando","carinho","afeto","afetuoso",
+        "querido","querida","amado","amada","amoroso","encantado","fascinado",
+        "apaixonada","gosto muito","te amo","te adoro","amo demais",
+        "love","i love","in love","apaixonei","me apaixonei","apaixonar",
+    ],
+    "esperanca": [
+        "esperanca","esperancoso","otimista","confiante","acredito","vai melhorar",
+        "vai dar certo","positivo","animado com o futuro","novo começo","recomeço",
+        "possivel","conseguir","superar","vencer","melhorar","progredir",
+        "hopeful","optimistic","looking forward","bright future",
+    ],
+    "gratidao": [
+        "grato","grata","gratidao","obrigado","obrigada","agradecido","agradecida",
+        "thankful","grateful","blessed","abencado","privilegiado","sortudo",
+        "que bom","que otimo","que maravilha","que alegria","que presente",
+        "valorizo","reconheco","apreco","aprecio","estimo",
+    ],
+    "solidao": [
+        "sozinho","sozinha","solidao","solitario","isolado","abandonado","esquecido",
+        "ninguem","sem amigos","sem companhia","me sinto so","me sinto sozinho",
+        "lonely","alone","isolated","nobody","nao tenho","sem ninguem",
+        "invisivel","ninguem me entende","nao me veem","ignorado","excluido",
+    ],
+    "euforia": [
+        "eufórico","euforia","empolgado","animadíssimo","nas nuvens","voando",
+        "no alto","inacreditável","impressionante","que coisa incrivel","uau",
+        "wow","amazing","incredible","on top of the world","on cloud nine",
+        "doido de feliz","doida de feliz","muito muito feliz",
+    ],
+    "calma": [
+        "calmo","calma","tranquilo","tranquila","sereno","serena","paz","pacifico",
+        "relaxado","relaxada","equilibrado","centrado","zen","meditando",
+        "peaceful","calm","relaxed","chill","tranquil","serenity",
+        "sem pressa","devagar","respirando fundo","descansando",
+    ],
+    "confusao": [
+        "confuso","confusa","perdido","perdida","desorientado","nao entendo",
+        "nao sei","sem saber","indeciso","indecisa","em duvida","duvidoso",
+        "confused","lost","unsure","uncertain","dont know","nao consigo entender",
+        "complicado","complexo","embaralhado","atordoado",
+    ],
+    "vergonha": [
+        "vergonha","envergonhado","envergonhada","humilhado","humilhada","constrangido",
+        "constrangida","timido","timida","acanhado","acanhada","sem graca",
+        "morrendo de vergonha","que saia","que situacao","que fria","que vexame",
+        "ashamed","embarrassed","humiliated","shy","timid",
+    ],
+    "estresse": [
+        "estressado","estressada","esgotado","esgotada","sobrecarregado","sobrecarregada",
+        "sob pressao","pressao","cansado de tudo","no limite","no meu limite",
+        "sem energia","sem forcas","exausto","exausta","burnout","esgotamento",
+        "stressed","overwhelmed","burned out","exhausted","drained",
+        "saco cheio","de saco cheio","cheio","nao aguento mais",
+    ],
+    "saudade": [
+        "saudade","com saudade","tanta saudade","muita saudade","sentindo saudade",
+        "nostalgia","nostalgico","nostalgica","lembrar","recordar","memoria",
+        "tempos antigos","epoca boa","quando era","lembrei","me lembro",
+        "miss","missing","nostalgia","reminiscing","remembering",
+    ],
+    "orgulho": [
+        "orgulho","orgulhoso","orgulhosa","conquista","conquistei","consegui",
+        "realizei","realizado","realizada","me superei","superei","venci","venceu",
+        "proud","achievement","accomplished","succeeded","overcame",
+        "to muito feliz com","estou feliz por","me sinto bem por",
+    ],
+    "frustracao": [
+        "frustrado","frustrada","frustracao","decepcionado","decepcionada","decepção",
+        "nao deu certo","nao funcionou","tentei e nao","esperava mais","esperava melhor",
+        "disappointed","frustrated","let down","failed","nao consegui",
+        "nao rolou","nao aconteceu","deu errado","perdeu",
+    ],
+    "entusiasmo": [
+        "entusiasmado","entusiasmada","animado","empolgado","motivado","inspirado",
+        "com vontade","querendo muito","nao vejo a hora","mal posso esperar",
+        "enthusiastic","excited","motivated","inspired","cant wait",
+        "to ansioso para","to animado com","to empolgado com",
+    ],
+    "paz": [
+        "em paz","com paz","paz interior","tranquilidade","sossego","quietude",
+        "harmonia","equilibrio","bem comigo mesmo","bem comigo mesma",
+        "at peace","inner peace","harmony","balance","content","contente",
+        "satisfeito com","agradecido pela","curtindo a vida",
+    ],
+    "desespero": [
+        "desesperado","desesperada","desespero","sem saida","sem esperanca",
+        "nao ha saida","nao tem jeito","acabou","tudo perdido","nao adianta",
+        "hopeless","desperate","no way out","giving up","desistindo",
+        "nao consigo mais","nao da mais","ja nao da","to desistindo",
+    ],
+    "neutro": [
+        "assim assim","mais ou menos","ok","tudo bem","nada demais","normal",
+        "regular","razoavel","nem bom nem ruim","medio","mediano",
+        "okay","fine","alright","so so","not bad","not good",
+    ],
+}
+
+def normalizar_giria(texto: str) -> str:
+    """Normaliza girias e expressoes para palavras-chave emocionais"""
+    texto_lower = texto.lower().strip()
+    for giria, traducao in GIRIAS_NORMALIZACAO.items():
+        if giria in texto_lower:
+            texto_lower = texto_lower.replace(giria, " " + traducao + " ")
+    return texto_lower
+
+def detectar_idioma(texto: str) -> str:
+    """Detecta idioma aproximado do texto"""
+    palavras_pt = ["estou","sinto","minha","meu","tenho","nao","que","com","uma","para","isso","mas"]
+    palavras_en = ["i am","i feel","i have","my","the","and","but","with","not","feel","this","that"]
+    palavras_es = ["estoy","siento","tengo","mi","que","con","una","para","esto","pero","muy"]
+    
+    texto_lower = texto.lower()
+    score_pt = sum(1 for p in palavras_pt if p in texto_lower)
+    score_en = sum(1 for p in palavras_en if p in texto_lower)
+    score_es = sum(1 for p in palavras_es if p in texto_lower)
+    
+    if score_en > score_pt and score_en > score_es:
+        return "en"
+    if score_es > score_pt and score_es > score_en:
+        return "es"
+    return "pt"
+
+def detectar_emocao(texto: str) -> str:
+    """Detecta emocao de QUALQUER texto — girias, idiomas, emojis, expressoes"""
+    if not texto or not texto.strip():
+        return "neutro"
+    
+    texto_orig = texto
+    
+    # 1. Normalizar girias primeiro
+    texto_normalizado = normalizar_giria(texto)
+    texto_norm = normalizar_texto(texto_normalizado)
+    
+    pontuacao = {}
+    
+    # 2. Detectar negacoes
+    negacoes = ["nao ", "nem ", "nunca ", "jamais ", "sem ", "not ", "no "]
     tem_negacao = any(n in texto_norm for n in negacoes)
 
-    for emocao, palavras_list in palavras_emocoes.items():
+    # 3. Pontuacao por palavras expandidas
+    for emocao, palavras_list in PALAVRAS_EMOCOES_EXPANDIDO.items():
         pontos = 0
         for palavra in palavras_list:
             palavra_norm = normalizar_texto(palavra)
             if palavra_norm in texto_norm:
-                # Palavras maiores valem mais
                 base = len(palavra_norm.split())
-                # Bonus para frases exatas
                 if len(palavra_norm.split()) > 1:
                     base *= 2
-                # Penaliza emocoes positivas se tem negacao
-                if tem_negacao and emocao in ["alegria", "amor", "gratidao", "euforia", "esperanca"]:
+                if tem_negacao and emocao in ["alegria","amor","gratidao","euforia","esperanca","paz","calma"]:
                     base = max(1, base - 2)
                 pontos += base
         if pontos > 0:
             pontuacao[emocao] = pontos
 
-    # Bonus por emojis no texto original
+    # 4. Bonus por emojis
     emoji_emocao = {
-        "alegria":   ["😄","😊","🎉","😁","🥳","❤️","🥰"],
-        "tristeza":  ["😢","😭","💔","😔","😞"],
-        "raiva":     ["😡","🤬","😤","💢","👊"],
-        "medo":      ["😨","😱","😰","🫣"],
-        "ansiedade": ["😰","😟","😬","🫠"],
-        "amor":      ["❤️","🥰","💕","💖","😍"],
-        "surpresa":  ["😮","😲","🤯","😯"],
-        "nojo":      ["🤢","🤮","😖"],
-        "gratidao":  ["🙏","💙","🫶"],
-        "calma":     ["😌","🧘","🌿","☮️"],
+        "alegria":    ["😄","😊","🎉","😁","🥳","😃","😀","🤩","🥰"],
+        "tristeza":   ["😢","😭","💔","😔","😞","😿","🥺","😓"],
+        "raiva":      ["😡","🤬","😤","💢","👊","🔥"],
+        "medo":       ["😨","😱","😰","🫣","😧"],
+        "ansiedade":  ["😰","😟","😬","🫠","😥"],
+        "amor":       ["❤️","🥰","💕","💖","😍","💝","💘"],
+        "surpresa":   ["😮","😲","🤯","😯","🫢"],
+        "nojo":       ["🤢","🤮","😖","🤧"],
+        "gratidao":   ["🙏","💙","🫶","🤗","😇"],
+        "calma":      ["😌","🧘","🌿","☮️","🕊️"],
+        "euforia":    ["🚀","⚡","🌟","✨","🎊","🏆"],
+        "saudade":    ["📸","🥺","💭","🌅"],
+        "orgulho":    ["💪","🏆","🎯","⭐","👑"],
+        "desespero":  ["😩","😫","💀","🫠"],
+        "paz":        ["☮️","🌸","🌈","🌺","💚"],
     }
-    for emocao, emojis in emoji_emocao.items():
-        for e in emojis:
-            if e in texto:
-                pontuacao[emocao] = pontuacao.get(emocao, 0) + 3
+    for emocao, emojis_list in emoji_emocao.items():
+        for e in emojis_list:
+            if e in texto_orig:
+                pontuacao[emocao] = pontuacao.get(emocao, 0) + 4
 
-    # Detecta intensidade lexical para boost
-    palavras_intensas = ["odeio", "detesto", "amo", "adoro", "apaixonado", "desesperado", "eufórico"]
+    # 5. Boost por palavras intensas
+    palavras_intensas = [
+        "odeio","detesto","amo","adoro","apaixonado","desesperado","eufórico",
+        "destruido","arrasado","incrivel","horrivel","pessimo","otimo","maravilhoso",
+        "nunca","sempre","demais","extremamente","totalmente","completamente",
+    ]
     for p in palavras_intensas:
         if normalizar_texto(p) in texto_norm:
             for emocao in pontuacao:
+                pontuacao[emocao] = int(pontuacao[emocao] * 1.4)
+
+    # 6. Boost por repeticao de letras (muuuito, nãooo)
+    if re.search(r'(.){2,}', texto.lower()):
+        for emocao in pontuacao:
+            pontuacao[emocao] = int(pontuacao[emocao] * 1.2)
+
+    # 7. Boost por exclamacao
+    if texto.count("!") >= 2:
+        for emocao in ["alegria","raiva","euforia","desespero","surpresa"]:
+            if emocao in pontuacao:
                 pontuacao[emocao] = int(pontuacao[emocao] * 1.3)
 
     if not pontuacao:
@@ -5418,7 +5814,7 @@ async def chat(
     # Histórico das últimas mensagens
     historico = db.query(Mensagem).filter(
         Mensagem.usuario_id == usuario.id
-    ).order_by(Mensagem.criado_em.desc()).limit(8).all()
+    ).order_by(Mensagem.criado_em.desc()).limit(12).all()
 
     contexto = ""
     for h in reversed(historico):
@@ -5498,28 +5894,105 @@ async def chat(
 
     total_sessoes = len(historico) // 2 + 1
 
+    # Detectar idioma e normalizar mensagem
+    idioma_usuario = detectar_idioma(mensagem)
+    mensagem_normalizada = normalizar_giria(mensagem)
+    
+    # Dias na plataforma
+    dias_plataforma = (datetime.now() - usuario.criado_em).days if usuario.criado_em else 0
+    
+    # Score IE se existir
+    score_ie = getattr(usuario, 'score_ie', None)
+    score_str = f"{score_ie}/100" if score_ie else "ainda calculando"
+    
+    # Creditos Sofia
+    creditos_sofia = getattr(usuario, 'creditos_sofia', 0) or 0
+    
+    # Contexto de idioma
+    idioma_info = ""
+    if idioma_usuario == "en":
+        idioma_info = "O usuario escreveu em ingles. Entenda a mensagem mas SEMPRE responda em portugues brasileiro."
+    elif idioma_usuario == "es":
+        idioma_info = "O usuario escreveu em espanhol. Entenda a mensagem mas SEMPRE responda em portugues brasileiro."
+    
+    # Instrucoes por plano — muito mais detalhadas
+    if eh_premium:
+        instrucoes_plano = (
+            "MODO PREMIUM — Sessao terapeutica completa:\n"
+            "1. Acolha com empatia genuina (2-3 linhas)\n"
+            "2. Valide a emocao sem julgamento\n"
+            "3. Identifique o nucleo do problema\n"
+            "4. Ensine 1 tecnica terapeutica especifica (TCC/Mindfulness/EMDR) com passo a passo\n"
+            "5. Proponha 1 exercicio pratico para HOJE\n"
+            "6. Se padrao negativo recorrente: aponte gentilmente\n"
+            "7. Termine com 1 pergunta reflexiva profunda e aberta\n"
+            "Tamanho: 12-18 linhas. Use o nome. Seja especifica. Use emojis com moderacao.\n"
+            "Se mencionar crise/suicidio: indique CVV 188 (24h, gratuito) imediatamente."
+        )
+    elif creditos_sofia > 0:
+        instrucoes_plano = (
+            "MODO SESSAO AVULSA — Resposta completa e personalizada:\n"
+            "1. Acolha com empatia (2 linhas)\n"
+            "2. Valide a emocao\n"
+            "3. Ensine 1 tecnica pratica com passo a passo\n"
+            "4. Termine com 1 pergunta reflexiva\n"
+            "Tamanho: 8-12 linhas. Use o nome. Seja especifica.\n"
+            "Se crise: indique CVV 188."
+        )
+    else:
+        instrucoes_plano = (
+            "MODO FREE — Resposta de apoio basico:\n"
+            "1. Acolha com empatia genuina (1-2 linhas)\n"
+            "2. Valide a emocao\n"
+            "3. Oferea 1 dica pratica simples\n"
+            "4. Termine com 1 pergunta reflexiva\n"
+            "Tamanho: 5-7 linhas. Use o nome.\n"
+            "Mencione sutilmente que Premium tem sessoes terapeuticas completas.\n"
+            "Se crise: indique CVV 188."
+        )
+
     prompt = (
-        f"Voce e Sofia, psicologa virtual brasileira especializada em TCC, Mindfulness e EMDR. "
-        f"Empatica, calorosa, direta e humana. NUNCA substitui psicologo real.\n\n"
-        f"PERFIL DO USUARIO:\n"
+        "=== IDENTIDADE ===\n"
+        "Voce e Sofia, psicologa virtual brasileira. "
+        "Especialidades: TCC (Terapia Cognitivo-Comportamental), Mindfulness, EMDR, Psicologia Positiva e Gestalt.\n"
+        "Personalidade: empatica, calorosa, direta, sem rodeios, humana, nao robotica.\n"
+        "Voce NUNCA substitui um psicologo real. Em crises graves sempre indique ajuda profissional.\n\n"
+        "=== LINGUAGEM ===\n"
+        "- SEMPRE em portugues brasileiro coloquial e acessivel\n"
+        "- Entenda girias (na bad, destruido, surtei, etc) e responda naturalmente\n"
+        "- Nao use linguagem clinica desnecessaria\n"
+        "- Seja direta — sem enrolacao\n"
+        "- Use o nome do usuario para criar conexao\n"
+        f"- {idioma_info}\n\n"
+        "=== PERFIL DO USUARIO ===\n"
         f"- Nome: {usuario.nome}\n"
         f"- Plano: {usuario.plano.upper()}\n"
         f"- Sessao #{total_sessoes} com voce\n"
-        f"- Emocao atual: {emocao_atual} {get_emoji(emocao_atual)}\n"
-        f"- Padrao emocional recente: {padrao_emocional or 'sem dados'}\n"
-        f"- Diario recente: {contexto_diario or 'sem entradas'}\n"
-        f"- Pontos: {usuario.pontos} | Badge: {usuario.badge}\n\n"
-        f"INSTRUCOES DE RESPOSTA: {instrucoes_plano}\n\n"
-        f"MEMORIA DA CONVERSA:\n{historico_curto if historico_curto else 'Inicio da conversa.'}\n\n"
-        f"MENSAGEM ATUAL: {mensagem}\n\n"
-        f"Responda como Sofia em portugues brasileiro coloquial. "
-        f"Use o nome do usuario. Seja especifica ao contexto dele. "
-        f"Termine com uma pergunta reflexiva aberta:"
+        f"- Ha {dias_plataforma} dias na plataforma\n"
+        f"- Emocao detectada agora: {emocao_atual} {get_emoji(emocao_atual)}\n"
+        f"- Padrao emocional recente: {padrao_emocional or 'primeira sessao'}\n"
+        f"- Diario recente: {contexto_diario or 'sem entradas no diario'}\n"
+        f"- Score IE: {score_str}\n"
+        f"- Conquistas: {usuario.badge}\n\n"
+        "=== MEMORIA DA CONVERSA ===\n"
+        f"{historico_curto if historico_curto else 'Inicio da conversa — apresente-se brevemente.'}\n\n"
+        "=== INSTRUCOES DE RESPOSTA ===\n"
+        f"{instrucoes_plano}\n\n"
+        "=== TECNICAS DISPONIVEIS ===\n"
+        "TCC: reestruturacao cognitiva, registro de pensamentos, experimentos comportamentais\n"
+        "Mindfulness: respiracao 4-7-8, body scan, ancoragem no presente, 5-4-3-2-1\n"
+        "EMDR: processamento bilateral, estimulacao sensorial\n"
+        "Gestalt: cadeira vazia, contato com emocao, awareness\n"
+        "Psic. Positiva: gratidao, forcas, flow, PERMA\n\n"
+        "=== MENSAGEM ATUAL DO USUARIO ===\n"
+        f"Original: {mensagem}\n"
+        f"Normalizada: {mensagem_normalizada}\n\n"
+        "Responda agora como Sofia:"
     )
 
     try:
         resposta = cliente_ia.models.generate_content(
-            model="gemini-1.5-flash-8b",
+            model="gemini-2.0-flash",
             contents=prompt,
             config=types.GenerateContentConfig(temperature=0.75, max_output_tokens=2048)
         )
