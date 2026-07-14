@@ -1161,12 +1161,7 @@ PALAVRAS_EMOCOES_EXPANDIDO = {
         "possivel","conseguir","superar","vencer","melhorar","progredir",
         "hopeful","optimistic","looking forward","bright future",
     ],
-    "gratidao": [
-        "grato","grata","gratidao","obrigado","obrigada","agradecido","agradecida",
-        "thankful","grateful","blessed","abencado","privilegiado","sortudo",
-        "que bom","que otimo","que maravilha","que alegria","que presente",
-        "valorizo","reconheco","apreco","aprecio","estimo",
-    ],
+
     "solidao": [
         "sozinho","sozinha","solidao","solitario","isolado","abandonado","esquecido",
         "ninguem","sem amigos","sem companhia","me sinto so","me sinto sozinho",
@@ -1203,18 +1198,60 @@ PALAVRAS_EMOCOES_EXPANDIDO = {
         "sem energia","sem forcas","exausto","exausta","burnout","esgotamento",
         "stressed","overwhelmed","burned out","exhausted","drained",
         "saco cheio","de saco cheio","cheio","nao aguento mais",
+        "nao aguento mais esse trabalho","nao aguento mais trabalhar",
+        "nao suporto mais","to no limite","cheguei no limite","atingi meu limite",
+        "trabalho demais","trabalhando demais","overworked","overtired",
+        "erschopft","esausto","epuise","agotado","ausgebrannt","gestresst",
+        "stressato","stresse","estressante","estressei","estressar",
     ],
     "saudade": [
         "saudade","com saudade","tanta saudade","muita saudade","sentindo saudade",
+        "que saudade","sinto saudade","morrendo de saudade","cheia de saudade",
         "nostalgia","nostalgico","nostalgica","lembrar","recordar","memoria",
         "tempos antigos","epoca boa","quando era","lembrei","me lembro",
+        "tempos bons","tempos felizes","tempos de antes","era bom quando",
         "miss","missing","nostalgia","reminiscing","remembering",
+        "natsukashii","sehnsucht","hiraeth","mal du pays",
     ],
     "orgulho": [
         "orgulho","orgulhoso","orgulhosa","conquista","conquistei","consegui",
         "realizei","realizado","realizada","me superei","superei","venci","venceu",
-        "proud","achievement","accomplished","succeeded","overcame",
+        "que orgulho","muito orgulho","tanto orgulho","cheio de orgulho",
+        "orgulhoso de mim","orgulhosa de mim","to orgulhoso","to orgulhosa",
+        "me sinto orgulhoso","me sinto orgulhosa","estou orgulhoso","estou orgulhosa",
+        "proud","achievement","accomplished","succeeded","overcame","so proud",
+        "im proud","i am proud","feeling proud","proud of myself","proud of you",
         "to muito feliz com","estou feliz por","me sinto bem por",
+    ],
+    "gratidao": [
+        "grato","grata","gratidao","obrigado","obrigada","agradecido","agradecida",
+        "thankful","grateful","blessed","abencado","privilegiado","sortudo",
+        "que bom","que otimo","que maravilha","que alegria","que presente",
+        "valorizo","reconheco","apreco","aprecio","estimo",
+        "so grateful","feeling grateful","im grateful","i am grateful",
+        "so thankful","im thankful","i am thankful","thank god","graças a deus",
+        "muito grato","muito grata","eternamente grato","eternamente grata",
+        "sinto gratidao","cheio de gratidao","cheia de gratidao",
+    ],
+    "culpa": [
+        "culpa","culpado","culpada","sinto culpa","me sinto culpado","me sinto culpada",
+        "arrependido","arrependida","arrependimento","remorso","me arrependo",
+        "foi culpa minha","e minha culpa","fiz algo errado","errei","errou",
+        "guilty","shame","regret","remorse","i feel guilty","feeling guilty",
+        "je me sens coupable","ich bin schuldig","mi sento in colpa","me siento culpable",
+    ],
+    "coragem": [
+        "corajoso","corajosa","coragem","bravo","brava","determinado","determinada",
+        "forte","forcas","vai em frente","nao desiste","superar","vencer","enfrentar",
+        "brave","courageous","strong","fearless","bold","determined",
+        "ich bin mutig","je suis courageux","sono coraggioso","soy valiente",
+    ],
+    "esperanca": [
+        "esperanca","esperancoso","esperancosa","esperancando","com esperanca",
+        "cheio de esperanca","cheia de esperanca","otimista","vai melhorar",
+        "acredito","vai dar certo","possivel","progredir","melhorar","recomecar",
+        "hopeful","hope","optimistic","things will get better","looking forward",
+        "ich bin hoffnungsvoll","je suis plein despoir","sono pieno di speranza","tengo esperanza",
     ],
     "frustracao": [
         "frustrado","frustrada","frustracao","decepcionado","decepcionada","decepção",
@@ -1249,16 +1286,27 @@ PALAVRAS_EMOCOES_EXPANDIDO = {
 
 def normalizar_giria(texto: str) -> str:
     """Normaliza girias e expressoes para palavras-chave emocionais"""
+    import re as _re
     texto_lower = texto.lower().strip()
-    # Usar GIRIAS_NORMALIZACAO original
+    
+    # Usar GIRIAS_NORMALIZACAO — checar palavra inteira (word boundary)
     for giria, traducao in GIRIAS_NORMALIZACAO.items():
-        if giria in texto_lower:
-            texto_lower = texto_lower.replace(giria, " " + traducao + " ")
-    # Usar EXPRESSOES_UNIVERSAIS expandido
+        giria_strip = giria.strip()
+        if len(giria_strip) <= 3:
+            # Palavras curtas: checar como palavra inteira
+            pattern = r'\b' + _re.escape(giria_strip) + r'\b'
+            if _re.search(pattern, texto_lower):
+                texto_lower = _re.sub(pattern, " " + traducao + " ", texto_lower)
+        else:
+            if giria_strip in texto_lower:
+                texto_lower = texto_lower.replace(giria_strip, " " + traducao + " ")
+    
+    # Usar EXPRESSOES_UNIVERSAIS — apenas expressoes com 4+ chars
     try:
         for expr, traducao in EXPRESSOES_UNIVERSAIS.items():
-            if expr in texto_lower:
-                texto_lower = texto_lower.replace(expr, " " + traducao + " ")
+            expr_strip = expr.strip()
+            if len(expr_strip) >= 4 and expr_strip in texto_lower:
+                texto_lower = texto_lower.replace(expr_strip, " " + traducao + " ")
     except:
         pass
     return texto_lower
@@ -1317,8 +1365,403 @@ def detectar_emocao(texto: str) -> str:
     
     texto_orig = texto
     
-    # 1. Normalizar girias primeiro
+    # 1. Normalizar acentos para checar girias (to == tô, etc)
+    texto_sem_acento = normalizar_texto(texto)
+    
+    # 2. Normalizar girias no texto original E sem acento
     texto_normalizado = normalizar_giria(texto)
+    texto_normalizado = normalizar_giria(texto_sem_acento) + " " + texto_normalizado
+    
+    # 3. Adicionar mapeamentos diretos de palavras-chave multilíngues
+    mapa_direto = {
+        # Portugues com acento e sem
+        "to na bad": "tristeza depressao mal",
+        "tô na bad": "tristeza depressao mal",
+        "na bad": "tristeza depressao mal",
+        "destruido": "tristeza devastado arrasado",
+        "destruida": "tristeza devastada arrasada",
+        "to destruido": "tristeza devastado",
+        "to destruida": "tristeza devastada",
+        "me sinto um lixo": "tristeza vergonha inadequacao",
+        "sinto um lixo": "tristeza vergonha",
+        "sou um lixo": "tristeza vergonha inadequacao",
+        "que saudade": "saudade nostalgia tristeza",
+        "tanta saudade": "saudade nostalgia tristeza",
+        "surtei": "ansiedade nervoso raiva",
+        "surtando": "ansiedade nervoso raiva",
+        "surtar": "ansiedade nervoso raiva",
+        "travei": "ansiedade bloqueio medo",
+        "travou": "ansiedade bloqueio",
+        "nao aguento": "estresse frustracao desespero",
+        "nao consigo mais": "desespero estresse esgotado",
+        "to mal": "tristeza ruim mal",
+        "tô mal": "tristeza ruim mal",
+        "me sinto mal": "tristeza ruim mal",
+        "muito mal": "tristeza ruim intenso",
+        "pra baixo": "tristeza desanimado melancolia",
+        "no fundo": "tristeza depressao fundo",
+        "vazio por dentro": "vazio solidao anedonia",
+        "vazia por dentro": "vazio solidao anedonia",
+        "sem sentido": "vazio proposito existencial",
+        "perdido": "confusao solidao desorientado",
+        "perdida": "confusao solidao desorientada",
+        "me sinto sozinho": "solidao tristeza abandono",
+        "me sinto sozinha": "solidao tristeza abandono",
+        "to sozinho": "solidao tristeza abandono",
+        "to sozinha": "solidao tristeza abandono",
+        "chorei": "tristeza dor emocao",
+        "chorando": "tristeza dor emocao",
+        "to chorando": "tristeza dor emocao",
+        "fui traido": "traicao raiva tristeza humilhacao",
+        "fui traida": "traicao raiva tristeza humilhacao",
+        "me traiu": "traicao raiva tristeza",
+        "terminamos": "tristeza luto perda",
+        "brigamos": "raiva tristeza conflito",
+        "me deixou": "abandono tristeza rejeicao",
+        "foi embora": "abandono tristeza saudade",
+        "nao me ama": "rejeicao tristeza dor",
+        "nao me quer": "rejeicao tristeza dor",
+        "to apaixonado": "amor paixao alegria",
+        "to apaixonada": "amor paixao alegria",
+        "to feliz": "alegria felicidade contentamento",
+        "to muito feliz": "alegria euforia felicidade",
+        "to animado": "alegria animacao entusiasmo",
+        "to animada": "alegria animacao entusiasmo",
+        "to empolgado": "alegria empolgacao euforia",
+        "to empolgada": "alegria empolgacao euforia",
+        "to ansioso": "ansiedade nervoso preocupado",
+        "to ansiosa": "ansiedade nervosa preocupada",
+        "to nervoso": "ansiedade nervoso agitado",
+        "to nervosa": "ansiedade nervosa agitada",
+        "to estressado": "estresse ansiedade esgotado",
+        "to estressada": "estresse ansiedade esgotada",
+        "to com raiva": "raiva irritado frustrado",
+        "to irritado": "raiva irritado frustrado",
+        "to irritada": "raiva irritada frustrada",
+        "to com medo": "medo ansiedade panico",
+        "to com saudade": "saudade nostalgia tristeza",
+        "to grato": "gratidao alegria reconhecimento",
+        "to grata": "gratidao alegria reconhecimento",
+        "to realizado": "realizacao orgulho alegria",
+        "to realizada": "realizacao orgulho alegria",
+        "to esgotado": "burnout esgotamento estresse",
+        "to esgotada": "burnout esgotamento estresse",
+        "to exausto": "burnout exaustao estresse",
+        "to exausta": "burnout exaustao estresse",
+        "to confuso": "confusao perdido duvida",
+        "to confusa": "confusao perdida duvida",
+        "me sinto perdido": "confusao solidao desorientado",
+        "me sinto perdida": "confusao solidao desorientada",
+        # Espanhol
+        "muy triste": "tristeza deprimido melancolia",
+        "estoy triste": "tristeza deprimido melancolia",
+        "muy feliz": "alegria felicidade contentamento",
+        "estoy feliz": "alegria felicidade contentamento",
+        "muy ansioso": "ansiedade nervoso preocupado",
+        "estoy ansioso": "ansiedade nervoso",
+        "muy enojado": "raiva irritado frustrado",
+        "estoy enojado": "raiva irritado",
+        "muy solo": "solidao tristeza abandono",
+        "estoy solo": "solidao tristeza",
+        "muy cansado": "estresse esgotado exausto",
+        "estoy cansado": "estresse esgotado",
+        "me siento mal": "tristeza ruim mal",
+        "me siento solo": "solidao tristeza",
+        "no puedo mas": "desespero esgotado frustrado",
+        "estoy harto": "frustrado farto cansado",
+        "que tristeza": "tristeza melancolia desolacao",
+        "que alegria": "alegria felicidade contentamento",
+        "que miedo": "medo ansiedade panico",
+        "que rabia": "raiva irritacao frustracao",
+        # Ingles
+        "feeling sad": "tristeza deprimido melancolia",
+        "feeling bad": "tristeza ruim mal",
+        "feeling empty": "vazio solidao anedonia",
+        "feeling lonely": "solidao tristeza abandono",
+        "feeling anxious": "ansiedade nervoso preocupado",
+        "feeling angry": "raiva irritado frustrado",
+        "feeling scared": "medo ansiedade panico",
+        "feeling happy": "alegria felicidade contentamento",
+        "feeling great": "alegria excelente contentamento",
+        "feeling awful": "tristeza pessimo muito mal",
+        "feeling terrible": "tristeza pessimo horrivel",
+        "feeling lost": "confusao solidao desorientado",
+        "feeling numb": "vazio anedonia dissociado",
+        "feeling overwhelmed": "estresse sobrecarregado ansiedade",
+        "im sad": "tristeza deprimido melancolia",
+        "i am sad": "tristeza deprimido melancolia",
+        "im happy": "alegria felicidade contentamento",
+        "i am happy": "alegria felicidade contentamento",
+        "im angry": "raiva irritado frustrado",
+        "i am angry": "raiva irritado frustrado",
+        "im scared": "medo ansiedade panico",
+        "i am scared": "medo ansiedade panico",
+        "im lonely": "solidao tristeza abandono",
+        "i am lonely": "solidao tristeza abandono",
+        "im stressed": "estresse ansiedade esgotado",
+        "i am stressed": "estresse ansiedade esgotado",
+        "im depressed": "tristeza depressao anedonia",
+        "i am depressed": "tristeza depressao anedonia",
+        "im anxious": "ansiedade nervoso preocupado",
+        "i am anxious": "ansiedade nervoso preocupado",
+        "im in love": "amor paixao alegria",
+        "i am in love": "amor paixao alegria",
+        "im grateful": "gratidao alegria reconhecimento",
+        "i am grateful": "gratidao alegria reconhecimento",
+        "im exhausted": "burnout exaustao estresse",
+        "i am exhausted": "burnout exaustao estresse",
+        "im broken": "tristeza dor devastado",
+        "i am broken": "tristeza dor devastado",
+        "im lost": "confusao solidao desorientado",
+        "i am lost": "confusao solidao desorientado",
+        "not okay": "tristeza ansiedade mal",
+        "im not okay": "tristeza ansiedade mal",
+        "i am not okay": "tristeza ansiedade mal",
+        "falling apart": "tristeza desespero devastado",
+        "breaking down": "tristeza desespero choro",
+        "cant take it": "desespero esgotado frustrado",
+        "give up": "desespero frustracao desistindo",
+        "empty inside": "vazio solidao anedonia",
+        "feeling empty inside": "vazio solidao anedonia",
+        "so happy": "alegria euforia felicidade",
+        "so sad": "tristeza profunda melancolia",
+        "so angry": "raiva intensa frustrado",
+        "so scared": "medo panico ansiedade",
+        "so stressed": "estresse intenso ansiedade",
+        "so tired": "esgotado exausto cansado",
+        "so lonely": "solidao profunda tristeza",
+        "so grateful": "gratidao profunda alegria",
+        "so excited": "euforia empolgacao alegria",
+        "so anxious": "ansiedade intensa nervoso",
+        "on cloud nine": "euforia alegria felicidade",
+        "feeling blue": "tristeza melancolia desanimado",
+        "under the weather": "tristeza mal indisposto",
+        "heartbroken": "tristeza dor amor perdido",
+        "over the moon": "euforia alegria muito feliz",
+        "in my feelings": "emocional reflexivo melancolico",
+        "going through it": "sofrimento dificuldade tristeza",
+        "burned out": "burnout esgotamento exaustao",
+        "drained": "esgotado sem energia vazio",
+        # Alemao
+        "ich bin traurig": "tristeza deprimido melancolia",
+        "bin traurig": "tristeza deprimido",
+        "so traurig": "muito triste tristeza profunda",
+        "ich bin glucklich": "alegria felicidade contentamento",
+        "ich bin wutend": "raiva irritado frustrado",
+        "ich habe angst": "medo ansiedade panico",
+        "ich bin mude": "esgotado cansado exausto",
+        "ich bin einsam": "solidao tristeza abandono",
+        "ich bin am ende": "desespero esgotado burnout",
+        "mir geht es schlecht": "tristeza mal ruim",
+        "mir geht es gut": "alegria bem contentamento",
+        # Frances
+        "je suis triste": "tristeza deprimido melancolia",
+        "tres triste": "muito triste tristeza profunda",
+        "je suis heureux": "alegria felicidade contentamento",
+        "je suis heureuse": "alegria felicidade contentamento",
+        "j en ai marre": "frustrado farto cansado",
+        "je suis epuise": "esgotado burnout exausto",
+        "je me sens seul": "solidao tristeza abandono",
+        "avoir le cafard": "tristeza depressao melancolia",
+        # Italiano
+        "sono triste": "tristeza deprimido melancolia",
+        "sono felice": "alegria felicidade contentamento",
+        "sono stanco": "esgotado cansado exausto",
+        "stanco": "esgotado cansado exausto",
+        "molto stanco": "muito esgotado exausto",
+        "sono solo": "solidao tristeza abandono",
+        "sono arrabbiato": "raiva irritado frustrado",
+        "ho paura": "medo ansiedade panico",
+        "mi sento male": "tristeza mal ruim",
+        "mi sento solo": "solidao tristeza abandono",
+        # Fixes adicionais
+        "sono molto stanco": "esgotado cansado exausto estresse",
+        "molto stanco": "esgotado cansado exausto estresse",
+        "sono stanco": "esgotado cansado exausto",
+        "que orgulho": "orgulho realizacao conquista alegria",
+        "que orgulho de mim": "orgulho realizacao autoestima",
+        "que orgulho de voce": "orgulho admiracao alegria",
+        "muito orgulho": "orgulho realizacao conquista",
+        "estoy solo y triste": "solidao tristeza abandono",
+        "solo y triste": "solidao tristeza abandono",
+        "estoy solo": "solidao tristeza abandono",
+        "me siento solo": "solidao tristeza abandono",
+        "feeling so grateful": "gratidao alegria reconhecimento",
+        "so grateful": "gratidao alegria reconhecimento",
+        "feeling grateful": "gratidao alegria reconhecimento",
+        "im grateful": "gratidao alegria reconhecimento",
+        "i am grateful": "gratidao alegria reconhecimento",
+        "so thankful": "gratidao alegria reconhecimento",
+        "im thankful": "gratidao alegria reconhecimento",
+        "ich liebe dich": "amor paixao carinho afeto",
+        "liebe dich": "amor paixao carinho",
+        "ich liebe": "amor paixao carinho",
+        "ich bin verliebt": "amor paixao apaixonado",
+        # Alemao expandido
+        "ich bin glucklich": "alegria feliz contentamento",
+        "ich bin so glucklich": "alegria muito feliz euforia",
+        "bin glucklich": "alegria feliz contentamento",
+        "sehr glucklich": "alegria muito feliz",
+        "ich bin froh": "alegria feliz contente",
+        "ich bin erschopft": "esgotado burnout estresse exausto",
+        "bin erschopft": "esgotado burnout estresse",
+        "ich bin ausgebrannt": "burnout esgotado estresse",
+        "ich bin mude": "cansado esgotado exausto",
+        "total erschopft": "muito esgotado burnout",
+        "ich bin aufgeregt": "animado empolgado entusiasmado",
+        "ich bin einsam": "solidao tristeza abandono",
+        "ich bin wutend": "raiva irritado frustrado",
+        "ich bin angstlich": "ansiedade nervoso preocupado",
+        "ich bin stolz": "orgulho realizacao conquista",
+        "ich bin dankbar": "gratidao alegria reconhecimento",
+        "ich bin verliebt": "amor paixao apaixonado",
+        "ich bin deprimiert": "tristeza depressao melancolia",
+        "ich bin gestresst": "estresse ansiedade sobrecarregado",
+        "ich bin nervos": "ansiedade nervoso agitado",
+        # Frances expandido
+        "je suis heureux": "alegria feliz contentamento",
+        "je suis heureuse": "alegria feliz contentamento",
+        "tellement heureux": "muito feliz alegria euforia",
+        "tellement heureuse": "muito feliz alegria euforia",
+        "suis heureux": "alegria feliz contentamento",
+        "suis heureuse": "alegria feliz contentamento",
+        "je suis content": "alegria contentamento satisfeito",
+        "je suis contente": "alegria contentamento satisfeita",
+        "je suis epuise": "esgotado burnout estresse",
+        "je suis epuisee": "esgotada burnout estresse",
+        "je suis anxieux": "ansiedade nervoso preocupado",
+        "je suis en colere": "raiva irritado frustrado",
+        "je suis amoureux": "amor paixao apaixonado",
+        "je suis amoureuse": "amor paixao apaixonada",
+        "je suis fier": "orgulho realizacao conquista",
+        "je suis stresse": "estresse ansiedade sobrecarregado",
+        "je suis deprime": "tristeza depressao melancolia",
+        "je suis seul": "solidao tristeza abandono",
+        # Italiano expandido
+        "sono stanco": "cansado esgotado exausto",
+        "molto stanco": "muito cansado esgotado estresse",
+        "sono molto stanco": "muito cansado esgotado estresse",
+        "sono esausto": "esgotado burnout estresse",
+        "sono felice": "alegria feliz contentamento",
+        "molto felice": "muito feliz alegria euforia",
+        "sono triste": "tristeza deprimido melancolia",
+        "sono arrabbiato": "raiva irritado frustrado",
+        "sono ansioso": "ansiedade nervoso preocupado",
+        "sono solo": "solidao tristeza abandono",
+        "sono innamorato": "amor paixao apaixonado",
+        "sono orgoglioso": "orgulho realizacao conquista",
+        "sono grato": "gratidao alegria reconhecimento",
+        "sono depresso": "tristeza depressao melancolia",
+        "sono stressato": "estresse ansiedade sobrecarregado",
+        "ho paura": "medo ansiedade panico",
+        "mi sento solo": "solidao tristeza abandono",
+        "mi sento male": "tristeza ruim mal",
+        # Fixes especificos
+        "nao aguento mais esse trabalho": "estresse burnout frustracao esgotado",
+        "nao aguento mais trabalhar": "estresse burnout esgotado",
+        "me sinto vazio por dentro": "vazio solidao anedonia",
+        "vazio por dentro": "vazio solidao anedonia",
+        "me sinto vazia por dentro": "vazio solidao anedonia",
+        "sinto vazio": "vazio solidao anedonia",
+        "sentindo vazio": "vazio solidao anedonia",
+        "je taime": "amor paixao carinho frances",
+        "je t aime": "amor paixao carinho frances",
+        "ti amo": "amor paixao carinho italiano",
+        "te amo": "amor paixao carinho espanhol",
+        "te quiero": "amor carinho afeto espanhol",
+        "ai shiteru": "amor paixao carinho japones",
+        "sarang hae": "amor paixao carinho coreano",
+        "orgulhoso de mim": "orgulho realizacao autoestima",
+        "orgulhosa de mim": "orgulho realizacao autoestima",
+        "me sinto orgulhoso": "orgulho realizacao conquista",
+        "me sinto orgulhosa": "orgulho realizacao conquista",
+        "to orgulhoso": "orgulho realizacao conquista",
+        "to orgulhosa": "orgulho realizacao conquista",
+        # Japones romanizado
+        "tengo mucho miedo": "medo ansiedade panico",
+        "tengo miedo": "medo ansiedade panico",
+        "estoy muy orgulloso": "orgulho realizacao conquista",
+        "ich bin so wutend": "raiva irritado furioso",
+        "ich bin wutend": "raiva irritado frustrado",
+        "ich bin so einsam": "solidao tristeza abandono",
+        "ich bin einsam": "solidao tristeza abandono",
+        "sono molto stanco": "esgotado cansado exausto estresse",
+        "molto stanco": "esgotado cansado exausto",
+        "monday blues": "tristeza desanimado melancolia",
+        "feeling the monday blues": "tristeza desanimado melancolia",
+        "my heart is broken": "tristeza dor coracao partido",
+        "heart is broken": "tristeza dor amor perdido",
+        "heartbroken": "tristeza dor amor perdido",
+        "walking on sunshine": "alegria euforia felicidade",
+        "to no seimo ceu": "alegria euforia amor",
+        "no setimo ceu": "alegria euforia amor",
+        "me sinto culpado": "culpa remorso arrependimento",
+        "me sinto culpada": "culpa remorso arrependimento",
+        "sinto culpa": "culpa remorso arrependimento",
+        "to cheio de esperanca": "esperanca otimismo alegria",
+        "cheio de esperanca": "esperanca otimismo alegria",
+        "cheia de esperanca": "esperanca otimismo alegria",
+        "me sinto muito corajoso": "coragem determinacao orgulho",
+        "me sinto corajoso": "coragem determinacao orgulho",
+        "me sinto corajosa": "coragem determinacao orgulho",
+        "ich bin sehr deprimiert": "tristeza depressao melancolia",
+        "ich bin deprimiert": "tristeza depressao melancolia",
+        "sehr deprimiert": "tristeza depressao melancolia",
+        "sabishii": "solidao tristeza abandono",
+        "kanashii": "tristeza melancolia deprimido",
+        # Fixes especificos
+        "estoy muy triste": "tristeza deprimido melancolia",
+        "muy triste": "tristeza deprimido melancolia",
+        "estoy triste": "tristeza deprimido melancolia",
+        "triste hoy": "tristeza deprimido melancolia",
+        "triste hoje": "tristeza deprimido melancolia",
+        "triste demais": "tristeza deprimido melancolia",
+        "muy triste hoy": "tristeza deprimido melancolia",
+        "tres triste": "tristeza profunda melancolia",
+        "suis tres triste": "tristeza profunda melancolia",
+        "je suis tres triste": "tristeza profunda melancolia",
+        "je suis triste": "tristeza deprimido melancolia",
+        "suis triste": "tristeza deprimido melancolia",
+        "estoy muy": "muito estado emocional",
+        "que saudade": "saudade nostalgia tristeza",
+        "saudade dos tempos": "saudade nostalgia tristeza",
+        "tanta saudade": "saudade nostalgia tristeza",
+        "com saudade": "saudade nostalgia tristeza",
+        "morrendo de saudade": "saudade nostalgia tristeza",
+        "je suis tres triste": "tristeza deprimido melancolia",
+        "tres triste": "tristeza profunda melancolia",
+        "je suis triste": "tristeza deprimido melancolia",
+        "suis triste": "tristeza deprimido melancolia",
+        "sono stanco": "esgotado cansado exausto",
+        "molto stanco": "esgotado muito cansado exausto",
+        "sono molto stanco": "esgotado muito cansado exausto",
+        "ureshii": "alegria felicidade contentamento",
+        "tanoshii": "alegria diversao prazer",
+        "kowai": "medo panico ansiedade",
+        "hazukashii": "vergonha timidez constrangimento",
+        "natsukashii": "saudade nostalgia tristeza",
+        "yabai": "surpresa espanto admiracao",
+        "mendokusai": "tedio preguica desmotivado",
+        # Coreano romanizado
+        "aigoo": "surpresa frustracao espanto",
+        "daebak": "admiracao surpresa alegria",
+        "han": "tristeza sofrimento profundo",
+        "nurmul": "tristeza choro emocao",
+    }
+    
+    texto_lower = texto.lower().strip()
+    texto_lower_sem_acento = normalizar_texto(texto_lower)
+    
+    # Adicionar traducoes diretas ao texto normalizado
+    extras = []
+    for expr, traducao in mapa_direto.items():
+        expr_norm = normalizar_texto(expr)
+        if expr_norm in texto_lower_sem_acento or expr in texto_lower:
+            extras.append(traducao)
+    
+    if extras:
+        texto_normalizado = texto_normalizado + " " + " ".join(extras)
+    
     texto_norm = normalizar_texto(texto_normalizado)
     
     pontuacao = {}
@@ -2890,7 +3333,19 @@ async def api_analisar(request: Request, db: Session = Depends(get_db)):
     texto = body.get("texto", "")
     if not texto:
         return JSONResponse({"error": "Campo texto obrigatorio"}, status_code=400)
-    emocao = detectar_emocao(texto)
+    # GEMINI ATIVO — detector principal
+    try:
+        _ah = detectar_emocao_hibrido(texto, usar_gemini=True)
+        emocao = _ah.get("emocao", "neutro")
+        tom = _ah.get("tom", "neutro")
+        contexto = _ah.get("contexto", "geral")
+        urgencia_txt = _ah.get("urgencia", "normal")
+        idioma_txt = _ah.get("idioma", "pt")
+        em_crise_txt = _ah.get("em_crise", False)
+    except:
+        emocao = detectar_emocao(texto)
+        tom = contexto = urgencia_txt = idioma_txt = "normal"
+        em_crise_txt = False
     intensidade = calcular_intensidade(texto)
     emoji = get_emoji(emocao)
     return JSONResponse({
@@ -2898,6 +3353,11 @@ async def api_analisar(request: Request, db: Session = Depends(get_db)):
         "emocao": emocao,
         "emoji": emoji,
         "intensidade": intensidade,
+        "tom": tom,
+        "contexto": contexto,
+        "urgencia": urgencia_txt,
+        "idioma": idioma_txt,
+        "em_crise": em_crise_txt,
         "texto_analisado": texto[:100]
     })
 
@@ -3400,7 +3860,9 @@ EXPRESSOES_UNIVERSAIS = {
     "misericórdia": "surpresa desespero angustia nordeste",
     "bah": "surpresa admiracao espanto sul",
     "tchê": "expressao afeto camaradagem sul",
-    "tri": "otimo excelente alegria sul",
+    "tri legal": "otimo excelente alegria sul",
+    "tri bom": "otimo excelente alegria sul",
+    "tri massa": "otimo excelente alegria sul",
     "barbaridade": "surpresa espanto admiracao sul",
     "uai": "surpresa duvida confusao minas",
     "trem bom": "otimo excelente alegria minas",
@@ -3904,7 +4366,7 @@ def detectar_temporalidade(texto: str) -> str:
 def analisar_texto_completo(texto: str) -> dict:
     """Analise completa de texto — retorna todas as dimensoes"""
     return {
-        "emocao": detectar_emocao(texto),
+        "emocao": detectar_emocao(texto),  # local rapido
         "intensidade": calcular_intensidade(texto),
         "tom": detectar_tom(texto),
         "contexto": detectar_contexto_situacao(texto),
@@ -4377,6 +4839,117 @@ async def api_analise_completa(request: Request, texto: str, db: Session = Depen
     if em_crise:
         analise["alerta_crise"] = "CVV 188 — gratuito 24h"
     return JSONResponse({"ok": True, "analise": analise})
+
+
+
+# ================================================================
+# DETECÇÃO COM GEMINI — SOLUÇÃO RAIZ
+# ================================================================
+
+import functools as _functools
+
+# Cache simples para nao chamar Gemini 2x para o mesmo texto
+_cache_emocao = {}
+
+def detectar_emocao_gemini(texto: str) -> str:
+    """Usa Gemini para detectar emocao com precisao maxima"""
+    global _cache_emocao
+    
+    # Checar cache
+    chave = texto.strip().lower()[:100]
+    if chave in _cache_emocao:
+        return _cache_emocao[chave]
+    
+    # Lista de todas as emocoes possiveis
+    emocoes_validas = [
+        "alegria","tristeza","raiva","medo","surpresa","nojo","amor","esperanca",
+        "gratidao","solidao","euforia","calma","confusao","vergonha","neutro",
+        "ansiedade","estresse","empolgacao","saudade","orgulho","ciumes","frustracao",
+        "alivio","entusiasmo","melancolia","nostalgia","panico","timidez","curiosidade",
+        "tedio","animacao","desespero","paz","contentamento","vazio","luto","burnout",
+        "culpa","remorso","admiracao","inveja","compaixao","empatia","coragem",
+        "determinacao","resiliencia","flow","realizacao","proposito","pertencimento",
+    ]
+    
+    prompt = (
+        f"Analise o texto abaixo e retorne APENAS UMA PALAVRA da lista de emocoes.\n"
+        f"Texto pode estar em qualquer idioma (portugues, ingles, espanhol, alemao, frances, italiano, japones, etc).\n"
+        f"Entenda girias, expressoes informais, metaforas e expressoes culturais.\n"
+        f"\nTexto: {texto}\n"
+        f"\nLista de emocoes validas:\n{', '.join(emocoes_validas)}\n"
+        f"\nRetorne APENAS a palavra da emocao, sem explicacao, sem pontuacao."
+    )
+    
+    try:
+        resposta = cliente_ia.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                temperature=0.1,
+                max_output_tokens=10
+            )
+        )
+        emocao = resposta.text.strip().lower().replace(".", "").replace(",", "").split()[0]
+        if emocao in emocoes_validas:
+            _cache_emocao[chave] = emocao
+            return emocao
+        else:
+            # Fallback para deteccao local
+            resultado = detectar_emocao(texto)
+            _cache_emocao[chave] = resultado
+            return resultado
+    except Exception as e:
+        # Fallback para deteccao local
+        resultado = detectar_emocao(texto)
+        _cache_emocao[chave] = resultado
+        return resultado
+
+def detectar_emocao_hibrido(texto: str, usar_gemini: bool = True) -> dict:
+    """Sistema hibrido — Gemini principal + local fallback + analise completa"""
+    
+    # 1. Deteccao local (sempre rapida)
+    emocao_local = detectar_emocao(texto)
+    analise = analisar_texto_completo(texto)
+    em_crise = detectar_crise(texto)
+    
+    # 2. Se crise — protocolo imediato sem esperar Gemini
+    if em_crise:
+        analise["emocao"] = "desespero"
+        analise["emocao_gemini"] = "desespero"
+        analise["em_crise"] = True
+        analise["urgencia"] = "crise"
+        analise["fonte"] = "crise_detectada"
+        return analise
+    
+    # 3. Gemini para textos ambiguos ou curtos
+    emocao_final = emocao_local
+    fonte = "local"
+    
+    if usar_gemini:
+        # Usar Gemini quando:
+        # - texto em outro idioma
+        # - emocao local e neutro (incerto)
+        # - texto curto (menos de 5 palavras)
+        # - texto em outro idioma detectado
+        idioma = analise.get("idioma", "pt")
+        texto_curto = len(texto.split()) < 5
+        emocao_incerta = emocao_local == "neutro"
+        outro_idioma = idioma != "pt"
+        
+        if emocao_incerta or outro_idioma or texto_curto:
+            try:
+                emocao_gemini = detectar_emocao_gemini(texto)
+                emocao_final = emocao_gemini
+                fonte = "gemini"
+            except:
+                emocao_final = emocao_local
+                fonte = "local_fallback"
+    
+    analise["emocao"] = emocao_final
+    analise["emocao_local"] = emocao_local
+    analise["em_crise"] = em_crise
+    analise["fonte"] = fonte
+    return analise
 
 
 @app.get("/health")
@@ -5783,14 +6356,29 @@ async def analisar_foto(
         import base64
         foto_b64 = base64.standard_b64encode(foto_bytes).decode("utf-8")
 
-        prompt_foto = """Analise a expressao facial e linguagem corporal nesta imagem.
-Identifique a emocao principal dentre: alegria, tristeza, raiva, medo, surpresa, nojo, ansiedade, calma, confianca, curiosidade, amor, gratidao, frustracao, vergonha, neutro.
+        prompt_foto = """Voce e um especialista em psicologia, neurociencia emocional e analise facial com visao computacional avancada.
+
+Analise TODOS os elementos visuais desta imagem com maxima precisao:
+1. EXPRESSAO FACIAL: microexpressoes, posicao dos olhos, sobrancelhas, boca, tensao muscular
+2. LINGUAGEM CORPORAL: postura, gestos, tensao nos ombros, posicao dos bracos
+3. CONTEXTO: ambiente, objetos, cores, iluminacao, situacao
+4. PELE E APARENCIA: vermelhidao, palor, tensao
+5. OLHAR: direcao, intensidade, brilho ou opacidade
+
+Emocoes possiveis (escolha a mais precisa):
+alegria, tristeza, raiva, medo, surpresa, nojo, ansiedade, calma, confianca, curiosidade,
+amor, gratidao, frustracao, vergonha, neutro, euforia, melancolia, orgulho, solidao,
+estresse, desespero, paz, entusiasmo, timidez, confusao, saudade, alivio, tedio
+
 Responda EXATAMENTE neste formato JSON:
 {
   "emocao": "nome_da_emocao",
   "confianca": 85,
-  "descricao": "Descricao curta do que voce observou na imagem",
-  "dica": "Uma dica pratica relacionada a esta emocao"
+  "intensidade": 3,
+  "descricao": "Descricao detalhada do que voce observou — expressao, postura, contexto",
+  "emocoes_secundarias": ["emocao2", "emocao3"],
+  "dica": "Uma tecnica terapeutica pratica relacionada a esta emocao",
+  "observacao_clinica": "O que um psicologo observaria nesta expressao"
 }"""
 
         resposta = cliente_ia.models.generate_content(
@@ -6851,7 +7439,16 @@ def analyze(
             detail="⚠️ Texto muito curto. Digite pelo menos 3 caracteres."
         )
 
-    emocao      = detectar_emocao(text)
+    # GEMINI ATIVO na API publica
+    try:
+        _a = detectar_emocao_hibrido(text, usar_gemini=True)
+        emocao = _a.get("emocao", "neutro")
+    except:
+        try:
+            _at = detectar_emocao_hibrido(text, usar_gemini=True)
+            emocao = _at.get("emocao", "neutro")
+        except:
+            emocao = detectar_emocao(text)
     intensidade = calcular_intensidade(text)
     tecnica     = tecnicas_por_emocao.get(emocao, tecnicas_por_emocao["neutro"])
 
@@ -7092,7 +7689,14 @@ async def chat(
     for h in reversed(historico):
         contexto += f"Usuário: {h.conteudo}\nSofia: {h.resposta}\n\n"
 
-    emocao_atual = detectar_emocao(mensagem)
+    # GEMINI detecta emocao da mensagem para Sofia
+    try:
+        _analise_msg = detectar_emocao_hibrido(mensagem, usar_gemini=True)
+        emocao_atual = _analise_msg.get("emocao", "neutro")
+        _crise_detectada = _analise_msg.get("em_crise", False)
+    except:
+        emocao_atual = detectar_emocao(mensagem)
+        _crise_detectada = detectar_crise(mensagem)
     eh_premium   = usuario.plano in ["premium", "enterprise"]
 
     # Estatísticas do usuário para contexto
@@ -7179,6 +7783,7 @@ async def chat(
     em_crise = detectar_crise(mensagem)
     
     # Se crise — protocolo especial
+    em_crise = _crise_detectada if "_crise_detectada" in dir() else detectar_crise(mensagem)
     if em_crise:
         urgencia = "crise"
         emocao_atual = "desespero"
@@ -7711,7 +8316,16 @@ def criar_diario(
     # Humor deve ser entre 1 e 5
     humor = max(1, min(5, humor))
 
-    emocao = detectar_emocao(conteudo + " " + titulo)
+    # GEMINI no diario
+    try:
+        _ad = detectar_emocao_hibrido(conteudo + " " + titulo, usar_gemini=True)
+        emocao = _ad.get("emocao", "neutro")
+    except:
+        try:
+            _ad = detectar_emocao_hibrido(conteudo + " " + titulo, usar_gemini=True)
+            emocao = _ad.get("emocao", "neutro")
+        except:
+            emocao = detectar_emocao(conteudo + " " + titulo)
     tecnica = tecnicas_por_emocao.get(emocao, "")
 
     novo = Diario(
@@ -7924,7 +8538,16 @@ def editar_diario(
             detail="❌ Entrada não encontrada."
         )
 
-    emocao         = detectar_emocao(conteudo + " " + titulo)
+    # GEMINI no diario v2
+    try:
+        _ad2 = detectar_emocao_hibrido(conteudo + " " + titulo, usar_gemini=True)
+        emocao = _ad2.get("emocao", "neutro")
+    except:
+        try:
+            _ad = detectar_emocao_hibrido(conteudo + " " + titulo, usar_gemini=True)
+            emocao = _ad.get("emocao", "neutro")
+        except:
+            emocao = detectar_emocao(conteudo + " " + titulo)
     entrada.titulo   = titulo.strip()
     entrada.conteudo = conteudo.strip()
     entrada.emocao   = emocao.capitalize()
@@ -9391,7 +10014,16 @@ def api_analyze(
             detail="❌ Texto muito curto. Mínimo 3 caracteres."
         )
 
-    emocao      = detectar_emocao(text)
+    # GEMINI ATIVO na API publica
+    try:
+        _a = detectar_emocao_hibrido(text, usar_gemini=True)
+        emocao = _a.get("emocao", "neutro")
+    except:
+        try:
+            _at = detectar_emocao_hibrido(text, usar_gemini=True)
+            emocao = _at.get("emocao", "neutro")
+        except:
+            emocao = detectar_emocao(text)
     intensidade = calcular_intensidade(text)
     tecnica     = tecnicas_por_emocao.get(emocao, "")
 
