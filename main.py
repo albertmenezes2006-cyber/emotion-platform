@@ -4926,11 +4926,6 @@ def detectar_emocao_hibrido(texto: str, usar_gemini: bool = True) -> dict:
     fonte = "local"
     
     if usar_gemini:
-        # Usar Gemini quando:
-        # - texto em outro idioma
-        # - emocao local e neutro (incerto)
-        # - texto curto (menos de 5 palavras)
-        # - texto em outro idioma detectado
         idioma = analise.get("idioma", "pt")
         texto_curto = len(texto.split()) < 5
         emocao_incerta = emocao_local == "neutro"
@@ -4938,18 +4933,215 @@ def detectar_emocao_hibrido(texto: str, usar_gemini: bool = True) -> dict:
         
         if emocao_incerta or outro_idioma or texto_curto:
             try:
-                emocao_gemini = detectar_emocao_gemini(texto)
-                emocao_final = emocao_gemini
-                fonte = "gemini"
+                # ORQUESTRADOR — tenta todas as IAs
+                emocao_orq = detectar_emocao_orquestrador(texto)
+                emocao_final = emocao_orq
+                fonte = "orquestrador"
             except:
-                emocao_final = emocao_local
-                fonte = "local_fallback"
+                try:
+                    emocao_gemini = detectar_emocao_gemini(texto)
+                    emocao_final = emocao_gemini
+                    fonte = "gemini"
+                except:
+                    emocao_final = emocao_local
+                    fonte = "local_fallback"
     
     analise["emocao"] = emocao_final
     analise["emocao_local"] = emocao_local
     analise["em_crise"] = em_crise
     analise["fonte"] = fonte
     return analise
+
+
+
+# ================================================================
+# ORQUESTRADOR GLOBAL DE IAs v20.0
+# Groq + Mistral + OpenRouter + Gemini
+# Failover automatico — Sofia NUNCA para
+# ================================================================
+
+import requests as _requests
+
+# KEYS — seguras via variaveis de ambiente
+IA_KEYS = {
+    "groq":       os.getenv("GROQ_API_KEY", ""),
+    "mistral":    os.getenv("MISTRAL_API_KEY", ""),
+    "openrouter": os.getenv("OPENROUTER_API_KEY", ""),
+    "gemini":     os.getenv("GEMINI_API_KEY", ""),
+    "cerebras":   os.getenv("CEREBRAS_API_KEY", ""),
+    "deepseek":   os.getenv("DEEPSEEK_API_KEY", ""),
+}
+
+# MODELOS POR IA
+IA_MODELOS = {
+    "groq":       "llama-3.3-70b-versatile",
+    "mistral":    "mistral-small-latest",
+    "openrouter": "meta-llama/llama-3.3-70b-instruct:free",
+    "gemini":     "gemini-2.0-flash",
+}
+
+# Cache de respostas para economizar quota
+_cache_respostas = {}
+
+def chamar_ia(prompt: str, max_tokens: int = 1000, temperatura: float = 0.75) -> dict:
+    """Chama IAs em ordem de prioridade com failover automatico"""
+    
+    # Checar cache
+    cache_key = prompt[:150]
+    if cache_key in _cache_respostas:
+        return {"texto": _cache_respostas[cache_key], "ia": "cache", "ok": True}
+    
+    # Ordem de prioridade
+    ordem = ["groq", "mistral", "openrouter", "gemini"]
+    
+    for ia_nome in ordem:
+        try:
+            resultado = _chamar_ia_especifica(ia_nome, prompt, max_tokens, temperatura)
+            if resultado["ok"]:
+                # Salvar no cache
+                _cache_respostas[cache_key] = resultado["texto"]
+                # Limpar cache se muito grande
+                if len(_cache_respostas) > 500:
+                    keys = list(_cache_respostas.keys())
+                    for k in keys[:100]:
+                        del _cache_respostas[k]
+                return resultado
+        except Exception as e:
+            print(f"[IA] {ia_nome} falhou: {e}")
+            continue
+    
+    return {"texto": "", "ia": "none", "ok": False}
+
+def _chamar_ia_especifica(ia_nome: str, prompt: str, max_tokens: int, temperatura: float) -> dict:
+    """Chama uma IA especifica"""
+    key = IA_KEYS.get(ia_nome, "")
+    if not key:
+        return {"ok": False, "erro": "sem key"}
+    
+    # GROQ
+    if ia_nome == "groq":
+        headers = {
+            "Authorization": f"Bearer {key}",
+            "Content-Type": "application/json"
+        }
+        data = {
+            "model": IA_MODELOS["groq"],
+            "messages": [{"role": "user", "content": prompt}],
+            "max_tokens": max_tokens,
+            "temperature": temperatura
+        }
+        r = _requests.post(
+            "https://api.groq.com/openai/v1/chat/completions",
+            headers=headers, json=data, timeout=30
+        )
+        if r.status_code == 200:
+            texto = r.json()["choices"][0]["message"]["content"]
+            return {"ok": True, "texto": texto, "ia": "groq"}
+        elif r.status_code == 429:
+            return {"ok": False, "erro": "quota"}
+        else:
+            return {"ok": False, "erro": f"status {r.status_code}"}
+    
+    # MISTRAL
+    elif ia_nome == "mistral":
+        headers = {
+            "Authorization": f"Bearer {key}",
+            "Content-Type": "application/json"
+        }
+        data = {
+            "model": IA_MODELOS["mistral"],
+            "messages": [{"role": "user", "content": prompt}],
+            "max_tokens": max_tokens,
+            "temperature": temperatura
+        }
+        r = _requests.post(
+            "https://api.mistral.ai/v1/chat/completions",
+            headers=headers, json=data, timeout=30
+        )
+        if r.status_code == 200:
+            texto = r.json()["choices"][0]["message"]["content"]
+            return {"ok": True, "texto": texto, "ia": "mistral"}
+        elif r.status_code == 429:
+            return {"ok": False, "erro": "quota"}
+        else:
+            return {"ok": False, "erro": f"status {r.status_code}"}
+    
+    # OPENROUTER
+    elif ia_nome == "openrouter":
+        headers = {
+            "Authorization": f"Bearer {key}",
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://emotion-platform-albert.onrender.com",
+            "X-Title": "Emotion Intelligence Platform"
+        }
+        data = {
+            "model": IA_MODELOS["openrouter"],
+            "messages": [{"role": "user", "content": prompt}],
+            "max_tokens": max_tokens,
+            "temperature": temperatura
+        }
+        r = _requests.post(
+            "https://openrouter.ai/api/v1/chat/completions",
+            headers=headers, json=data, timeout=30
+        )
+        if r.status_code == 200:
+            texto = r.json()["choices"][0]["message"]["content"]
+            return {"ok": True, "texto": texto, "ia": "openrouter"}
+        elif r.status_code == 429:
+            return {"ok": False, "erro": "quota"}
+        else:
+            return {"ok": False, "erro": f"status {r.status_code}"}
+    
+    # GEMINI
+    elif ia_nome == "gemini":
+        try:
+            resposta = cliente_ia.models.generate_content(
+                model="gemini-2.0-flash",
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    temperature=temperatura,
+                    max_output_tokens=max_tokens
+                )
+            )
+            return {"ok": True, "texto": resposta.text, "ia": "gemini"}
+        except Exception as e:
+            return {"ok": False, "erro": str(e)}
+    
+    return {"ok": False, "erro": "ia desconhecida"}
+
+def detectar_emocao_orquestrador(texto: str) -> str:
+    """Detecta emocao usando o orquestrador de IAs"""
+    emocoes_validas = [
+        "alegria","tristeza","raiva","medo","surpresa","nojo","amor","esperanca",
+        "gratidao","solidao","euforia","calma","confusao","vergonha","neutro",
+        "ansiedade","estresse","empolgacao","saudade","orgulho","ciumes","frustracao",
+        "alivio","entusiasmo","melancolia","nostalgia","panico","timidez","curiosidade",
+        "tedio","animacao","desespero","paz","contentamento","vazio","luto","burnout",
+        "culpa","remorso","admiracao","inveja","compaixao","empatia","coragem",
+        "determinacao","resiliencia","realizacao","proposito",
+    ]
+    
+    prompt = (
+        f"Analise o texto e retorne APENAS UMA PALAVRA da lista.\n"
+        f"Texto pode estar em qualquer idioma. Entenda girias e expressoes informais.\n"
+        f"Texto: {texto}\n"
+        f"Lista: {', '.join(emocoes_validas)}\n"
+        f"Retorne APENAS a palavra, sem pontuacao."
+    )
+    
+    resultado = chamar_ia(prompt, max_tokens=10, temperatura=0.1)
+    if resultado["ok"]:
+        emocao = resultado["texto"].strip().lower().split()[0].replace(".", "")
+        if emocao in emocoes_validas:
+            return emocao
+    
+    # Fallback local
+    return detectar_emocao(texto)
+
+def sofia_responder_orquestrador(prompt_completo: str) -> dict:
+    """Sofia responde usando o melhor orquestrador disponivel"""
+    resultado = chamar_ia(prompt_completo, max_tokens=1500, temperatura=0.75)
+    return resultado
 
 
 @app.get("/health")
@@ -7955,12 +8147,19 @@ async def chat(
     )
 
     try:
-        resposta = cliente_ia.models.generate_content(
-            model="gemini-2.0-flash",
-            contents=prompt,
-            config=types.GenerateContentConfig(temperature=0.75, max_output_tokens=2048)
-        )
-        texto_resposta = resposta.text
+        # ORQUESTRADOR — usa melhor IA disponivel
+        resultado_ia = sofia_responder_orquestrador(prompt)
+        if resultado_ia["ok"]:
+            texto_resposta = resultado_ia["texto"]
+            print(f"[Sofia] Respondeu via: {resultado_ia['ia']}")
+        else:
+            # Fallback Gemini direto
+            resposta = cliente_ia.models.generate_content(
+                model="gemini-2.0-flash",
+                contents=prompt,
+                config=types.GenerateContentConfig(temperature=0.75, max_output_tokens=2048)
+            )
+            texto_resposta = resposta.text
 
     except Exception as e:
         erro_str = str(e).lower()
