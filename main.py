@@ -3208,6 +3208,108 @@ def processar_nova_senha(
 # FIM RECUPERACAO DE SENHA
 # ================================================================
 
+
+# ================================================================
+# HUMOR POR HORA DO DIA v20.0
+# ================================================================
+
+@app.get("/api/humor-por-hora")
+def api_humor_por_hora(request: Request, db: Session = Depends(get_db)):
+    """Retorna distribuicao de emocoes por hora do dia"""
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return JSONResponse({"ok": False}, status_code=401)
+
+    from collections import defaultdict
+    from datetime import timedelta
+
+    analises = db.query(Analise).filter(
+        Analise.usuario_id == usuario.id,
+        Analise.criado_em >= datetime.now() - timedelta(days=30)
+    ).all()
+
+    emocoes_positivas = ["alegria","amor","gratidao","esperanca","calma","paz",
+                         "orgulho","realizacao","contentamento","entusiasmo","flow"]
+    emocoes_negativas = ["tristeza","raiva","ansiedade","estresse","medo",
+                         "solidao","frustracao","burnout","desespero","panico"]
+
+    por_hora = defaultdict(lambda: {"total": 0, "positivas": 0, "negativas": 0})
+
+    for a in analises:
+        if not a.criado_em:
+            continue
+        hora = a.criado_em.hour
+        por_hora[hora]["total"] += 1
+        if a.emocao and a.emocao.lower() in emocoes_positivas:
+            por_hora[hora]["positivas"] += 1
+        elif a.emocao and a.emocao.lower() in emocoes_negativas:
+            por_hora[hora]["negativas"] += 1
+
+    # Formatar para grafico
+    labels = [f"{h:02d}h" for h in range(24)]
+    positivas = [por_hora[h]["positivas"] for h in range(24)]
+    negativas = [por_hora[h]["negativas"] for h in range(24)]
+    totais = [por_hora[h]["total"] for h in range(24)]
+
+    # Hora de pico
+    hora_pico = max(range(24), key=lambda h: por_hora[h]["total"]) if analises else 0
+    hora_melhor = max(range(24), key=lambda h: por_hora[h]["positivas"]) if analises else 0
+
+    return JSONResponse({
+        "ok": True,
+        "labels": labels,
+        "positivas": positivas,
+        "negativas": negativas,
+        "totais": totais,
+        "hora_pico": f"{hora_pico:02d}h",
+        "hora_melhor": f"{hora_melhor:02d}h",
+        "total_analises": len(analises),
+    })
+
+@app.get("/api/evolucao-semanal")
+def api_evolucao_semanal(request: Request, db: Session = Depends(get_db)):
+    """Retorna evolucao emocional das ultimas 4 semanas"""
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return JSONResponse({"ok": False}, status_code=401)
+
+    from datetime import timedelta
+
+    semanas = []
+    for i in range(3, -1, -1):
+        inicio = datetime.now() - timedelta(weeks=i+1)
+        fim = datetime.now() - timedelta(weeks=i)
+        analises = db.query(Analise).filter(
+            Analise.usuario_id == usuario.id,
+            Analise.criado_em >= inicio,
+            Analise.criado_em < fim
+        ).all()
+
+        emocoes_pos = ["alegria","amor","gratidao","esperanca","calma","paz","orgulho"]
+        pos = sum(1 for a in analises if a.emocao and a.emocao.lower() in emocoes_pos)
+        total = len(analises)
+        score = round((pos / total * 100) if total > 0 else 0, 1)
+
+        semana_label = f"Sem {4-i}"
+        semanas.append({
+            "semana": semana_label,
+            "score": score,
+            "total": total,
+            "positivas": pos,
+        })
+
+    return JSONResponse({
+        "ok": True,
+        "semanas": semanas,
+        "labels": [s["semana"] for s in semanas],
+        "scores": [s["score"] for s in semanas],
+        "totais": [s["total"] for s in semanas],
+    })
+
+# ================================================================
+# FIM HUMOR POR HORA
+# ================================================================
+
 # ================================================================
 # UPSELL AUTOMATICO v20.0
 # ================================================================
@@ -7430,6 +7532,12 @@ def index(request: Request, ref: str = None, db: Session = Depends(get_db)):
         "score_consistencia":    score_consistencia,
         "score_engajamento":     score_engajamento,
         "score_progresso":       score_progresso,
+        # Score IE v3 completo para dashboard
+        "score_autoconsciencia": min(100, int((variedade / 15) * 100)),
+        "score_autorregulacao":  min(100, int((1 - (sum(intensidades)/len(intensidades) - 1) / 4) * 100) if intensidades else 50),
+        "score_conexao":         min(100, int((total_msgs / 20) * 100)),
+        "score_reflexao":        min(100, int((total_diarios / 20) * 100)),
+        "streak":                calcular_streak(usuario.id, db),
     })
 
 # ================================================================

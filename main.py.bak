@@ -4721,17 +4721,46 @@ def detectar_temporalidade(texto: str) -> str:
         return "futuro"
     return "presente"
 
+
+def detectar_idioma_preciso(texto: str) -> str:
+    """Detecta idioma com maxima precisao — PT tem prioridade absoluta"""
+    if not texto or not texto.strip():
+        return "pt"
+    texto_lower = texto.lower().strip()
+    marcadores_pt = [
+        "estou","tô","tá","né","tudo bem","oi","tchau","obrigado","obrigada",
+        "saudade","gente","cara","mano","irmão","irmao","não","nao","também",
+        "tambem","então","entao","você","voce","me sinto","tô bem","to mal",
+        "muito","pra","pro","minha","meu","hoje","amanhã","agora"
+    ]
+    if any(p in texto_lower for p in marcadores_pt):
+        return "pt"
+    
+    marcadores_en = ["i am","i'm","i feel","i have","i've","don't","you're"]
+    if any(p in texto_lower for p in marcadores_en):
+        return "en"
+
+    try:
+        from langdetect import detect, DetectorFactory
+        DetectorFactory.seed = 0
+        idioma = detect(texto)
+        return "pt" if idioma in ["pt","gl","la"] else idioma
+    except:
+        return "pt"
+
 def analisar_texto_completo(texto: str) -> dict:
     """Analise completa de texto — retorna todas as dimensoes"""
+    emocao = detectar_emocao(texto)
+    idioma = detectar_idioma_preciso(texto)
     return {
-        "emocao": detectar_emocao(texto),  # local rapido
+        "emocao": emocao,
         "intensidade": calcular_intensidade(texto),
         "tom": detectar_tom(texto),
         "contexto": detectar_contexto_situacao(texto),
         "urgencia": detectar_urgencia(texto),
         "temporalidade": detectar_temporalidade(texto),
-        "idioma": detectar_idioma(texto),
-        "emoji": get_emoji(detectar_emocao(texto)),
+        "idioma": idioma,
+        "emoji": get_emoji(emocao),
     }
 
 
@@ -5678,19 +5707,23 @@ async def health(db: Session = Depends(get_db)):
         total_analises  = db.query(Analise).count()
         total_mensagens = db.query(Mensagem).count()
         total_diarios   = db.query(Diario).count()
+        total_pagamentos = db.query(Pagamento).filter(Pagamento.status == "approved").count()
         uptime          = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         return {
             "status":          "healthy",
-            "version": "20.0 ULTIMATE",
+            "version":         "20.0 ULTIMATE",
             "timestamp":       uptime,
             "database":        "connected",
             "usuarios":        total_usuarios,
             "analises":        total_analises,
             "mensagens":       total_mensagens,
             "diarios":         total_diarios,
-            "ia":              "Google Gemini 2.0 Flash",
+            "pagamentos_aprovados": total_pagamentos,
+            "ia":              "Groq + Mistral + OpenRouter + Gemini (17 modelos)",
             "pagamentos":      "MercadoPago",
             "emails":          "SendGrid",
+            "monitoramento":   "Telegram Bot ativo",
+            "features":        "v20 — idioma PT, upsell, streak, recuperar senha, monitoramento",
         }
     except Exception as e:
         return {
@@ -10407,14 +10440,29 @@ def compartilhar_analise(analise_id: int, request: Request, db: Session = Depend
     nome = usuario.nome.split()[0] if usuario else "Alguem"
     emocao = analise.emocao or "neutro"
     emoji = analise.emoji or "🧠"
-    texto_share = f"{nome} se sentiu {emocao} {emoji} — registrado na Emotion Intelligence"
-    url_share = f"{BASE_URL}/cadastro"
+    texto_share = f"{nome} se sentiu {emocao} {emoji} — Emotion Intelligence"
+    url_share = f"{BASE_URL}/compartilhar/{analise_id}"
+    url_cadastro = f"{BASE_URL}/cadastro"
+
+    # Se for browser, retorna pagina HTML
+    accept = request.headers.get("accept","")
+    if "text/html" in accept:
+        return render_template("compartilhar.html",
+            request=request,
+            analise=analise,
+            nome=nome,
+            emocao=emocao,
+            emoji=emoji,
+        )
+
+    import urllib.parse
+    texto_enc = urllib.parse.quote(texto_share)
     return {
         "texto": texto_share,
-        "url": url_share,
-        "whatsapp": f"https://wa.me/?text={texto_share} {url_share}",
-        "twitter": f"https://twitter.com/intent/tweet?text={texto_share}&url={url_share}",
-        "telegram": f"https://t.me/share/url?url={url_share}&text={texto_share}"
+        "url": url_cadastro,
+        "whatsapp": f"https://wa.me/?text={texto_enc}%20{urllib.parse.quote(url_cadastro)}",
+        "twitter": f"https://twitter.com/intent/tweet?text={texto_enc}&url={urllib.parse.quote(url_cadastro)}",
+        "telegram": f"https://t.me/share/url?url={urllib.parse.quote(url_cadastro)}&text={texto_enc}"
     }
 
 @app.get("/certificado")
@@ -10772,11 +10820,47 @@ def exportar_pdf(request: Request, db: Session = Depends(get_db)):
             ]))
             elementos.append(tabela_ultimas)
 
+        # Score IE
+        try:
+            score_data = calcular_score_ie_v3(usuario.id, db)
+            if score_data and score_data.get("score_total", 0) > 0:
+                elementos.append(Paragraph("Score de Inteligencia Emocional", estilo_secao))
+                score_items = [
+                    ["Dimensao", "Score"],
+                    ["Score Total IE", f"{score_data['score_total']}/100"],
+                    ["Nivel", score_data.get('nivel', '')],
+                    ["Ponto Forte", score_data.get('ponto_forte', '')],
+                    ["A Melhorar", score_data.get('ponto_fraco', '')],
+                ]
+                for dim, val in score_data.get("dimensoes", {}).items():
+                    nomes = {
+                        "autoconsciencia":"Autoconsciencia","pratica":"Pratica",
+                        "equilibrio":"Equilibrio","regulacao":"Regulacao",
+                        "reflexao":"Reflexao","conexao":"Conexao Social",
+                        "resiliencia":"Resiliencia","mindfulness":"Mindfulness",
+                        "crescimento":"Crescimento","proposito":"Proposito"
+                    }
+                    score_items.append([nomes.get(dim, dim), f"{val}/100"])
+                tabela_score = Table(score_items, colWidths=[9*cm, 7*cm])
+                tabela_score.setStyle(TableStyle([
+                    ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#9b59b6')),
+                    ('TEXTCOLOR', (0,0), (-1,0), colors.white),
+                    ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
+                    ('FONTSIZE', (0,0), (-1,-1), 10),
+                    ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, colors.HexColor('#f9f0ff')]),
+                    ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor('#dddddd')),
+                    ('PADDING', (0,0), (-1,-1), 8),
+                ]))
+                elementos.append(tabela_score)
+                elementos.append(Spacer(1, 0.5*cm))
+        except Exception as _score_err:
+            print(f"Score IE no PDF: {_score_err}")
+
         # Rodape
         elementos.append(Spacer(1, 1*cm))
         elementos.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor('#cccccc')))
         elementos.append(Paragraph(
-            "Emotion Intelligence Platform v15.0 — emotion-platform-albert.onrender.com",
+            "Emotion Intelligence Platform v20.0 — emotion-platform-albert.onrender.com",
             estilo_subtitulo
         ))
 
@@ -10949,4 +11033,4 @@ def api_ranking(
 
 # ================================================================
 # FIM DA PARTE 4 — FIM DO ARQUIVO COMPLETO
-# ================================================================
+# ================================================================# v20-final
