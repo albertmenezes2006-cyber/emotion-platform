@@ -8274,6 +8274,10 @@ def ativar_trial(request: Request, db: Session = Depends(get_db)):
 def ranking_route(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
     # Ranking e publico — funciona sem login
+    # Se browser acessa, retorna pagina HTML
+    accept = request.headers.get("accept", "")
+    if "text/html" in accept:
+        return render_template("ranking.html", request=request, usuario=usuario)
 
     top = db.query(Usuario).filter(
         Usuario.ativo == True

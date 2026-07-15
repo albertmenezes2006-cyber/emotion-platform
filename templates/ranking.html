@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-JGLER9XVGY');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ranking Global — Emotion Intelligence</title>
+<meta property="og:title" content="Ranking Global — Emotion Intelligence">
+<meta property="og:description" content="Veja os usuários mais engajados na Emotion Intelligence Platform.">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#00d2ff;--secondary:#3a7bd5;--gold:#f39c12;--dark:#0f0c29;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1)}
+body{font-family:'Segoe UI',sans-serif;background:var(--dark);color:#fff;min-height:100vh}
+nav{padding:14px 24px;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.logo{font-size:18px;font-weight:bold;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+.container{max-width:800px;margin:0 auto;padding:40px 20px}
+/* HERO */
+.hero{text-align:center;padding:40px 20px;margin-bottom:32px}
+.hero h1{font-size:36px;font-weight:900;margin-bottom:8px}
+.hero h1 span{background:linear-gradient(90deg,var(--gold),#e67e22);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:rgba(255,255,255,0.5);font-size:15px;margin-bottom:16px}
+.total-badge{display:inline-block;background:rgba(0,210,255,0.1);border:1px solid rgba(0,210,255,0.2);padding:6px 16px;border-radius:20px;font-size:13px;color:var(--primary)}
+/* MINHA POSICAO */
+.minha-pos{background:rgba(0,210,255,0.08);border:2px solid rgba(0,210,255,0.3);border-radius:18px;padding:20px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.pos-info{display:flex;align-items:center;gap:14px}
+.pos-num{font-size:36px;font-weight:900;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.pos-label{font-size:12px;color:rgba(255,255,255,0.5)}
+.pos-pontos{text-align:right}
+.pos-pontos-num{font-size:28px;font-weight:900;color:var(--gold)}
+/* TOP 3 */
+.top3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:28px}
+.top3-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;text-align:center;transition:all .3s;position:relative;overflow:hidden}
+.top3-card:hover{transform:translateY(-4px)}
+.top3-card.primeiro{border-color:rgba(255,215,0,0.4);background:rgba(255,215,0,0.06);order:-1}
+.top3-card.segundo{border-color:rgba(192,192,192,0.3)}
+.top3-card.terceiro{border-color:rgba(205,127,50,0.3)}
+.top3-emoji{font-size:40px;margin-bottom:8px;display:block}
+.top3-nome{font-size:15px;font-weight:700;margin-bottom:4px}
+.top3-pontos{font-size:22px;font-weight:900;color:var(--gold)}
+.top3-badge{font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px}
+.top3-plano{font-size:10px;padding:3px 10px;border-radius:20px;margin-top:6px;display:inline-block}
+.plano-premium{background:rgba(0,210,255,0.15);color:var(--primary)}
+.plano-enterprise{background:rgba(46,204,113,0.15);color:#2ecc71}
+.plano-free{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.5)}
+/* LISTA */
+.lista-titulo{font-size:16px;font-weight:700;margin-bottom:14px;color:rgba(255,255,255,0.7)}
+.ranking-item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;margin-bottom:10px;display:flex;align-items:center;gap:14px;transition:all .2s}
+.ranking-item:hover{border-color:var(--primary);transform:translateX(4px)}
+.ranking-item.eu{border-color:rgba(0,210,255,0.4);background:rgba(0,210,255,0.05)}
+.ranking-pos{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;flex-shrink:0}
+.ranking-info{flex:1}
+.ranking-nome{font-size:15px;font-weight:600}
+.ranking-badge{font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px}
+.ranking-pontos{font-size:20px;font-weight:900;color:var(--gold)}
+.ranking-plano{font-size:10px;padding:2px 8px;border-radius:10px;margin-top:4px;display:inline-block}
+/* CTA */
+.cta-card{background:linear-gradient(135deg,rgba(0,210,255,0.1),rgba(58,123,213,0.1));border:1px solid rgba(0,210,255,0.2);border-radius:18px;padding:28px;text-align:center;margin-top:24px}
+.cta-card h3{font-size:20px;margin-bottom:8px}
+.cta-card p{color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:16px}
+.btn-cta{display:inline-block;padding:12px 28px;background:linear-gradient(90deg,var(--primary),var(--secondary));border-radius:12px;color:#fff;font-weight:700;font-size:15px;text-decoration:none;margin:4px}
+.btn-sec{background:rgba(255,255,255,0.08);border:1px solid var(--border)}
+/* LOADING */
+.loading{text-align:center;padding:40px;color:rgba(255,255,255,0.4)}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">🧠 Emotion Intelligence</a>
+  <div style="display:flex;gap:10px">
+    <a href="/dashboard" style="color:rgba(255,255,255,0.5);font-size:13px;text-decoration:none">Dashboard</a>
+    <a href="/gamificacao" style="color:rgba(255,255,255,0.5);font-size:13px;text-decoration:none">Conquistas</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="hero">
+    <h1>🏆 Ranking <span>Global</span></h1>
+    <p>Os usuários mais engajados na Emotion Intelligence</p>
+    <div class="total-badge" id="totalBadge">Carregando...</div>
+  </div>
+
+  <!-- MINHA POSICAO -->
+  <div class="minha-pos" id="minhaPos" style="display:none">
+    <div class="pos-info">
+      <div class="pos-num" id="posNum">#--</div>
+      <div>
+        <div style="font-weight:700">Sua posição</div>
+        <div class="pos-label" id="posLabel">no ranking global</div>
+      </div>
+    </div>
+    <div class="pos-pontos">
+      <div class="pos-pontos-num" id="possPontos">--</div>
+      <div class="pos-label">pontos</div>
+    </div>
+  </div>
+
+  <!-- TOP 3 -->
+  <div class="top3" id="top3Container">
+    <div class="loading">⏳ Carregando ranking...</div>
+  </div>
+
+  <!-- LISTA 4-20 -->
+  <div class="lista-titulo">📋 Top 20 — Ranking Completo</div>
+  <div id="listaRanking">
+    <div class="loading">⏳ Carregando...</div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-card">
+    <h3>🚀 Suba no ranking!</h3>
+    <p>Faça análises diárias, converse com a Sofia e escreva no diário para ganhar pontos.</p>
+    <a href="/dashboard" class="btn-cta">📊 Fazer Análise Agora</a>
+    <a href="/premium" class="btn-cta btn-sec">⭐ Premium +5pts/análise</a>
+  </div>
+</div>
+
+<script>
+fetch('/ranking')
+  .then(r => r.json())
+  .then(d => {
+    // Total
+    document.getElementById('totalBadge').textContent = `👥 ${d.total_usuarios} usuários na plataforma`;
+
+    // Minha posicao
+    if(d.logado && d.minha_posicao) {
+      const mp = document.getElementById('minhaPos');
+      mp.style.display = 'flex';
+      document.getElementById('posNum').textContent = '#' + d.minha_posicao;
+      document.getElementById('possPontos').textContent = d.meus_pontos;
+      document.getElementById('posLabel').textContent = `de ${d.total_usuarios} usuários`;
+    }
+
+    // TOP 3
+    const top3 = document.getElementById('top3Container');
+    const ranking = d.ranking;
+    if(ranking.length === 0) {
+      top3.innerHTML = '<div class="loading">Nenhum usuário ainda</div>';
+    } else {
+      const classes = ['segundo','primeiro','terceiro'];
+      const itens = [ranking[1], ranking[0], ranking[2]].filter(Boolean);
+      top3.innerHTML = itens.map((u, i) => {
+        const cls = u ? (u.posicao === 1 ? 'primeiro' : u.posicao === 2 ? 'segundo' : 'terceiro') : '';
+        return u ? `
+          <div class="top3-card ${cls}">
+            <span class="top3-emoji">${u.emoji}</span>
+            <div class="top3-nome">${u.nome}</div>
+            <div class="top3-pontos">${u.pontos} pts</div>
+            <div class="top3-badge">${u.badge}</div>
+            <div class="top3-plano plano-${u.plano}">${u.plano.toUpperCase()}</div>
+            ${u.eu ? '<div style="margin-top:8px;font-size:11px;color:#00d2ff;font-weight:700">← Você</div>' : ''}
+          </div>
+        ` : '<div></div>';
+      }).join('');
+    }
+
+    // LISTA 4-20
+    const lista = document.getElementById('listaRanking');
+    const resto = ranking.slice(3);
+    if(resto.length === 0) {
+      lista.innerHTML = '<div class="loading" style="font-size:14px">Seja um dos primeiros! 🚀</div>';
+    } else {
+      lista.innerHTML = resto.map(u => `
+        <div class="ranking-item ${u.eu ? 'eu' : ''}">
+          <div class="ranking-pos" style="color:${u.eu ? 'var(--primary)' : 'rgba(255,255,255,0.5)'}">#${u.posicao}</div>
+          <div class="ranking-info">
+            <div class="ranking-nome">${u.nome} ${u.eu ? '← Você' : ''}</div>
+            <div class="ranking-badge">${u.badge}</div>
+            <span class="ranking-plano plano-${u.plano}">${u.plano.toUpperCase()}</span>
+          </div>
+          <div style="text-align:right">
+            <div class="ranking-pontos">${u.pontos}</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.4)">pontos</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    gtag('event','ver_ranking',{event_category:'engajamento',event_label:'ranking_page'});
+  })
+  .catch(e => {
+    document.getElementById('top3Container').innerHTML = '<div class="loading">❌ Erro ao carregar</div>';
+  });
+</script>
+</body>
+</html>
