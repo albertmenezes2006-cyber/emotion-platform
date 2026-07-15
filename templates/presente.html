@@ -3,99 +3,263 @@
 <head>
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-JGLER9XVGY');
-</script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-JGLER9XVGY');</script>
 <meta charset="UTF-8">
-
-<meta property="og:type" content="website">
-<meta property="og:title" content="Dar Presente — Emotion Intelligence">
-<meta property="og:description" content="Presenteie alguém com a Emotion Intelligence Premium. O melhor presente de saúde mental.">
-<meta property="og:url" content="https://emotion-platform-albert.onrender.com/presente">
-<meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/favicon.svg">
-<meta property="og:site_name" content="Emotion Intelligence">
-<meta property="og:locale" content="pt_BR">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Dar Presente — Emotion Intelligence">
-<meta name="twitter:description" content="Presenteie alguém com a Emotion Intelligence Premium. O melhor presente de saúde mental.">
-<meta name="twitter:image" content="https://emotion-platform-albert.onrender.com/static/favicon.svg">
-<link rel="canonical" href="https://emotion-platform-albert.onrender.com/presente">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Presente — Emotion Intelligence Platform</title>
+<title>Dar Presente — Emotion Intelligence</title>
+<meta name="description" content="Presenteie alguém com saúde emocional. O melhor presente que você pode dar.">
+<meta property="og:title" content="Dar Presente — Emotion Intelligence">
+<meta property="og:description" content="Presenteie com análise emocional com IA. A partir de R$14,90.">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',sans-serif;background:#0f0f1a;color:#fff;min-height:100vh}
-.hero{background:linear-gradient(135deg,#f7971e,#ffd200);padding:50px 20px;text-align:center;color:#000}
-.hero h1{font-size:2rem;margin-bottom:10px}
-.container{max-width:600px;margin:0 auto;padding:40px 20px}
-.card{background:#1a1a2e;border-radius:20px;padding:35px;border:2px solid #ffd200;margin-bottom:20px}
-.opcoes{display:grid;gap:15px;margin:20px 0}
-.opcao{background:#111;border-radius:12px;padding:20px;cursor:pointer;border:2px solid #333;transition:.3s;display:flex;justify-content:space-between;align-items:center}
-.opcao:hover,.opcao.ativo{border-color:#ffd200}
-.opcao h3{margin-bottom:5px}
-.opcao .preco{font-size:1.3rem;font-weight:700;color:#ffd200}
-.form-group{margin:15px 0}
-.form-group label{display:block;margin-bottom:8px;color:#aaa}
-.form-group input,.form-group textarea{width:100%;padding:12px;background:#111;border:1px solid #333;border-radius:8px;color:#fff;font-size:1rem}
-.form-group textarea{height:80px;resize:none}
-.btn{width:100%;padding:16px;background:linear-gradient(135deg,#f7971e,#ffd200);color:#000;border:none;border-radius:12px;font-size:1.1rem;font-weight:700;cursor:pointer;margin-top:20px;transition:.3s}
-.btn:hover{transform:translateY(-2px)}
-.loader{display:none;padding:20px;text-align:center;color:#ffd200}
+:root{--primary:#00d2ff;--secondary:#3a7bd5;--dark:#0f0c29;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1);--success:#2ecc71;--gold:#f39c12}
+body{font-family:'Segoe UI',sans-serif;background:var(--dark);color:#fff;min-height:100vh}
+nav{padding:14px 24px;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.logo{font-size:18px;font-weight:bold;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+.container{max-width:860px;margin:0 auto;padding:40px 20px}
+/* HERO */
+.hero{text-align:center;padding:40px 20px;margin-bottom:32px}
+.hero-emoji{font-size:72px;margin-bottom:16px;animation:bounce 2s ease infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+h1{font-size:36px;font-weight:900;margin-bottom:10px}
+h1 span{background:linear-gradient(90deg,var(--gold),#e67e22);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:16px;color:rgba(255,255,255,0.6);max-width:500px;margin:0 auto;line-height:1.7}
+/* OPCOES */
+.opcoes{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:32px}
+.opcao{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:24px;text-align:center;cursor:pointer;transition:all .3s;position:relative}
+.opcao:hover{border-color:var(--gold);transform:translateY(-4px)}
+.opcao.selecionada{border-color:var(--gold);background:rgba(243,156,18,0.08)}
+.opcao-emoji{font-size:36px;margin-bottom:10px;display:block}
+.opcao-nome{font-size:16px;font-weight:700;color:var(--gold);margin-bottom:6px}
+.opcao-preco{font-size:24px;font-weight:900;background:linear-gradient(90deg,var(--gold),#e67e22);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
+.opcao-desc{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.4}
+.opcao-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--gold),#e67e22);padding:3px 12px;border-radius:20px;font-size:10px;font-weight:bold;white-space:nowrap}
+/* FORM */
+.form-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;margin-bottom:24px}
+.form-card h2{font-size:20px;font-weight:700;margin-bottom:20px;color:var(--primary)}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;margin-bottom:6px;color:rgba(255,255,255,0.6);font-size:13px;font-weight:600}
+.form-group input,.form-group textarea{width:100%;padding:13px 16px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,0.05);color:#fff;font-size:14px;outline:none;transition:border .2s;font-family:inherit}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--gold)}
+.form-group input::placeholder,.form-group textarea::placeholder{color:rgba(255,255,255,0.3)}
+.form-group textarea{height:90px;resize:none}
+/* PREVIEW */
+.preview-card{background:linear-gradient(135deg,rgba(243,156,18,0.1),rgba(230,126,34,0.08));border:2px solid rgba(243,156,18,0.3);border-radius:18px;padding:24px;margin-bottom:24px;text-align:center}
+.preview-card h3{font-size:14px;color:var(--gold);margin-bottom:16px}
+.preview-presente{background:rgba(0,0,0,0.3);border-radius:14px;padding:20px;display:inline-block;min-width:280px;text-align:center}
+.preview-emoji{font-size:40px;margin-bottom:8px}
+.preview-titulo{font-size:18px;font-weight:700;margin-bottom:6px}
+.preview-msg{font-size:13px;color:rgba(255,255,255,0.6);font-style:italic;margin-bottom:10px}
+.preview-codigo{font-size:20px;font-weight:900;font-family:monospace;color:var(--gold);letter-spacing:3px}
+/* RESGATE */
+.resgate-card{background:rgba(0,210,255,0.05);border:1px solid rgba(0,210,255,0.2);border-radius:16px;padding:20px;margin-bottom:24px}
+.resgate-card h3{font-size:15px;color:var(--primary);margin-bottom:12px}
+.resgate-row{display:flex;gap:10px}
+.resgate-input{flex:1;padding:12px 16px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,0.05);color:#fff;font-size:14px;text-transform:uppercase;outline:none}
+.resgate-input::placeholder{text-transform:none;color:rgba(255,255,255,0.3)}
+.btn-resgatar{padding:12px 20px;background:linear-gradient(90deg,var(--primary),var(--secondary));border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer}
+.resgate-result{margin-top:10px;padding:10px 14px;border-radius:8px;font-size:13px;display:none}
+.resgate-result.ok{background:rgba(46,204,113,0.15);color:var(--success);border:1px solid rgba(46,204,113,0.3)}
+.resgate-result.erro{background:rgba(231,76,60,0.15);color:#e74c3c;border:1px solid rgba(231,76,60,0.3)}
+/* BTN */
+.btn-presentear{width:100%;padding:17px;background:linear-gradient(90deg,var(--gold),#e67e22);border:none;border-radius:14px;color:#fff;font-size:17px;font-weight:bold;cursor:pointer;transition:all .3s}
+.btn-presentear:hover{transform:translateY(-2px);box-shadow:0 15px 40px rgba(243,156,18,0.4)}
+.seguranca{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.seg-item{font-size:12px;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:4px}
+.toast{position:fixed;bottom:24px;right:24px;background:rgba(46,204,113,.95);color:#fff;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s}
+.toast.show{transform:translateY(0);opacity:1}
+.footer{text-align:center;padding:24px;color:rgba(255,255,255,0.25);font-size:12px}
 </style>
 </head>
 <body>
-<div class="hero">
-  <h1>🎁 Presente para alguém especial</h1>
-  <p>Dê o presente de bem-estar emocional</p>
-</div>
+<nav>
+  <a href="/" class="logo">🧠 Emotion Intelligence</a>
+  <a href="/dashboard" style="color:rgba(255,255,255,0.5);font-size:13px;text-decoration:none">← Dashboard</a>
+</nav>
+
 <div class="container">
-  <div class="card">
-    <h2 style="margin-bottom:20px">Escolha o presente:</h2>
-    <div class="opcoes">
-      {% for op in opcoes %}
-      <div class="opcao {% if loop.first %}ativo{% endif %}" onclick="selecionarOpcao('{{op.plano}}',this)">
-        <div>
-          <h3>{{op.nome}}</h3>
-          <div style="color:#aaa;font-size:.85rem">Acesso completo</div>
-        </div>
-        <div class="preco">R${{op.preco}}</div>
-      </div>
-      {% endfor %}
+  <div class="hero">
+    <div class="hero-emoji">🎁</div>
+    <h1>Dar um <span>Presente</span></h1>
+    <p class="hero-sub">O melhor presente que você pode dar é saúde emocional. Escolha o plano e surpreenda alguém especial!</p>
+  </div>
+
+  <!-- OPCOES DE PRESENTE -->
+  <h2 style="margin-bottom:16px;font-size:20px">🎁 Escolha o presente</h2>
+  <div class="opcoes">
+    <div class="opcao" id="op-creditos_P" onclick="selecionarOpcao('creditos_P','🌱 Pacote Starter','R$14,90','50 análises + 20 msgs Sofia')">
+      <span class="opcao-emoji">🌱</span>
+      <div class="opcao-nome">Starter</div>
+      <div class="opcao-preco">R$14,90</div>
+      <div class="opcao-desc">50 análises + 20 msgs Sofia</div>
+    </div>
+    <div class="opcao selecionada" id="op-creditos_M" onclick="selecionarOpcao('creditos_M','⭐ Pacote Pro','R$24,90','100 análises + 50 msgs Sofia')">
+      <div class="opcao-badge">MAIS POPULAR</div>
+      <span class="opcao-emoji">⭐</span>
+      <div class="opcao-nome">Pro</div>
+      <div class="opcao-preco">R$24,90</div>
+      <div class="opcao-desc">100 análises + 50 msgs Sofia</div>
+    </div>
+    <div class="opcao" id="op-creditos_G" onclick="selecionarOpcao('creditos_G','💎 Pacote Elite','R$39,90','200 análises + 120 msgs Sofia')">
+      <span class="opcao-emoji">💎</span>
+      <div class="opcao-nome">Elite</div>
+      <div class="opcao-preco">R$39,90</div>
+      <div class="opcao-desc">200 análises + 120 msgs Sofia</div>
+    </div>
+    <div class="opcao" id="op-premium" onclick="selecionarOpcao('premium','👑 Premium 1 mês','R$49,00','Acesso Premium completo por 1 mês')">
+      <span class="opcao-emoji">👑</span>
+      <div class="opcao-nome">Premium</div>
+      <div class="opcao-preco">R$49,00</div>
+      <div class="opcao-desc">1 mês Premium completo</div>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <div class="form-card">
+    <h2>✉️ Personalizar o Presente</h2>
+    <div class="form-group">
+      <label>Email do presenteado (opcional)</label>
+      <input type="email" id="email_dest" placeholder="email@exemplo.com">
     </div>
     <div class="form-group">
-      <label>Email do destinatário (opcional):</label>
-      <input type="email" id="email_dest" placeholder="amigo@email.com">
+      <label>Mensagem pessoal (opcional)</label>
+      <textarea id="mensagem_presente" placeholder="Ex: Feliz aniversário! Espero que isso te ajude a se conhecer melhor 💙"></textarea>
     </div>
-    <div class="form-group">
-      <label>Mensagem personalizada (opcional):</label>
-      <textarea id="mensagem" placeholder="Escreva uma mensagem carinhosa..."></textarea>
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="preview-card">
+    <h3>🎁 Preview do Presente</h3>
+    <div class="preview-presente">
+      <div class="preview-emoji" id="prevEmoji">⭐</div>
+      <div class="preview-titulo" id="prevTitulo">Pacote Pro</div>
+      <div class="preview-msg" id="prevMsg" style="display:none"></div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:6px">Código do presente:</div>
+      <div class="preview-codigo">GIFT-XXXX</div>
     </div>
-    <button class="btn" onclick="comprar()">🎁 ENVIAR PRESENTE</button>
-    <div class="loader" id="loader">⏳ Processando presente...</div>
-    <p style="color:#888;font-size:.8rem;text-align:center;margin-top:15px">🔒 Código único gerado automaticamente • Válido por 90 dias</p>
+  </div>
+
+  <!-- BTN PRESENTEAR -->
+  <button class="btn-presentear" id="btnPresentear" onclick="presentear()">
+    🎁 Presentear — R$24,90
+  </button>
+  <div class="seguranca">
+    <div class="seg-item">🔒 Pagamento seguro</div>
+    <div class="seg-item">📅 Código sem prazo</div>
+    <div class="seg-item">↩️ Garantia 7 dias</div>
+  </div>
+
+  <!-- RESGATE -->
+  <div class="resgate-card" style="margin-top:32px">
+    <h3>🎁 Já recebeu um presente? Resgate aqui!</h3>
+    <div class="resgate-row">
+      <input class="resgate-input" id="codigoResgate" type="text" placeholder="Digite o código (ex: GIFT-ABC123)">
+      <button class="btn-resgatar" onclick="resgatar()">Resgatar</button>
+    </div>
+    <div class="resgate-result" id="resgateResult"></div>
   </div>
 </div>
+
+<div class="footer">
+  🧠 Emotion Intelligence Platform v20.0
+</div>
+
+<div class="toast" id="toast"></div>
+
 <script>
-let planoSelecionado='premium';
-function selecionarOpcao(plano,el){
-  planoSelecionado=plano;
-  document.querySelectorAll('.opcao').forEach(e=>e.classList.remove('ativo'));
-  el.classList.add('ativo');
+let opcaoAtual = 'creditos_M';
+let precoAtual = 'R$24,90';
+const emojis = {
+  'creditos_P': '🌱', 'creditos_M': '⭐',
+  'creditos_G': '💎', 'premium': '👑'
+};
+
+function selecionarOpcao(id, nome, preco, desc) {
+  document.querySelectorAll('.opcao').forEach(o => o.classList.remove('selecionada'));
+  document.getElementById('op-' + id).classList.add('selecionada');
+  opcaoAtual = id;
+  precoAtual = preco;
+  document.getElementById('prevEmoji').textContent = emojis[id];
+  document.getElementById('prevTitulo').textContent = nome;
+  document.getElementById('btnPresentear').textContent = `🎁 Presentear — ${preco}`;
+  gtag('event','selecionar_presente',{event_category:'presente',event_label:id});
 }
-async function comprar(){
-  document.querySelector('.btn').style.display='none';
-  document.getElementById('loader').style.display='block';
-  const r=await fetch('/presente/processar',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({plano:planoSelecionado,email_destinatario:document.getElementById('email_dest').value,mensagem:document.getElementById('mensagem').value})
-  });
-  const d=await r.json();
-  if(d.ok) window.location.href=d.url;
-  else { alert('Erro: '+d.erro); document.querySelector('.btn').style.display='block'; document.getElementById('loader').style.display='none'; }
+
+document.getElementById('mensagem_presente').addEventListener('input', function() {
+  const msg = document.getElementById('prevMsg');
+  if(this.value.trim()) {
+    msg.textContent = '"' + this.value.trim() + '"';
+    msg.style.display = 'block';
+  } else {
+    msg.style.display = 'none';
+  }
+});
+
+function presentear() {
+  const btn = document.getElementById('btnPresentear');
+  btn.disabled = true;
+  btn.textContent = '⏳ Processando...';
+
+  const fd = new FormData();
+  fd.append('plano', opcaoAtual);
+  fd.append('destinatario_email', document.getElementById('email_dest').value);
+  fd.append('mensagem', document.getElementById('mensagem_presente').value);
+
+  gtag('event','begin_checkout',{event_category:'presente',event_label:opcaoAtual});
+
+  fetch('/presente/processar', {method:'POST', body:fd})
+    .then(r => r.json())
+    .then(d => {
+      if(d.url) {
+        window.location.href = d.url;
+      } else if(d.ok) {
+        window.location.href = '/presente/sucesso?codigo=' + d.codigo;
+      } else {
+        showToast('Erro: ' + (d.erro || 'Tente novamente'), 'erro');
+        btn.disabled = false;
+        btn.textContent = `🎁 Presentear — ${precoAtual}`;
+      }
+    }).catch(() => {
+      showToast('Erro de conexão', 'erro');
+      btn.disabled = false;
+      btn.textContent = `🎁 Presentear — ${precoAtual}`;
+    });
+}
+
+function resgatar() {
+  const codigo = document.getElementById('codigoResgate').value.trim().toUpperCase();
+  const result = document.getElementById('resgateResult');
+  if(!codigo) { showToast('Digite um código', 'erro'); return; }
+
+  const fd = new FormData();
+  fd.append('codigo', codigo);
+
+  fetch('/presente/resgatar', {method:'POST', body:fd})
+    .then(r => r.json())
+    .then(d => {
+      result.style.display = 'block';
+      if(d.ok) {
+        result.className = 'resgate-result ok';
+        result.textContent = '✅ ' + (d.mensagem || 'Presente resgatado com sucesso!');
+        showToast('🎉 Presente resgatado!');
+        gtag('event','presente_resgatado',{event_category:'presente',event_label:codigo});
+      } else {
+        result.className = 'resgate-result erro';
+        result.textContent = '❌ ' + (d.detail || d.erro || 'Código inválido');
+      }
+    }).catch(() => {
+      result.style.display = 'block';
+      result.className = 'resgate-result erro';
+      result.textContent = '❌ Erro de conexão';
+    });
+}
+
+function showToast(msg, tipo) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = tipo === 'erro' ? 'rgba(231,76,60,0.95)' : 'rgba(46,204,113,0.95)';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
 }
 </script>
 </body>
