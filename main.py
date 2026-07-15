@@ -7209,21 +7209,6 @@ async def sitemap():
     linhas.append("</urlset>")
     xml = "\n".join(linhas)
     return Response(content=xml, media_type="application/xml")
-    urls_fixas = [
-        "/", "/login", "/cadastro", "/blog", "/planos", "/premium",
-        "/sobre", "/contato", "/faq", "/privacidade", "/termos",
-        "/terapia", "/ranking", "/afiliado",
-    ]
-    slugs = [a["slug"] for a in ARTIGOS_BLOG]
-    hoje = datetime.now().strftime("%Y-%m-%d")
-    linhas = ['<?xml version="1.0" encoding="UTF-8"?>']
-    linhas.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
-    for u in urls_fixas:
-        linhas.append(f'  <url><loc>{BASE_URL}{u}</loc><lastmod>{hoje}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>')
-    for s in slugs:
-        linhas.append(f'  <url><loc>{BASE_URL}/blog/{s}</loc><lastmod>{hoje}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>')
-    linhas.append('</urlset>')
-    return Response(content=chr(10).join(linhas), media_type="application/xml")
 
 @app.get("/favicon.ico", include_in_schema=False)
 async def favicon():
@@ -8048,7 +8033,7 @@ def ranking_route(request: Request, db: Session = Depends(get_db)):
     ).order_by(Usuario.pontos.desc()).limit(20).all()
 
     posicao = next(
-        (i + 1 for i, u in enumerate(top) if u.id == usuario.id),
+        (i + 1 for i, u in enumerate(top) if usuario and u.id == usuario.id),
         None
     )
 
