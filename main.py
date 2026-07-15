@@ -4724,14 +4724,7 @@ def detectar_temporalidade(texto: str) -> str:
 def analisar_texto_completo(texto: str) -> dict:
     """Analise completa de texto — retorna todas as dimensoes"""
     emocao = detectar_emocao(texto)
-    # Usar langdetect direto para melhor precisao
-    try:
-        from langdetect import detect
-        idioma = detect(texto)
-        if idioma not in ["pt","en","es","fr","de","it","ja","ko","ar","ru","hi"]:
-            idioma = detectar_idioma(texto)
-    except:
-        idioma = detectar_idioma(texto)
+    idioma = detectar_idioma_preciso(texto)
     return {
         "emocao": emocao,
         "intensidade": calcular_intensidade(texto),
