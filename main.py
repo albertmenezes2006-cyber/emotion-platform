@@ -4950,18 +4950,45 @@ def detectar_idioma_preciso(texto: str) -> str:
         return "pt"
 
 def analisar_texto_completo(texto: str) -> dict:
-    """Analise completa de texto — retorna todas as dimensoes"""
-    emocao = detectar_emocao(texto)
+    """Analise completa de texto — retorna todas as dimensoes com maxima inteligencia"""
+    # Detectar idioma primeiro
     idioma = detectar_idioma_preciso(texto)
+
+    # Detectar emocao local (rapido)
+    emocao_local = detectar_emocao(texto)
+
+    # Se emocao local for incerta ou texto curto, usar IA
+    emocoes_incertas = ["neutro", "confusao"]
+    texto_curto = len(texto.strip()) < 15
+    if emocao_local in emocoes_incertas or texto_curto:
+        try:
+            emocao = detectar_emocao_orquestrador(texto)
+        except:
+            emocao = emocao_local
+    else:
+        emocao = emocao_local
+
+    intensidade = calcular_intensidade(texto)
+    tom = detectar_tom(texto)
+    contexto = detectar_contexto_situacao(texto)
+    urgencia = detectar_urgencia(texto)
+    temporalidade = detectar_temporalidade(texto)
+
+    # Ajustar urgencia se crise
+    em_crise = detectar_crise(texto)
+    if em_crise:
+        urgencia = "crise"
+
     return {
         "emocao": emocao,
-        "intensidade": calcular_intensidade(texto),
-        "tom": detectar_tom(texto),
-        "contexto": detectar_contexto_situacao(texto),
-        "urgencia": detectar_urgencia(texto),
-        "temporalidade": detectar_temporalidade(texto),
+        "intensidade": intensidade,
+        "tom": tom,
+        "contexto": contexto,
+        "urgencia": urgencia,
+        "temporalidade": temporalidade,
         "idioma": idioma,
         "emoji": get_emoji(emocao),
+        "em_crise": em_crise,
     }
 
 
@@ -5772,7 +5799,7 @@ def _chamar_ia_especifica(ia_nome: str, prompt: str, max_tokens: int, temperatur
     return {"ok": False, "erro": "ia desconhecida"}
 
 def detectar_emocao_orquestrador(texto: str) -> str:
-    """Detecta emocao usando o orquestrador de IAs"""
+    """Detecta emocao com maxima inteligencia — contexto semantico completo"""
     emocoes_validas = [
         "alegria","tristeza","raiva","medo","surpresa","nojo","amor","esperanca",
         "gratidao","solidao","euforia","calma","confusao","vergonha","neutro",
@@ -5780,24 +5807,36 @@ def detectar_emocao_orquestrador(texto: str) -> str:
         "alivio","entusiasmo","melancolia","nostalgia","panico","timidez","curiosidade",
         "tedio","animacao","desespero","paz","contentamento","vazio","luto","burnout",
         "culpa","remorso","admiracao","inveja","compaixao","empatia","coragem",
-        "determinacao","resiliencia","realizacao","proposito",
+        "determinacao","resiliencia","realizacao","proposito","traicao","abandono",
+        "rejeicao","inseguranca","autoestima","depressao","esgotamento","sobrecarga",
     ]
-    
+
     prompt = (
-        f"Analise o texto e retorne APENAS UMA PALAVRA da lista.\n"
-        f"Texto pode estar em qualquer idioma. Entenda girias e expressoes informais.\n"
-        f"Texto: {texto}\n"
-        f"Lista: {', '.join(emocoes_validas)}\n"
-        f"Retorne APENAS a palavra, sem pontuacao."
+        f"Voce e um especialista em psicologia e linguistica.\n"
+        f"Analise o CONTEXTO SEMANTICO completo do texto abaixo.\n"
+        f"Considere: girias, ironia, sarcasmo, subentendidos, expressoes idiomaticas.\n"
+        f"O texto pode estar em qualquer idioma — entenda o sentimento real.\n\n"
+        f"Texto: \"{texto}\"\n\n"
+        f"Escolha A EMOCAO DOMINANTE mais precisa da lista:\n"
+        f"{', '.join(emocoes_validas)}\n\n"
+        f"Retorne APENAS a palavra da lista, sem explicacao, sem pontuacao."
     )
-    
-    resultado = chamar_ia(prompt, max_tokens=10, temperatura=0.1)
+
+    resultado = chamar_ia(prompt, max_tokens=15, temperatura=0.1)
     if resultado["ok"]:
-        emocao = resultado["texto"].strip().lower().split()[0].replace(".", "")
+        texto_ia = resultado["texto"].strip().lower()
+        # Limpar resposta
+        for char in ['.', ',', '!', '?', '"', "'", '\n']:
+            texto_ia = texto_ia.replace(char, '')
+        emocao = texto_ia.split()[0] if texto_ia.split() else ""
         if emocao in emocoes_validas:
             return emocao
-    
-    # Fallback local
+        # Buscar qualquer emocao valida na resposta
+        for e in emocoes_validas:
+            if e in texto_ia:
+                return e
+
+    # Fallback local inteligente
     return detectar_emocao(texto)
 
 def sofia_responder_orquestrador(prompt_completo: str, usar_cache: bool = False, temperatura: float = 0.85) -> dict:
