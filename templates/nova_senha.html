@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JGLER9XVGY');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova Senha — Emotion Intelligence</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#00d2ff;--secondary:#3a7bd5;--dark:#0f0c29;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1)}
+body{font-family:'Segoe UI',sans-serif;background:var(--dark);color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.box{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:40px;max-width:420px;width:100%;text-align:center}
+.logo{font-size:20px;font-weight:bold;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:24px;display:block}
+.icon{font-size:56px;margin-bottom:16px}
+h1{font-size:24px;font-weight:700;margin-bottom:8px}
+p{color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:24px;line-height:1.6}
+.form-group{margin-bottom:16px;text-align:left}
+label{display:block;margin-bottom:6px;color:rgba(255,255,255,0.6);font-size:13px}
+input{width:100%;padding:13px 16px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,0.05);color:#fff;font-size:14px;outline:none;transition:border .2s}
+input:focus{border-color:var(--primary)}
+.requisitos{background:rgba(0,210,255,0.05);border:1px solid rgba(0,210,255,0.15);border-radius:10px;padding:12px;margin-bottom:16px;text-align:left}
+.requisitos p{font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:0}
+.req{font-size:12px;padding:3px 0;display:flex;align-items:center;gap:6px}
+.req.ok{color:#2ecc71}
+.req.nok{color:rgba(255,255,255,0.3)}
+.btn{width:100%;padding:14px;background:linear-gradient(90deg,var(--primary),var(--secondary));border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:8px}
+.btn:hover{transform:translateY(-2px)}
+.alert-erro{background:rgba(231,76,60,0.15);border:1px solid rgba(231,76,60,0.3);border-radius:10px;padding:12px;color:#e74c3c;font-size:13px;margin-bottom:16px}
+.links{margin-top:20px}
+.links a{color:rgba(255,255,255,0.4);font-size:13px;text-decoration:none}
+.links a:hover{color:var(--primary)}
+</style>
+</head>
+<body>
+<div class="box">
+  <a href="/" class="logo">🧠 Emotion Intelligence</a>
+  <div class="icon">🔐</div>
+  <h1>Nova Senha</h1>
+  <p>Digite sua nova senha abaixo.</p>
+  {% if erro %}
+  <div class="alert-erro">❌ {{erro}}</div>
+  {% endif %}
+  <form method="post" action="/nova-senha" onsubmit="return validar()">
+    <input type="hidden" name="token" value="{{token}}">
+    <div class="form-group">
+      <label>Nova senha</label>
+      <input type="password" name="senha" id="senha" placeholder="••••••••" required oninput="checarRequisitos()">
+    </div>
+    <div class="requisitos">
+      <div class="req" id="req-tam">⬜ Mínimo 8 caracteres</div>
+      <div class="req" id="req-num">⬜ Pelo menos 1 número</div>
+    </div>
+    <div class="form-group">
+      <label>Confirmar nova senha</label>
+      <input type="password" name="confirmar" id="confirmar" placeholder="••••••••" required>
+    </div>
+    <button type="submit" class="btn">🔐 Salvar Nova Senha</button>
+  </form>
+  <div class="links">
+    <a href="/login">← Voltar ao login</a>
+  </div>
+</div>
+<script>
+function checarRequisitos() {
+  const senha = document.getElementById('senha').value;
+  const tam = document.getElementById('req-tam');
+  const num = document.getElementById('req-num');
+  if(senha.length >= 8) {
+    tam.textContent = '✅ Mínimo 8 caracteres';
+    tam.className = 'req ok';
+  } else {
+    tam.textContent = '⬜ Mínimo 8 caracteres';
+    tam.className = 'req nok';
+  }
+  if(/[0-9]/.test(senha)) {
+    num.textContent = '✅ Pelo menos 1 número';
+    num.className = 'req ok';
+  } else {
+    num.textContent = '⬜ Pelo menos 1 número';
+    num.className = 'req nok';
+  }
+}
+function validar() {
+  const senha = document.getElementById('senha').value;
+  const confirmar = document.getElementById('confirmar').value;
+  if(senha !== confirmar) {
+    alert('As senhas não coincidem!');
+    return false;
+  }
+  if(senha.length < 8) {
+    alert('Senha deve ter pelo menos 8 caracteres!');
+    return false;
+  }
+  return true;
+}
+</script>
+</body>
+</html>

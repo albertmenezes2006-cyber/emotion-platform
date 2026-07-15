@@ -3022,6 +3022,100 @@ def resgatar_presente(codigo: str, usuario_id: int, db) -> dict:
 # --- PLANO ANUAL ---
 
 
+
+# ================================================================
+# RECUPERACAO DE SENHA v20.0
+# ================================================================
+
+import hashlib as _hashlib
+
+_tokens_recuperacao = {}  # token -> {email, expira}
+
+@app.get("/recuperar-senha", response_class=HTMLResponse)
+def pagina_recuperar_senha(request: Request):
+    return render_template("recuperar_senha.html", request=request, erro=None, sucesso=None)
+
+@app.post("/recuperar-senha")
+async def processar_recuperar_senha(
+    request: Request,
+    email: str = Form(...),
+    db: Session = Depends(get_db)
+):
+    usuario = db.query(Usuario).filter(Usuario.email == email.lower().strip()).first()
+    if not usuario:
+        return render_template("recuperar_senha.html", request=request,
+            erro="Email não encontrado", sucesso=None)
+    # Gerar token unico
+    token = _hashlib.sha256(f"{email}{datetime.now().isoformat()}{uuid.uuid4()}".encode()).hexdigest()[:32]
+    _tokens_recuperacao[token] = {
+        "email": email.lower().strip(),
+        "expira": datetime.now() + timedelta(hours=2)
+    }
+    # Enviar email
+    link = f"{BASE_URL}/nova-senha?token={token}"
+    html = email_base(f"""
+        <h2 style="color:#333;margin-top:0">🔑 Recuperação de Senha</h2>
+        <p>Olá, <strong>{usuario.nome}</strong>!</p>
+        <p>Recebemos uma solicitação para redefinir sua senha na Emotion Intelligence.</p>
+        <p>Clique no botão abaixo para criar uma nova senha:</p>
+        {botao_email("🔑 Criar Nova Senha", link)}
+        <p style="color:#999;font-size:13px;margin-top:20px">
+        Este link expira em 2 horas. Se você não solicitou isso, ignore este email.
+        </p>
+    """)
+    try:
+        enviar_email(email, "🔑 Recuperar Senha — Emotion Intelligence", html)
+        return render_template("recuperar_senha.html", request=request,
+            erro=None, sucesso="Email enviado! Verifique sua caixa de entrada.")
+    except Exception as e:
+        return render_template("recuperar_senha.html", request=request,
+            erro="Erro ao enviar email. Tente novamente.", sucesso=None)
+
+@app.get("/nova-senha", response_class=HTMLResponse)
+def pagina_nova_senha(request: Request, token: str = ""):
+    if not token or token not in _tokens_recuperacao:
+        return render_template("recuperar_senha.html", request=request,
+            erro="Link inválido ou expirado", sucesso=None)
+    dados = _tokens_recuperacao[token]
+    if datetime.now() > dados["expira"]:
+        del _tokens_recuperacao[token]
+        return render_template("recuperar_senha.html", request=request,
+            erro="Link expirado. Solicite um novo.", sucesso=None)
+    return render_template("nova_senha.html", request=request, token=token, erro=None)
+
+@app.post("/nova-senha")
+def processar_nova_senha(
+    request: Request,
+    token: str = Form(...),
+    senha: str = Form(...),
+    confirmar: str = Form(...),
+    db: Session = Depends(get_db)
+):
+    if token not in _tokens_recuperacao:
+        return render_template("nova_senha.html", request=request,
+            token=token, erro="Token inválido")
+    if senha != confirmar:
+        return render_template("nova_senha.html", request=request,
+            token=token, erro="Senhas não coincidem")
+    valida, msg = validar_senha(senha)
+    if not valida:
+        return render_template("nova_senha.html", request=request,
+            token=token, erro=msg)
+    dados = _tokens_recuperacao[token]
+    usuario = db.query(Usuario).filter(Usuario.email == dados["email"]).first()
+    if not usuario:
+        return render_template("nova_senha.html", request=request,
+            token=token, erro="Usuário não encontrado")
+    usuario.senha = hash_senha(senha)
+    db.commit()
+    del _tokens_recuperacao[token]
+    enviar_telegram(f"🔑 Senha alterada\n👤 {usuario.email}")
+    return RedirectResponse("/login?msg=Senha alterada com sucesso!", status_code=302)
+
+# ================================================================
+# FIM RECUPERACAO DE SENHA
+# ================================================================
+
 # ================================================================
 # UPSELL AUTOMATICO v20.0
 # ================================================================
