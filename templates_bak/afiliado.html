@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JGLER9XVGY');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Afiliados — Emotion Intelligence</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#00d2ff;--secondary:#3a7bd5;--success:#2ecc71;--danger:#e74c3c;--warning:#f39c12;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1);--text-muted:rgba(255,255,255,0.5)}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh}
+.navbar{background:rgba(0,0,0,0.4);backdrop-filter:blur(10px);padding:15px 30px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border)}
+.navbar h1{font-size:20px;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-right{display:flex;gap:8px}
+.nav-btn{padding:7px 16px;border-radius:20px;color:#fff;text-decoration:none;font-size:12px;font-weight:600;transition:all .2s}
+.nav-btn:hover{transform:translateY(-1px)}
+.btn-back{background:var(--secondary)}
+.btn-logout{background:var(--danger)}
+.container{max-width:1000px;margin:0 auto;padding:30px 20px}
+/* HERO */
+.hero{text-align:center;padding:40px 20px;margin-bottom:30px}
+.hero-badge{display:inline-block;background:rgba(46,204,113,0.1);border:1px solid rgba(46,204,113,0.3);padding:5px 16px;border-radius:20px;font-size:12px;color:var(--success);margin-bottom:16px;font-weight:600}
+.hero h1{font-size:46px;font-weight:900;margin-bottom:12px;line-height:1.1}
+.hero h1 span{background:linear-gradient(90deg,var(--success),#27ae60);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:17px;color:var(--text-muted);max-width:500px;margin:0 auto}
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:24px}
+.stat{background:var(--card);border-radius:18px;padding:22px;text-align:center;border:1px solid var(--border);transition:transform .2s}
+.stat:hover{transform:translateY(-3px)}
+.stat-num{font-size:40px;font-weight:bold;line-height:1}
+.stat-num.blue{background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-num.green{background:linear-gradient(90deg,var(--success),#27ae60);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-num.yellow{background:linear-gradient(90deg,var(--warning),#e67e22);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{color:var(--text-muted);margin-top:6px;font-size:12px;font-weight:600}
+/* LINK CARD */
+.link-card{background:var(--card);border-radius:20px;padding:30px;border:1px solid var(--border);margin-bottom:20px;text-align:center}
+.link-card h2{font-size:20px;color:var(--primary);margin-bottom:10px}
+.link-card p{font-size:13px;color:var(--text-muted);margin-bottom:16px}
+.link-box{background:rgba(0,0,0,0.3);border-radius:12px;padding:14px 18px;font-size:14px;word-break:break-all;margin:14px 0;border:1px solid var(--border);text-align:left;font-family:monospace;color:rgba(255,255,255,0.8)}
+.btns-share{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.btn-share{padding:12px 16px;border-radius:12px;border:none;color:#fff;font-size:13px;font-weight:bold;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-share:hover{transform:translateY(-2px)}
+.btn-copy{background:linear-gradient(90deg,var(--primary),var(--secondary))}
+.btn-whats{background:#25D366}
+.btn-telegram{background:#0088cc}
+.btn-twitter{background:#1DA1F2}
+.copied-msg{color:var(--success);font-size:13px;margin-top:10px;display:none;font-weight:600}
+.copied-msg.show{display:block}
+/* CARDS */
+.card{background:var(--card);border-radius:20px;padding:28px;border:1px solid var(--border);margin-bottom:20px}
+.card h2{font-size:18px;color:var(--primary);margin-bottom:20px;display:flex;align-items:center;gap:8px}
+/* STEPS */
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}
+.step{text-align:center;padding:20px;background:rgba(255,255,255,0.03);border-radius:16px;border:1px solid rgba(255,255,255,0.06);transition:all .2s}
+.step:hover{transform:translateY(-3px);background:rgba(255,255,255,0.07)}
+.step-num{width:46px;height:46px;border-radius:50%;background:linear-gradient(90deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:bold;margin:0 auto 12px;box-shadow:0 0 15px rgba(0,210,255,0.3)}
+.step h3{font-size:15px;margin-bottom:6px;font-weight:700}
+.step p{color:var(--text-muted);font-size:12px;line-height:1.6}
+/* POTENCIAL */
+.potencial{background:linear-gradient(90deg,rgba(46,204,113,0.08),rgba(39,174,96,0.08));border:1px solid rgba(46,204,113,0.2);border-radius:20px;padding:28px;margin-bottom:20px}
+.potencial h2{font-size:18px;margin-bottom:20px;text-align:center;color:var(--success)}
+.pot-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px}
+.pot-item{background:rgba(0,0,0,0.2);border-radius:14px;padding:16px;text-align:center;border:1px solid rgba(46,204,113,0.15)}
+.pot-valor{font-size:26px;font-weight:bold;color:var(--success)}
+.pot-label{font-size:11px;color:var(--text-muted);margin-top:4px}
+/* INDICADOS */
+.indicados-lista{max-height:300px;overflow-y:auto}
+.indicado-item{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:rgba(255,255,255,0.03);border-radius:10px;margin-bottom:8px;border:1px solid var(--border)}
+.indicado-nome{font-size:14px;font-weight:600}
+.indicado-email{font-size:12px;color:var(--text-muted)}
+.indicado-plano{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:bold}
+.plano-premium{background:rgba(0,210,255,.2);color:var(--primary)}
+.plano-free{background:rgba(149,165,166,.2);color:#95a5a6}
+/* DICAS */
+.dicas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.dica{background:rgba(255,255,255,0.03);border-radius:14px;padding:18px;border:1px solid var(--border)}
+.dica-icon{font-size:28px;margin-bottom:10px}
+.dica h3{font-size:14px;font-weight:700;margin-bottom:6px}
+.dica p{font-size:12px;color:var(--text-muted);line-height:1.6}
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:rgba(46,204,113,.95);color:#fff;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s}
+.toast.show{transform:translateY(0);opacity:1}
+/* FOOTER */
+.footer{text-align:center;padding:30px;color:rgba(255,255,255,0.25);font-size:12px}
+.footer a{color:rgba(255,255,255,0.3);text-decoration:none;margin:0 8px}
+.footer a:hover{color:var(--primary)}
+@media(max-width:768px){
+  .navbar{padding:12px 16px}
+  .hero h1{font-size:32px}
+  .container{padding:16px 12px}
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <h1>🧠 Emotion Intelligence</h1>
+  <div class="nav-right">
+    <a href="/"       class="nav-btn btn-back">← Dashboard</a>
+    <a href="/logout" class="nav-btn btn-logout">Sair</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">💰 Programa de Afiliados</div>
+  <h1>Indique e <span>ganhe dinheiro!</span></h1>
+  <p>Compartilhe seu link, ganhe 20% de comissão em cada venda. Renda passiva real sem investimento!</p>
+</div>
+
+<!-- STATS -->
+<div class="stats-grid">
+  <div class="stat">
+    <div class="stat-num blue">{{ total_indicados }}</div>
+    <div class="stat-label">👥 Pessoas Indicadas</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num yellow">{{ indicados_premium }}</div>
+    <div class="stat-label">⭐ Viraram Premium</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num green">R${{ comissao }}</div>
+    <div class="stat-label">💰 Comissão Gerada</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num blue">20%</div>
+    <div class="stat-label">📊 Sua Comissão</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num green">R$9,80</div>
+    <div class="stat-label">💵 Por Premium</div>
+  </div>
+</div>
+
+<!-- LINK DE AFILIADO -->
+<div class="link-card">
+  <h2>🔗 Seu Link de Afiliado</h2>
+  <p>Compartilhe esse link em qualquer lugar e ganhe 20% de comissão quando alguém assinar o Premium!</p>
+  <div class="link-box" id="linkAfiliado">{{ link }}</div>
+  <div class="btns-share">
+    <button class="btn-share btn-copy" onclick="copiarLink()">📋 Copiar Link</button>
+    <button class="btn-share btn-whats" onclick="compartilharWhats()">📱 WhatsApp</button>
+    <button class="btn-share btn-telegram" onclick="compartilharTelegram()">✈️ Telegram</button>
+    <button class="btn-share btn-twitter" onclick="compartilharTwitter()">🐦 Twitter</button>
+  </div>
+  <div class="copied-msg" id="copiedMsg">✅ Link copiado! Agora compartilhe e comece a ganhar!</div>
+</div>
+
+<!-- COMO FUNCIONA -->
+<div class="card">
+  <h2>🚀 Como funciona?</h2>
+  <div class="steps-grid">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>Compartilhe</h3>
+      <p>Envie seu link para amigos, redes sociais, grupos e comunidades</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>Eles se cadastram</h3>
+      <p>Seus indicados criam conta usando seu link exclusivo</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>Eles assinam</h3>
+      <p>Quando assinarem Premium ou Enterprise, você ganha!</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h3>Você recebe</h3>
+      <p>20% de comissão por cada venda — renda passiva real!</p>
+    </div>
+  </div>
+</div>
+
+<!-- POTENCIAL DE GANHOS -->
+<div class="potencial">
+  <h2>💰 Potencial de Ganhos Mensais</h2>
+  <div class="pot-grid">
+    <div class="pot-item">
+      <div class="pot-valor">R$9,80</div>
+      <div class="pot-label">1 Premium indicado</div>
+    </div>
+    <div class="pot-item">
+      <div class="pot-valor">R$98</div>
+      <div class="pot-label">10 Premium/mês</div>
+    </div>
+    <div class="pot-item">
+      <div class="pot-valor">R$245</div>
+      <div class="pot-label">25 Premium/mês</div>
+    </div>
+    <div class="pot-item">
+      <div class="pot-valor">R$490</div>
+      <div class="pot-label">50 Premium/mês</div>
+    </div>
+    <div class="pot-item">
+      <div class="pot-valor">R$980</div>
+      <div class="pot-label">100 Premium/mês</div>
+    </div>
+    <div class="pot-item">
+      <div class="pot-valor">R$1960</div>
+      <div class="pot-label">200 Premium/mês</div>
+    </div>
+  </div>
+</div>
+
+<!-- SEUS INDICADOS -->
+<div class="card">
+  <h2>👥 Seus Indicados ({{ total_indicados }})</h2>
+  {% if indicados %}
+  <div class="indicados-lista">
+    {% for u in indicados %}
+    <div class="indicado-item">
+      <div>
+        <div class="indicado-nome">{{ u.nome }}</div>
+        <div class="indicado-email">{{ u.email }}</div>
+      </div>
+      <span class="indicado-plano {% if u.plano in ['premium','enterprise'] %}plano-premium{% else %}plano-free{% endif %}">
+        {{ u.plano|upper }}
+      </span>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p style="color:var(--text-muted);font-size:14px;text-align:center;padding:20px 0">
+    Nenhum indicado ainda. Compartilhe seu link e comece a ganhar! 🚀
+  </p>
+  {% endif %}
+</div>
+
+<!-- CALCULADORA -->
+<div class="card" style="background:linear-gradient(135deg,rgba(46,204,113,0.06),rgba(39,174,96,0.03))">
+  <h2>🧮 Calculadora de Ganhos</h2>
+  <p style="color:var(--text-muted);font-size:13px;margin-bottom:20px">Simule quanto você pode ganhar por mês</p>
+  <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:20px">
+    <div style="flex:1;min-width:200px">
+      <label style="font-size:13px;color:var(--text-muted);display:block;margin-bottom:8px">Indicados Premium por mês:</label>
+      <input type="range" id="sliderIndicados" min="1" max="200" value="10"
+        oninput="calcularGanhos()"
+        style="width:100%;accent-color:var(--success)">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:4px">
+        <span>1</span><span>50</span><span>100</span><span>200</span>
+      </div>
+    </div>
+    <div style="text-align:center;min-width:140px">
+      <div id="numIndicados" style="font-size:36px;font-weight:900;color:var(--success)">10</div>
+      <div style="font-size:12px;color:var(--text-muted)">indicados/mês</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px">
+    <div style="background:rgba(0,0,0,0.2);border-radius:14px;padding:16px;text-align:center;border:1px solid rgba(46,204,113,0.2)">
+      <div id="ganhoMes" style="font-size:26px;font-weight:bold;color:var(--success)">R$98</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:4px">por mês</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:14px;padding:16px;text-align:center;border:1px solid rgba(46,204,113,0.2)">
+      <div id="ganhoAno" style="font-size:26px;font-weight:bold;color:var(--success)">R$1.176</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:4px">por ano</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:14px;padding:16px;text-align:center;border:1px solid rgba(243,156,18,0.3)">
+      <div id="ganhoDia" style="font-size:26px;font-weight:bold;color:var(--warning)">R$3,27</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:4px">por dia</div>
+    </div>
+  </div>
+</div>
+
+<!-- QR CODE -->
+<div class="card" style="text-align:center">
+  <h2>📱 QR Code do seu Link</h2>
+  <p style="color:var(--text-muted);font-size:13px;margin-bottom:16px">Imprima ou mostre na tela — facilita compartilhar presencialmente</p>
+  <div id="qrcode" style="display:inline-block;background:#fff;padding:16px;border-radius:16px;margin-bottom:16px"></div>
+  <br>
+  <button onclick="baixarQR()" style="padding:10px 24px;background:linear-gradient(90deg,var(--primary),var(--secondary));border:none;border-radius:12px;color:#fff;font-size:13px;font-weight:bold;cursor:pointer">
+    ⬇️ Baixar QR Code
+  </button>
+</div>
+
+<!-- DICAS -->
+<div class="card">
+  <h2>💡 Dicas para ganhar mais</h2>
+  <div class="dicas-grid">
+    <div class="dica">
+      <div class="dica-icon">📱</div>
+      <h3>Redes Sociais</h3>
+      <p>Poste no Instagram, TikTok e Facebook contando sua experiência com a plataforma</p>
+    </div>
+    <div class="dica">
+      <div class="dica-icon">👥</div>
+      <h3>Grupos e Comunidades</h3>
+      <p>Compartilhe em grupos de saúde mental, psicologia, bem-estar e desenvolvimento pessoal</p>
+    </div>
+    <div class="dica">
+      <div class="dica-icon">📧</div>
+      <h3>Email e WhatsApp</h3>
+      <p>Envie para amigos e familiares que podem se beneficiar da análise emocional</p>
+    </div>
+    <div class="dica">
+      <div class="dica-icon">🎥</div>
+      <h3>Conteúdo em Vídeo</h3>
+      <p>Faça um vídeo mostrando como usa a plataforma e coloque seu link na bio</p>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="footer">
+  <a href="/">Dashboard</a>
+  <a href="/planos">Planos</a>
+  <a href="/faq">FAQ</a>
+  <a href="/contato">Contato</a>
+  <br><br>
+  🧠 Emotion Intelligence Platform 2026 — v18.0
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// QR CODE
+function gerarQR() {
+  var link = getLink();
+  var qrDiv = document.getElementById('qrcode');
+  if (!qrDiv) return;
+  var url = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(link);
+  qrDiv.innerHTML = '<img src="' + url + '" alt="QR Code" style="border-radius:8px" id="qrImg">';
+}
+
+function baixarQR() {
+  var img = document.getElementById('qrImg');
+  if (!img) return;
+  var a = document.createElement('a');
+  a.href = img.src;
+  a.download = 'qrcode-afiliado.png';
+  a.click();
+}
+
+// CALCULADORA
+function calcularGanhos() {
+  var n = parseInt(document.getElementById('sliderIndicados').value);
+  var mes = n * 9.80;
+  var ano = mes * 12;
+  var dia = mes / 30;
+  document.getElementById('numIndicados').textContent = n;
+  document.getElementById('ganhoMes').textContent = 'R$' + mes.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  document.getElementById('ganhoAno').textContent = 'R$' + ano.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  document.getElementById('ganhoDia').textContent = 'R$' + dia.toFixed(2);
+}
+
+// Inicia ao carregar
+window.addEventListener('load', function() {
+  gerarQR();
+  calcularGanhos();
+});
+
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show')},3000);
+}
+
+function getLink(){
+  return document.getElementById('linkAfiliado').textContent.trim();
+}
+
+function copiarLink(){
+  navigator.clipboard.writeText(getLink()).then(function(){
+    document.getElementById('copiedMsg').classList.add('show');
+    showToast('✅ Link copiado!');
+    setTimeout(function(){
+      document.getElementById('copiedMsg').classList.remove('show');
+    },3000);
+  });
+}
+
+function compartilharWhats(){
+  var msg='🧠 Descobri uma IA incrível que detecta emoções e tem uma psicóloga virtual!\n\n'
+    +'✅ Grátis para começar\n'
+    +'✅ Análise por texto e voz\n'
+    +'✅ Psicóloga virtual (Sofia IA)\n'
+    +'✅ Diário emocional + gráficos\n\n'
+    +'Acesse agora: '+getLink();
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+}
+
+function compartilharTelegram(){
+  var msg='🧠 Emotion Intelligence — IA Emocional!\n\n'
+    +'Analise suas emoções, converse com a Sofia (psicóloga IA) e evolua emocionalmente!\n\n'
+    +getLink();
+  window.open('https://t.me/share/url?url='+encodeURIComponent(getLink())+'&text='+encodeURIComponent(msg),'_blank');
+}
+
+function compartilharTwitter(){
+  var msg='Descobri uma IA que detecta emoções e tem uma psicóloga virtual! 🧠\n\nGrátis para começar:\n'+getLink();
+  window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(msg),'_blank');
+}
+</script>
+</body>
+</html>

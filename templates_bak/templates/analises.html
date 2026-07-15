@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minhas Análises — Emotion Intelligence</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#0f0f1a;color:#fff;min-height:100vh}
+.hero{background:linear-gradient(135deg,#667eea,#764ba2);padding:40px 20px;text-align:center}
+.hero h1{font-size:1.8rem}
+.container{max-width:800px;margin:0 auto;padding:30px 20px}
+.card{background:#1a1a2e;border-radius:12px;padding:20px;margin-bottom:15px;border:1px solid #333;display:flex;justify-content:space-between;align-items:center}
+.card .emocao{font-size:1.5rem}
+.card .texto{color:#aaa;font-size:.9rem;margin-top:5px;max-width:500px}
+.card .data{color:#666;font-size:.8rem}
+.badge{padding:4px 12px;border-radius:10px;font-size:.8rem;font-weight:700;background:#667eea22;color:#667eea}
+.vazio{text-align:center;padding:60px;color:#aaa}
+.nav{display:flex;gap:10px;justify-content:center;margin-bottom:25px;flex-wrap:wrap}
+.nav a{padding:8px 16px;background:#1a1a2e;border-radius:8px;text-decoration:none;color:#fff;border:1px solid #333}
+.nav a:hover{border-color:#667eea}
+</style>
+</head>
+<body>
+<div class="hero">
+  <h1>📊 Minhas Análises</h1>
+  <p style="color:#ffffff99">Total: {{total}} análises registradas</p>
+</div>
+<div class="container">
+  <div class="nav">
+    <a href="/">🏠 Home</a>
+    <a href="/diario">📔 Diário</a>
+    <a href="/score-ie">🧠 Score IE</a>
+    <a href="/historico">💬 Histórico</a>
+  </div>
+  {% if analises %}
+    {% for a in analises %}
+    <div class="card">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="emocao">{{a.emoji or "😐"}}</span>
+          <span class="badge">{{a.emocao or "neutro"}}</span>
+          <span style="color:#aaa;font-size:.8rem">intensidade: {{a.intensidade or 1}}/5</span>
+        </div>
+        <div class="texto">{{a.texto[:100] if a.texto else ""}}</div>
+      </div>
+      <div class="data">{{a.criado_em.strftime("%d/%m/%Y %H:%M") if a.criado_em else ""}}</div>
+    </div>
+    {% endfor %}
+  {% else %}
+  <div class="vazio">
+    <div style="font-size:3rem;margin-bottom:15px">📊</div>
+    <h2>Nenhuma análise ainda</h2>
+    <p>Faça sua primeira análise emocional!</p>
+    <a href="/" style="display:inline-block;margin-top:20px;padding:12px 25px;background:#667eea;border-radius:10px;text-decoration:none;color:#fff">Analisar agora</a>
+  </div>
+  {% endif %}
+</div>
+</body>
+</html>

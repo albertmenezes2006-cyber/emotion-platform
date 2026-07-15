@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JGLER9XVGY');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ — Emotion Intelligence</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#00d2ff;--secondary:#3a7bd5;--success:#2ecc71;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1)}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh}
+nav{background:rgba(0,0,0,0.4);backdrop-filter:blur(10px);padding:15px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border)}
+.logo{font-size:20px;font-weight:bold;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+.nav-right{display:flex;gap:8px}
+.nav-btn{padding:7px 16px;border-radius:20px;color:#fff;text-decoration:none;font-size:12px;font-weight:600;background:var(--secondary);transition:all .2s}
+.nav-btn:hover{transform:translateY(-1px)}
+.container{max-width:820px;margin:0 auto;padding:50px 20px}
+.hero{text-align:center;margin-bottom:44px}
+.hero-badge{display:inline-block;background:rgba(0,210,255,0.1);border:1px solid rgba(0,210,255,0.2);padding:5px 16px;border-radius:20px;font-size:12px;color:var(--primary);margin-bottom:14px;font-weight:600}
+h1{font-size:40px;font-weight:900;margin-bottom:10px;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.subtitle{color:rgba(255,255,255,0.5);font-size:15px}
+/* CATEGORIAS */
+.cats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;justify-content:center}
+.cat-btn{padding:8px 18px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:rgba(255,255,255,0.6);cursor:pointer;font-size:13px;font-weight:600;transition:all .2s}
+.cat-btn.ativo{background:linear-gradient(90deg,var(--primary),var(--secondary));color:#fff;border-color:transparent}
+/* FAQ */
+.faq-group{margin-bottom:30px}
+.faq-group-title{font-size:14px;color:var(--primary);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;padding-left:4px}
+.faq-item{background:var(--card);border-radius:14px;margin-bottom:10px;border:1px solid var(--border);overflow:hidden;transition:border-color .2s}
+.faq-item:hover{border-color:rgba(0,210,255,0.2)}
+.faq-pergunta{padding:18px 22px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:15px;font-weight:600;transition:background .2s;gap:12px}
+.faq-pergunta:hover{background:rgba(255,255,255,0.04)}
+.faq-icone{font-size:18px;color:var(--primary);flex-shrink:0;transition:transform .3s}
+.faq-icone.aberto{transform:rotate(45deg)}
+.faq-resposta{padding:0 22px;max-height:0;overflow:hidden;transition:all .4s;color:rgba(255,255,255,0.65);line-height:1.8;font-size:14px}
+.faq-resposta.aberto{padding:0 22px 18px;max-height:400px}
+/* CTA */
+.cta{text-align:center;margin-top:50px;padding:36px;background:var(--card);border-radius:20px;border:1px solid var(--border)}
+.cta h2{font-size:24px;margin-bottom:10px}
+.cta p{color:rgba(255,255,255,0.5);margin-bottom:20px;font-size:14px}
+.btn{display:inline-block;padding:13px 32px;border-radius:12px;background:linear-gradient(90deg,var(--primary),var(--secondary));color:#fff;text-decoration:none;font-size:15px;font-weight:bold;transition:all .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(58,123,213,0.4)}
+.footer{text-align:center;padding:30px;color:rgba(255,255,255,0.25);font-size:12px}
+.footer a{color:rgba(255,255,255,0.3);text-decoration:none;margin:0 8px}
+.footer a:hover{color:var(--primary)}
+@media(max-width:768px){nav{padding:12px 16px}.container{padding:30px 14px}h1{font-size:30px}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">🧠 Emotion Intelligence</a>
+  <div class="nav-right">
+    <a href="/" class="nav-btn">← Voltar</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="hero">
+    <div class="hero-badge">❓ Perguntas Frequentes</div>
+    <h1>FAQ Completo</h1>
+    <p class="subtitle">Tire todas as suas dúvidas sobre a Emotion Intelligence Platform</p>
+  </div>
+
+  <div class="cats">
+    <button class="cat-btn ativo" onclick="filtrarCat('todos',this)">Todos</button>
+    <button class="cat-btn" onclick="filtrarCat('plataforma',this)">🧠 Plataforma</button>
+    <button class="cat-btn" onclick="filtrarCat('sofia',this)">💬 Sofia IA</button>
+    <button class="cat-btn" onclick="filtrarCat('planos',this)">⭐ Planos</button>
+    <button class="cat-btn" onclick="filtrarCat('afiliados',this)">💰 Afiliados</button>
+    <button class="cat-btn" onclick="filtrarCat('privacidade',this)">🔒 Privacidade</button>
+  </div>
+
+  <!-- PLATAFORMA -->
+  <div class="faq-group" data-cat="plataforma">
+    <div class="faq-group-title">🧠 Sobre a Plataforma</div>
+    <div class="faq-item">
+      <div class="faq-pergunta" onclick="toggle(this)">O que é a Emotion Intelligence Platform?<span class="faq-icone">+</span></div>
+      <div class="faq-resposta">É uma plataforma de análise emocional com IA que identifica emoções em textos e voz, oferece uma psicóloga virtual (Sofia), diário emocional, gráficos e muito mais. Tudo para ajudar no seu autoconhecimento emocional.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-pergunta" onclick="toggle(this)">Como funciona a análise por voz?<span class="faq-icone">+</span></div>
+      <div class="faq-resposta">Clique no botão do microfone 🎤, fale uma frase e nossa IA converte sua voz em texto e analisa a emoção instantaneamente. Funciona melhor no Chrome e navegadores modernos.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-pergunta" onclick="toggle(this)">Quantas emoções a plataforma detecta?<span class="faq-icone">+</span></div>
+      <div class="faq-resposta">Nossa IA detecta 15 emoções: Alegria, Tristeza, Raiva, Medo, Surpresa, Nojo, Amor, Esperança, Gratidão, Solidão, Euforia, Calma, Confusão, Vergonha e Neutro.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-pergunta" onclick="toggle(this)">Posso instalar como aplicativo no celular?<span class="faq-icone">+</span></div>
+      <div class="faq-resposta">Sim! Abra o site no Chrome do seu celular, toque no menu (⋮) e selecione "Adicionar à tela inicial". O app ficará na sua tela principal como qualquer outro aplicativo — é um PWA!</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-pergunta" onclick="toggle(this)">O que é o sistema de pontos e badges?<span class="faq-icone">+</span></div>
+      <div class="faq-resposta">Você ganha pontos ao fazer análises (+5), conversar com a Sofia (+2), escrever no diário (+8) e outras ações. Com mais pontos você evolui de badge: 🌱 Iniciante → 🌿 Explorador → 🔥 Intermediário → ⭐ Avançado → 🏆 Especialista → 💎 Mestre → 👑 Lenda!</div>
+    </div>
+  </div>
+
+  <!-- SOFIA -->
+  <div class="faq-group" data-cat="sofia">
+    <div class="faq-group-title">💬 Sofia — Psicóloga Virtual</div>
+    <div class="faq-item">
+      <div class="faq-pergunta" onclick="toggle(this)">Quem é a Sofia?<span class="faq-icone">+</span></div>
+      <div class="faq-resposta">Sofia é nossa psicóloga virtual baseada em IA (Google Gemini). Ela é empática, acolhedora e usa técnicas como TCC, mindfulness e respiração para te ajudar a entender e trabalhar suas emoções.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-pergunta" onclick="toggle(this)">A Sofia substitui um psicólogo real?<span class="faq-icone">+</span></div>
+      <div class="faq-resposta">Não! A Sofia é uma ferramenta de apoio emocional e autoconhecimento. Para questões sérias de saúde mental, sempre recomendamos buscar um profissional de saúde mental presencialmente.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-pergunta" onclick="toggle(this)">Quantas mensagens posso enviar para a Sofia?<span class="faq-icone">+</span></div>
+      <div class="faq-resposta">No plano Free você tem 5 mensagens por dia. No plano Trial e Premium as conversas são ilimitadas! A Sofia também lembra do histórico recente da conversa.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-pergunta" onclick="toggle(this)">A Sofia guarda minhas conversas?<span class="faq-icone">+</span></div>
+      <div class="faq-resposta">Sim, o histórico das conversas é salvo para que a Sofia tenha contexto e possa te acompanhar melhor ao longo do tempo. Suas conversas são privadas e só você pode ver.</div>
+    </div>
+  </div>
+
+  <!-- PLANOS -->
+  <div class="faq-group" data-cat="planos">
+    <div class="faq-group-title">⭐ Planos e Pagamentos</div>
+    <div class="faq-item">
+      <div class="faq-pergunta" onclick="toggle(this)">O plano Free é realmente gratuito?<span class="faq-icone">+</span></div>
+      <div class="faq-resposta">Sim! 100% gratuito, sem cartão de crédito, para sempre. Você tem 10 análises/dia, 5 chats com a Sofia/dia, 3 entradas no diário/dia, sistema de pontos e link de afiliado.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-pergunta" onclick="toggle(this)">O que é o Trial Premium de 7 dias?<span class="faq-icone">+</span></div>
+      <div class="faq-resposta">Todos os novos usuários têm direito a 7 dias de Trial Premium grátis. Sem cartão de crédito, sem cobrança automática. Você ativa na sua conta e experimenta tudo ilimitado!</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-pergunta" onclick="toggle(this)">Qual a diferença entre Free e Premium?<span class="faq-icone">+</span></div>
+      <div class="faq-resposta">O Free tem limites diários. O Premium (R$49/mês) oferece: análises ilimitadas, Sofia ilimitada, diário ilimitado, relatório semanal por email, API pública, suporte prioritário e sem anúncios.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-pergunta" onclick="toggle(this)">Quais formas de pagamento são aceitas?<span class="faq-icone">+</span></div>
+      <div class="faq-resposta">PIX, cartão de crédito, débito e boleto bancário através do MercadoPago, líder em pagamentos na América Latina.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-pergunta" onclick="toggle(this)">Posso cancelar quando quiser?<span class="faq-icone">+</span></div>
+      <div class="faq-resposta">Sim! Entre em contato pelo email albertmenezes2006@gmail.com e cancelamos em até 24h. Você continua com acesso Premium até o fim do período pago.</div>
+    </div>
+  </div>
+
+  <!-- AFILIADOS -->
+  <div class="faq-group" data-cat="afiliados">
+    <div class="faq-group-title">💰 Programa de Afiliados</div>
+    <div class="faq-item">
+      <div class="faq-pergunta" onclick="toggle(this)">Como funciona o programa de afiliados?<span class="faq-icone">+</span></div>
+      <div class="faq-resposta">Cada usuário recebe um link exclusivo. Quando alguém se cadastrar pelo seu link e assinar Premium ou Enterprise, você ganha 20% de comissão automaticamente.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-pergunta" onclick="toggle(this)">Quanto posso ganhar como afiliado?<span class="faq-icone">+</span></div>
+      <div class="faq-resposta">Por cada Premium indicado você ganha R$9,80. Com 10 indicados Premium = R$98/mês. Com 100 = R$980/mês! É renda passiva real sem investimento.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-pergunta" onclick="toggle(this)">O programa de afiliados é gratuito?<span class="faq-icone">+</span></div>
+      <div class="faq-resposta">Sim! Todo usuário, inclusive do plano Free, tem acesso ao programa de afiliados e ao seu link exclusivo. Sem custo nenhum para participar.</div>
+    </div>
+  </div>
+
+  <!-- PRIVACIDADE -->
+  <div class="faq-group" data-cat="privacidade">
+    <div class="faq-group-title">🔒 Privacidade e Segurança</div>
+    <div class="faq-item">
+      <div class="faq-pergunta" onclick="toggle(this)">Meus dados estão seguros?<span class="faq-icone">+</span></div>
+      <div class="faq-resposta">Sim! Senhas criptografadas, conexões HTTPS, seguimos a LGPD. Não vendemos seus dados a terceiros.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-pergunta" onclick="toggle(this)">Posso solicitar a exclusão dos meus dados?<span class="faq-icone">+</span></div>
+      <div class="faq-resposta">Sim! De acordo com a LGPD você tem direito à exclusão dos seus dados. Entre em contato pelo email albertmenezes2006@gmail.com.</div>
+    </div>
+  </div>
+
+  <div class="cta">
+    <h2>Ainda tem dúvidas?</h2>
+    <p>Nossa equipe está pronta para ajudar você!</p>
+    <a href="/contato" class="btn">💬 Falar com o Suporte</a>
+  </div>
+</div>
+
+<div class="footer">
+  <a href="/">Início</a>
+  <a href="/planos">Planos</a>
+  <a href="/contato">Contato</a>
+  <a href="/privacidade">Privacidade</a>
+  <a href="/termos">Termos</a>
+  <br><br>🧠 Emotion Intelligence Platform 2026
+</div>
+
+<script>
+function toggle(el){
+  var r=el.nextElementSibling;
+  var i=el.querySelector('.faq-icone');
+  r.classList.toggle('aberto');
+  i.classList.toggle('aberto');
+  i.textContent=r.classList.contains('aberto')?'×':'+';
+}
+function filtrarCat(cat,btn){
+  document.querySelectorAll('.cat-btn').forEach(function(b){b.classList.remove('ativo')});
+  btn.classList.add('ativo');
+  document.querySelectorAll('.faq-group').forEach(function(g){
+    g.style.display=(cat==='todos'||g.dataset.cat===cat)?'block':'none';
+  });
+}
+</script>
+</body>
+</html>

@@ -1,39 +1,101 @@
-.PHONY: check push full backup watch test lint security
+.PHONY: all check push full backup lint test security status health monitor blocos modulos log size git clean help
 
-check:
-	@python3 validar.py
-
+# Verificações
 syntax:
-	@python3 -m py_compile main.py && echo "✅ Sintaxe OK" || echo "❌ ERRO de sintaxe"
+	@python3 -m py_compile main.py && echo "✅ Sintaxe OK"
 
 lint:
 	@ruff check main.py --fix && echo "✅ Lint OK"
 
 security:
-	@bandit -r main.py -ll -q && echo "✅ Segurança OK" || echo "⚠️  Avisos de segurança"
+	@bandit -r main.py -ll -q && echo "✅ Segurança OK" || true
 
 test:
-	@pytest tests/ -v --tb=short
+	@pytest tests/ -v --tb=short --cov=. --cov-report=term-missing 2>/dev/null || pytest tests/ -v
 
+check:
+	@python3 validar.py
+
+# Utilidades
 backup:
-	@cp main.py main.py.bak && echo "✅ Backup criado: main.py.bak"
+	@python3 ep.py backup
 
-push:
-	@python3 validar.py && git add . && git commit -m "$(MSG)" && git push || echo "❌ Corrija os erros antes do push"
-
-full:
-	@make backup && make syntax && make lint && make test && make check && echo "🚀 TUDO OK — pronto para push!"
-
-watch:
-	@watchmedo shell-command --patterns="*.py" --recursive --command='python3 -m py_compile main.py && echo "✅ OK" || echo "❌ ERRO"' .
-
-lines:
-	@wc -l main.py
+linhas:
+	@python3 ep.py linhas
 
 status:
-	@echo "════════════════════════════════" && \
-	echo "  EMOTION PLATFORM STATUS" && \
-	echo "════════════════════════════════" && \
-	wc -l main.py && \
-	git log --oneline -5 && \
-	echo "════════════════════════════════"
+	@python3 ep.py status
+
+health:
+	@python3 ep.py health
+
+monitor:
+	@python3 monitor.py --watch
+
+blocos:
+	@python3 ep.py blocos
+
+modulos:
+	@python3 ep.py modulos
+
+log:
+	@python3 ep.py log
+
+size:
+	@python3 ep.py size
+
+git:
+	@python3 ep.py git
+
+clean:
+	@python3 ep.py clean
+
+deps:
+	@python3 ep.py deps
+
+# Deploy seguro
+push:
+	@python3 validar.py && \
+	git add . && \
+	git commit -m "$(MSG)" && \
+	git push || echo "❌ Corrija os erros"
+
+# Autopilot
+autopilot:
+	@python3 autopilot.py
+
+# Tudo de uma vez
+full:
+	@make backup
+	@make syntax
+	@make lint
+	@make test
+	@make check
+	@echo "🚀 TUDO OK — rode: make push MSG='mensagem'"
+
+# Ajuda
+help:
+	@echo ""
+	@echo "════════════════════════════════════════"
+	@echo "  EMOTION PLATFORM — COMANDOS"
+	@echo "════════════════════════════════════════"
+	@echo "  make syntax    → sintaxe Python"
+	@echo "  make lint      → Ruff linter"
+	@echo "  make test      → Pytest + cobertura"
+	@echo "  make security  → Bandit segurança"
+	@echo "  make check     → Validador completo"
+	@echo "  make backup    → Backup main.py"
+	@echo "  make status    → Status do projeto"
+	@echo "  make health    → Checa deploy"
+	@echo "  make monitor   → Monitora 24/7"
+	@echo "  make blocos    → Fila de blocos"
+	@echo "  make modulos   → Lista módulos"
+	@echo "  make log       → Logs autopilot"
+	@echo "  make size      → Tamanho arquivos"
+	@echo "  make git       → Últimos commits"
+	@echo "  make clean     → Limpa cache"
+	@echo "  make full      → Tudo de uma vez"
+	@echo "  make autopilot → Aplica blocos"
+	@echo "  make push MSG='texto' → Push seguro"
+	@echo "════════════════════════════════════════"
+	@echo ""
