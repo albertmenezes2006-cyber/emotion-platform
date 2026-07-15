@@ -5707,19 +5707,23 @@ async def health(db: Session = Depends(get_db)):
         total_analises  = db.query(Analise).count()
         total_mensagens = db.query(Mensagem).count()
         total_diarios   = db.query(Diario).count()
+        total_pagamentos = db.query(Pagamento).filter(Pagamento.status == "approved").count()
         uptime          = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         return {
             "status":          "healthy",
-            "version": "20.0 ULTIMATE",
+            "version":         "20.0 ULTIMATE",
             "timestamp":       uptime,
             "database":        "connected",
             "usuarios":        total_usuarios,
             "analises":        total_analises,
             "mensagens":       total_mensagens,
             "diarios":         total_diarios,
-            "ia":              "Google Gemini 2.0 Flash",
+            "pagamentos_aprovados": total_pagamentos,
+            "ia":              "Groq + Mistral + OpenRouter + Gemini (17 modelos)",
             "pagamentos":      "MercadoPago",
             "emails":          "SendGrid",
+            "monitoramento":   "Telegram Bot ativo",
+            "features":        "v20 — idioma PT, upsell, streak, recuperar senha, monitoramento",
         }
     except Exception as e:
         return {
@@ -10816,11 +10820,47 @@ def exportar_pdf(request: Request, db: Session = Depends(get_db)):
             ]))
             elementos.append(tabela_ultimas)
 
+        # Score IE
+        try:
+            score_data = calcular_score_ie_v3(usuario.id, db)
+            if score_data and score_data.get("score_total", 0) > 0:
+                elementos.append(Paragraph("Score de Inteligencia Emocional", estilo_secao))
+                score_items = [
+                    ["Dimensao", "Score"],
+                    ["Score Total IE", f"{score_data['score_total']}/100"],
+                    ["Nivel", score_data.get('nivel', '')],
+                    ["Ponto Forte", score_data.get('ponto_forte', '')],
+                    ["A Melhorar", score_data.get('ponto_fraco', '')],
+                ]
+                for dim, val in score_data.get("dimensoes", {}).items():
+                    nomes = {
+                        "autoconsciencia":"Autoconsciencia","pratica":"Pratica",
+                        "equilibrio":"Equilibrio","regulacao":"Regulacao",
+                        "reflexao":"Reflexao","conexao":"Conexao Social",
+                        "resiliencia":"Resiliencia","mindfulness":"Mindfulness",
+                        "crescimento":"Crescimento","proposito":"Proposito"
+                    }
+                    score_items.append([nomes.get(dim, dim), f"{val}/100"])
+                tabela_score = Table(score_items, colWidths=[9*cm, 7*cm])
+                tabela_score.setStyle(TableStyle([
+                    ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#9b59b6')),
+                    ('TEXTCOLOR', (0,0), (-1,0), colors.white),
+                    ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
+                    ('FONTSIZE', (0,0), (-1,-1), 10),
+                    ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.white, colors.HexColor('#f9f0ff')]),
+                    ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor('#dddddd')),
+                    ('PADDING', (0,0), (-1,-1), 8),
+                ]))
+                elementos.append(tabela_score)
+                elementos.append(Spacer(1, 0.5*cm))
+        except Exception as _score_err:
+            print(f"Score IE no PDF: {_score_err}")
+
         # Rodape
         elementos.append(Spacer(1, 1*cm))
         elementos.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor('#cccccc')))
         elementos.append(Paragraph(
-            "Emotion Intelligence Platform v15.0 — emotion-platform-albert.onrender.com",
+            "Emotion Intelligence Platform v20.0 — emotion-platform-albert.onrender.com",
             estilo_subtitulo
         ))
 
