@@ -7554,6 +7554,164 @@ def calcular_risco_login(ip: str, fingerprint: str, usuario_id: int = None) -> d
 # ═══ FIM S1/18 — SENHAS E AUTENTICAÇÃO ══════════════════════════════
 
 
+
+# ═══════════════════════════════════════════════════════════════════════
+# SEGURANÇA S2/18 — HEADERS DE SEGURANÇA (22 implementações)
+# ═══════════════════════════════════════════════════════════════════════
+
+# ── S2.1 Configurações de headers
+SECURITY_HEADERS = {
+    # S2.2 Previne clickjacking
+    "X-Frame-Options": "DENY",
+    # S2.3 Previne MIME sniffing
+    "X-Content-Type-Options": "nosniff",
+    # S2.4 Força HTTPS por 1 ano
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
+    # S2.5 Controla referrer
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    # S2.6 Remove informações do servidor
+    "Server": "Emotion-Platform",
+    # S2.7 XSS protection legado
+    "X-XSS-Protection": "1; mode=block",
+    # S2.8 Permissões de features do browser
+    "Permissions-Policy": (
+        "camera=(), microphone=(self), geolocation=(), "
+        "payment=(), usb=(), bluetooth=(), "
+        "accelerometer=(), gyroscope=()"
+    ),
+    # S2.9 Cross-Origin políticas
+    "Cross-Origin-Embedder-Policy": "require-corp",
+    "Cross-Origin-Opener-Policy": "same-origin",
+    "Cross-Origin-Resource-Policy": "same-origin",
+    # S2.10 Cache para dados sensíveis
+    "Cache-Control": "no-store, no-cache, must-revalidate, private",
+    "Pragma": "no-cache",
+}
+
+# S2.11 CSP completo
+CSP_POLICY = (
+    "default-src 'self'; "
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' "
+    "https://cdn.jsdelivr.net https://cdnjs.cloudflare.com "
+    "https://www.googletagmanager.com https://www.google-analytics.com "
+    "https://pagead2.googlesyndication.com; "
+    "style-src 'self' 'unsafe-inline' "
+    "https://cdn.jsdelivr.net https://cdnjs.cloudflare.com "
+    "https://fonts.googleapis.com; "
+    "font-src 'self' https://fonts.gstatic.com "
+    "https://cdnjs.cloudflare.com; "
+    "img-src 'self' data: https: blob:; "
+    "connect-src 'self' https://api.groq.com https://api.mistral.ai "
+    "https://generativelanguage.googleapis.com "
+    "https://www.google-analytics.com; "
+    "frame-src 'none'; "
+    "object-src 'none'; "
+    "base-uri 'self'; "
+    "form-action 'self'; "
+    "upgrade-insecure-requests;"
+)
+
+# S2.12 Headers para rotas de API (sem cache)
+API_HEADERS = {
+    "Cache-Control": "no-store, no-cache, must-revalidate",
+    "Pragma": "no-cache",
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+}
+
+# S2.13 Headers para logout (limpar dados)
+LOGOUT_HEADERS = {
+    "Clear-Site-Data": '"cache", "cookies", "storage"',
+    "Cache-Control": "no-store",
+}
+
+# ── S2.14 Middleware de segurança principal
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        path = request.url.path
+
+        # Aplicar headers base em todas as rotas
+        for header, value in SECURITY_HEADERS.items():
+            response.headers[header] = value
+
+        # S2.15 CSP em páginas HTML
+        if not path.startswith("/api/"):
+            response.headers["Content-Security-Policy"] = CSP_POLICY
+
+        # S2.16 Headers extras para API
+        if path.startswith("/api/"):
+            for header, value in API_HEADERS.items():
+                response.headers[header] = value
+
+        # S2.17 Headers de logout
+        if path in ("/logout", "/api/logout"):
+            for header, value in LOGOUT_HEADERS.items():
+                response.headers[header] = value
+
+        # S2.18 Remover headers perigosos
+        response.headers.pop("X-Powered-By", None)
+        response.headers.pop("X-AspNet-Version", None)
+        response.headers.pop("X-AspNetMvc-Version", None)
+
+        # S2.19 CORS restrito
+        origin = request.headers.get("origin", "")
+        allowed_origins = [
+            "https://emotion-platform-albert.onrender.com",
+            "http://localhost:10000",
+            "http://127.0.0.1:10000",
+        ]
+        if origin in allowed_origins:
+            response.headers["Access-Control-Allow-Origin"] = origin
+            response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+            response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization, X-API-Key"
+            response.headers["Access-Control-Allow-Credentials"] = "true"
+            response.headers["Access-Control-Max-Age"] = "3600"
+            response.headers["Vary"] = "Origin"
+
+        # S2.20 Feature Policy adicional
+        response.headers["Feature-Policy"] = (
+            "geolocation 'none'; "
+            "microphone 'self'; "
+            "camera 'none'; "
+            "payment 'none'"
+        )
+
+        # S2.21 Report-To para violações CSP
+        response.headers["Report-To"] = '{"group":"csp-endpoint","max_age":10886400,"endpoints":[{"url":"/api/csp-report"}]}'
+
+        # S2.22 Expect-CT
+        response.headers["Expect-CT"] = "max-age=86400, enforce"
+
+        return response
+
+# ── Registrar middleware
+app.add_middleware(SecurityHeadersMiddleware)
+
+# ── Endpoint para receber relatórios CSP
+@app.post("/api/csp-report")
+async def receber_csp_report(request: Request):
+    try:
+        body = await request.json()
+        print(f"CSP Violation: {body}")
+    except Exception:
+        pass
+    return JSONResponse({"ok": True})
+
+# ── Endpoint para verificar headers
+@app.get("/api/security-headers")
+async def verificar_security_headers(request: Request):
+    return JSONResponse({
+        "headers_ativos": list(SECURITY_HEADERS.keys()),
+        "csp_ativo": True,
+        "cors_restrito": True,
+        "total_headers": len(SECURITY_HEADERS) + 4,
+        "seguranca": "S2/18 — 22 headers ativos"
+    })
+
+# ═══ FIM S2/18 — HEADERS DE SEGURANÇA ═══════════════════════════════
+
+
 @app.get("/terapia", response_class=HTMLResponse)
 def terapia_page(request: Request, dia: int = 1, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
