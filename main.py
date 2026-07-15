@@ -8026,35 +8026,40 @@ def ativar_trial(request: Request, db: Session = Depends(get_db)):
 @app.get("/ranking")
 def ranking_route(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
-    # Ranking e publico — sem bloqueio por login
+    # Ranking e publico — funciona sem login
 
     top = db.query(Usuario).filter(
         Usuario.ativo == True
     ).order_by(Usuario.pontos.desc()).limit(20).all()
 
-    posicao = next(
-        (i + 1 for i, u in enumerate(top) if usuario and u.id == usuario.id),
-        None
-    )
+    total_usuarios = db.query(Usuario).filter(Usuario.ativo == True).count()
 
-    # Se não está no top 20, busca posição real
-    if posicao is None:
-        todos_ordenados = db.query(Usuario).filter(
-            Usuario.ativo == True
-        ).order_by(Usuario.pontos.desc()).all()
+    posicao = None
+    meus_pontos = 0
+    meu_badge = ""
+
+    if usuario:
         posicao = next(
-            (i + 1 for i, u in enumerate(todos_ordenados)
-             if u.id == usuario.id),
+            (i + 1 for i, u in enumerate(top) if u.id == usuario.id),
             None
         )
+        if posicao is None:
+            todos_ordenados = db.query(Usuario).filter(
+                Usuario.ativo == True
+            ).order_by(Usuario.pontos.desc()).all()
+            posicao = next(
+                (i + 1 for i, u in enumerate(todos_ordenados) if u.id == usuario.id),
+                None
+            )
+        meus_pontos = usuario.pontos
+        meu_badge = usuario.badge
 
     return {
-        "minha_posicao": posicao,
-        "meus_pontos":   usuario.pontos,
-        "meu_badge":     usuario.badge,
-        "total_usuarios": db.query(Usuario).filter(
-            Usuario.ativo == True
-        ).count(),
+        "minha_posicao":  posicao,
+        "meus_pontos":    meus_pontos,
+        "meu_badge":      meu_badge,
+        "total_usuarios": total_usuarios,
+        "logado":         usuario is not None,
         "ranking": [{
             "posicao": i + 1,
             "nome":    u.nome[:25],
@@ -8062,7 +8067,7 @@ def ranking_route(request: Request, db: Session = Depends(get_db)):
             "badge":   u.badge,
             "plano":   u.plano,
             "emoji":   "👑" if i == 0 else "🥈" if i == 1 else "🥉" if i == 2 else "🏅",
-            "eu":      u.id == usuario.id,
+            "eu":      usuario is not None and u.id == usuario.id,
         } for i, u in enumerate(top)]
     }
 
