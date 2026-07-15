@@ -12,7 +12,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emotion Intelligence — IA Emocional #1 do Brasil</title>
-<meta name="description" content="Plataforma de análise emocional com IA. Detecte emoções por texto e voz. Converse com Sofia, sua psicóloga virtual.">
+<meta name="description" content="🧠 Emotion Intelligence — IA Emocional #1 do Brasil. Detecte 150+ emoções, converse com Sofia sua psicóloga virtual 24h e evolua emocionalmente. Grátis para começar.">
 <link rel="manifest" href="/static/manifest.json">
 <meta name="theme-color" content="#00d2ff">
 <style>
@@ -47,7 +47,7 @@ nav{
 .hero{
   min-height:100vh;
   display:flex;align-items:center;justify-content:center;
-  text-align:center;padding:120px 20px 80px;
+  text-align:center;padding:160px 20px 80px;
   background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);
   position:relative;overflow:hidden;
 }
@@ -567,7 +567,14 @@ footer{
 </div>
 
 <!-- NAV -->
-<nav>
+
+<!-- BARRA URGENCIA -->
+<div style="background:linear-gradient(90deg,#e74c3c,#c0392b);padding:10px;text-align:center;font-size:13px;font-weight:600;position:fixed;top:0;width:100%;z-index:200">
+  🔥 Oferta por tempo limitado: <strong>7 dias Premium GRÁTIS</strong> para novos cadastros!
+  <a href="/cadastro" style="margin-left:12px;background:#fff;color:#e74c3c;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:bold;text-decoration:none">Resgatar →</a>
+</div>
+
+<nav style="margin-top:38px">
   <div class="logo">🧠 Emotion Intelligence</div>
   <div class="nav-btns">
     <a href="/login"    class="btn-login">Entrar</a>
@@ -584,7 +591,7 @@ footer{
       Analise textos e voz em segundos. Converse com a Sofia, sua psicóloga virtual.
       Entenda seus sentimentos com tecnologia de ponta.
     </p>
-    <p class="contador">
+    <p class="contador" id="vagasContador">
       🔥 Junte-se a <strong>{{ total_usuarios }}</strong> pessoas que já descobriram suas emoções!
     </p>
     <div class="hero-btns">
@@ -1279,5 +1286,68 @@ if('serviceWorker' in navigator){
   navigator.serviceWorker.register('/static/sw.js').catch(function(){});
 }
 </script>
+
+<!-- SOCIAL PROOF ANIMADO -->
+<div id="socialProof" style="position:fixed;bottom:80px;left:20px;z-index:999;max-width:280px;display:none">
+  <div style="background:rgba(15,12,41,0.95);border:1px solid rgba(0,210,255,0.3);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;animation:slideInLeft .4s ease">
+    <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#00d2ff,#3a7bd5);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0" id="spEmoji">😊</div>
+    <div>
+      <div style="font-size:13px;font-weight:600" id="spNome">Alguém</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.5)" id="spMsg">acabou de se cadastrar</div>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes slideInLeft{from{transform:translateX(-100%);opacity:0}to{transform:translateX(0);opacity:1}}
+</style>
+
+<script>
+// Social proof animado
+const proofs = [
+  {emoji:"😊", nome:"Rafael M., SP", msg:"acabou de analisar sua emoção"},
+  {emoji:"🧠", nome:"Camila F., RJ", msg:"está conversando com a Sofia"},
+  {emoji:"📔", nome:"Marcos T., MG", msg:"escreveu no diário emocional"},
+  {emoji:"⭐", nome:"Ana C., PR", msg:"ativou o plano Premium"},
+  {emoji:"🔥", nome:"Bruno S., BA", msg:"atingiu 7 dias de streak"},
+  {emoji:"🏆", nome:"Juliana M., RS", msg:"desbloqueou nova conquista"},
+  {emoji:"💬", nome:"Pedro L., CE", msg:"fez sua primeira análise"},
+  {emoji:"🌟", nome:"Larissa O., GO", msg:"obteve Score IE de 82"},
+];
+
+let proofIndex = 0;
+function mostrarProof() {
+  const p = proofs[proofIndex % proofs.length];
+  document.getElementById('spEmoji').textContent = p.emoji;
+  document.getElementById('spNome').textContent = p.nome;
+  document.getElementById('spMsg').textContent = p.msg;
+  const el = document.getElementById('socialProof');
+  el.style.display = 'block';
+  el.style.animation = 'none';
+  el.offsetHeight;
+  el.style.animation = '';
+  el.querySelector('div').style.animation = 'slideInLeft .4s ease';
+  setTimeout(() => { el.style.display = 'none'; }, 4000);
+  proofIndex++;
+}
+setTimeout(() => { mostrarProof(); setInterval(mostrarProof, 12000); }, 8000);
+</script>
+
+
+<!-- CONTADOR REGRESSIVO -->
+<script>
+function contadorVagas() {
+  const KEY = 'vagas_restantes';
+  let vagas = localStorage.getItem(KEY);
+  if(!vagas) {
+    vagas = Math.floor(Math.random() * 20) + 30; // 30-50 vagas
+    localStorage.setItem(KEY, vagas);
+  }
+  const el = document.getElementById('vagasContador');
+  if(el) el.textContent = vagas + ' vagas gratuitas restantes hoje';
+}
+contadorVagas();
+</script>
+
 </body>
 </html>
