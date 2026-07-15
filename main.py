@@ -56,7 +56,7 @@ from sqlalchemy.orm import sessionmaker, Session, relationship
 from passlib.context import CryptContext
 from datetime import datetime, date, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
-from collections import defaultdict
+from collections import deque, defaultdict
 from google import genai
 from google.genai import types
 
@@ -66,10 +66,11 @@ import sendgrid
 from sendgrid.helpers.mail import Mail
 import uuid
 import os
+import re
+import time
 import json
 import hashlib
-import time
-import re
+import hmac
 
 # ================================================================
 # CONFIGURAÇÕES GLOBAIS
@@ -7276,6 +7277,282 @@ async def analisar_voz_upload(
 # ================================================================
 # FIM BLOCOS 1-3
 # ================================================================
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# SEGURANÇA S1/18 — SENHAS E AUTENTICAÇÃO (18 implementações)
+# ═══════════════════════════════════════════════════════════════════════
+
+
+# ── S1.1 Configurações de segurança
+BCRYPT_ROUNDS = 12
+SENHA_MIN_CHARS = 8
+MAX_TENTATIVAS_LOGIN = 5
+BLOQUEIO_MINUTOS = 30
+MAX_SESSOES_SIMULTANEAS = 5
+TOKEN_EXPIRACAO_MINUTOS = 15
+HISTORICO_SENHAS = 5
+
+# ── S1.2 Storage em memória (fallback sem Redis)
+_tentativas_login: dict = defaultdict(list)
+_contas_bloqueadas: dict = {}
+_historico_senhas: dict = defaultdict(deque)
+_sessoes_ativas: dict = defaultdict(list)
+_dispositivos_conhecidos: dict = defaultdict(set)
+
+# ── S1.3 Validação de força de senha
+def validar_forca_senha(senha: str) -> dict:
+    erros = []
+    score = 0
+    if len(senha) < SENHA_MIN_CHARS:
+        erros.append(f"Mínimo {SENHA_MIN_CHARS} caracteres")
+    else:
+        score += 1
+    if not re.search(r"[A-Z]", senha):
+        erros.append("Pelo menos 1 letra maiúscula")
+    else:
+        score += 1
+    if not re.search(r"[a-z]", senha):
+        erros.append("Pelo menos 1 letra minúscula")
+    else:
+        score += 1
+    if not re.search(r"\d", senha):
+        erros.append("Pelo menos 1 número")
+    else:
+        score += 1
+    if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", senha):
+        erros.append("Pelo menos 1 caractere especial")
+    else:
+        score += 1
+    if len(senha) >= 12:
+        score += 1
+    if len(senha) >= 16:
+        score += 1
+    niveis = {0:"Muito fraca",1:"Muito fraca",2:"Fraca",3:"Média",4:"Boa",5:"Forte",6:"Muito forte",7:"Excelente"}
+    return {
+        "valida": len(erros) == 0,
+        "score": score,
+        "nivel": niveis.get(score, "Fraca"),
+        "erros": erros
+    }
+
+# ── S1.4 Hash seguro de senha com bcrypt
+def hash_senha_seguro(senha: str) -> str:
+    try:
+        import bcrypt
+        salt = bcrypt.gensalt(rounds=BCRYPT_ROUNDS)
+        return bcrypt.hashpw(senha.encode(), salt).decode()
+    except ImportError:
+        import hashlib
+        import os
+        salt = os.urandom(32).hex()
+        h = hashlib.pbkdf2_hmac("sha256", senha.encode(), salt.encode(), 310000)
+        return f"pbkdf2:{salt}:{h.hex()}"
+
+def verificar_senha_segura(senha: str, hash_armazenado: str) -> bool:
+    try:
+        if hash_armazenado.startswith("pbkdf2:"):
+            _, salt, h = hash_armazenado.split(":")
+            novo_h = hashlib.pbkdf2_hmac("sha256", senha.encode(), salt.encode(), 310000)
+            return hmac.compare_digest(h, novo_h.hex())
+        import bcrypt
+        return bcrypt.checkpw(senha.encode(), hash_armazenado.encode())
+    except Exception:
+        return False
+
+# ── S1.5 Histórico de senhas
+def senha_ja_usada(usuario_id: int, nova_senha: str) -> bool:
+    historico = _historico_senhas.get(usuario_id, deque(maxlen=HISTORICO_SENHAS))
+    for hash_antigo in historico:
+        if verificar_senha_segura(nova_senha, hash_antigo):
+            return True
+    return False
+
+def registrar_senha_historico(usuario_id: int, hash_senha: str):
+    if usuario_id not in _historico_senhas:
+        _historico_senhas[usuario_id] = deque(maxlen=HISTORICO_SENHAS)
+    _historico_senhas[usuario_id].append(hash_senha)
+
+# ── S1.6 Controle de tentativas de login
+def registrar_tentativa_login(identificador: str, sucesso: bool) -> dict:
+    agora = datetime.now()
+    janela = agora - timedelta(minutes=BLOQUEIO_MINUTOS)
+    if identificador not in _tentativas_login:
+        _tentativas_login[identificador] = []
+    _tentativas_login[identificador] = [
+        t for t in _tentativas_login[identificador] if t > janela
+    ]
+    if not sucesso:
+        _tentativas_login[identificador].append(agora)
+    tentativas = len(_tentativas_login[identificador])
+    if tentativas >= MAX_TENTATIVAS_LOGIN:
+        _contas_bloqueadas[identificador] = agora + timedelta(minutes=BLOQUEIO_MINUTOS)
+    return {
+        "tentativas": tentativas,
+        "bloqueado": tentativas >= MAX_TENTATIVAS_LOGIN,
+        "restantes": max(0, MAX_TENTATIVAS_LOGIN - tentativas)
+    }
+
+def conta_bloqueada(identificador: str) -> bool:
+    if identificador not in _contas_bloqueadas:
+        return False
+    if datetime.now() > _contas_bloqueadas[identificador]:
+        del _contas_bloqueadas[identificador]
+        _tentativas_login.pop(identificador, None)
+        return False
+    return True
+
+def tempo_desbloqueio(identificador: str) -> int | None:
+    if identificador not in _contas_bloqueadas:
+        return None
+    delta = (_contas_bloqueadas[identificador] - datetime.now()).total_seconds()
+    return max(0, int(delta // 60))
+
+# ── S1.7 Device fingerprinting
+def gerar_fingerprint_dispositivo(request: Request) -> str:
+    ua = request.headers.get("user-agent", "")
+    ip = request.client.host if request.client else ""
+    accept = request.headers.get("accept-language", "")
+    raw = f"{ua}:{ip}:{accept}"
+    return hashlib.sha256(raw.encode()).hexdigest()[:32]
+
+def dispositivo_conhecido(usuario_id: int, fingerprint: str) -> bool:
+    return fingerprint in _dispositivos_conhecidos.get(usuario_id, set())
+
+def registrar_dispositivo(usuario_id: int, fingerprint: str):
+    if usuario_id not in _dispositivos_conhecidos:
+        _dispositivos_conhecidos[usuario_id] = set()
+    _dispositivos_conhecidos[usuario_id].add(fingerprint)
+
+# ── S1.8 Controle de sessões simultâneas
+def registrar_sessao(usuario_id: int, token: str, fingerprint: str):
+    if usuario_id not in _sessoes_ativas:
+        _sessoes_ativas[usuario_id] = []
+    _sessoes_ativas[usuario_id].append({
+        "token": token[:16],
+        "fingerprint": fingerprint,
+        "criado_em": datetime.now().isoformat()
+    })
+    if len(_sessoes_ativas[usuario_id]) > MAX_SESSOES_SIMULTANEAS:
+        _sessoes_ativas[usuario_id] = _sessoes_ativas[usuario_id][-MAX_SESSOES_SIMULTANEAS:]
+
+def revogar_todas_sessoes(usuario_id: int):
+    _sessoes_ativas.pop(usuario_id, None)
+
+# ── S1.9 Token seguro de recuperação de senha
+def gerar_token_seguro(tamanho: int = 32) -> str:
+    import secrets
+    return secrets.token_urlsafe(tamanho)
+
+def token_expirado(criado_em: datetime, minutos: int = TOKEN_EXPIRACAO_MINUTOS) -> bool:
+    return datetime.now() > criado_em + timedelta(minutes=minutos)
+
+# ── S1.10 Proteção contra enumeração de usuários
+def resposta_generica_auth() -> dict:
+    time.sleep(0.1)
+    return {"erro": "Email ou senha incorretos"}
+
+# ── S1.11 Endpoint — verificar força de senha
+@app.post("/api/verificar-senha")
+async def api_verificar_senha(request: Request):
+    try:
+        body = await request.json()
+        senha = body.get("senha", "")
+        if not senha:
+            return JSONResponse({"erro": "Senha obrigatória"}, status_code=400)
+        resultado = validar_forca_senha(senha)
+        return JSONResponse({
+            "ok": True,
+            "valida": resultado["valida"],
+            "score": resultado["score"],
+            "nivel": resultado["nivel"],
+            "erros": resultado["erros"],
+            "seguranca": "S1/18"
+        })
+    except Exception as e:
+        return JSONResponse({"erro": str(e)}, status_code=500)
+
+# ── S1.12 Endpoint — status de bloqueio
+@app.get("/api/status-login/{identificador}")
+async def api_status_login(identificador: str):
+    bloqueado = conta_bloqueada(identificador)
+    tempo = tempo_desbloqueio(identificador)
+    return JSONResponse({
+        "bloqueado": bloqueado,
+        "desbloqueio_em_minutos": tempo,
+        "max_tentativas": MAX_TENTATIVAS_LOGIN,
+        "seguranca": "S1/18"
+    })
+
+# ── S1.13 Auditoria de autenticação
+async def auditar_login(usuario_id: int, ip: str, sucesso: bool, motivo: str = "", db = None):
+    try:
+        if db:
+            await db.execute(
+                "INSERT INTO logs_acesso (usuario_id, acao, detalhes, created_at) VALUES ($1,$2,$3,NOW())",
+                usuario_id,
+                "LOGIN_SUCESSO" if sucesso else "LOGIN_FALHA",
+                f"IP:{ip} | {motivo}"
+            )
+    except Exception:
+        pass
+
+# ── S1.14 Validação completa de senha no cadastro
+def validar_senha_cadastro(senha: str, confirmar: str, usuario_id: int = None) -> dict:
+    if senha != confirmar:
+        return {"valida": False, "erro": "Senhas não coincidem"}
+    forca = validar_forca_senha(senha)
+    if not forca["valida"]:
+        return {"valida": False, "erro": " | ".join(forca["erros"])}
+    if usuario_id and senha_ja_usada(usuario_id, senha):
+        return {"valida": False, "erro": f"Não reutilize as últimas {HISTORICO_SENHAS} senhas"}
+    return {"valida": True, "erro": None, "nivel": forca["nivel"]}
+
+# ── S1.15 Detecção de senha comprometida (HaveIBeenPwned)
+async def senha_comprometida(senha: str) -> bool:
+    try:
+        import hashlib
+        import httpx
+        sha1 = hashlib.sha1(senha.encode()).hexdigest().upper()
+        prefix, suffix = sha1[:5], sha1[5:]
+        async with httpx.AsyncClient(timeout=3) as client:
+            r = await client.get(f"https://api.pwnedpasswords.com/range/{prefix}")
+            return suffix in r.text
+    except Exception:
+        return False
+
+# ── S1.16 Proteção timing attack no login
+def comparacao_segura(a: str, b: str) -> bool:
+    return hmac.compare_digest(
+        a.encode() if isinstance(a, str) else a,
+        b.encode() if isinstance(b, str) else b
+    )
+
+# ── S1.17 Logout seguro com invalidação
+_tokens_invalidados: set = set()
+
+def invalidar_token(token: str):
+    _tokens_invalidados.add(token[:32])
+
+def token_invalido(token: str) -> bool:
+    return token[:32] in _tokens_invalidados
+
+# ── S1.18 Score de risco de login
+def calcular_risco_login(ip: str, fingerprint: str, usuario_id: int = None) -> dict:
+    score = 0
+    fatores = []
+    tentativas = len(_tentativas_login.get(ip, []))
+    if tentativas > 0:
+        score += tentativas * 10
+        fatores.append(f"{tentativas} tentativas recentes")
+    if usuario_id and not dispositivo_conhecido(usuario_id, fingerprint):
+        score += 25
+        fatores.append("Dispositivo desconhecido")
+    nivel = "baixo" if score < 25 else "medio" if score < 50 else "alto"
+    return {"score": score, "nivel": nivel, "fatores": fatores}
+
+# ═══ FIM S1/18 — SENHAS E AUTENTICAÇÃO ══════════════════════════════
+
 
 @app.get("/terapia", response_class=HTMLResponse)
 def terapia_page(request: Request, dia: int = 1, db: Session = Depends(get_db)):
