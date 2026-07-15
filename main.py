@@ -5800,9 +5800,9 @@ def detectar_emocao_orquestrador(texto: str) -> str:
     # Fallback local
     return detectar_emocao(texto)
 
-def sofia_responder_orquestrador(prompt_completo: str, usar_cache: bool = False) -> dict:
+def sofia_responder_orquestrador(prompt_completo: str, usar_cache: bool = False, temperatura: float = 0.85) -> dict:
     """Sofia responde usando o melhor orquestrador disponivel"""
-    resultado = chamar_ia(prompt_completo, max_tokens=1500, temperatura=0.75, usar_cache=usar_cache)
+    resultado = chamar_ia(prompt_completo, max_tokens=2000, temperatura=temperatura, usar_cache=usar_cache)
     return resultado
 
 
