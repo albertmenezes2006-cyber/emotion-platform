@@ -9009,7 +9009,7 @@ async def chat(
         f"• Idioma: {idioma_usuario}\n"
         f"• Em crise: {'SIM — PROTOCOLO ESPECIAL' if em_crise else 'nao'}\n\n"
         "=== PERFIL COMPLETO DO USUARIO ===\n"
-        f"• Nome: {usuario.nome}\n"
+        f"• Nome: {usuario.nome.split()[0]}\n"
         f"• Plano: {usuario.plano.upper()}\n"
         f"• Sessao #{total_sessoes} com voce\n"
         f"• Ha {dias_plataforma} dias na plataforma\n"
