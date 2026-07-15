@@ -1,5 +1,5 @@
 # ================================================================
-# EMOTION INTELLIGENCE PLATFORM - v20.0 ULTIMATE
+# EMOTION INTELLIGENCE PLATFORM - v21.0 ULTIMATE
 # ================================================================
 # Desenvolvido por: Albert Menezes
 # Versão: 14.0 ULTIMATE
@@ -2194,7 +2194,7 @@ def email_base(conteudo_interno: str) -> str:
                     🧠 Emotion Intelligence
                 </h1>
                 <p style="color: rgba(255,255,255,0.8); margin: 10px 0 0;">
-                    v20.0 ULTIMATE
+                    v21.0 ULTIMATE
                 </p>
             </div>
             <div style="padding: 40px;">
@@ -3006,7 +3006,7 @@ def resgatar_presente(codigo: str, usuario_id: int, db) -> dict:
 
 
 # ================================================================
-# STREAK DE DIAS CONSECUTIVOS v20.0
+# STREAK DE DIAS CONSECUTIVOS v21.0
 # ================================================================
 
 def calcular_streak(usuario_id: int, db) -> dict:
@@ -3071,7 +3071,7 @@ def api_streak(request: Request, db: Session = Depends(get_db)):
 # ================================================================
 
 # ================================================================
-# RECUPERACAO DE SENHA v20.0
+# RECUPERACAO DE SENHA v21.0
 # ================================================================
 
 try:
@@ -3169,7 +3169,7 @@ def processar_nova_senha(
 
 
 # ================================================================
-# NOTIFICACOES PUSH + 2FA v20.0
+# NOTIFICACOES PUSH + 2FA v21.0
 # ================================================================
 
 # VAPID keys para push (gerar uma vez)
@@ -3266,7 +3266,7 @@ async def verificar_2fa(request: Request, db: Session = Depends(get_db)):
 # ================================================================
 
 # ================================================================
-# HUMOR POR HORA DO DIA v20.0
+# HUMOR POR HORA DO DIA v21.0
 # ================================================================
 
 @app.get("/api/humor-por-hora")
@@ -3367,7 +3367,7 @@ def api_evolucao_semanal(request: Request, db: Session = Depends(get_db)):
 # ================================================================
 
 # ================================================================
-# UPSELL AUTOMATICO v20.0
+# UPSELL AUTOMATICO v21.0
 # ================================================================
 
 @app.get("/api/upsell")
@@ -3427,7 +3427,7 @@ def api_upsell(request: Request, db: Session = Depends(get_db)):
 # ================================================================
 
 # ================================================================
-# SISTEMA DE MONITORAMENTO v20.0 — ALERTAS TELEGRAM AUTOMATICOS
+# SISTEMA DE MONITORAMENTO v21.0 — ALERTAS TELEGRAM AUTOMATICOS
 # ================================================================
 
 
@@ -3489,7 +3489,7 @@ def relatorio_diario_sistema():
         erros_hora = len(_erros_recentes)
         db.close()
         msg = (
-            f"📊 <b>RELATORIO DIARIO — Emotion Intelligence v20.0</b>\n\n"
+            f"📊 <b>RELATORIO DIARIO — Emotion Intelligence v21.0</b>\n\n"
             f"👥 Usuarios total: {total_usuarios}\n"
             f"🆕 Novos hoje: {novos_hoje}\n"
             f"🔍 Analises total: {total_analises}\n"
@@ -5504,7 +5504,7 @@ def detectar_emocao_hibrido(texto: str, usar_gemini: bool = True) -> dict:
 
 
 # ================================================================
-# ORQUESTRADOR GLOBAL DE IAs v20.0
+# ORQUESTRADOR GLOBAL DE IAs v21.0
 # Groq + Mistral + OpenRouter + Gemini
 # Failover automatico — Sofia NUNCA para
 # ================================================================
@@ -5887,7 +5887,7 @@ async def health(db: Session = Depends(get_db)):
         return {
             "status":  "unhealthy",
             "error":   str(e),
-            "version": "20.0 ULTIMATE"
+            "version": "21.0 ULTIMATE"
         }
 
 
@@ -11168,7 +11168,7 @@ def exportar_pdf(request: Request, db: Session = Depends(get_db)):
         elementos.append(Spacer(1, 1*cm))
         elementos.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor('#cccccc')))
         elementos.append(Paragraph(
-            "Emotion Intelligence Platform v20.0 — emotion-platform-albert.onrender.com",
+            "Emotion Intelligence Platform v21.0 — emotion-platform-albert.onrender.com",
             estilo_subtitulo
         ))
 

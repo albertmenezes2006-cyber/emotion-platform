@@ -1,0 +1,19 @@
+[
+  {"numero": 4, "nome": "Especialidades Sofia", "status": "pendente", "codigo": ""},
+  {"numero": 5, "nome": "Plano Terapeutico", "status": "pendente", "codigo": ""},
+  {"numero": 6, "nome": "Previsao Humor ML", "status": "pendente", "codigo": ""},
+  {"numero": 7, "nome": "Dialetos BR", "status": "pendente", "codigo": ""},
+  {"numero": 8, "nome": "Games e Memes", "status": "pendente", "codigo": ""},
+  {"numero": 9, "nome": "Together AI", "status": "pendente", "codigo": ""},
+  {"numero": 10, "nome": "Hugging Face Models", "status": "pendente", "codigo": ""},
+  {"numero": 11, "nome": "Testes Psicologicos PHQ9 GAD7", "status": "pendente", "codigo": ""},
+  {"numero": 12, "nome": "Metas Terapeuticas", "status": "pendente", "codigo": ""},
+  {"numero": 13, "nome": "Wrapped Emocional Anual", "status": "pendente", "codigo": ""},
+  {"numero": 14, "nome": "Score IE 25 dimensoes", "status": "pendente", "codigo": ""},
+  {"numero": 15, "nome": "Padroes Perigosos Proativo", "status": "pendente", "codigo": ""},
+  {"numero": 16, "nome": "Sofia detecta evitacao", "status": "pendente", "codigo": ""},
+  {"numero": 17, "nome": "Personalidade adaptativa", "status": "pendente", "codigo": ""},
+  {"numero": 18, "nome": "Mindfulness MBSR 8 semanas", "status": "pendente", "codigo": ""},
+  {"numero": 19, "nome": "Psicoeducacao automatica", "status": "pendente", "codigo": ""},
+  {"numero": 20, "nome": "Integracao Spotify emocao", "status": "pendente", "codigo": ""}
+]
