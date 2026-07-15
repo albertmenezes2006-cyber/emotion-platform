@@ -21,3 +21,4 @@ aiofiles
 fastapi-mail
 email-validator
 bcrypt
+qrcode==8.2

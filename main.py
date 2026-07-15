@@ -10737,8 +10737,29 @@ def gerar_certificado(request: Request, db: Session = Depends(get_db)):
 
     data_emissao = datetime.now().strftime("%d de %B de %Y")
     elementos.append(Paragraph(f"Emitido em {data_emissao}", rodape_style))
-    elementos.append(Paragraph(f"Codigo de verificacao: EI-{usuario.id:06d}-{datetime.now().strftime('%Y%m')}", rodape_style))
+    codigo_verificacao = f"EI-{usuario.id:06d}-{datetime.now().strftime('%Y%m')}"
+    elementos.append(Paragraph(f"Codigo de verificacao: {codigo_verificacao}", rodape_style))
     elementos.append(Paragraph("emotion-platform-albert.onrender.com", rodape_style))
+
+    # QR Code
+    try:
+        import qrcode
+        import io as _io
+        qr = qrcode.QRCode(version=1, box_size=4, border=2)
+        qr_url = f"https://emotion-platform-albert.onrender.com/verificar/{codigo_verificacao}"
+        qr.add_data(qr_url)
+        qr.make(fit=True)
+        qr_img = qr.make_image(fill_color="black", back_color="white")
+        qr_buffer = _io.BytesIO()
+        qr_img.save(qr_buffer, format='PNG')
+        qr_buffer.seek(0)
+        from reportlab.platypus import Image as RLImage
+        qr_elem = RLImage(qr_buffer, width=3*cm, height=3*cm)
+        elementos.append(Spacer(1, 0.3*cm))
+        elementos.append(qr_elem)
+        elementos.append(Paragraph("Escaneie para verificar autenticidade", rodape_style))
+    except Exception as _qr_err:
+        print(f"QR code: {_qr_err}")
 
     doc.build(elementos)
     buf.seek(0)
