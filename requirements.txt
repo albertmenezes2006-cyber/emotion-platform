@@ -22,3 +22,4 @@ fastapi-mail
 email-validator
 bcrypt
 qrcode==8.2
+cohere==7.0.5

@@ -4979,16 +4979,28 @@ def analisar_texto_completo(texto: str) -> dict:
     if em_crise:
         urgencia = "crise"
 
+    # Analise avancada
+    negacao_min = detectar_negacao_minimizacao(texto)
+    sarcasmo = detectar_sarcasmo_basico(texto)
+    
+    # Ajustar emocao se detectar negacao forte
+    if negacao_min["negacao"] and emocao in ["neutro", "calma"]:
+        emocao = "tristeza"
+    
     return {
         "emocao": emocao,
         "intensidade": intensidade,
-        "tom": tom,
+        "tom": "sarcastico" if sarcasmo else tom,
         "contexto": contexto,
         "urgencia": urgencia,
         "temporalidade": temporalidade,
         "idioma": idioma,
         "emoji": get_emoji(emocao),
         "em_crise": em_crise,
+        "negacao": negacao_min["negacao"],
+        "minimizacao": negacao_min["minimizacao"],
+        "sarcasmo": sarcasmo,
+        "intensidade_real": negacao_min["intensidade_real"],
     }
 
 
@@ -8720,6 +8732,95 @@ def stats(request: Request, db: Session = Depends(get_db)):
 # ================================================================
 
 @app.post("/chat")
+
+
+# ================================================================
+# BLOCO 2/32500 — COHERE API + NLP SEMANTICO AVANCADO
+# ================================================================
+
+def analisar_com_cohere(texto: str) -> dict:
+    """Analise semantica avancada com Cohere — gratis 1000 req/dia"""
+    try:
+        import cohere
+        co = cohere.Client(os.getenv("COHERE_API_KEY", ""))
+        if not os.getenv("COHERE_API_KEY"):
+            return {}
+        
+        # Classificacao de sentimento avancada
+        response = co.classify(
+            inputs=[texto],
+            examples=[
+                cohere.ClassifyExample("estou muito feliz hoje", "positivo"),
+                cohere.ClassifyExample("que dia lindo", "positivo"),
+                cohere.ClassifyExample("me sinto realizado", "positivo"),
+                cohere.ClassifyExample("estou arrasado", "negativo"),
+                cohere.ClassifyExample("nao aguento mais", "negativo"),
+                cohere.ClassifyExample("to na bad", "negativo"),
+                cohere.ClassifyExample("tô ansioso", "negativo"),
+                cohere.ClassifyExample("dia normal", "neutro"),
+                cohere.ClassifyExample("ok", "neutro"),
+                cohere.ClassifyExample("mais ou menos", "neutro"),
+            ]
+        )
+        
+        if response.classifications:
+            cls = response.classifications[0]
+            return {
+                "sentimento_cohere": cls.prediction,
+                "confianca_cohere": round(cls.confidence, 2),
+            }
+    except Exception as e:
+        print(f"[COHERE] {e}")
+    return {}
+
+def detectar_negacao_minimizacao(texto: str) -> dict:
+    """Detecta negacao e minimizacao emocional"""
+    texto_lower = texto.lower()
+    
+    negacoes = ["nao estou bem", "nao to bem", "nao to bom",
+                "nao estou feliz", "nao consigo", "nao aguento",
+                "nao quero", "nao da mais", "nunca fico bem"]
+    
+    minimizacoes = ["to meio", "um pouco", "meio assim",
+                    "levemente", "quase", "talvez", "acho que",
+                    "nao sei", "mais ou menos", "sei la"]
+    
+    exageros = ["muito muito", "demais", "pra caramba",
+                "extremamente", "totalmente", "completamente",
+                "destruido", "arrasado", "nao aguento mais"]
+    
+    tem_negacao = any(n in texto_lower for n in negacoes)
+    tem_minimizacao = any(m in texto_lower for m in minimizacoes)
+    tem_exagero = any(e in texto_lower for e in exageros)
+    
+    return {
+        "negacao": tem_negacao,
+        "minimizacao": tem_minimizacao,
+        "exagero": tem_exagero,
+        "intensidade_real": "alta" if (tem_negacao or tem_exagero) else "media" if tem_minimizacao else "normal"
+    }
+
+def detectar_sarcasmo_basico(texto: str) -> bool:
+    """Detecta sarcasmo basico no texto"""
+    texto_lower = texto.lower()
+    
+    padroes_sarcasmo = [
+        "nossa que otimo", "que maravilha", "adorei",
+        "perfeito mesmo", "claro que sim", "com certeza",
+        "oh que surpresa", "que novidade", "incrivel mesmo",
+        "to muito bem obrigado", "tudo otimo", "nao to nada mal",
+    ]
+    
+    emojis_sarcasmo = ["🙄", "😒", "😑", "🤙", "👍😒"]
+    
+    tem_padrao = any(p in texto_lower for p in padroes_sarcasmo)
+    tem_emoji = any(e in texto for e in emojis_sarcasmo)
+    
+    return tem_padrao or tem_emoji
+
+# ================================================================
+# FIM BLOCO 2
+# ================================================================
 
 # ================================================================
 # MEMORIA PERMANENTE DA SOFIA (BLOCO 1/32500)
