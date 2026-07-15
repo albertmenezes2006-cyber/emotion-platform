@@ -4721,6 +4721,33 @@ def detectar_temporalidade(texto: str) -> str:
         return "futuro"
     return "presente"
 
+
+def detectar_idioma_preciso(texto: str) -> str:
+    """Detecta idioma com maxima precisao — PT tem prioridade absoluta"""
+    if not texto or not texto.strip():
+        return "pt"
+    texto_lower = texto.lower().strip()
+    marcadores_pt = [
+        "estou","tô","tá","né","tudo bem","oi","tchau","obrigado","obrigada",
+        "saudade","gente","cara","mano","irmão","irmao","não","nao","também",
+        "tambem","então","entao","você","voce","me sinto","tô bem","to mal",
+        "muito","pra","pro","minha","meu","hoje","amanhã","agora"
+    ]
+    if any(p in texto_lower for p in marcadores_pt):
+        return "pt"
+    
+    marcadores_en = ["i am","i'm","i feel","i have","i've","don't","you're"]
+    if any(p in texto_lower for p in marcadores_en):
+        return "en"
+
+    try:
+        from langdetect import detect, DetectorFactory
+        DetectorFactory.seed = 0
+        idioma = detect(texto)
+        return "pt" if idioma in ["pt","gl","la"] else idioma
+    except:
+        return "pt"
+
 def analisar_texto_completo(texto: str) -> dict:
     """Analise completa de texto — retorna todas as dimensoes"""
     emocao = detectar_emocao(texto)
