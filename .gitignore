@@ -4,3 +4,6 @@ __pycache__/
 *.pyc
 .env
 emotion-release.keystore
+templates_bak/
+main.py.bak
+*.bak
