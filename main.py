@@ -3021,6 +3021,67 @@ def resgatar_presente(codigo: str, usuario_id: int, db) -> dict:
 
 # --- PLANO ANUAL ---
 
+
+# ================================================================
+# UPSELL AUTOMATICO v20.0
+# ================================================================
+
+@app.get("/api/upsell")
+def api_upsell(request: Request, db: Session = Depends(get_db)):
+    """Retorna dados de upsell quando usuario atinge limite"""
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return JSONResponse({"show": False})
+    if usuario_tem_acesso_premium(usuario):
+        return JSONResponse({"show": False})
+    analises_hoje = contar_hoje(Analise, usuario.id, db)
+    msgs_hoje = contar_hoje(Mensagem, usuario.id, db)
+    diarios_hoje = contar_hoje(Diario, usuario.id, db)
+    limite_analises = get_limite(usuario, "analises")
+    limite_chat = get_limite(usuario, "chat")
+    limite_diario = get_limite(usuario, "diario")
+    upsell = None
+    if analises_hoje >= limite_analises:
+        upsell = {
+            "show": True,
+            "tipo": "analises",
+            "emoji": "🔍",
+            "titulo": f"Limite de {limite_analises} análises atingido!",
+            "mensagem": "Faça upgrade para análises ilimitadas por menos de R$1,60/dia",
+            "cta": "⭐ Assinar Premium — R$49/mês",
+            "url": "/checkout-page?plano=premium",
+            "cor": "#00d2ff"
+        }
+    elif msgs_hoje >= limite_chat:
+        upsell = {
+            "show": True,
+            "tipo": "chat",
+            "emoji": "💬",
+            "titulo": f"Limite de {limite_chat} mensagens atingido!",
+            "mensagem": "Continue conversando com a Sofia sem limites com o Premium",
+            "cta": "⭐ Assinar Premium — R$49/mês",
+            "url": "/checkout-page?plano=premium",
+            "cor": "#9b59b6"
+        }
+    elif diarios_hoje >= limite_diario:
+        upsell = {
+            "show": True,
+            "tipo": "diario",
+            "emoji": "📔",
+            "titulo": f"Limite de {limite_diario} diários atingido!",
+            "mensagem": "Registre quantas entradas quiser com o Premium",
+            "cta": "⭐ Assinar Premium — R$49/mês",
+            "url": "/checkout-page?plano=premium",
+            "cor": "#2ecc71"
+        }
+    else:
+        return JSONResponse({"show": False})
+    return JSONResponse(upsell)
+
+# ================================================================
+# FIM UPSELL
+# ================================================================
+
 # ================================================================
 # SISTEMA DE MONITORAMENTO v20.0 — ALERTAS TELEGRAM AUTOMATICOS
 # ================================================================
