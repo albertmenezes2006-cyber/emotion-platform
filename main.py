@@ -5229,11 +5229,46 @@ def pagina_analises(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
     if not usuario:
         return RedirectResponse("/login", status_code=302)
+    from collections import Counter
+    from datetime import timedelta
     analises = db.query(Analise).filter(
         Analise.usuario_id == usuario.id
-    ).order_by(Analise.criado_em.desc()).limit(50).all()
-    return render_template("analises.html", request=request, usuario=usuario, analises=analises, total=len(analises))
-
+    ).order_by(Analise.criado_em.desc()).all()
+    # Stats
+    total = len(analises)
+    analises_hoje = contar_hoje(Analise, usuario.id, db)
+    emocoes_lista = [a.emocao.lower() for a in analises if a.emocao]
+    counter_emocoes = Counter(emocoes_lista)
+    emocao_top = counter_emocoes.most_common(1)[0][0] if counter_emocoes else "neutro"
+    intensidades = [a.intensidade for a in analises if a.intensidade]
+    media_intensidade = round(sum(intensidades)/len(intensidades), 1) if intensidades else 0
+    dias_ativos = len(set([a.criado_em.date() for a in analises if a.criado_em]))
+    # Grafico emocoes
+    emocoes_json = json.dumps(dict(counter_emocoes.most_common(8)))
+    # Grafico evolucao 7 dias
+    evolucao = {}
+    for i in range(6, -1, -1):
+        dia = (datetime.now() - timedelta(days=i)).strftime("%d/%m")
+        evolucao[dia] = 0
+    for a in analises:
+        if a.criado_em:
+            dia = a.criado_em.strftime("%d/%m")
+            if dia in evolucao:
+                evolucao[dia] += 1
+    evolucao_json = json.dumps(evolucao)
+    return render_template("analises.html",
+        request=request,
+        usuario=usuario,
+        analises=analises,
+        total=total,
+        analises_hoje=analises_hoje,
+        emocao_top=emocao_top,
+        media_intensidade=media_intensidade,
+        dias_ativos=dias_ativos,
+        emocoes_json=emocoes_json,
+        evolucao_json=evolucao_json,
+    )
+    # ROTA ORIGINAL REMOVIDA — substituida acima
 @app.get("/configuracoes", response_class=HTMLResponse)
 def pagina_configuracoes(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)

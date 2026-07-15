@@ -10,72 +10,352 @@
   gtag('config', 'G-JGLER9XVGY');
 </script>
 <meta charset="UTF-8">
-
-<meta property="og:type" content="website">
-<meta property="og:title" content="Minhas Análises — Emotion Intelligence">
-<meta property="og:description" content="Veja todo seu histórico emocional com gráficos e filtros avançados.">
-<meta property="og:url" content="https://emotion-platform-albert.onrender.com/analises">
-<meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/favicon.svg">
-<meta property="og:site_name" content="Emotion Intelligence">
-<meta property="og:locale" content="pt_BR">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Minhas Análises — Emotion Intelligence">
-<meta name="twitter:description" content="Veja todo seu histórico emocional com gráficos e filtros avançados.">
-<meta name="twitter:image" content="https://emotion-platform-albert.onrender.com/static/favicon.svg">
-<link rel="canonical" href="https://emotion-platform-albert.onrender.com/analises">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:title" content="Minhas Análises — Emotion Intelligence">
+<meta property="og:description" content="Histórico completo das suas análises emocionais com gráficos e filtros.">
 <title>Minhas Análises — Emotion Intelligence</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',sans-serif;background:#0f0f1a;color:#fff;min-height:100vh}
-.hero{background:linear-gradient(135deg,#667eea,#764ba2);padding:40px 20px;text-align:center}
-.hero h1{font-size:1.8rem}
-.container{max-width:800px;margin:0 auto;padding:30px 20px}
-.card{background:#1a1a2e;border-radius:12px;padding:20px;margin-bottom:15px;border:1px solid #333;display:flex;justify-content:space-between;align-items:center}
-.card .emocao{font-size:1.5rem}
-.card .texto{color:#aaa;font-size:.9rem;margin-top:5px;max-width:500px}
-.card .data{color:#666;font-size:.8rem}
-.badge{padding:4px 12px;border-radius:10px;font-size:.8rem;font-weight:700;background:#667eea22;color:#667eea}
-.vazio{text-align:center;padding:60px;color:#aaa}
-.nav{display:flex;gap:10px;justify-content:center;margin-bottom:25px;flex-wrap:wrap}
-.nav a{padding:8px 16px;background:#1a1a2e;border-radius:8px;text-decoration:none;color:#fff;border:1px solid #333}
-.nav a:hover{border-color:#667eea}
+:root{
+  --primary:#00d2ff;--secondary:#3a7bd5;
+  --success:#2ecc71;--danger:#e74c3c;
+  --warning:#f39c12;--dark:#0f0c29;
+  --card:rgba(255,255,255,0.05);
+  --border:rgba(255,255,255,0.1);
+}
+body{font-family:'Segoe UI',sans-serif;background:var(--dark);color:#fff;min-height:100vh}
+nav{padding:14px 24px;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.logo{font-size:18px;font-weight:bold;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:8px;flex-wrap:wrap}
+.nav-links a{padding:7px 14px;border-radius:20px;text-decoration:none;color:#fff;font-size:12px;border:1px solid var(--border);transition:all .2s}
+.nav-links a:hover{border-color:var(--primary);color:var(--primary)}
+.container{max-width:1100px;margin:0 auto;padding:30px 20px}
+/* HERO */
+.hero{background:var(--card);border-radius:20px;border:1px solid var(--border);padding:30px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.hero h1{font-size:28px;font-weight:900;margin-bottom:6px}
+.hero h1 span{background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:rgba(255,255,255,0.5);font-size:14px}
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:14px;margin-bottom:24px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;text-align:center}
+.stat-num{font-size:32px;font-weight:900;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px}
+/* FILTROS */
+.filtros{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:24px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.filtros select,.filtros input{padding:9px 14px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,0.05);color:#fff;font-size:13px;outline:none}
+.filtros select option{background:#1a1a2e}
+.btn-filtrar{padding:9px 20px;background:linear-gradient(90deg,var(--primary),var(--secondary));border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer}
+.btn-limpar{padding:9px 16px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;color:#fff;font-size:13px;cursor:pointer}
+/* GRAFICOS */
+.graficos{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
+@media(max-width:700px){.graficos{grid-template-columns:1fr}}
+.grafico-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px}
+.grafico-card h3{font-size:14px;color:var(--primary);margin-bottom:16px}
+/* LISTA */
+.lista-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.lista-header h2{font-size:18px}
+.btn-exportar{padding:8px 16px;background:rgba(46,204,113,0.15);border:1px solid rgba(46,204,113,0.3);border-radius:10px;color:var(--success);font-size:12px;font-weight:700;cursor:pointer;text-decoration:none}
+.analise-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;transition:all .2s}
+.analise-card:hover{border-color:var(--primary);transform:translateX(4px)}
+.analise-left{flex:1}
+.analise-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.emocao-emoji{font-size:24px}
+.emocao-badge{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;background:rgba(0,210,255,0.15);color:var(--primary);border:1px solid rgba(0,210,255,0.3)}
+.intensidade{display:flex;gap:3px}
+.intensidade-dot{width:8px;height:8px;border-radius:50%;background:var(--border)}
+.intensidade-dot.ativo{background:var(--primary)}
+.analise-texto{color:rgba(255,255,255,0.7);font-size:13px;line-height:1.5;margin-bottom:8px}
+.analise-meta{display:flex;gap:12px;flex-wrap:wrap}
+.meta-item{font-size:11px;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:4px}
+.analise-right{text-align:right;flex-shrink:0}
+.analise-data{font-size:11px;color:rgba(255,255,255,0.3)}
+.btn-share{padding:5px 12px;background:rgba(0,210,255,0.1);border:1px solid rgba(0,210,255,0.2);border-radius:8px;color:var(--primary);font-size:11px;cursor:pointer;margin-top:8px;display:block}
+/* VAZIO */
+.vazio{text-align:center;padding:60px 20px;background:var(--card);border-radius:20px;border:1px solid var(--border)}
+.vazio-icon{font-size:64px;margin-bottom:16px}
+.vazio h2{font-size:22px;margin-bottom:8px}
+.vazio p{color:rgba(255,255,255,0.5);margin-bottom:20px}
+.btn-primary{padding:13px 28px;background:linear-gradient(90deg,var(--primary),var(--secondary));border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+/* PAGINACAO */
+.paginacao{display:flex;gap:8px;justify-content:center;margin-top:24px;flex-wrap:wrap}
+.pag-btn{padding:8px 16px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:#fff;font-size:13px;cursor:pointer;text-decoration:none;transition:all .2s}
+.pag-btn:hover,.pag-btn.ativo{background:linear-gradient(90deg,var(--primary),var(--secondary));border-color:transparent}
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:rgba(46,204,113,.95);color:#fff;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s}
+.toast.show{transform:translateY(0);opacity:1}
 </style>
 </head>
 <body>
-<div class="hero">
-  <h1>📊 Minhas Análises</h1>
-  <p style="color:#ffffff99">Total: {{total}} análises registradas</p>
-</div>
-<div class="container">
-  <div class="nav">
+<nav>
+  <span class="logo">🧠 Emotion Intelligence</span>
+  <div class="nav-links">
     <a href="/">🏠 Home</a>
+    <a href="/dashboard">📊 Dashboard</a>
     <a href="/diario">📔 Diário</a>
     <a href="/score-ie">🧠 Score IE</a>
-    <a href="/historico">💬 Histórico</a>
+    <a href="/historico">💬 Chat</a>
+    <a href="/perfil">👤 Perfil</a>
   </div>
-  {% if analises %}
-    {% for a in analises %}
-    <div class="card">
-      <div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <span class="emocao">{{a.emoji or "😐"}}</span>
-          <span class="badge">{{a.emocao or "neutro"}}</span>
-          <span style="color:#aaa;font-size:.8rem">intensidade: {{a.intensidade or 1}}/5</span>
-        </div>
-        <div class="texto">{{a.texto[:100] if a.texto else ""}}</div>
-      </div>
-      <div class="data">{{a.criado_em.strftime("%d/%m/%Y %H:%M") if a.criado_em else ""}}</div>
+</nav>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div>
+      <h1>📊 Minhas <span>Análises</span></h1>
+      <p>Histórico completo das suas análises emocionais</p>
     </div>
-    {% endfor %}
-  {% else %}
-  <div class="vazio">
-    <div style="font-size:3rem;margin-bottom:15px">📊</div>
-    <h2>Nenhuma análise ainda</h2>
-    <p>Faça sua primeira análise emocional!</p>
-    <a href="/" style="display:inline-block;margin-top:20px;padding:12px 25px;background:#667eea;border-radius:10px;text-decoration:none;color:#fff">Analisar agora</a>
+    <a href="/exportar/csv" class="btn-exportar">📥 Exportar CSV</a>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num">{{total}}</div>
+      <div class="stat-label">Total Análises</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">{{analises_hoje}}</div>
+      <div class="stat-label">Hoje</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">{{emocao_top}}</div>
+      <div class="stat-label">Emoção Principal</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">{{media_intensidade}}</div>
+      <div class="stat-label">Intensidade Média</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">{{dias_ativos}}</div>
+      <div class="stat-label">Dias Ativos</div>
+    </div>
+  </div>
+
+  <!-- GRAFICOS -->
+  {% if analises %}
+  <div class="graficos">
+    <div class="grafico-card">
+      <h3>🍩 Distribuição de Emoções</h3>
+      <canvas id="graficoEmocoes" height="220"></canvas>
+    </div>
+    <div class="grafico-card">
+      <h3>📈 Evolução nos Últimos 7 Dias</h3>
+      <canvas id="graficoEvolucao" height="220"></canvas>
+    </div>
   </div>
   {% endif %}
+
+  <!-- FILTROS -->
+  <div class="filtros">
+    <select id="filtroEmocao" onchange="filtrar()">
+      <option value="">Todas as emoções</option>
+      <option value="alegria">😊 Alegria</option>
+      <option value="tristeza">😢 Tristeza</option>
+      <option value="ansiedade">😰 Ansiedade</option>
+      <option value="raiva">😠 Raiva</option>
+      <option value="medo">😨 Medo</option>
+      <option value="amor">❤️ Amor</option>
+      <option value="gratidao">🙏 Gratidão</option>
+      <option value="burnout">🔥 Burnout</option>
+      <option value="estresse">😤 Estresse</option>
+      <option value="solidao">🌑 Solidão</option>
+      <option value="calma">😌 Calma</option>
+      <option value="esperanca">🌟 Esperança</option>
+    </select>
+    <select id="filtroPeriodo" onchange="filtrar()">
+      <option value="">Todo período</option>
+      <option value="7">Últimos 7 dias</option>
+      <option value="30">Últimos 30 dias</option>
+      <option value="90">Últimos 90 dias</option>
+    </select>
+    <input type="text" id="filtroBusca" placeholder="🔍 Buscar no texto..." oninput="filtrar()">
+    <button class="btn-limpar" onclick="limparFiltros()">✕ Limpar</button>
+  </div>
+
+  <!-- LISTA -->
+  <div class="lista-header">
+    <h2>📋 Histórico <span id="contadorFiltrado" style="color:var(--primary);font-size:14px"></span></h2>
+  </div>
+
+  {% if analises %}
+  <div id="listaAnalises">
+    {% for a in analises %}
+    <div class="analise-card"
+         data-emocao="{{a.emocao|lower}}"
+         data-texto="{{a.texto|lower}}"
+         data-data="{{a.criado_em.strftime('%Y-%m-%d') if a.criado_em else ''}}">
+      <div class="analise-left">
+        <div class="analise-top">
+          <span class="emocao-emoji">{{a.emoji or "😐"}}</span>
+          <span class="emocao-badge">{{a.emocao or "neutro"}}</span>
+          <div class="intensidade">
+            {% for i in range(5) %}
+            <div class="intensidade-dot {% if i < (a.intensidade or 1) %}ativo{% endif %}"></div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="analise-texto">{{a.texto[:150] if a.texto else ""}}{% if a.texto and a.texto|length > 150 %}...{% endif %}</div>
+        <div class="analise-meta">
+          {% if a.recomendacao %}
+          <span class="meta-item">💡 {{a.recomendacao[:60]}}</span>
+          {% endif %}
+        </div>
+      </div>
+      <div class="analise-right">
+        <div class="analise-data">
+          {{a.criado_em.strftime("%d/%m/%Y") if a.criado_em else ""}}<br>
+          <span style="font-size:10px">{{a.criado_em.strftime("%H:%M") if a.criado_em else ""}}</span>
+        </div>
+        <button class="btn-share" onclick="compartilhar({{a.id}})">🔗 Compartilhar</button>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div id="semResultados" style="display:none" class="vazio">
+    <div class="vazio-icon">🔍</div>
+    <h2>Nenhuma análise encontrada</h2>
+    <p>Tente outros filtros</p>
+    <button class="btn-primary" onclick="limparFiltros()">Limpar filtros</button>
+  </div>
+
+  {% else %}
+  <div class="vazio">
+    <div class="vazio-icon">📊</div>
+    <h2>Nenhuma análise ainda</h2>
+    <p>Faça sua primeira análise emocional agora!</p>
+    <a href="/dashboard" class="btn-primary">🧠 Analisar agora</a>
+  </div>
+  {% endif %}
+
 </div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// DADOS PARA GRAFICOS
+const emocoesDados = {{emocoes_json|safe if emocoes_json else "{}"}};
+const evolucaoDados = {{evolucao_json|safe if evolucao_json else "{}"}};
+
+// GRAFICO EMOCOES
+if(Object.keys(emocoesDados).length > 0) {
+  const ctxE = document.getElementById('graficoEmocoes');
+  if(ctxE) {
+    const labels = Object.keys(emocoesDados).slice(0,8);
+    const values = Object.values(emocoesDados).slice(0,8);
+    const cores = ['#00d2ff','#3a7bd5','#2ecc71','#e74c3c','#f39c12','#9b59b6','#1abc9c','#e67e22'];
+    new Chart(ctxE, {
+      type: 'doughnut',
+      data: {
+        labels: labels,
+        datasets: [{data: values, backgroundColor: cores, borderWidth: 0}]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {labels: {color:'#fff', font:{size:11}}}
+        }
+      }
+    });
+  }
+}
+
+// GRAFICO EVOLUCAO
+if(Object.keys(evolucaoDados).length > 0) {
+  const ctxV = document.getElementById('graficoEvolucao');
+  if(ctxV) {
+    new Chart(ctxV, {
+      type: 'line',
+      data: {
+        labels: Object.keys(evolucaoDados),
+        datasets: [{
+          label: 'Análises por dia',
+          data: Object.values(evolucaoDados),
+          borderColor: '#00d2ff',
+          backgroundColor: 'rgba(0,210,255,0.1)',
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: '#00d2ff',
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: {ticks:{color:'#666'}, grid:{color:'#222'}},
+          y: {ticks:{color:'#666'}, grid:{color:'#222'}, beginAtZero:true}
+        },
+        plugins: {legend:{labels:{color:'#fff'}}}
+      }
+    });
+  }
+}
+
+// FILTROS
+function filtrar() {
+  const emocao = document.getElementById('filtroEmocao').value.toLowerCase();
+  const periodo = document.getElementById('filtroPeriodo').value;
+  const busca = document.getElementById('filtroBusca').value.toLowerCase();
+  const cards = document.querySelectorAll('.analise-card');
+  let visiveis = 0;
+  const hoje = new Date();
+
+  cards.forEach(card => {
+    const cardEmocao = card.dataset.emocao || '';
+    const cardTexto = card.dataset.texto || '';
+    const cardData = card.dataset.data || '';
+
+    let mostrar = true;
+
+    if(emocao && !cardEmocao.includes(emocao)) mostrar = false;
+    if(busca && !cardTexto.includes(busca)) mostrar = false;
+
+    if(periodo && cardData) {
+      const diff = (hoje - new Date(cardData)) / (1000*60*60*24);
+      if(diff > parseInt(periodo)) mostrar = false;
+    }
+
+    card.style.display = mostrar ? 'flex' : 'none';
+    if(mostrar) visiveis++;
+  });
+
+  document.getElementById('contadorFiltrado').textContent = `(${visiveis} encontradas)`;
+  document.getElementById('semResultados').style.display = visiveis === 0 ? 'block' : 'none';
+}
+
+function limparFiltros() {
+  document.getElementById('filtroEmocao').value = '';
+  document.getElementById('filtroPeriodo').value = '';
+  document.getElementById('filtroBusca').value = '';
+  filtrar();
+}
+
+// COMPARTILHAR
+function compartilhar(id) {
+  fetch('/compartilhar/' + id)
+    .then(r => r.json())
+    .then(d => {
+      if(navigator.share) {
+        navigator.share({title: 'Emotion Intelligence', text: d.texto, url: d.url});
+      } else {
+        navigator.clipboard.writeText(d.url).then(() => showToast('Link copiado!'));
+      }
+    }).catch(() => showToast('Erro ao compartilhar'));
+}
+
+// TOAST
+function showToast(msg, cor='#2ecc71') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = cor;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// GA
+gtag('event','page_view',{event_category:'analises',event_label:'historico'});
+</script>
 </body>
 </html>
