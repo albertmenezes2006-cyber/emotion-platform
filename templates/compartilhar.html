@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-JGLER9XVGY');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análise Compartilhada — Emotion Intelligence</title>
+<meta property="og:title" content="Minha análise emocional — Emotion Intelligence">
+<meta property="og:description" content="Descubra suas emoções com IA. Gratuito e seguro.">
+<meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/favicon.svg">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#00d2ff;--secondary:#3a7bd5;--dark:#0f0c29;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1)}
+body{font-family:'Segoe UI',sans-serif;background:var(--dark);color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;text-align:center}
+.container{max-width:500px;width:100%}
+.card{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:40px;margin-bottom:24px}
+.emoji{font-size:72px;margin-bottom:16px;display:block}
+.emocao{font-size:28px;font-weight:900;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
+.texto{font-size:16px;color:rgba(255,255,255,0.6);font-style:italic;margin-bottom:20px;line-height:1.6}
+.meta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:24px}
+.meta-item{background:rgba(0,210,255,0.1);border:1px solid rgba(0,210,255,0.2);border-radius:20px;padding:5px 14px;font-size:12px;color:var(--primary)}
+.share-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+.btn-share{padding:12px 20px;border-radius:12px;font-size:14px;font-weight:700;text-decoration:none;cursor:pointer;border:none;transition:all .2s}
+.btn-wa{background:#25D366;color:#fff}
+.btn-tw{background:#1DA1F2;color:#fff}
+.btn-tg{background:#0088cc;color:#fff}
+.btn-copy{background:var(--card);border:1px solid var(--border);color:#fff}
+.btn-share:hover{transform:translateY(-2px)}
+.cta{background:linear-gradient(135deg,rgba(0,210,255,0.1),rgba(58,123,213,0.1));border:1px solid rgba(0,210,255,0.2);border-radius:16px;padding:24px}
+.cta h3{font-size:18px;margin-bottom:8px}
+.cta p{color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:16px}
+.btn-cta{display:inline-block;padding:12px 28px;background:linear-gradient(90deg,var(--primary),var(--secondary));border-radius:12px;color:#fff;font-weight:700;font-size:15px;text-decoration:none}
+.toast{position:fixed;bottom:24px;right:24px;background:rgba(46,204,113,.95);color:#fff;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s}
+.toast.show{transform:translateY(0);opacity:1}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+    <span class="emoji" id="emoji">🧠</span>
+    <div class="emocao" id="emocao">Carregando...</div>
+    <div class="texto" id="texto"></div>
+    <div class="meta" id="meta"></div>
+    <div class="share-btns">
+      <a class="btn-share btn-wa" id="btnWa" href="#" target="_blank">📱 WhatsApp</a>
+      <a class="btn-share btn-tw" id="btnTw" href="#" target="_blank">🐦 Twitter</a>
+      <a class="btn-share btn-tg" id="btnTg" href="#" target="_blank">✈️ Telegram</a>
+      <button class="btn-share btn-copy" onclick="copiarLink()">📋 Copiar Link</button>
+    </div>
+  </div>
+  <div class="cta">
+    <h3>🧠 Descubra suas emoções com IA</h3>
+    <p>Análise emocional gratuita com 150+ emoções. Converse com Sofia, sua psicóloga virtual.</p>
+    <a href="/cadastro" class="btn-cta">🚀 Criar Conta Grátis</a>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const id = window.location.pathname.split('/').pop();
+const url = window.location.href;
+
+fetch('/compartilhar/' + id)
+  .then(r => r.json())
+  .then(d => {
+    document.getElementById('emoji').textContent = '🧠';
+    document.getElementById('emocao').textContent = d.texto || 'Análise Emocional';
+    document.getElementById('btnWa').href = d.whatsapp || '#';
+    document.getElementById('btnTw').href = d.twitter || '#';
+    document.getElementById('btnTg').href = d.telegram || '#';
+  }).catch(() => {
+    document.getElementById('emocao').textContent = 'Emotion Intelligence';
+  });
+
+function copiarLink() {
+  navigator.clipboard.writeText(url).then(() => showToast('Link copiado!'));
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+gtag('event','ver_compartilhamento',{event_category:'social',event_label:id});
+</script>
+</body>
+</html>

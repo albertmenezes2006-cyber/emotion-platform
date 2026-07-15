@@ -10436,14 +10436,29 @@ def compartilhar_analise(analise_id: int, request: Request, db: Session = Depend
     nome = usuario.nome.split()[0] if usuario else "Alguem"
     emocao = analise.emocao or "neutro"
     emoji = analise.emoji or "🧠"
-    texto_share = f"{nome} se sentiu {emocao} {emoji} — registrado na Emotion Intelligence"
-    url_share = f"{BASE_URL}/cadastro"
+    texto_share = f"{nome} se sentiu {emocao} {emoji} — Emotion Intelligence"
+    url_share = f"{BASE_URL}/compartilhar/{analise_id}"
+    url_cadastro = f"{BASE_URL}/cadastro"
+
+    # Se for browser, retorna pagina HTML
+    accept = request.headers.get("accept","")
+    if "text/html" in accept:
+        return render_template("compartilhar.html",
+            request=request,
+            analise=analise,
+            nome=nome,
+            emocao=emocao,
+            emoji=emoji,
+        )
+
+    import urllib.parse
+    texto_enc = urllib.parse.quote(texto_share)
     return {
         "texto": texto_share,
-        "url": url_share,
-        "whatsapp": f"https://wa.me/?text={texto_share} {url_share}",
-        "twitter": f"https://twitter.com/intent/tweet?text={texto_share}&url={url_share}",
-        "telegram": f"https://t.me/share/url?url={url_share}&text={texto_share}"
+        "url": url_cadastro,
+        "whatsapp": f"https://wa.me/?text={texto_enc}%20{urllib.parse.quote(url_cadastro)}",
+        "twitter": f"https://twitter.com/intent/tweet?text={texto_enc}&url={urllib.parse.quote(url_cadastro)}",
+        "telegram": f"https://t.me/share/url?url={urllib.parse.quote(url_cadastro)}&text={texto_enc}"
     }
 
 @app.get("/certificado")
