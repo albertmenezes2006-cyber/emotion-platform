@@ -165,6 +165,17 @@ PONTOS_POR_ACAO = {
 
 rate_limit_store = defaultdict(list)
 
+def limpar_rate_limit_store():
+    """Limpa entradas antigas do rate limit store — previne memory leak"""
+    agora = time.time()
+    keys_remover = []
+    for ip, acessos in rate_limit_store.items():
+        rate_limit_store[ip] = [t for t in acessos if agora - t < 3600]
+        if not rate_limit_store[ip]:
+            keys_remover.append(ip)
+    for k in keys_remover:
+        del rate_limit_store[k]
+
 # ================================================================
 # BANCO DE DADOS
 # ================================================================
@@ -2783,25 +2794,32 @@ async def enviar_email_dia14(nome: str, email: str):
 
 def job_onboarding_emails():
     from sqlalchemy.orm import Session
+    import asyncio
     db: Session = SessionLocal()
     try:
         agora = datetime.now()
         usuarios = db.query(Usuario).filter(Usuario.plano == 'free').all()
-        import asyncio
         for u in usuarios:
             if not u.criado_em:
                 continue
             dias = (agora - u.criado_em).days
-            if dias == 1:
-                asyncio.run(enviar_email_dia1(u.nome, u.email))
-            elif dias == 3:
-                asyncio.run(enviar_email_dia3(u.nome, u.email))
-            elif dias == 7:
-                asyncio.run(enviar_email_dia7(u.nome, u.email))
-            elif dias == 14:
-                asyncio.run(enviar_email_dia14(u.nome, u.email))
+            try:
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                if dias == 1:
+                    loop.run_until_complete(enviar_email_dia1(u.nome, u.email))
+                elif dias == 3:
+                    loop.run_until_complete(enviar_email_dia3(u.nome, u.email))
+                elif dias == 7:
+                    loop.run_until_complete(enviar_email_dia7(u.nome, u.email))
+                elif dias == 14:
+                    loop.run_until_complete(enviar_email_dia14(u.nome, u.email))
+                loop.close()
+            except Exception as email_err:
+                print(f'[ONBOARDING] Email erro para {u.email}: {email_err}')
     except Exception as e:
-        print(f'[ONBOARDING] Erro: {e}')
+        print(f'[ONBOARDING] Erro geral: {e}')
+        enviar_telegram(f"⚠️ Erro onboarding: {str(e)[:100]}")
     finally:
         db.close()
 
@@ -5185,12 +5203,15 @@ async def api_analise_completa(request: Request, texto: str, db: Session = Depen
 import functools as _functools
 
 # Cache simples para nao chamar Gemini 2x para o mesmo texto
-_cache_emocao = {}
+_cache_emocao = {}  # cache com limite automatico
+_cache_emocao_max = 500
 
 def detectar_emocao_gemini(texto: str) -> str:
     """Usa Gemini para detectar emocao com precisao maxima"""
     global _cache_emocao
-    
+    # Limpar cache se muito grande
+    if len(_cache_emocao) > _cache_emocao_max:
+        _cache_emocao = {}
     # Checar cache
     chave = texto.strip().lower()[:100]
     if chave in _cache_emocao:
@@ -9925,16 +9946,14 @@ def admin(request: Request, db: Session = Depends(get_db)):
     inativos   = [u for u in todos if not u.ativo]
 
     receita_total = sum(
-        49  if p.plano == "premium"    else
-        199 if p.plano == "enterprise" else 0
+        p.valor or 0
         for p in pagamentos_aprovados
     )
 
     receita_mensal = sum(
-        49  if p.plano == "premium"    else
-        199 if p.plano == "enterprise" else 0
+        p.valor or 0
         for p in pagamentos_aprovados
-        if p.criado_em >= datetime.now() - timedelta(days=30)
+        if p.criado_em and p.criado_em >= datetime.now() - timedelta(days=30)
     )
 
     logs_recentes = db.query(LogAcesso).order_by(
