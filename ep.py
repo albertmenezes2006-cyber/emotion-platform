@@ -143,3 +143,8 @@ elif CMD == "full":
 
 else:
     print(__doc__)
+
+# Comando obs — observabilidade
+if CMD == "obs":
+    from modules.dashboard_obs import imprimir_relatorio
+    imprimir_relatorio()

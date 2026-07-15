@@ -99,3 +99,12 @@ help:
 	@echo "  make push MSG='texto' → Push seguro"
 	@echo "════════════════════════════════════════"
 	@echo ""
+
+obs:
+	@python3 ep.py obs
+
+saude:
+	@python3 -c "from modules.saude import verificar_saude_sistema; import json; print(json.dumps(verificar_saude_sistema(), indent=2, ensure_ascii=False))"
+
+metricas:
+	@python3 -c "from modules.metricas import metricas; import json; print(json.dumps(metricas.resumo(), indent=2, ensure_ascii=False))"
