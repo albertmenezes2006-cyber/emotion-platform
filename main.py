@@ -9096,58 +9096,91 @@ async def chat(
         import random as _random
 
         import random as _rand
-        _variacao = _rand.randint(1, 3)  # variar resposta
-        _fallbacks = {
+        _v = _rand.randint(0, 2)  # 3 versoes diferentes de cada fallback
+        _n = usuario.nome.split()[0]
+        _fallbacks_lista = {
+            "alegria": [
+                f"Que delicia {_n}! Quando a alegria bate assim, vale ancorar o momento. O que exatamente esta te fazendo tao bem hoje? Escreve aqui, pode ser simples.",
+                f"{_n}, isso e lindo de ver! A alegria plena e rara. O que voce quer fazer com essa energia toda? Tem algo que ficou pra depois que pode acontecer agora?",
+                f"Adoro quando isso acontece, {_n}! Alegria genuina merece ser registrada. Me conta — o que mudou para voce se sentir assim?",
+            ],
+            "euforia": [
+                f"{_n}, que energia! Euforia e boa mas vale respirar um pouco. O que esta causando tudo isso? Me conta tudo.",
+                f"Nossa, {_n}! Voce esta com uma energia incrivel. Aproveita — mas me diz: isso e algo que vem acontecendo ou surgiu do nada?",
+                f"{_n} em modo full energy! Legal demais. O que voce vai fazer com tudo isso? Tem algum projeto ou sonho que essa energia pode alimentar?",
+            ],
+            "tristeza": [
+                f"Que dificil, {_n}. Fico aqui com voce. A tristeza e pesada mas ela nao mente — algo importante esta sendo tocado. O que aconteceu?",
+                f"{_n}, sinto muito. Nao precisa estar bem agora. Pode me contar o que esta pesando? Estou aqui sem pressa.",
+                f"Oi {_n}. Percebi que as coisas estao dificeis. Coloca a mao no coracao por um segundo e respira. Me conta — de onde vem essa tristeza?",
+            ],
+            "melancolia": [
+                f"{_n}, tem algo de bonito e pesado ao mesmo tempo na melancolia. Ela nao e igual a tristeza — e mais contemplativa. O que voce esta sentindo saudade ou falta?",
+                f"Melancolia e assim, {_n} — como uma musica triste que a gente gosta de ouvir. O que esta passando pela sua cabeca agora?",
+                f"{_n}, permita-se sentir isso sem pressa de resolver. Melancolia tem algo a dizer. O que voce acha que ela esta tentando te mostrar?",
+            ],
+            "ansiedade": [
+                f"{_n}, vamos desacelerar juntos. Faz isso comigo: 5 coisas que voce VE agora. Fala aqui. Depois a gente segue.",
+                f"Oi {_n}. Ansiedade e sufocante, eu sei. Antes de tudo — respira. Inspire por 4 segundos, segura por 4, solta por 4. Faz isso 3 vezes. Me avisa quando terminar.",
+                f"{_n}, o que especificamente esta deixando voce ansioso? Tenta colocar em palavras o que sua cabeca esta repetindo. As vezes nomear ja alivia.",
+            ],
+            "panico": [
+                f"{_n}, voce esta seguro agora. Solta o ar devagar. Olha ao redor e me diz: voce ve alguma coisa azul perto de voce?",
+                f"Respira, {_n}. Devagar. Inspire pelo nariz, solta pela boca. O panico passa — voce ja passou por isso antes. O que voce esta sentindo no corpo agora?",
+                f"{_n}, fica comigo. Tres respiracoes fundas agora — nao pula isso. Depois me conta o que disparou esse panico.",
+            ],
+            "raiva": [
+                f"{_n}, sua raiva faz sentido. Algo importante foi desrespeitado. O que exatamente aconteceu? Me conta sem filtro.",
+                f"Que raiva, ne {_n}? E valido. Antes de qualquer coisa — o que voce quer fazer com essa raiva? Tem algo que precisa ser dito ou feito?",
+                f"{_n}, raiva costuma esconder algo mais fundo — magoa, frustracao, medo. O que esta por baixo de tudo isso? O que realmente te doeu?",
+            ],
+            "frustracao": [
+                f"{_n}, frustracao dói de um jeito especial — quando a gente se dedicou e nao saiu como queria. O que aconteceu? Me conta.",
+                f"Entendo, {_n}. Quando as coisas nao saem como a gente espera e muito desgastante. O que especificamente nao funcionou?",
+                f"{_n}, o que voce esperava que acontecesse? As vezes explorar a expectativa ajuda a entender de onde vem a frustracao.",
+            ],
+            "burnout": [
+                f"{_n}, o corpo e a mente estao mandando um sinal claro: e demais. Quando foi a ultima vez que voce realmente descansou — sem culpa?",
+                f"Burnout e esgotamento real, {_n}. Nao e frescura, e sobrecarga. O que esta consumindo mais sua energia ultimamente?",
+                f"{_n}, me conta: voce esta dando conta de tudo ou so fingindo que esta? O que voce gostaria de poder largar agora mesmo?",
+            ],
+            "solidao": [
+                f"{_n}, solidao e uma das sensacoes mais dificeis. Nao precisa estar sozinho para se sentir assim. O que especificamente voce sente que falta?",
+                f"Oi {_n}. Estou aqui. Me conta — essa solidao veio de alguma situacao especifica ou e algo que voce sente ha um tempo?",
+                f"{_n}, solidao as vezes e sinal de que precisamos de conexao real — nao so de presenca. O que voce sente que mais falta nas suas relacoes?",
+            ],
+            "culpa": [
+                f"{_n}, culpa e pesada. Mas antes de tudo — o que aconteceu? Me conta sem julgamento. Preciso entender o contexto.",
+                f"Culpa e um dos sentimentos mais difíceis, {_n}. Ela pode ser util quando nos ensina algo — ou pode ser cruel quando nos pune sem parar. O que voce fez ou deixou de fazer?",
+                f"{_n}, voce consegue separar o que foi realmente sua responsabilidade do que voce esta assumindo que nao e seu? Me conta a situacao.",
+            ],
+            "vazio": [
+                f"{_n}, vazio e diferente de tristeza — e quase a ausencia de sentimento. Ha quanto tempo voce se sente assim?",
+                f"Oi {_n}. Vazio por dentro e muito desgastante. Tem alguma coisa que antes te dava prazer mas agora nao da mais?",
+                f"{_n}, quando foi a ultima vez que voce se sentiu presente e vivo? Me conta o que estava acontecendo nesse momento.",
+            ],
+            "desespero": [
+                f"{_n}, estou aqui. Me conta tudo — sem filtro. O que esta acontecendo?",
+                f"{_n}, desespero e sinal de que algo esta muito pesado. Voce nao precisa carregar isso sozinho. O que esta te fazendo sentir assim?",
+                f"Oi {_n}. Esse momento vai passar, mesmo que nao parecna. Me conta — o que esta acontecendo na sua vida agora?",
+            ],
+            "medo": [
+                f"{_n}, medo e um sinal — nao necessariamente de perigo real, mas de algo que importa muito pra voce. O que voce tem medo de perder ou de enfrentar?",
+                f"O que esta te assustando, {_n}? Me conta com detalhes — as vezes colocar o medo em palavras ja tira um pouco do poder dele.",
+                f"{_n}, medo e normal. O que importa e o que fazemos com ele. O que voce acha que poderia acontecer de pior? E de melhor?",
+            ],
+            "neutro": [
+                f"Oi {_n}! Como voce esta se sentindo agora? Me conta o que passa pela sua cabeca.",
+                f"{_n}, pode me contar mais sobre como voce esta? Quero entender melhor o que esta passando com voce.",
+                f"Oi {_n}! Estou aqui. O que voce quer explorar hoje?",
+            ],
+        }
+
+        # Construir fallbacks com variacao
+        _fallbacks = {k: v[_v % len(v)] for k, v in _fallbacks_lista.items()}
+        _fallbacks_DUMMY = {
             "alegria": (
                 f"que lindo {usuario.nome} sua alegria merece ser celebrada "
-                "a gratidao amplifica emocoes positivas escreva 3 coisas que estao te fazendo bem hoje "
-                "isso ancora essa energia boa dentro de voce "
-                "o que mais esta contribuindo para essa sensacao maravilhosa"
-            ),
-            "euforia": (
-                f"{usuario.nome} que energia incrivel voce esta irradiando "
-                "euforia e maravilhosa mas vale ancorar esse momento "
-                "escreva o que esta causando isso para poder revisitar depois "
-                "como voce quer que essa energia impacte sua vida essa semana"
-            ),
-            "tristeza": (
-                f"{usuario.nome} sinto muito que voce esteja passando por isso "
-                "a tristeza e valida ela nos diz que algo importa para nos "
-                "tente o acolhimento coloque a mao no coracao respire fundo 3 vezes "
-                "e diga estou aqui estou me ouvindo "
-                "o que voce precisaria ouvir agora de alguem que te ama"
-            ),
-            "melancolia": (
-                f"{usuario.nome} a melancolia tem uma textura diferente da tristeza comum "
-                "ela e mais suave mais contemplativa "
-                "permita-se sentir sem resistir "
-                "o que essa sensacao esta tentando te dizer sobre o que voce valoriza"
-            ),
-            "ansiedade": (
-                f"{usuario.nome} vamos fazer o Grounding 5-4-3-2-1 juntos agora "
-                "nomeie 5 coisas que voce VE 4 que pode TOCAR 3 que OUVE "
-                "2 que CHEIRA e 1 que SABOREIA "
-                "isso traz sua mente de volta ao presente "
-                "como esta seu corpo fisico nesse momento"
-            ),
-            "panico": (
-                f"{usuario.nome} voce esta seguro agora "
-                "respira comigo inspire por 4 segundos segure por 4 expire por 4 "
-                "faz isso 3 vezes "
-                "o panico passa voce consegue atravessar isso "
-                "o que voce esta vendo ao seu redor agora mesmo"
-            ),
-            "raiva": (
-                f"{usuario.nome} sua raiva e valida algo importante foi tocado "
-                "tente a Respiracao 4-7-8 inspire por 4s segure por 7s expire por 8s "
-                "faca 3 vezes isso ativa o sistema parassimpatico "
-                "o que exatamente mais te incomoda nessa situacao"
-            ),
-            "frustracao": (
-                f"{usuario.nome} a frustracao aparece quando algo que importa nao sai como esperado "
-                "o que especificamente nao foi como voce queria "
-                "o que estava em seu controle e o que nao estava "
-                "como voce pode ajustar a expectativa ou a estrategia"
             ),
             "medo": (
                 f"{usuario.nome} o medo e um sinal do seu sistema de protecao "
