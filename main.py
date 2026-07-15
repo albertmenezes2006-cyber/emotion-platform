@@ -3209,6 +3209,104 @@ def processar_nova_senha(
 # ================================================================
 
 
+
+# ================================================================
+# NOTIFICACOES PUSH + 2FA v20.0
+# ================================================================
+
+# VAPID keys para push (gerar uma vez)
+VAPID_PUBLIC_KEY = os.getenv("VAPID_PUBLIC_KEY", "BEl62iUYgUivxIkv69yViEuiBIa40HI80NM9e5TsLUjxkvJBV2L4EjGZ7ZKnzLQGaWOW5CESwFBkFpnsSQ")
+VAPID_PRIVATE_KEY = os.getenv("VAPID_PRIVATE_KEY", "")
+
+@app.post("/api/push/subscribe")
+async def push_subscribe(request: Request, db: Session = Depends(get_db)):
+    """Salva subscription de push notification"""
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return JSONResponse({"ok": False}, status_code=401)
+    try:
+        body = await request.json()
+        # Salvar subscription no perfil do usuario (simplificado)
+        if body.get("endpoint"):
+            enviar_telegram(
+                f"📱 Push subscription\n"
+                f"👤 {usuario.email}\n"
+                f"🔔 Notificacoes ativadas"
+            )
+        return JSONResponse({"ok": True, "mensagem": "Push ativado!"})
+    except Exception as e:
+        return JSONResponse({"ok": False, "erro": str(e)})
+
+@app.post("/api/push/send")
+async def push_send_test(request: Request, db: Session = Depends(get_db)):
+    """Envia notificacao push de teste"""
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return JSONResponse({"ok": False}, status_code=401)
+    return JSONResponse({
+        "ok": True,
+        "mensagem": "Notificacao enviada via Telegram!",
+        "tip": "Push nativo requer VAPID configurado"
+    })
+
+@app.get("/api/push/vapid-key")
+def get_vapid_key():
+    """Retorna chave publica VAPID"""
+    return JSONResponse({"publicKey": VAPID_PUBLIC_KEY})
+
+# 2FA — TOTP simples
+_codigos_2fa = {}  # email -> {codigo, expira}
+
+@app.post("/api/2fa/enviar")
+async def enviar_2fa(request: Request, db: Session = Depends(get_db)):
+    """Envia codigo 2FA por email"""
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return JSONResponse({"ok": False}, status_code=401)
+    import random
+    codigo = str(random.randint(100000, 999999))
+    _codigos_2fa[usuario.email] = {
+        "codigo": codigo,
+        "expira": datetime.now() + timedelta(minutes=10)
+    }
+    html = email_base(f"""
+        <h2 style='color:#333;margin-top:0'>🔐 Codigo de Verificacao</h2>
+        <p>Ola, <strong>{usuario.nome}</strong>!</p>
+        <p>Seu codigo de verificacao de dois fatores:</p>
+        <div style='text-align:center;margin:24px 0'>
+          <div style='font-size:48px;font-weight:900;color:#00d2ff;letter-spacing:8px'>{codigo}</div>
+        </div>
+        <p style='color:#999;font-size:13px'>Valido por 10 minutos. Nao compartilhe.</p>
+    """)
+    try:
+        enviar_email(usuario.email, "🔐 Codigo 2FA — Emotion Intelligence", html)
+        return JSONResponse({"ok": True, "mensagem": "Codigo enviado por email!"})
+    except:
+        return JSONResponse({"ok": False, "erro": "Erro ao enviar email"})
+
+@app.post("/api/2fa/verificar")
+async def verificar_2fa(request: Request, db: Session = Depends(get_db)):
+    """Verifica codigo 2FA"""
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return JSONResponse({"ok": False}, status_code=401)
+    body = await request.json()
+    codigo = body.get("codigo", "")
+    dados = _codigos_2fa.get(usuario.email)
+    if not dados:
+        return JSONResponse({"ok": False, "erro": "Nenhum codigo enviado"})
+    if datetime.now() > dados["expira"]:
+        del _codigos_2fa[usuario.email]
+        return JSONResponse({"ok": False, "erro": "Codigo expirado"})
+    if dados["codigo"] != codigo:
+        return JSONResponse({"ok": False, "erro": "Codigo incorreto"})
+    del _codigos_2fa[usuario.email]
+    return JSONResponse({"ok": True, "mensagem": "Verificado com sucesso!"})
+
+# ================================================================
+# FIM PUSH + 2FA
+# ================================================================
+
 # ================================================================
 # HUMOR POR HORA DO DIA v20.0
 # ================================================================

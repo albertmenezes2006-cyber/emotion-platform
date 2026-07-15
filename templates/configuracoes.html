@@ -118,5 +118,73 @@ async function salvar(){
   }
 }
 </script>
+
+  <div class='card'>
+    <h2>🔐 Segurança Avançada</h2>
+    <p style='font-size:13px;color:#888;margin-bottom:16px'>Verificação em dois fatores por email</p>
+    <button class='btn' onclick='enviar2FA()' style='margin-bottom:10px'>📧 Enviar Código 2FA</button>
+    <div id='div2fa' style='display:none;margin-top:10px'>
+      <input type='text' id='codigo2fa' placeholder='Digite o código de 6 dígitos' 
+             style='width:100%;padding:12px;border-radius:8px;border:1px solid #333;background:#111;color:#fff;font-size:18px;letter-spacing:4px;text-align:center;margin-bottom:10px'>
+      <button class='btn' onclick='verificar2FA()'>✅ Verificar Código</button>
+    </div>
+    <div id='result2fa' style='margin-top:10px;font-size:13px'></div>
+  </div>
+
+  <div class='card'>
+    <h2>🔔 Notificações Push</h2>
+    <p style='font-size:13px;color:#888;margin-bottom:16px'>Receba alertas direto no seu dispositivo</p>
+    <button class='btn' onclick='ativarPush()'>🔔 Ativar Notificações</button>
+    <div id='pushStatus' style='margin-top:10px;font-size:13px;color:#888'></div>
+  </div>
+
+<script>
+async function enviar2FA() {
+  const r = await fetch('/api/2fa/enviar', {method:'POST'});
+  const d = await r.json();
+  if(d.ok) {
+    document.getElementById('div2fa').style.display = 'block';
+    document.getElementById('result2fa').innerHTML = '<span style="color:#2ecc71">✅ ' + d.mensagem + '</span>';
+  } else {
+    document.getElementById('result2fa').innerHTML = '<span style="color:#e74c3c">❌ ' + d.erro + '</span>';
+  }
+}
+
+async function verificar2FA() {
+  const codigo = document.getElementById('codigo2fa').value;
+  const r = await fetch('/api/2fa/verificar', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({codigo})
+  });
+  const d = await r.json();
+  if(d.ok) {
+    document.getElementById('result2fa').innerHTML = '<span style="color:#2ecc71">✅ ' + d.mensagem + '</span>';
+    document.getElementById('div2fa').style.display = 'none';
+  } else {
+    document.getElementById('result2fa').innerHTML = '<span style="color:#e74c3c">❌ ' + d.erro + '</span>';
+  }
+}
+
+async function ativarPush() {
+  const status = document.getElementById('pushStatus');
+  if(!('Notification' in window)) {
+    status.textContent = '❌ Navegador não suporta notificações';
+    return;
+  }
+  const perm = await Notification.requestPermission();
+  if(perm === 'granted') {
+    status.innerHTML = '<span style="color:#2ecc71">✅ Notificações ativadas!</span>';
+    await fetch('/api/push/subscribe', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({endpoint: 'browser', activated: true})
+    });
+  } else {
+    status.textContent = '❌ Permissão negada';
+  }
+}
+</script>
+
 </body>
 </html>
