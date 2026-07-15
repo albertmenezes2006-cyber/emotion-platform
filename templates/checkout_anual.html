@@ -10,97 +10,160 @@
   gtag('config', 'G-JGLER9XVGY');
 </script>
 <meta charset="UTF-8">
-
-<meta property="og:type" content="website">
-<meta property="og:title" content="Checkout Anual — Emotion Intelligence">
-<meta property="og:description" content="Assine o plano anual com desconto.">
-<meta property="og:url" content="https://emotion-platform-albert.onrender.com/checkout/anual">
-<meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/favicon.svg">
-<meta property="og:site_name" content="Emotion Intelligence">
-<meta property="og:locale" content="pt_BR">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Checkout Anual — Emotion Intelligence">
-<meta name="twitter:description" content="Assine o plano anual com desconto.">
-<meta name="twitter:image" content="https://emotion-platform-albert.onrender.com/static/favicon.svg">
-<link rel="canonical" href="https://emotion-platform-albert.onrender.com/checkout/anual">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Premium Anual — Emotion Intelligence Platform</title>
+<title>Plano Anual — Emotion Intelligence</title>
+<meta name="description" content="Assine o plano anual e economize R$189. Menos de R$1,10 por dia.">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',sans-serif;background:#0f0f1a;color:#fff;min-height:100vh}
-.hero{background:linear-gradient(135deg,#667eea,#764ba2);padding:60px 20px;text-align:center}
-.hero h1{font-size:2.5rem;margin-bottom:10px}
-.hero p{font-size:1.2rem;opacity:.9}
-.badge-economia{background:#ffd700;color:#000;padding:8px 20px;border-radius:20px;font-weight:700;font-size:1.1rem;display:inline-block;margin:15px 0}
-.container{max-width:600px;margin:0 auto;padding:40px 20px}
-.card{background:#1a1a2e;border-radius:20px;padding:40px;border:2px solid #667eea;margin-bottom:20px}
-.preco-box{text-align:center;margin:30px 0}
-.preco-antigo{font-size:1.2rem;color:#888;text-decoration:line-through}
-.preco-novo{font-size:3rem;font-weight:700;color:#ffd700}
-.preco-sub{color:#aaa;font-size:.9rem}
-.features{list-style:none;margin:25px 0}
-.features li{padding:10px 0;border-bottom:1px solid #333;display:flex;align-items:center;gap:10px}
-.features li::before{content:"✅";font-size:1.1rem}
-.btn-comprar{width:100%;padding:18px;background:linear-gradient(135deg,#ffd700,#ff8c00);color:#000;border:none;border-radius:12px;font-size:1.2rem;font-weight:700;cursor:pointer;transition:.3s}
-.btn-comprar:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(255,215,0,.3)}
-.garantia{text-align:center;color:#aaa;font-size:.85rem;margin-top:15px}
-.comparativo{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:25px 0}
-.col-plano{background:#111;border-radius:12px;padding:20px;text-align:center}
-.col-plano.destaque{border:2px solid #ffd700}
-.col-plano h3{margin-bottom:10px}
-.loader{display:none;text-align:center;padding:20px}
+:root{--primary:#00d2ff;--secondary:#3a7bd5;--gold:#f39c12;--success:#2ecc71;--dark:#0f0c29;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1)}
+body{font-family:'Segoe UI',sans-serif;background:var(--dark);color:#fff;min-height:100vh;padding:20px}
+nav{background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);padding:14px 24px;display:flex;justify-content:space-between;align-items:center;border-radius:14px;margin-bottom:30px}
+.logo{font-size:18px;font-weight:bold;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.container{max-width:860px;margin:0 auto}
+.grid{display:grid;grid-template-columns:1fr 360px;gap:24px}
+@media(max-width:768px){.grid{grid-template-columns:1fr}}
+/* ESQUERDO */
+.badge-economia{display:inline-block;background:linear-gradient(90deg,var(--gold),#e67e22);padding:6px 18px;border-radius:20px;font-size:13px;font-weight:bold;margin-bottom:16px}
+h1{font-size:28px;font-weight:900;margin-bottom:6px}
+h1 span{background:linear-gradient(90deg,var(--gold),#e67e22);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:24px}
+/* PLANO BOX */
+.plano-box{background:rgba(243,156,18,0.08);border:2px solid rgba(243,156,18,0.4);border-radius:18px;padding:24px;margin-bottom:20px;position:relative}
+.plano-box::before{content:'MAIS POPULAR';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--gold),#e67e22);padding:4px 16px;border-radius:20px;font-size:11px;font-weight:bold;white-space:nowrap}
+.preco-antigo{font-size:14px;color:rgba(255,255,255,0.3);text-decoration:line-through}
+.preco-atual{font-size:48px;font-weight:900;background:linear-gradient(90deg,var(--gold),#e67e22);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.preco-periodo{font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:4px}
+.economia-badge{background:rgba(46,204,113,0.15);border:1px solid rgba(46,204,113,0.3);border-radius:8px;padding:8px 14px;font-size:13px;color:var(--success);margin-top:12px;display:inline-block}
+/* FEATURES */
+.features{list-style:none;margin-bottom:20px}
+.features li{padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:14px;display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.85)}
+.features li:last-child{border-bottom:none}
+/* COMPARATIVO */
+.comp{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:20px}
+.comp h3{font-size:14px;color:var(--primary);margin-bottom:14px}
+.comp-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px}
+.comp-row:last-child{border-bottom:none}
+.comp-label{color:rgba(255,255,255,0.6)}
+.comp-mensal{color:rgba(255,255,255,0.4)}
+.comp-anual{color:var(--gold);font-weight:700}
+/* DIREITO */
+.right-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:24px;margin-bottom:16px}
+.seguranca{background:rgba(46,204,113,0.06);border:1px solid rgba(46,204,113,0.2);border-radius:14px;padding:16px;margin-bottom:16px}
+.seg-item{font-size:12px;color:rgba(255,255,255,0.6);padding:5px 0;display:flex;align-items:center;gap:8px}
+.btn-pagar{width:100%;padding:17px;background:linear-gradient(90deg,var(--gold),#e67e22);border:none;border-radius:14px;color:#fff;font-size:17px;font-weight:bold;cursor:pointer;transition:all .3s;margin-bottom:10px}
+.btn-pagar:hover{transform:translateY(-2px);box-shadow:0 15px 40px rgba(243,156,18,0.4)}
+.garantia{font-size:12px;color:rgba(255,255,255,0.3);text-align:center;line-height:1.6}
+.dep{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-top:12px}
+.dep-stars{color:var(--gold);font-size:13px;margin-bottom:6px}
+.dep-text{font-size:12px;color:rgba(255,255,255,0.6);font-style:italic;margin-bottom:6px}
+.dep-autor{font-size:11px;color:rgba(255,255,255,0.3)}
+.toast{position:fixed;bottom:24px;right:24px;background:rgba(46,204,113,.95);color:#fff;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s}
+.toast.show{transform:translateY(0);opacity:1}
 </style>
 </head>
 <body>
-<div class="hero">
-  <div class="badge-economia">🔥 ECONOMIA DE R$189 NO ANO</div>
-  <h1>Premium Anual</h1>
-  <p>Pague uma vez, use o ano todo com tudo ilimitado</p>
+<div style="max-width:900px;margin:0 auto">
+  <nav>
+    <span class="logo">🧠 Emotion Intelligence</span>
+    <a href="/planos" style="color:rgba(255,255,255,0.5);font-size:13px;text-decoration:none">← Voltar aos planos</a>
+  </nav>
 </div>
 <div class="container">
-  <div class="card">
-    <div class="preco-box">
-      <div class="preco-antigo">De R$588/ano (R$49 × 12)</div>
-      <div class="preco-novo">R$399<span style="font-size:1.2rem">/ano</span></div>
-      <div class="preco-sub">ou 12× R$33,25 • Economia de R$189</div>
-    </div>
-    <ul class="features">
-      <li>Análises emocionais ilimitadas</li>
-      <li>Chat Sofia ilimitado</li>
-      <li>Diário emocional ilimitado</li>
-      <li>Relatórios PDF mensais</li>
-      <li>Certificado IE em PDF</li>
-      <li>Score de Inteligência Emocional</li>
-      <li>Análise por foto com IA</li>
-      <li>Exportar dados CSV</li>
-      <li>Suporte prioritário</li>
-      <li>Sem renovação mensal — 1 pagamento só</li>
-    </ul>
-    <div class="comparativo">
-      <div class="col-plano">
-        <h3>Mensal</h3>
-        <div style="font-size:1.5rem;font-weight:700">R$49<small>/mês</small></div>
-        <div style="color:#888;font-size:.8rem">R$588/ano</div>
+  <div class="grid">
+    <div>
+      <div class="badge-economia">🏆 MELHOR CUSTO-BENEFÍCIO</div>
+      <h1>Plano <span>Anual</span></h1>
+      <p class="sub">Pague uma vez, use o ano todo. Economia real de R$189.</p>
+      <div class="plano-box">
+        <div class="preco-antigo">De R$588/ano (R$49/mês × 12)</div>
+        <div class="preco-atual">R$399</div>
+        <div class="preco-periodo">/ano — pagamento único</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.5)">≈ R$1,09 por dia — menos que uma bala ☕</div>
+        <div class="economia-badge">✅ Você economiza R$189 por ano!</div>
       </div>
-      <div class="col-plano destaque">
-        <h3 style="color:#ffd700">Anual ⭐</h3>
-        <div style="font-size:1.5rem;font-weight:700;color:#ffd700">R$399<small>/ano</small></div>
-        <div style="color:#ffd700;font-size:.8rem">Economia R$189</div>
+      <ul class="features">
+        <li>♾️ Análises emocionais ilimitadas</li>
+        <li>🤖 Chat ilimitado com Sofia IA</li>
+        <li>📔 Diário emocional ilimitado</li>
+        <li>📧 Relatório semanal por email</li>
+        <li>📄 Exportar PDF mensal</li>
+        <li>🧠 Score IE avançado em 10 dimensões</li>
+        <li>🎓 Certificado IE em PDF</li>
+        <li>🏆 +100 pontos de bônus na ativação</li>
+        <li>⚡ Suporte prioritário</li>
+        <li>🔒 Acesso por 12 meses completos</li>
+      </ul>
+      <div class="comp">
+        <h3>💰 Comparativo de valor</h3>
+        <div class="comp-row">
+          <span class="comp-label">Plano mensal (12x)</span>
+          <span class="comp-mensal">R$588/ano</span>
+        </div>
+        <div class="comp-row">
+          <span class="comp-label">Plano anual</span>
+          <span class="comp-anual">R$399/ano ✓</span>
+        </div>
+        <div class="comp-row">
+          <span class="comp-label">Sua economia</span>
+          <span style="color:var(--success);font-weight:700">R$189 (32% off)</span>
+        </div>
       </div>
     </div>
-    <button class="btn-comprar" onclick="comprar()">🚀 QUERO O PLANO ANUAL — R$399</button>
-    <div class="loader" id="loader">⏳ Redirecionando para pagamento...</div>
-    <div class="garantia">🔒 Pagamento 100% seguro via MercadoPago<br>✅ Garantia de 7 dias ou reembolso total</div>
+    <div>
+      <div class="seguranca">
+        <div style="font-size:13px;color:var(--success);font-weight:700;margin-bottom:10px">🔒 Compra 100% Segura</div>
+        <div class="seg-item">🛡️ Pagamento criptografado SSL</div>
+        <div class="seg-item">↩️ Garantia de 7 dias</div>
+        <div class="seg-item">📅 12 meses de acesso</div>
+        <div class="seg-item">🔒 Dados protegidos pela LGPD</div>
+      </div>
+      <div class="right-card">
+        <div style="font-size:14px;font-weight:700;margin-bottom:8px">📋 Resumo</div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+          <span style="color:rgba(255,255,255,0.6)">Plano Anual Premium</span>
+          <span>R$399,00</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0;color:var(--success)">
+          <span>Desconto anual</span>
+          <span>-R$189,00</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:bold;padding:10px 0;border-top:1px solid rgba(255,255,255,0.1);margin-top:4px">
+          <span>Total</span>
+          <span style="color:var(--gold)">R$399,00</span>
+        </div>
+      </div>
+      <button class="btn-pagar" onclick="irParaPagamento()">
+        🏆 Assinar Plano Anual — R$399
+      </button>
+      <p class="garantia">🔒 Redirecionado para MercadoPago<br>Cartão · PIX · Boleto · Garantia 7 dias</p>
+      <div class="dep">
+        <div class="dep-stars">★★★★★</div>
+        <p class="dep-text">"O plano anual foi a melhor decisão. Economizei R$189 e uso todos os dias. Vale muito a pena!"</p>
+        <div class="dep-autor">Juliana M. — Psicóloga, SP</div>
+      </div>
+    </div>
   </div>
 </div>
+<div class="toast" id="toast"></div>
 <script>
-async function comprar(){
-  document.querySelector('.btn-comprar').style.display='none';
-  document.getElementById('loader').style.display='block';
-  const r = await fetch('/checkout/anual/processar',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});
-  const d = await r.json();
-  if(d.ok) window.location.href = d.url;
-  else { alert('Erro: '+d.erro); document.querySelector('.btn-comprar').style.display='block'; document.getElementById('loader').style.display='none'; }
+function irParaPagamento() {
+  const btn = document.querySelector('.btn-pagar');
+  btn.disabled = true;
+  btn.textContent = '⏳ Redirecionando...';
+  gtag('event','begin_checkout',{event_category:'conversao',event_label:'anual',value:399});
+  fetch('/checkout/anual/processar', {method:'POST'})
+    .then(r => r.json())
+    .then(d => {
+      if(d.url) window.location.href = d.url;
+      else { showToast('Erro: ' + (d.erro || 'Tente novamente'), 'erro'); btn.disabled=false; btn.textContent='🏆 Assinar Plano Anual — R$399'; }
+    }).catch(() => { window.location.href = '/checkout?plano=anual'; });
+}
+function showToast(msg, tipo) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = tipo==='erro' ? 'rgba(231,76,60,0.95)' : 'rgba(46,204,113,0.95)';
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3500);
 }
 </script>
 </body>
