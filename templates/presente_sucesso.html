@@ -1,51 +1,113 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-JGLER9XVGY');
-</script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-JGLER9XVGY');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Presente Enviado! — Emotion Intelligence Platform</title>
+<title>Presente Enviado — Emotion Intelligence</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',sans-serif;background:#0f0f1a;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center}
-.card{background:#1a1a2e;border-radius:20px;padding:50px;text-align:center;max-width:500px;border:2px solid #ffd200}
-.emoji{font-size:5rem;margin-bottom:20px}
-h1{font-size:2rem;color:#ffd200;margin-bottom:10px}
-.codigo-box{background:#111;border-radius:12px;padding:20px;margin:25px 0;border:2px dashed #ffd200}
-.codigo{font-size:2rem;font-weight:700;color:#ffd200;letter-spacing:4px}
-.btn{display:inline-block;padding:14px 30px;background:linear-gradient(135deg,#f7971e,#ffd200);color:#000;border-radius:12px;text-decoration:none;font-weight:700;margin:10px;cursor:pointer;border:none;font-size:1rem}
-p{color:#aaa;margin:10px 0}
+:root{--primary:#00d2ff;--secondary:#3a7bd5;--success:#2ecc71;--dark:#0f0c29;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1)}
+body{font-family:'Segoe UI',sans-serif;background:var(--dark);color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;text-align:center}
+.container{max-width:500px;width:100%}
+.success-circle{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,var(--success),#27ae60);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:52px;animation:popIn .6s cubic-bezier(0.175,0.885,0.32,1.275)}
+@keyframes popIn{0%{transform:scale(0);opacity:0}100%{transform:scale(1);opacity:1}}
+.confetti{font-size:36px;margin-bottom:16px;animation:bounce 1s ease infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+h1{font-size:32px;font-weight:900;margin-bottom:10px}
+h1 span{background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{color:rgba(255,255,255,0.6);font-size:15px;margin-bottom:28px;line-height:1.6}
+.codigo-box{background:rgba(0,210,255,0.08);border:2px solid rgba(0,210,255,0.3);border-radius:16px;padding:24px;margin-bottom:24px}
+.codigo-label{font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px}
+.codigo{font-size:32px;font-weight:900;font-family:monospace;color:var(--primary);letter-spacing:4px;margin-bottom:8px}
+.codigo-desc{font-size:13px;color:rgba(255,255,255,0.5)}
+.btn-copy{padding:10px 24px;background:rgba(0,210,255,0.15);border:1px solid rgba(0,210,255,0.3);border-radius:10px;color:var(--primary);font-size:14px;font-weight:700;cursor:pointer;margin-top:12px;transition:all .2s}
+.btn-copy:hover{background:rgba(0,210,255,0.25)}
+.instrucoes{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:24px;text-align:left}
+.instrucoes h3{font-size:14px;color:var(--primary);margin-bottom:12px}
+.step{display:flex;align-items:flex-start;gap:12px;padding:8px 0;font-size:13px;color:rgba(255,255,255,0.7)}
+.step-num{width:24px;height:24px;border-radius:50%;background:linear-gradient(90deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;flex-shrink:0}
+.btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{padding:13px 24px;border-radius:12px;font-size:14px;font-weight:700;text-decoration:none;transition:all .2s}
+.btn-primary{background:linear-gradient(90deg,var(--primary),var(--secondary));color:#fff}
+.btn-primary:hover{transform:translateY(-2px)}
+.btn-sec{background:var(--card);border:1px solid var(--border);color:#fff}
+.btn-sec:hover{border-color:var(--primary)}
+.toast{position:fixed;bottom:24px;right:24px;background:rgba(46,204,113,.95);color:#fff;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s}
+.toast.show{transform:translateY(0);opacity:1}
 </style>
 </head>
 <body>
-<div class="card">
-  <div class="emoji">🎁</div>
-  <h1>Presente Enviado!</h1>
-  <p>O pagamento foi aprovado. Compartilhe o código abaixo:</p>
+<div class="container">
+  <div class="confetti">🎁</div>
+  <div class="success-circle">✓</div>
+  <h1>Presente <span>Enviado!</span></h1>
+  <p class="sub">Seu presente foi criado com sucesso. Compartilhe o código abaixo com quem você quer presentear!</p>
   <div class="codigo-box">
-    <div style="color:#aaa;font-size:.85rem;margin-bottom:10px">CÓDIGO DO PRESENTE</div>
-    <div class="codigo">{{codigo}}</div>
-    {% if presente and presente.destinatario_email %}
-    <div style="color:#aaa;font-size:.85rem;margin-top:10px">Para: {{presente.destinatario_email}}</div>
-    {% endif %}
+    <div class="codigo-label">🎁 CÓDIGO DO PRESENTE</div>
+    <div class="codigo" id="codigoPresenteEl">{{codigo}}</div>
+    <div class="codigo-desc">Válido por 30 dias • Não expira se usado</div>
+    <button class="btn-copy" onclick="copiarCodigo()">📋 Copiar Código</button>
   </div>
-  <p>O destinatário usa este código em <strong>/perfil</strong> para resgatar o presente.</p>
-  <p style="color:#888;font-size:.85rem">Válido por 90 dias</p>
-  <button class="btn" onclick="copiar()">📋 Copiar Código</button>
-  <a href="/dashboard" class="btn" style="background:#333;color:#fff">🏠 Ir ao Dashboard</a>
+  <div class="instrucoes">
+    <h3>📋 Como o presenteado usa?</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>Acesse <strong>emotion-platform-albert.onrender.com</strong> e crie uma conta grátis</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>Vá em <strong>Carteira → Resgatar Presente</strong></div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div>Digite o código <strong>{{codigo}}</strong> e clique em Resgatar</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div>O plano é ativado <strong>imediatamente!</strong> 🎉</div>
+    </div>
+  </div>
+  <div class="btns">
+    <a href="/dashboard" class="btn btn-primary">📊 Ir ao Dashboard</a>
+    <a href="/presente" class="btn btn-sec">🎁 Dar Outro Presente</a>
+  </div>
 </div>
+<div class="toast" id="toast"></div>
 <script>
-function copiar(){
-  navigator.clipboard.writeText('{{codigo}}');
-  alert('Código copiado!');
+function copiarCodigo() {
+  const codigo = document.getElementById('codigoPresenteEl').textContent;
+  navigator.clipboard.writeText(codigo).then(() => showToast('Código copiado! 📋')).catch(() => {
+    const el = document.createElement('textarea');
+    el.value = codigo; document.body.appendChild(el); el.select();
+    document.execCommand('copy'); document.body.removeChild(el);
+    showToast('Código copiado!');
+  });
+  gtag('event','copiar_codigo_presente',{event_category:'presente',event_label:codigo});
 }
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3000);
+}
+// Confetti
+setTimeout(()=>{
+  const emojis=['🎁','⭐','🎉','💝','🎊'];
+  for(let i=0;i<6;i++){
+    setTimeout(()=>{
+      const el=document.createElement('div');
+      el.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+      el.style.cssText=`position:fixed;font-size:24px;pointer-events:none;z-index:9999;left:${Math.random()*100}vw;top:-50px;animation:fall 2s ease forwards`;
+      const s=document.createElement('style');
+      s.textContent='@keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}';
+      document.head.appendChild(s);
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),2000);
+    },i*200);
+  }
+},500);
+gtag('event','presente_criado',{event_category:'conversao',event_label:'presente'});
 </script>
 </body>
 </html>
