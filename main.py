@@ -3210,7 +3210,6 @@ def processar_nova_senha(
 
 
 
-
 # ================================================================
 # NOTIFICACOES PUSH + 2FA v20.0
 # ================================================================
@@ -4950,57 +4949,18 @@ def detectar_idioma_preciso(texto: str) -> str:
         return "pt"
 
 def analisar_texto_completo(texto: str) -> dict:
-    """Analise completa de texto — retorna todas as dimensoes com maxima inteligencia"""
-    # Detectar idioma primeiro
+    """Analise completa de texto — retorna todas as dimensoes"""
+    emocao = detectar_emocao(texto)
     idioma = detectar_idioma_preciso(texto)
-
-    # Detectar emocao local (rapido)
-    emocao_local = detectar_emocao(texto)
-
-    # Se emocao local for incerta ou texto curto, usar IA
-    emocoes_incertas = ["neutro", "confusao"]
-    texto_curto = len(texto.strip()) < 15
-    if emocao_local in emocoes_incertas or texto_curto:
-        try:
-            emocao = detectar_emocao_orquestrador(texto)
-        except:
-            emocao = emocao_local
-    else:
-        emocao = emocao_local
-
-    intensidade = calcular_intensidade(texto)
-    tom = detectar_tom(texto)
-    contexto = detectar_contexto_situacao(texto)
-    urgencia = detectar_urgencia(texto)
-    temporalidade = detectar_temporalidade(texto)
-
-    # Ajustar urgencia se crise
-    em_crise = detectar_crise(texto)
-    if em_crise:
-        urgencia = "crise"
-
-    # Analise avancada
-    negacao_min = detectar_negacao_minimizacao(texto)
-    sarcasmo = detectar_sarcasmo_basico(texto)
-    
-    # Ajustar emocao se detectar negacao forte
-    if negacao_min["negacao"] and emocao in ["neutro", "calma"]:
-        emocao = "tristeza"
-    
     return {
         "emocao": emocao,
-        "intensidade": intensidade,
-        "tom": "sarcastico" if sarcasmo else tom,
-        "contexto": contexto,
-        "urgencia": urgencia,
-        "temporalidade": temporalidade,
+        "intensidade": calcular_intensidade(texto),
+        "tom": detectar_tom(texto),
+        "contexto": detectar_contexto_situacao(texto),
+        "urgencia": detectar_urgencia(texto),
+        "temporalidade": detectar_temporalidade(texto),
         "idioma": idioma,
         "emoji": get_emoji(emocao),
-        "em_crise": em_crise,
-        "negacao": negacao_min["negacao"],
-        "minimizacao": negacao_min["minimizacao"],
-        "sarcasmo": sarcasmo,
-        "intensidade_real": negacao_min["intensidade_real"],
     }
 
 
@@ -5811,7 +5771,7 @@ def _chamar_ia_especifica(ia_nome: str, prompt: str, max_tokens: int, temperatur
     return {"ok": False, "erro": "ia desconhecida"}
 
 def detectar_emocao_orquestrador(texto: str) -> str:
-    """Detecta emocao com maxima inteligencia — contexto semantico completo"""
+    """Detecta emocao usando o orquestrador de IAs"""
     emocoes_validas = [
         "alegria","tristeza","raiva","medo","surpresa","nojo","amor","esperanca",
         "gratidao","solidao","euforia","calma","confusao","vergonha","neutro",
@@ -5819,41 +5779,29 @@ def detectar_emocao_orquestrador(texto: str) -> str:
         "alivio","entusiasmo","melancolia","nostalgia","panico","timidez","curiosidade",
         "tedio","animacao","desespero","paz","contentamento","vazio","luto","burnout",
         "culpa","remorso","admiracao","inveja","compaixao","empatia","coragem",
-        "determinacao","resiliencia","realizacao","proposito","traicao","abandono",
-        "rejeicao","inseguranca","autoestima","depressao","esgotamento","sobrecarga",
+        "determinacao","resiliencia","realizacao","proposito",
     ]
-
+    
     prompt = (
-        f"Voce e um especialista em psicologia e linguistica.\n"
-        f"Analise o CONTEXTO SEMANTICO completo do texto abaixo.\n"
-        f"Considere: girias, ironia, sarcasmo, subentendidos, expressoes idiomaticas.\n"
-        f"O texto pode estar em qualquer idioma — entenda o sentimento real.\n\n"
-        f"Texto: \"{texto}\"\n\n"
-        f"Escolha A EMOCAO DOMINANTE mais precisa da lista:\n"
-        f"{', '.join(emocoes_validas)}\n\n"
-        f"Retorne APENAS a palavra da lista, sem explicacao, sem pontuacao."
+        f"Analise o texto e retorne APENAS UMA PALAVRA da lista.\n"
+        f"Texto pode estar em qualquer idioma. Entenda girias e expressoes informais.\n"
+        f"Texto: {texto}\n"
+        f"Lista: {', '.join(emocoes_validas)}\n"
+        f"Retorne APENAS a palavra, sem pontuacao."
     )
-
-    resultado = chamar_ia(prompt, max_tokens=15, temperatura=0.1)
+    
+    resultado = chamar_ia(prompt, max_tokens=10, temperatura=0.1)
     if resultado["ok"]:
-        texto_ia = resultado["texto"].strip().lower()
-        # Limpar resposta
-        for char in ['.', ',', '!', '?', '"', "'", '\n']:
-            texto_ia = texto_ia.replace(char, '')
-        emocao = texto_ia.split()[0] if texto_ia.split() else ""
+        emocao = resultado["texto"].strip().lower().split()[0].replace(".", "")
         if emocao in emocoes_validas:
             return emocao
-        # Buscar qualquer emocao valida na resposta
-        for e in emocoes_validas:
-            if e in texto_ia:
-                return e
-
-    # Fallback local inteligente
+    
+    # Fallback local
     return detectar_emocao(texto)
 
-def sofia_responder_orquestrador(prompt_completo: str, usar_cache: bool = False, temperatura: float = 0.85) -> dict:
+def sofia_responder_orquestrador(prompt_completo: str, usar_cache: bool = False) -> dict:
     """Sofia responde usando o melhor orquestrador disponivel"""
-    resultado = chamar_ia(prompt_completo, max_tokens=2000, temperatura=temperatura, usar_cache=usar_cache)
+    resultado = chamar_ia(prompt_completo, max_tokens=1500, temperatura=0.75, usar_cache=usar_cache)
     return resultado
 
 
@@ -7236,6 +7184,134 @@ PROGRAMA_7_DIAS = [
     }
 ]
 
+
+# ================================================================
+# BLOCOS 1-3/32500 — MEMORIA SOFIA + COHERE + VOZ + EMOCOES
+# ================================================================
+
+EMOCOES_EXPANDIDAS = {
+    "otimismo":      ["esperancoso","animado","confiante","positivo"],
+    "pavor":         ["aterrorizado","apavorado","em panico","horrorizado"],
+    "desapontamento":["desapontado","decepcionado","desiludido"],
+    "remorso":       ["arrependido","culpado","pesaroso"],
+    "serenidade":    ["sereno","tranquilo","em paz","zen"],
+    "extase":        ["extasiado","transcendente","em flow"],
+    "nostalgia":     ["nostalgico","saudoso do passado"],
+    "antecipacao":   ["ansioso positivo","expectante"],
+    "kama_muta":     ["profundamente tocado","comovido","arrepiado"],
+    "fiero":         ["orgulhoso de conquista","vitorioso"],
+    "frisson":       ["arrepio emocional","goosebumps"],
+    "insight":       ["eureka","epifania","tive um insight"],
+    "flow":          ["em flow","totalmente imerso"],
+    "garra":         ["com garra","nao vou desistir"],
+    "angustia_existencial": ["sem proposito","vazio existencial"],
+}
+
+def detectar_emocao_expandida(texto: str) -> str:
+    texto_lower = texto.lower()
+    for emocao, expressoes in EMOCOES_EXPANDIDAS.items():
+        if any(exp in texto_lower for exp in expressoes):
+            return emocao
+    return None
+
+def detectar_negacao_minimizacao(texto: str) -> dict:
+    texto_lower = texto.lower()
+    negacoes = ["nao estou bem","nao to bem","nao aguento","nao consigo mais"]
+    minimizacoes = ["to meio","um pouco","meio assim","mais ou menos","sei la"]
+    exageros = ["muito muito","demais","destruido","arrasado","nao aguento mais"]
+    tem_negacao = any(n in texto_lower for n in negacoes)
+    tem_minimizacao = any(m in texto_lower for m in minimizacoes)
+    tem_exagero = any(e in texto_lower for e in exageros)
+    return {
+        "negacao": tem_negacao,
+        "minimizacao": tem_minimizacao,
+        "exagero": tem_exagero,
+        "intensidade_real": "alta" if (tem_negacao or tem_exagero) else "media" if tem_minimizacao else "normal"
+    }
+
+def detectar_sarcasmo_basico(texto: str) -> bool:
+    texto_lower = texto.lower()
+    padroes = ["nossa que otimo","que maravilha","perfeito mesmo","tudo otimo","nao to nada mal"]
+    emojis_sarc = ["\U0001f644","\U0001f612","\U0001f611"]
+    return any(p in texto_lower for p in padroes) or any(e in texto for e in emojis_sarc)
+
+def obter_perfil_sofia(usuario_id: int, db) -> str:
+    try:
+        perfil = db.query(PerfilSofia).filter(PerfilSofia.usuario_id == usuario_id).first()
+        if not perfil:
+            return "Primeira interacao — sem historico."
+        partes = []
+        if perfil.resumo: partes.append(f"Resumo: {perfil.resumo}")
+        if perfil.temas_principais: partes.append(f"Temas: {perfil.temas_principais}")
+        if perfil.alertas: partes.append(f"Alertas: {perfil.alertas}")
+        return " | ".join(partes) if partes else "Perfil em construcao."
+    except:
+        return "Sem perfil disponivel."
+
+def atualizar_perfil_sofia_bg(usuario_id: int, db):
+    try:
+        msgs = db.query(Mensagem).filter(
+            Mensagem.usuario_id == usuario_id
+        ).order_by(Mensagem.criado_em.desc()).limit(10).all()
+        if not msgs: return
+        texto = " ".join([m.conteudo for m in msgs if m.conteudo])[:800]
+        prompt = f"Resuma em 15 palavras o perfil emocional: {texto}"
+        res = chamar_ia(prompt, max_tokens=25, temperatura=0.2)
+        if res["ok"]:
+            perfil = db.query(PerfilSofia).filter(PerfilSofia.usuario_id == usuario_id).first()
+            if not perfil:
+                perfil = PerfilSofia(usuario_id=usuario_id, atualizado_em=datetime.now())
+                db.add(perfil)
+            perfil.resumo = res["texto"].strip()[:200]
+            perfil.atualizado_em = datetime.now()
+            db.commit()
+    except Exception as e:
+        print(f"[PERFIL SOFIA] {e}")
+
+@app.post("/analisar/voz-upload")
+async def analisar_voz_upload(
+    request: Request,
+    audio: UploadFile = File(...),
+    db: Session = Depends(get_db)
+):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return JSONResponse({"ok": False, "erro": "Nao autenticado"}, status_code=401)
+    try:
+        import groq as _groq_lib
+        import tempfile, os as _os2
+        _gc = _groq_lib.Groq(api_key=os.getenv("GROQ_API_KEY",""))
+        ab = await audio.read()
+        ext = (audio.filename or "audio.wav").split(".")[-1]
+        with tempfile.NamedTemporaryFile(suffix="."+ext, delete=False) as tmp:
+            tmp.write(ab); tp = tmp.name
+        with open(tp,"rb") as af:
+            tr = _gc.audio.transcriptions.create(
+                file=af, model="whisper-large-v3",
+                language="pt", response_format="text"
+            )
+        _os2.unlink(tp)
+        texto = str(tr).strip()
+        if not texto:
+            return JSONResponse({"ok":False,"erro":"Audio nao reconhecido"})
+        analise = analisar_texto_completo(texto)
+        ee = detectar_emocao_expandida(texto)
+        if ee:
+            analise["emocao"] = ee
+            analise["emoji"] = get_emoji(ee)
+        nova = Analise(texto=texto, emocao=analise["emocao"],
+                      emoji=analise["emoji"], intensidade=analise["intensidade"],
+                      usuario_id=usuario.id)
+        db.add(nova); db.commit()
+        adicionar_pontos(usuario, PONTOS_POR_ACAO.get("analise",2), db)
+        return JSONResponse({"ok":True,"transcricao":texto,"analise":analise})
+    except Exception as e:
+        return JSONResponse({"ok":False,"erro":str(e)[:200]})
+
+# ================================================================
+# FIM BLOCOS 1-3
+# ================================================================
+
 @app.get("/terapia", response_class=HTMLResponse)
 def terapia_page(request: Request, dia: int = 1, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
@@ -7466,17 +7542,13 @@ async def sitemap():
         ("/premium", "0.9", "weekly"),
         ("/planos", "0.9", "weekly"),
         ("/cadastro", "0.8", "monthly"),
-        ("/login", "0.7", "monthly"),
         ("/terapia", "0.8", "monthly"),
         ("/afiliado", "0.7", "monthly"),
-        ("/ranking", "0.7", "weekly"),
         ("/sobre", "0.6", "monthly"),
         ("/faq", "0.6", "monthly"),
         ("/contato", "0.5", "monthly"),
         ("/privacidade", "0.4", "monthly"),
         ("/termos", "0.4", "monthly"),
-        ("/whitelabel", "0.6", "monthly"),
-        ("/api/v1/docs", "0.5", "monthly"),
         ("/blog/o-que-e-inteligencia-emocional", "0.8", "monthly"),
         ("/blog/tecnicas-para-controlar-ansiedade", "0.8", "monthly"),
         ("/blog/como-lidar-com-tristeza", "0.8", "monthly"),
@@ -7628,13 +7700,7 @@ def index(request: Request, ref: str = None, db: Session = Depends(get_db)):
     # Componentes do score (cada um vale ate 25 pontos)
     # 1. Variedade emocional (quantas emocoes diferentes — max 15)
     variedade      = len(emocoes_contagem)
-    score_variedade = min(25, int((variedade / 15) * 25)) if variedade > 0 else 0
-
-    # Calcular intensidades com protecao
-    try:
-        intensidades = [a.intensidade for a in todas_analises if a.intensidade]
-    except:
-        intensidades = []
+    score_variedade = min(25, int((variedade / 15) * 25))
 
     # 2. Consistencia (dias cadastrado com atividade — usa total de analises)
     score_consistencia = min(25, int((min(total_analises_count, 50) / 50) * 25))
@@ -7665,17 +7731,6 @@ def index(request: Request, ref: str = None, db: Session = Depends(get_db)):
         nivel_ie = "Iniciante"
         cor_ie   = "#e74c3c"
 
-    try:
-        streak_data = calcular_streak(usuario.id, db)
-    except Exception as _se:
-        streak_data = {"streak_atual": 0, "streak_maximo": 0, "ultimo_dia": None, "emoji": "✨"}
-
-    try:
-        intensidades_list = [a.intensidade for a in todas_analises if a.intensidade]
-        score_autor = min(100, int((1 - (sum(intensidades_list)/len(intensidades_list) - 1) / 4) * 100)) if intensidades_list else 50
-    except:
-        score_autor = 50
-
     return templates.TemplateResponse(request, "dashboard.html", {
         "usuario":               usuario,
         "analises_hoje":         analises_hoje,
@@ -7704,11 +7759,11 @@ def index(request: Request, ref: str = None, db: Session = Depends(get_db)):
         "score_engajamento":     score_engajamento,
         "score_progresso":       score_progresso,
         # Score IE v3 completo para dashboard
-        "score_autoconsciencia": min(100, int((variedade / 15) * 100)) if variedade > 0 else 0,
-        "score_autorregulacao":  min(100, int((1 - (sum(intensidades)/len(intensidades) - 1) / 4) * 100)) if intensidades else 50,
+        "score_autoconsciencia": min(100, int((variedade / 15) * 100)),
+        "score_autorregulacao":  min(100, int((1 - (sum(intensidades)/len(intensidades) - 1) / 4) * 100) if intensidades else 50),
         "score_conexao":         min(100, int((total_msgs / 20) * 100)),
         "score_reflexao":        min(100, int((total_diarios / 20) * 100)),
-        "streak":                streak_data,
+        "streak":                calcular_streak(usuario.id, db),
     })
 
 # ================================================================
@@ -8347,10 +8402,6 @@ def ativar_trial(request: Request, db: Session = Depends(get_db)):
 def ranking_route(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
     # Ranking e publico — funciona sem login
-    # Se browser acessa, retorna pagina HTML
-    accept = request.headers.get("accept", "")
-    if "text/html" in accept:
-        return render_template("ranking.html", request=request, usuario=usuario)
 
     top = db.query(Usuario).filter(
         Usuario.ativo == True
@@ -8732,261 +8783,6 @@ def stats(request: Request, db: Session = Depends(get_db)):
 # ================================================================
 
 @app.post("/chat")
-
-
-
-# ================================================================
-# BLOCO 3/32500 — ANALISE VOZ WHISPER + 500 EMOCOES EXPANDIDAS
-# ================================================================
-
-# 200+ EMOCOES NOVAS — expandindo de 150 para 350+
-EMOCOES_EXPANDIDAS = {
-    # Emoções compostas (Plutchik wheel)
-    "otimismo":      ["esperancoso","animado","confiante","positivo","entusiasmado"],
-    "amor":          ["amoroso","carinhoso","afetivo","apaixonado","encantado"],
-    "submissao":     ["submisso","obediente","passivo","resignado"],
-    "pavor":         ["aterrorizado","apavorado","em panico","horrorizado"],
-    "desapontamento":["desapontado","decepcionado","frustrado","desiludido"],
-    "remorso":       ["arrependido","culpado","envergonhado","pesaroso"],
-    "desprezo":      ["desprezo","desdenhoso","arrogante","superior"],
-    "agressividade": ["agressivo","hostil","belicoso","combativo"],
-    # Emoções existenciais
-    "angustia_existencial": ["perdido","sem proposito","vazio existencial","sem sentido"],
-    "serenidade":    ["sereno","tranquilo","em paz","quieto","zen"],
-    "extase":        ["extasiado","em euforia","transcendente","em flow"],
-    "tedio_profundo":["entediado","aborrecido","apático","indiferente"],
-    "nostalgia":     ["nostalgico","saudoso do passado","melancólico"],
-    "antecipacao":   ["ansioso positivo","empolgado com futuro","expectante"],
-    # Emoções sociais avancadas
-    "kama_muta":     ["profundamente tocado","emocionado","comovido","arrepiado"],
-    "fiero":         ["orgulhoso de conquista","vitorioso","realizado"],
-    "naches":        ["orgulhoso dos outros","feliz pelo outro","kvelling"],
-    "schadenfreude": ["satisfeito com o infortúnio alheio"],
-    "frisson":       ["arrepio emocional","goosebumps","calafrios bons"],
-    # Emoções cognitivas
-    "curiosidade_intensa": ["muito curioso","instigado","fascinado"],
-    "confusao_profunda":   ["completamente perdido","desorientado"],
-    "insight":       ["eureka","epifania","tive um insight","entendi tudo"],
-    "flow":          ["em flow","no estado ideal","totalmente imerso"],
-    # Emoções brasileiras expandidas
-    "desenrascanco": ["me virando","se virando","jeitinho"],
-    "saudade_ativa": ["com saudade mas feliz","saudade boa"],
-    "garra":         ["com garra","determinado","nao vou desistir"],
-    "jogo_bonito":   ["jogando bonito","fazendo bonito","caprichando"],
-}
-
-def detectar_emocao_expandida(texto: str) -> str:
-    """Detecta emocoes do vocabulario expandido de 350+"""
-    texto_lower = texto.lower()
-    for emocao, expressoes in EMOCOES_EXPANDIDAS.items():
-        if any(exp in texto_lower for exp in expressoes):
-            return emocao
-    return None
-
-@app.post("/analisar/voz")
-async def analisar_voz_upload(
-    request: Request,
-    audio: UploadFile = File(...),
-    db: Session = Depends(get_db)
-):
-    """Analisa audio enviado e detecta emocao — Whisper via Groq"""
-    usuario = get_usuario_logado(request, db)
-    if not usuario:
-        return JSONResponse({"ok": False, "erro": "Nao autenticado"}, status_code=401)
-    
-    try:
-        # Ler audio
-        audio_bytes = await audio.read()
-        
-        # Transcricao via Groq Whisper (gratis)
-        import groq as _groq_lib
-        _groq_client = _groq_lib.Groq(api_key=os.getenv("GROQ_API_KEY", ""))
-        
-        import tempfile
-        with tempfile.NamedTemporaryFile(suffix="."+audio.filename.split(".")[-1], delete=False) as tmp:
-            tmp.write(audio_bytes)
-            tmp_path = tmp.name
-        
-        with open(tmp_path, "rb") as audio_file:
-            transcricao = _groq_client.audio.transcriptions.create(
-                file=audio_file,
-                model="whisper-large-v3",
-                language="pt",
-                response_format="text"
-            )
-        
-        import os as _os
-        _os.unlink(tmp_path)
-        
-        texto_transcrito = str(transcricao).strip()
-        
-        if not texto_transcrito:
-            return JSONResponse({"ok": False, "erro": "Nao foi possivel transcrever o audio"})
-        
-        # Analisar emocao do texto transcrito
-        analise = analisar_texto_completo(texto_transcrito)
-        emocao_exp = detectar_emocao_expandida(texto_transcrito)
-        if emocao_exp:
-            analise["emocao"] = emocao_exp
-        
-        # Salvar analise
-        nova = Analise(
-            texto=texto_transcrito,
-            emocao=analise["emocao"],
-            emoji=analise["emoji"],
-            intensidade=analise["intensidade"],
-            recomendacao=recomendacoes.get(analise["emocao"], ""),
-            usuario_id=usuario.id,
-        )
-        db.add(nova)
-        db.commit()
-        adicionar_pontos(usuario, PONTOS_POR_ACAO.get("analise", 2), db)
-        
-        return JSONResponse({
-            "ok": True,
-            "transcricao": texto_transcrito,
-            "analise": analise,
-            "pontos_ganhos": PONTOS_POR_ACAO.get("analise", 2),
-        })
-        
-    except Exception as e:
-        return JSONResponse({"ok": False, "erro": str(e)[:200]})
-
-# ================================================================
-# FIM BLOCO 3
-# ================================================================
-
-# ================================================================
-# BLOCO 2/32500 — COHERE API + NLP SEMANTICO AVANCADO
-# ================================================================
-
-def analisar_com_cohere(texto: str) -> dict:
-    """Analise semantica avancada com Cohere — gratis 1000 req/dia"""
-    try:
-        import cohere
-        co = cohere.Client(os.getenv("COHERE_API_KEY", ""))
-        if not os.getenv("COHERE_API_KEY"):
-            return {}
-        
-        # Classificacao de sentimento avancada
-        response = co.classify(
-            inputs=[texto],
-            examples=[
-                cohere.ClassifyExample("estou muito feliz hoje", "positivo"),
-                cohere.ClassifyExample("que dia lindo", "positivo"),
-                cohere.ClassifyExample("me sinto realizado", "positivo"),
-                cohere.ClassifyExample("estou arrasado", "negativo"),
-                cohere.ClassifyExample("nao aguento mais", "negativo"),
-                cohere.ClassifyExample("to na bad", "negativo"),
-                cohere.ClassifyExample("tô ansioso", "negativo"),
-                cohere.ClassifyExample("dia normal", "neutro"),
-                cohere.ClassifyExample("ok", "neutro"),
-                cohere.ClassifyExample("mais ou menos", "neutro"),
-            ]
-        )
-        
-        if response.classifications:
-            cls = response.classifications[0]
-            return {
-                "sentimento_cohere": cls.prediction,
-                "confianca_cohere": round(cls.confidence, 2),
-            }
-    except Exception as e:
-        print(f"[COHERE] {e}")
-    return {}
-
-def detectar_negacao_minimizacao(texto: str) -> dict:
-    """Detecta negacao e minimizacao emocional"""
-    texto_lower = texto.lower()
-    
-    negacoes = ["nao estou bem", "nao to bem", "nao to bom",
-                "nao estou feliz", "nao consigo", "nao aguento",
-                "nao quero", "nao da mais", "nunca fico bem"]
-    
-    minimizacoes = ["to meio", "um pouco", "meio assim",
-                    "levemente", "quase", "talvez", "acho que",
-                    "nao sei", "mais ou menos", "sei la"]
-    
-    exageros = ["muito muito", "demais", "pra caramba",
-                "extremamente", "totalmente", "completamente",
-                "destruido", "arrasado", "nao aguento mais"]
-    
-    tem_negacao = any(n in texto_lower for n in negacoes)
-    tem_minimizacao = any(m in texto_lower for m in minimizacoes)
-    tem_exagero = any(e in texto_lower for e in exageros)
-    
-    return {
-        "negacao": tem_negacao,
-        "minimizacao": tem_minimizacao,
-        "exagero": tem_exagero,
-        "intensidade_real": "alta" if (tem_negacao or tem_exagero) else "media" if tem_minimizacao else "normal"
-    }
-
-def detectar_sarcasmo_basico(texto: str) -> bool:
-    """Detecta sarcasmo basico no texto"""
-    texto_lower = texto.lower()
-    
-    padroes_sarcasmo = [
-        "nossa que otimo", "que maravilha", "adorei",
-        "perfeito mesmo", "claro que sim", "com certeza",
-        "oh que surpresa", "que novidade", "incrivel mesmo",
-        "to muito bem obrigado", "tudo otimo", "nao to nada mal",
-    ]
-    
-    emojis_sarcasmo = ["🙄", "😒", "😑", "🤙", "👍😒"]
-    
-    tem_padrao = any(p in texto_lower for p in padroes_sarcasmo)
-    tem_emoji = any(e in texto for e in emojis_sarcasmo)
-    
-    return tem_padrao or tem_emoji
-
-# ================================================================
-# FIM BLOCO 2
-# ================================================================
-
-# ================================================================
-# MEMORIA PERMANENTE DA SOFIA (BLOCO 1/32500)
-# ================================================================
-
-def obter_perfil_sofia(usuario_id: int, db) -> str:
-    """Busca a memoria de longo prazo da Sofia sobre o usuario"""
-    perfil = db.query(PerfilSofia).filter(PerfilSofia.usuario_id == usuario_id).first()
-    if not perfil:
-        return "Nenhum perfil historico ainda. Esta e a primeira interacao profunda."
-    
-    resumo = []
-    if perfil.resumo: resumo.append(f"Resumo: {perfil.resumo}")
-    if perfil.temas_principais: resumo.append(f"Temas: {perfil.temas_principais}")
-    if perfil.tecnicas_usadas: resumo.append(f"Tecnicas que funcionam: {perfil.tecnicas_usadas}")
-    if perfil.alertas: resumo.append(f"ALERTAS: {perfil.alertas}")
-    
-    return " | ".join(resumo) if resumo else "Perfil em construcao."
-
-def atualizar_perfil_assincrono(usuario_id: int, db):
-    """Atualiza o perfil da Sofia em background (para nao atrasar o chat)"""
-    try:
-        # Pega as ultimas 10 mensagens
-        msgs = db.query(Mensagem).filter(Mensagem.usuario_id == usuario_id).order_by(Mensagem.criado_em.desc()).limit(10).all()
-        if not msgs: return
-        
-        texto_analise = " ".join([m.conteudo for m in msgs if m.conteudo])
-        
-        # Pede para IA resumir o paciente
-        prompt = f"Como psicologo, resuma o perfil deste paciente em 10 palavras baseado nestes relatos: {texto_analise[:1000]}"
-        res = chamar_ia(prompt, max_tokens=30, temperatura=0.3)
-        
-        if res["ok"]:
-            perfil = db.query(PerfilSofia).filter(PerfilSofia.usuario_id == usuario_id).first()
-            if not perfil:
-                perfil = PerfilSofia(usuario_id=usuario_id, atualizado_em=datetime.now())
-                db.add(perfil)
-            
-            perfil.resumo = res["texto"].strip()
-            perfil.atualizado_em = datetime.now()
-            db.commit()
-    except Exception as e:
-        print(f"[MEMORIA SOFIA] Erro ao atualizar: {e}")
-
 async def chat(
     request:  Request,
     mensagem: str = Form(...),
@@ -9064,31 +8860,22 @@ async def chat(
 
     if eh_premium:
         instrucoes_plano = (
-            f"PREMIUM — sessao terapeutica completa:\n"
-            f"1. Valide profundamente a emocao '{emocao_atual}' com empatia real\n"
-            f"2. Explore o que esta POR BAIXO dessa emocao — causas, padroes, crencas\n"
-            f"3. Ofeca UMA tecnica especifica e pratica com instrucoes passo a passo\n"
-            f"4. Proponha um exercicio concreto para HOJE\n"
-            f"5. Termine com 1-2 perguntas abertas que aprofundem a reflexao\n"
-            f"Tamanho: 12-18 linhas. Tom: terapeuta habilidosa e humana.\n"
-            f"Padrao emocional historico: {padrao_emocional}\n"
-            f"Em crise grave: mencione CVV 188 com carinho."
+            f"PREMIUM: acolha com empatia, reflita sobre {emocao_atual}, "
+            f"ensine 1 tecnica terapeutica pratica, exercicio para hoje, "
+            f"2 perguntas abertas, encoraje. 10-15 linhas. "
+            f"{padrao_emocional}. Crise grave: indique CVV 188."
         )
     else:
         instrucoes_plano = (
-            "FREE — resposta de apoio breve:\n"
-            "1. Valide o sentimento em 1-2 linhas genuinas\n"
-            "2. Ofeca 1 dica pratica simples e acionavel\n"
-            "3. Termine com 1 pergunta reflexiva\n"
-            "Tamanho: 4-7 linhas. Tom: amiga que se importa.\n"
-            "No final, mencione SUTILMENTE (nao forcado) que o Premium tem sessoes terapeuticas completas."
+            "FREE: 4-6 linhas. Acolha + 1 dica pratica + 1 pergunta reflexiva. "
+            "Mencione gentilmente que Premium tem sessoes terapeuticas completas."
         )
 
     # Historico compacto - ultimas 6 trocas (memoria ampliada)
     # Memoria completa da conversa atual
     historico_curto = ""
-    for h in reversed(historico[-20:]):
-        historico_curto += f"Usuario: {h.conteudo}\nSofia: {h.resposta[:500]}\n\n"
+    for h in reversed(historico[-12:]):
+        historico_curto += f"Usuario: {h.conteudo}\nSofia: {h.resposta[:200]}\n\n"
     
     # Resumo do perfil emocional do usuario
     todas_analises = db.query(Analise).filter(
@@ -9276,12 +9063,12 @@ async def chat(
         f"• Idioma: {idioma_usuario}\n"
         f"• Em crise: {'SIM — PROTOCOLO ESPECIAL' if em_crise else 'nao'}\n\n"
         "=== PERFIL COMPLETO DO USUARIO ===\n"
-        f"• Nome: {usuario.nome.split()[0]}\n"
+        f"• Nome: {usuario.nome}\n"
         f"• Plano: {usuario.plano.upper()}\n"
         f"• Sessao #{total_sessoes} com voce\n"
         f"• Ha {dias_plataforma} dias na plataforma\n"
         f"• Historico emocional (top 3): {perfil_emocional}\n"
-        f"• Padrao emocional recente: {padrao_emocional or 'primeira sessao'}\n"        f"• MEMORIA DE LONGO PRAZO: {obter_perfil_sofia(usuario.id, db)}\n"
+        f"• Padrao emocional recente: {padrao_emocional or 'primeira sessao'}\n"
         f"• Temas recorrentes: {temas_recentes}\n"
         f"• Primeira mensagem: {primeira_msg}\n"
         f"• Diario recente: {contexto_diario or 'sem entradas'}\n"
@@ -9289,22 +9076,16 @@ async def chat(
         f"• Badge: {usuario.badge}\n"
         f"• Pontos: {usuario.pontos}\n\n"
         "=== REGRAS DE COMPORTAMENTO ===\n"
-        "• NAO repita 'Ola', 'Oi', 'Claro' ou qualquer apresentacao em cada mensagem\n"
-        "• NAO comece respostas com 'Entendo que...', 'Compreendo...', 'Como voce se sente...'\n"
-        "• NAO use frases roboticas ou genericas\n"
-        "• USE o historico para dar CONTINUIDADE — referencie o que foi dito antes\n"
-        "• Se e a primeira mensagem: apresente-se em 1 linha e mergulhe no assunto\n"
-        "• Se nao e a primeira: VA DIRETO ao ponto — sem apresentacao\n"
-        "• VARIE as aberturas: 'Caramba...', 'Nossa...', 'Que dificil isso', 'Faz sentido'\n"
-        "• NUNCA repita a mesma tecnica duas vezes seguidas\n"
-        "• Seja ESPECIFICA — cite exatamente o que a pessoa disse\n"
-        "• Seja CORAJOSA — diga coisas que um amigo honesto diria\n"
-        "• NUNCA misture ingles no portugues\n"
-        "• Paragrafos curtos — maximo 3 linhas cada\n\n"
+        "• NAO repita 'Ola' ou apresentacao em cada mensagem\n"
+        "• USE o historico para dar continuidade natural a conversa\n"
+        "• REFERENCIE o que foi dito antes quando relevante\n"
+        "• Se e a primeira mensagem: apresente-se brevemente\n"
+        "• Se nao e a primeira: continue a conversa naturalmente\n"
+        "• NUNCA misture ingles no meio do portugues\n"
+        "• Seja direta e humana, sem ser robotica\n"
+        "• Varie as tecnicas — nao repita a mesma toda vez\n\n"
         "=== MEMORIA DA CONVERSA ATUAL (ultimas 12 trocas) ===\n"
-        f"{historico_curto if historico_curto else 'PRIMEIRA CONVERSA — apresente-se brevemente (1 linha) e mergulhe no que a pessoa disse.'}\n\n"
-        f"TOTAL DE MENSAGENS NESSA CONVERSA: {total_sessoes}\n"
-        f"{'CONTINUACAO — nao se apresente, continue naturalmente' if total_sessoes > 1 else 'INICIO — pode se apresentar brevemente'}\n\n"
+        f"{historico_curto if historico_curto else 'PRIMEIRA CONVERSA — apresente-se com carinho e pergunte como a pessoa esta.'}\n\n"
         f"=== MODO ATUAL: {modo_sofia} ===\n"
         f"{instrucoes_modo}\n\n"
         "=== INSTRUCOES GERAIS DE RESPOSTA ===\n"
@@ -9342,7 +9123,7 @@ async def chat(
 
     try:
         # ORQUESTRADOR — usa melhor IA disponivel
-        resultado_ia = sofia_responder_orquestrador(prompt, usar_cache=False, temperatura=0.85)
+        resultado_ia = sofia_responder_orquestrador(prompt, usar_cache=False)
         if resultado_ia["ok"]:
             texto_resposta = resultado_ia["texto"]
             ia_usada_sofia = resultado_ia.get("ia", "orquestrador")
@@ -9362,92 +9143,57 @@ async def chat(
         print(f"[Gemini] Erro Sofia: {e}")
         import random as _random
 
-        import random as _rand
-        _v = _rand.randint(0, 2)  # 3 versoes diferentes de cada fallback
-        _n = usuario.nome.split()[0]
-        _fallbacks_lista = {
-            "alegria": [
-                f"Que delicia {_n}! Quando a alegria bate assim, vale ancorar o momento. O que exatamente esta te fazendo tao bem hoje? Escreve aqui, pode ser simples.",
-                f"{_n}, isso e lindo de ver! A alegria plena e rara. O que voce quer fazer com essa energia toda? Tem algo que ficou pra depois que pode acontecer agora?",
-                f"Adoro quando isso acontece, {_n}! Alegria genuina merece ser registrada. Me conta — o que mudou para voce se sentir assim?",
-            ],
-            "euforia": [
-                f"{_n}, que energia! Euforia e boa mas vale respirar um pouco. O que esta causando tudo isso? Me conta tudo.",
-                f"Nossa, {_n}! Voce esta com uma energia incrivel. Aproveita — mas me diz: isso e algo que vem acontecendo ou surgiu do nada?",
-                f"{_n} em modo full energy! Legal demais. O que voce vai fazer com tudo isso? Tem algum projeto ou sonho que essa energia pode alimentar?",
-            ],
-            "tristeza": [
-                f"Que dificil, {_n}. Fico aqui com voce. A tristeza e pesada mas ela nao mente — algo importante esta sendo tocado. O que aconteceu?",
-                f"{_n}, sinto muito. Nao precisa estar bem agora. Pode me contar o que esta pesando? Estou aqui sem pressa.",
-                f"Oi {_n}. Percebi que as coisas estao dificeis. Coloca a mao no coracao por um segundo e respira. Me conta — de onde vem essa tristeza?",
-            ],
-            "melancolia": [
-                f"{_n}, tem algo de bonito e pesado ao mesmo tempo na melancolia. Ela nao e igual a tristeza — e mais contemplativa. O que voce esta sentindo saudade ou falta?",
-                f"Melancolia e assim, {_n} — como uma musica triste que a gente gosta de ouvir. O que esta passando pela sua cabeca agora?",
-                f"{_n}, permita-se sentir isso sem pressa de resolver. Melancolia tem algo a dizer. O que voce acha que ela esta tentando te mostrar?",
-            ],
-            "ansiedade": [
-                f"{_n}, vamos desacelerar juntos. Faz isso comigo: 5 coisas que voce VE agora. Fala aqui. Depois a gente segue.",
-                f"Oi {_n}. Ansiedade e sufocante, eu sei. Antes de tudo — respira. Inspire por 4 segundos, segura por 4, solta por 4. Faz isso 3 vezes. Me avisa quando terminar.",
-                f"{_n}, o que especificamente esta deixando voce ansioso? Tenta colocar em palavras o que sua cabeca esta repetindo. As vezes nomear ja alivia.",
-            ],
-            "panico": [
-                f"{_n}, voce esta seguro agora. Solta o ar devagar. Olha ao redor e me diz: voce ve alguma coisa azul perto de voce?",
-                f"Respira, {_n}. Devagar. Inspire pelo nariz, solta pela boca. O panico passa — voce ja passou por isso antes. O que voce esta sentindo no corpo agora?",
-                f"{_n}, fica comigo. Tres respiracoes fundas agora — nao pula isso. Depois me conta o que disparou esse panico.",
-            ],
-            "raiva": [
-                f"{_n}, sua raiva faz sentido. Algo importante foi desrespeitado. O que exatamente aconteceu? Me conta sem filtro.",
-                f"Que raiva, ne {_n}? E valido. Antes de qualquer coisa — o que voce quer fazer com essa raiva? Tem algo que precisa ser dito ou feito?",
-                f"{_n}, raiva costuma esconder algo mais fundo — magoa, frustracao, medo. O que esta por baixo de tudo isso? O que realmente te doeu?",
-            ],
-            "frustracao": [
-                f"{_n}, frustracao dói de um jeito especial — quando a gente se dedicou e nao saiu como queria. O que aconteceu? Me conta.",
-                f"Entendo, {_n}. Quando as coisas nao saem como a gente espera e muito desgastante. O que especificamente nao funcionou?",
-                f"{_n}, o que voce esperava que acontecesse? As vezes explorar a expectativa ajuda a entender de onde vem a frustracao.",
-            ],
-            "burnout": [
-                f"{_n}, o corpo e a mente estao mandando um sinal claro: e demais. Quando foi a ultima vez que voce realmente descansou — sem culpa?",
-                f"Burnout e esgotamento real, {_n}. Nao e frescura, e sobrecarga. O que esta consumindo mais sua energia ultimamente?",
-                f"{_n}, me conta: voce esta dando conta de tudo ou so fingindo que esta? O que voce gostaria de poder largar agora mesmo?",
-            ],
-            "solidao": [
-                f"{_n}, solidao e uma das sensacoes mais dificeis. Nao precisa estar sozinho para se sentir assim. O que especificamente voce sente que falta?",
-                f"Oi {_n}. Estou aqui. Me conta — essa solidao veio de alguma situacao especifica ou e algo que voce sente ha um tempo?",
-                f"{_n}, solidao as vezes e sinal de que precisamos de conexao real — nao so de presenca. O que voce sente que mais falta nas suas relacoes?",
-            ],
-            "culpa": [
-                f"{_n}, culpa e pesada. Mas antes de tudo — o que aconteceu? Me conta sem julgamento. Preciso entender o contexto.",
-                f"Culpa e um dos sentimentos mais difíceis, {_n}. Ela pode ser util quando nos ensina algo — ou pode ser cruel quando nos pune sem parar. O que voce fez ou deixou de fazer?",
-                f"{_n}, voce consegue separar o que foi realmente sua responsabilidade do que voce esta assumindo que nao e seu? Me conta a situacao.",
-            ],
-            "vazio": [
-                f"{_n}, vazio e diferente de tristeza — e quase a ausencia de sentimento. Ha quanto tempo voce se sente assim?",
-                f"Oi {_n}. Vazio por dentro e muito desgastante. Tem alguma coisa que antes te dava prazer mas agora nao da mais?",
-                f"{_n}, quando foi a ultima vez que voce se sentiu presente e vivo? Me conta o que estava acontecendo nesse momento.",
-            ],
-            "desespero": [
-                f"{_n}, estou aqui. Me conta tudo — sem filtro. O que esta acontecendo?",
-                f"{_n}, desespero e sinal de que algo esta muito pesado. Voce nao precisa carregar isso sozinho. O que esta te fazendo sentir assim?",
-                f"Oi {_n}. Esse momento vai passar, mesmo que nao parecna. Me conta — o que esta acontecendo na sua vida agora?",
-            ],
-            "medo": [
-                f"{_n}, medo e um sinal — nao necessariamente de perigo real, mas de algo que importa muito pra voce. O que voce tem medo de perder ou de enfrentar?",
-                f"O que esta te assustando, {_n}? Me conta com detalhes — as vezes colocar o medo em palavras ja tira um pouco do poder dele.",
-                f"{_n}, medo e normal. O que importa e o que fazemos com ele. O que voce acha que poderia acontecer de pior? E de melhor?",
-            ],
-            "neutro": [
-                f"Oi {_n}! Como voce esta se sentindo agora? Me conta o que passa pela sua cabeca.",
-                f"{_n}, pode me contar mais sobre como voce esta? Quero entender melhor o que esta passando com voce.",
-                f"Oi {_n}! Estou aqui. O que voce quer explorar hoje?",
-            ],
-        }
-
-        # Construir fallbacks com variacao
-        _fallbacks = {k: v[_v % len(v)] for k, v in _fallbacks_lista.items()}
-        _fallbacks_DUMMY = {
+        _fallbacks = {
             "alegria": (
                 f"que lindo {usuario.nome} sua alegria merece ser celebrada "
+                "a gratidao amplifica emocoes positivas escreva 3 coisas que estao te fazendo bem hoje "
+                "isso ancora essa energia boa dentro de voce "
+                "o que mais esta contribuindo para essa sensacao maravilhosa"
+            ),
+            "euforia": (
+                f"{usuario.nome} que energia incrivel voce esta irradiando "
+                "euforia e maravilhosa mas vale ancorar esse momento "
+                "escreva o que esta causando isso para poder revisitar depois "
+                "como voce quer que essa energia impacte sua vida essa semana"
+            ),
+            "tristeza": (
+                f"{usuario.nome} sinto muito que voce esteja passando por isso "
+                "a tristeza e valida ela nos diz que algo importa para nos "
+                "tente o acolhimento coloque a mao no coracao respire fundo 3 vezes "
+                "e diga estou aqui estou me ouvindo "
+                "o que voce precisaria ouvir agora de alguem que te ama"
+            ),
+            "melancolia": (
+                f"{usuario.nome} a melancolia tem uma textura diferente da tristeza comum "
+                "ela e mais suave mais contemplativa "
+                "permita-se sentir sem resistir "
+                "o que essa sensacao esta tentando te dizer sobre o que voce valoriza"
+            ),
+            "ansiedade": (
+                f"{usuario.nome} vamos fazer o Grounding 5-4-3-2-1 juntos agora "
+                "nomeie 5 coisas que voce VE 4 que pode TOCAR 3 que OUVE "
+                "2 que CHEIRA e 1 que SABOREIA "
+                "isso traz sua mente de volta ao presente "
+                "como esta seu corpo fisico nesse momento"
+            ),
+            "panico": (
+                f"{usuario.nome} voce esta seguro agora "
+                "respira comigo inspire por 4 segundos segure por 4 expire por 4 "
+                "faz isso 3 vezes "
+                "o panico passa voce consegue atravessar isso "
+                "o que voce esta vendo ao seu redor agora mesmo"
+            ),
+            "raiva": (
+                f"{usuario.nome} sua raiva e valida algo importante foi tocado "
+                "tente a Respiracao 4-7-8 inspire por 4s segure por 7s expire por 8s "
+                "faca 3 vezes isso ativa o sistema parassimpatico "
+                "o que exatamente mais te incomoda nessa situacao"
+            ),
+            "frustracao": (
+                f"{usuario.nome} a frustracao aparece quando algo que importa nao sai como esperado "
+                "o que especificamente nao foi como voce queria "
+                "o que estava em seu controle e o que nao estava "
+                "como voce pode ajustar a expectativa ou a estrategia"
             ),
             "medo": (
                 f"{usuario.nome} o medo e um sinal do seu sistema de protecao "
@@ -9996,25 +9742,6 @@ def editar_diario(
 
 @app.get("/gamificacao")
 def gamificacao(request: Request, db: Session = Depends(get_db)):
-    usuario = get_usuario_logado(request, db)
-    if not usuario:
-        return RedirectResponse("/login", status_code=302)
-    total_analises = db.query(Analise).filter(Analise.usuario_id == usuario.id).count()
-    conquistas = db.query(Conquista).filter(Conquista.usuario_id == usuario.id).order_by(Conquista.criado_em.desc()).all()
-    dias_cadastrado = (datetime.now() - usuario.criado_em).days if usuario.criado_em else 0
-    prox = proximo_badge(usuario.pontos)
-    return render_template("gamificacao.html",
-        request=request,
-        usuario=usuario,
-        total_analises=total_analises,
-        total_conquistas=len(conquistas),
-        conquistas=conquistas,
-        dias_cadastrado=dias_cadastrado,
-        proximo_badge=prox,
-    )
-
-@app.get("/gamificacao_old")
-def gamificacao_old(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
     if not usuario:
         raise HTTPException(status_code=401, detail="Não autorizado")
@@ -10879,125 +10606,6 @@ def verificar_token(
     return usuario
 
 
-
-# ================================================================
-# API PUBLICA v2.0 — ENDPOINTS EXTRAS
-# ================================================================
-
-@app.get("/api/v1/emocoes-lista")
-def api_emocoes_lista():
-    """Lista todas as 150+ emocoes disponiveis"""
-    from collections import Counter
-    emocoes_todas = list(palavras_emocoes.keys()) if 'palavras_emocoes' in dir() else []
-    return JSONResponse({
-        "ok": True,
-        "total": len(emocoes_todas),
-        "emocoes": emocoes_todas[:50],  # Top 50
-        "categorias": {
-            "basicas": ["alegria","tristeza","raiva","medo","surpresa","nojo"],
-            "positivas": ["gratidao","amor","esperanca","calma","paz","orgulho","realizacao"],
-            "negativas": ["ansiedade","estresse","burnout","solidao","culpa","vergonha"],
-            "culturais": ["saudade","cafune","schadenfreude","hygge","ikigai","wabi-sabi"],
-        },
-        "version": "v2.0"
-    })
-
-@app.get("/api/v1/score")
-def api_score_publico(request: Request, usuario: Usuario = Depends(verificar_token), db: Session = Depends(get_db)):
-    """Retorna Score IE do usuario autenticado"""
-    score = calcular_score_ie_v3(usuario.id, db)
-    return JSONResponse({"ok": True, "score": score, "version": "v2.0"})
-
-@app.get("/api/v1/historico")
-def api_historico(
-    limite: int = 10,
-    usuario: Usuario = Depends(verificar_token),
-    db: Session = Depends(get_db)
-):
-    """Retorna historico de analises do usuario"""
-    analises = db.query(Analise).filter(
-        Analise.usuario_id == usuario.id
-    ).order_by(Analise.criado_em.desc()).limit(min(limite, 50)).all()
-
-    return JSONResponse({
-        "ok": True,
-        "total": len(analises),
-        "analises": [{
-            "id": a.id,
-            "texto": a.texto[:100] if a.texto else "",
-            "emocao": a.emocao,
-            "emoji": a.emoji,
-            "intensidade": a.intensidade,
-            "criado_em": a.criado_em.isoformat() if a.criado_em else None,
-        } for a in analises],
-        "version": "v2.0"
-    })
-
-@app.get("/api/v1/palavra-do-dia")
-def api_palavra_publica():
-    """Retorna palavra emocional do dia — sem autenticacao"""
-    return JSONResponse({"ok": True, "palavra": get_palavra_do_dia(), "version": "v2.0"})
-
-@app.post("/api/v1/analisar-lote")
-async def api_analisar_lote(
-    request: Request,
-    usuario: Usuario = Depends(verificar_token),
-    db: Session = Depends(get_db)
-):
-    """Analisa multiplos textos de uma vez (max 10)"""
-    body = await request.json()
-    textos = body.get("textos", [])
-    if not textos or not isinstance(textos, list):
-        return JSONResponse({"ok": False, "erro": "Envie uma lista de textos"}, status_code=400)
-    if len(textos) > 10:
-        return JSONResponse({"ok": False, "erro": "Maximo 10 textos por lote"}, status_code=400)
-
-    resultados = []
-    for texto in textos:
-        if not texto or not isinstance(texto, str):
-            continue
-        analise = analisar_texto_completo(texto[:500])
-        resultados.append({
-            "texto": texto[:100],
-            "emocao": analise["emocao"],
-            "emoji": analise["emoji"],
-            "intensidade": analise["intensidade"],
-            "tom": analise["tom"],
-            "idioma": analise["idioma"],
-        })
-
-    return JSONResponse({
-        "ok": True,
-        "total": len(resultados),
-        "resultados": resultados,
-        "version": "v2.0"
-    })
-
-@app.get("/api/v1/saude")
-def api_saude():
-    """Health check da API — sem autenticacao"""
-    return JSONResponse({
-        "ok": True,
-        "status": "online",
-        "version": "v2.0",
-        "endpoints": [
-            "GET /api/v1/analisar?text=",
-            "GET /api/v1/historico",
-            "GET /api/v1/score",
-            "GET /api/v1/emocoes-lista",
-            "GET /api/v1/palavra-do-dia",
-            "GET /api/v1/ranking",
-            "GET /api/v1/stats",
-            "POST /api/v1/analisar-lote",
-        ],
-        "autenticacao": "Header X-Api-Token: seu_token",
-        "docs": "https://emotion-platform-albert.onrender.com/api/v1/docs",
-    })
-
-# ================================================================
-# FIM API v2.0
-# ================================================================
-
 @app.get("/exportar/csv")
 def exportar_csv(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
@@ -11781,4 +11389,3 @@ def api_ranking(
 # ================================================================
 # FIM DA PARTE 4 — FIM DO ARQUIVO COMPLETO
 # ================================================================# v20-final
-# deploy-1784091173
