@@ -70,6 +70,7 @@ import re
 import time
 import json
 import hashlib
+import threading
 import hmac
 
 # ================================================================
@@ -7710,6 +7711,264 @@ async def verificar_security_headers(request: Request):
     })
 
 # ═══ FIM S2/18 — HEADERS DE SEGURANÇA ═══════════════════════════════
+
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# SEGURANÇA S3/18 — RATE LIMITING AVANÇADO (15 implementações)
+# ═══════════════════════════════════════════════════════════════════════
+
+
+# ── S3.1 Configurações de rate limit
+RATE_LIMITS = {
+    "global":          {"requisicoes": 1000, "janela_seg": 3600},
+    "login":           {"requisicoes": 5,    "janela_seg": 300},
+    "cadastro":        {"requisicoes": 3,    "janela_seg": 3600},
+    "recuperar_senha": {"requisicoes": 3,    "janela_seg": 1800},
+    "api_publica":     {"requisicoes": 100,  "janela_seg": 3600},
+    "api_premium":     {"requisicoes": 1000, "janela_seg": 3600},
+    "api_enterprise":  {"requisicoes": 10000,"janela_seg": 3600},
+    "analisar":        {"requisicoes": 50,   "janela_seg": 3600},
+    "chat":            {"requisicoes": 100,  "janela_seg": 3600},
+    "upload":          {"requisicoes": 10,   "janela_seg": 3600},
+    "admin":           {"requisicoes": 200,  "janela_seg": 3600},
+    "webhook":         {"requisicoes": 50,   "janela_seg": 60},
+    "csp_report":      {"requisicoes": 20,   "janela_seg": 60},
+    "export":          {"requisicoes": 5,    "janela_seg": 3600},
+    "free":            {"requisicoes": 200,  "janela_seg": 3600},
+}
+
+# ── S3.2 Armazenamento thread-safe
+_rate_store: dict = {}
+_rate_lock = threading.Lock()
+_blacklist_ips: set = set()
+_whitelist_ips: set = {"127.0.0.1", "::1"}
+
+# ── S3.3 Sliding Window Algorithm
+def sliding_window_check(chave: str, limite: int, janela_seg: int) -> dict:
+    agora = time.time()
+    with _rate_lock:
+        if chave not in _rate_store:
+            _rate_store[chave] = deque()
+        janela = _rate_store[chave]
+        limite_tempo = agora - janela_seg
+        while janela and janela[0] < limite_tempo:
+            janela.popleft()
+        count = len(janela)
+        restantes = max(0, limite - count)
+        reset_em = int(janela[0] + janela_seg - agora) if janela else janela_seg
+        if count >= limite:
+            return {
+                "permitido": False,
+                "count": count,
+                "limite": limite,
+                "restantes": 0,
+                "reset_em": reset_em,
+                "bloqueado": True
+            }
+        janela.append(agora)
+        return {
+            "permitido": True,
+            "count": count + 1,
+            "limite": limite,
+            "restantes": restantes - 1,
+            "reset_em": janela_seg,
+            "bloqueado": False
+        }
+
+# ── S3.4 Token Bucket Algorithm
+_token_buckets: dict = {}
+
+def token_bucket_check(chave: str, capacidade: int, taxa_por_seg: float) -> bool:
+    agora = time.time()
+    with _rate_lock:
+        if chave not in _token_buckets:
+            _token_buckets[chave] = {"tokens": capacidade, "ultimo": agora}
+        bucket = _token_buckets[chave]
+        delta = agora - bucket["ultimo"]
+        bucket["tokens"] = min(capacidade, bucket["tokens"] + delta * taxa_por_seg)
+        bucket["ultimo"] = agora
+        if bucket["tokens"] >= 1:
+            bucket["tokens"] -= 1
+            return True
+        return False
+
+# ── S3.5 Verificador principal de rate limit
+def verificar_rate_limit(ip: str, tipo: str, usuario_id: int = None, plano: str = "free") -> dict:
+    if ip in _whitelist_ips:
+        return {"permitido": True, "restantes": 999, "reset_em": 0}
+    if ip in _blacklist_ips:
+        return {"permitido": False, "restantes": 0, "reset_em": 3600, "bloqueado": True}
+    config = RATE_LIMITS.get(tipo, RATE_LIMITS["global"])
+    limite = config["requisicoes"]
+    janela = config["janela_seg"]
+    if plano == "premium":
+        limite = int(limite * 3)
+    elif plano == "enterprise":
+        limite = int(limite * 10)
+    chave_ip = f"rl:{tipo}:ip:{ip}"
+    resultado = sliding_window_check(chave_ip, limite, janela)
+    if usuario_id:
+        chave_user = f"rl:{tipo}:user:{usuario_id}"
+        resultado_user = sliding_window_check(chave_user, limite, janela)
+        if not resultado_user["permitido"]:
+            return resultado_user
+    if not resultado["permitido"]:
+        abusos = len(_rate_store.get(chave_ip, []))
+        if abusos >= limite * 3:
+            _blacklist_ips.add(ip)
+    return resultado
+
+# ── S3.6 Headers de rate limit na resposta
+def headers_rate_limit(resultado: dict) -> dict:
+    return {
+        "X-RateLimit-Limit": str(resultado.get("limite", 0)),
+        "X-RateLimit-Remaining": str(resultado.get("restantes", 0)),
+        "X-RateLimit-Reset": str(int(time.time()) + resultado.get("reset_em", 0)),
+        "X-RateLimit-Policy": "sliding-window",
+    }
+
+# ── S3.7 Resposta de rate limit excedido
+def resposta_rate_limit(resultado: dict) -> JSONResponse:
+    retry_after = resultado.get("reset_em", 60)
+    return JSONResponse(
+        status_code=429,
+        content={
+            "erro": "Rate limit excedido",
+            "retry_after_segundos": retry_after,
+            "msg": f"Tente novamente em {retry_after // 60 + 1} minutos",
+            "upgrade": "https://emotion-platform-albert.onrender.com/premium"
+        },
+        headers={
+            "Retry-After": str(retry_after),
+            "X-RateLimit-Remaining": "0",
+        }
+    )
+
+# ── S3.8 Blacklist management
+def adicionar_blacklist(ip: str, motivo: str = ""):
+    _blacklist_ips.add(ip)
+
+def remover_blacklist(ip: str):
+    _blacklist_ips.discard(ip)
+
+def adicionar_whitelist(ip: str):
+    _whitelist_ips.add(ip)
+
+def ip_bloqueado(ip: str) -> bool:
+    return ip in _blacklist_ips
+
+# ── S3.9 Limpeza automática do store
+def limpar_rate_store_antigo():
+    agora = time.time()
+    with _rate_lock:
+        for chave in list(_rate_store.keys()):
+            janela = _rate_store[chave]
+            while janela and janela[0] < agora - 7200:
+                janela.popleft()
+            if not janela:
+                del _rate_store[chave]
+
+# ── S3.10 Middleware de rate limit global
+class RateLimitMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        ip = request.client.host if request.client else "unknown"
+        path = request.url.path
+        if path.startswith("/static/") or path in ("/favicon.ico", "/robots.txt"):
+            return await call_next(request)
+        if ip_bloqueado(ip):
+            return JSONResponse(
+                {"erro": "IP bloqueado por abuso"},
+                status_code=403
+            )
+        tipo = "global"
+        if "/login" in path:
+            tipo = "login"
+        elif "/cadastro" in path:
+            tipo = "cadastro"
+        elif "/recuperar" in path:
+            tipo = "recuperar_senha"
+        elif "/api/v1/" in path:
+            tipo = "api_publica"
+        elif "/admin" in path:
+            tipo = "admin"
+        elif "/upload" in path:
+            tipo = "upload"
+        resultado = verificar_rate_limit(ip, tipo)
+        if not resultado["permitido"]:
+            return resposta_rate_limit(resultado)
+        response = await call_next(request)
+        for h, v in headers_rate_limit(resultado).items():
+            response.headers[h] = v
+        return response
+
+app.add_middleware(RateLimitMiddleware)
+
+# ── S3.11 Endpoint de status de rate limit
+@app.get("/api/rate-limit-status")
+async def rate_limit_status(request: Request):
+    ip = request.client.host if request.client else "unknown"
+    return JSONResponse({
+        "ip": ip,
+        "bloqueado": ip_bloqueado(ip),
+        "na_whitelist": ip in _whitelist_ips,
+        "limites": RATE_LIMITS,
+        "seguranca": "S3/18"
+    })
+
+# ── S3.12 Admin — gerenciar blacklist
+@app.post("/api/admin/blacklist")
+async def admin_blacklist(request: Request, db=Depends(get_db)):
+    usuario = await verificar_token(request, db)
+    if not usuario or usuario.get("plano") != "admin":
+        return JSONResponse({"erro": "Não autorizado"}, status_code=403)
+    body = await request.json()
+    acao = body.get("acao", "add")
+    ip = body.get("ip", "")
+    if not ip:
+        return JSONResponse({"erro": "IP obrigatório"}, status_code=400)
+    if acao == "add":
+        adicionar_blacklist(ip, body.get("motivo", ""))
+        return JSONResponse({"ok": True, "msg": f"IP {ip} bloqueado"})
+    elif acao == "remove":
+        remover_blacklist(ip)
+        return JSONResponse({"ok": True, "msg": f"IP {ip} desbloqueado"})
+    return JSONResponse({"erro": "Ação inválida"}, status_code=400)
+
+# ── S3.13 Limpeza periódica automática
+
+async def _job_limpar_rate_store():
+    import asyncio
+    while True:
+        await asyncio.sleep(3600)
+        limpar_rate_store_antigo()
+
+# ── S3.14 Rate limit por API key
+def verificar_rate_limit_api(api_key: str, plano: str = "developer") -> dict:
+    limites_api = {
+        "developer": {"requisicoes": 1000,  "janela_seg": 86400},
+        "business":  {"requisicoes": 10000, "janela_seg": 86400},
+        "enterprise":{"requisicoes": 100000,"janela_seg": 86400},
+    }
+    config = limites_api.get(plano, limites_api["developer"])
+    chave = f"rl:api:{api_key[:16]}"
+    return sliding_window_check(chave, config["requisicoes"], config["janela_seg"])
+
+# ── S3.15 Estatísticas de rate limit
+def stats_rate_limit() -> dict:
+    with _rate_lock:
+        total_chaves = len(_rate_store)
+        total_bloqueados = len(_blacklist_ips)
+        total_whitelist = len(_whitelist_ips)
+    return {
+        "chaves_ativas": total_chaves,
+        "ips_bloqueados": total_bloqueados,
+        "ips_whitelist": total_whitelist,
+        "algoritmos": ["sliding_window", "token_bucket"],
+        "limites_configurados": len(RATE_LIMITS)
+    }
+
+# ═══ FIM S3/18 — RATE LIMITING AVANÇADO ═════════════════════════════
 
 
 @app.get("/terapia", response_class=HTMLResponse)
