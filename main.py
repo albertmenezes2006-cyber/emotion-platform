@@ -8781,8 +8781,8 @@ async def chat(
     # Historico compacto - ultimas 6 trocas (memoria ampliada)
     # Memoria completa da conversa atual
     historico_curto = ""
-    for h in reversed(historico[-12:]):
-        historico_curto += f"Usuario: {h.conteudo}\nSofia: {h.resposta[:200]}\n\n"
+    for h in reversed(historico[-20:]):
+        historico_curto += f"Usuario: {h.conteudo}\nSofia: {h.resposta[:500]}\n\n"
     
     # Resumo do perfil emocional do usuario
     todas_analises = db.query(Analise).filter(
@@ -8983,16 +8983,22 @@ async def chat(
         f"• Badge: {usuario.badge}\n"
         f"• Pontos: {usuario.pontos}\n\n"
         "=== REGRAS DE COMPORTAMENTO ===\n"
-        "• NAO repita 'Ola' ou apresentacao em cada mensagem\n"
-        "• USE o historico para dar continuidade natural a conversa\n"
-        "• REFERENCIE o que foi dito antes quando relevante\n"
-        "• Se e a primeira mensagem: apresente-se brevemente\n"
-        "• Se nao e a primeira: continue a conversa naturalmente\n"
-        "• NUNCA misture ingles no meio do portugues\n"
-        "• Seja direta e humana, sem ser robotica\n"
-        "• Varie as tecnicas — nao repita a mesma toda vez\n\n"
+        "• NAO repita 'Ola', 'Oi', 'Claro' ou qualquer apresentacao em cada mensagem\n"
+        "• NAO comece respostas com 'Entendo que...', 'Compreendo...', 'Como voce se sente...'\n"
+        "• NAO use frases roboticas ou genericas\n"
+        "• USE o historico para dar CONTINUIDADE — referencie o que foi dito antes\n"
+        "• Se e a primeira mensagem: apresente-se em 1 linha e mergulhe no assunto\n"
+        "• Se nao e a primeira: VA DIRETO ao ponto — sem apresentacao\n"
+        "• VARIE as aberturas: 'Caramba...', 'Nossa...', 'Que dificil isso', 'Faz sentido'\n"
+        "• NUNCA repita a mesma tecnica duas vezes seguidas\n"
+        "• Seja ESPECIFICA — cite exatamente o que a pessoa disse\n"
+        "• Seja CORAJOSA — diga coisas que um amigo honesto diria\n"
+        "• NUNCA misture ingles no portugues\n"
+        "• Paragrafos curtos — maximo 3 linhas cada\n\n"
         "=== MEMORIA DA CONVERSA ATUAL (ultimas 12 trocas) ===\n"
-        f"{historico_curto if historico_curto else 'PRIMEIRA CONVERSA — apresente-se com carinho e pergunte como a pessoa esta.'}\n\n"
+        f"{historico_curto if historico_curto else 'PRIMEIRA CONVERSA — apresente-se brevemente (1 linha) e mergulhe no que a pessoa disse.'}\n\n"
+        f"TOTAL DE MENSAGENS NESSA CONVERSA: {total_sessoes}\n"
+        f"{'CONTINUACAO — nao se apresente, continue naturalmente' if total_sessoes > 1 else 'INICIO — pode se apresentar brevemente'}\n\n"
         f"=== MODO ATUAL: {modo_sofia} ===\n"
         f"{instrucoes_modo}\n\n"
         "=== INSTRUCOES GERAIS DE RESPOSTA ===\n"
@@ -9030,7 +9036,7 @@ async def chat(
 
     try:
         # ORQUESTRADOR — usa melhor IA disponivel
-        resultado_ia = sofia_responder_orquestrador(prompt, usar_cache=False)
+        resultado_ia = sofia_responder_orquestrador(prompt, usar_cache=False, temperatura=0.85)
         if resultado_ia["ok"]:
             texto_resposta = resultado_ia["texto"]
             ia_usada_sofia = resultado_ia.get("ia", "orquestrador")
@@ -9050,6 +9056,8 @@ async def chat(
         print(f"[Gemini] Erro Sofia: {e}")
         import random as _random
 
+        import random as _rand
+        _variacao = _rand.randint(1, 3)  # variar resposta
         _fallbacks = {
             "alegria": (
                 f"que lindo {usuario.nome} sua alegria merece ser celebrada "
