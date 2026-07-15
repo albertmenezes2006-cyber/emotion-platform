@@ -3020,6 +3020,118 @@ def resgatar_presente(codigo: str, usuario_id: int, db) -> dict:
 # ============================================================
 
 # --- PLANO ANUAL ---
+
+# ================================================================
+# SISTEMA DE MONITORAMENTO v20.0 — ALERTAS TELEGRAM AUTOMATICOS
+# ================================================================
+
+import threading as _threading
+
+_erros_recentes = []
+_max_erros = 100
+
+def monitorar_erro(rota: str, erro: str, usuario_id: int = None):
+    """Registra erro e alerta no Telegram se critico"""
+    global _erros_recentes
+    _erros_recentes.append({
+        "rota": rota,
+        "erro": erro[:200],
+        "usuario_id": usuario_id,
+        "timestamp": datetime.now().strftime("%d/%m %H:%M:%S")
+    })
+    if len(_erros_recentes) > _max_erros:
+        _erros_recentes = _erros_recentes[-_max_erros:]
+    # Alertar no Telegram para erros criticos
+    erros_criticos = ["500","database","connection","timeout","crash","memory"]
+    if any(e in erro.lower() for e in erros_criticos):
+        msg = (
+            f"🚨 <b>ERRO CRITICO DETECTADO</b>\n"
+            f"🔴 Rota: {rota}\n"
+            f"💥 Erro: {erro[:150]}\n"
+            f"⏰ {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}"
+        )
+        enviar_telegram(msg)
+
+def monitorar_ia_falha(modelo: str, erro: str):
+    """Alerta quando modelo de IA falha"""
+    msg = (
+        f"⚠️ <b>IA FALHOU</b>\n"
+        f"🤖 Modelo: {modelo}\n"
+        f"❌ Erro: {erro[:100]}\n"
+        f"⏰ {datetime.now().strftime('%H:%M:%S')}"
+    )
+    enviar_telegram(msg)
+
+def relatorio_diario_sistema():
+    """Envia relatorio diario de saude do sistema"""
+    try:
+        db = SessionLocal()
+        total_usuarios = db.query(Usuario).count()
+        total_analises = db.query(Analise).count()
+        total_msgs = db.query(Mensagem).count()
+        novos_hoje = db.query(Usuario).filter(
+            Usuario.criado_em >= datetime.now().replace(hour=0,minute=0,second=0)
+        ).count()
+        analises_hoje = db.query(Analise).filter(
+            Analise.criado_em >= datetime.now().replace(hour=0,minute=0,second=0)
+        ).count()
+        pagamentos = db.query(Pagamento).filter(
+            Pagamento.status == "approved"
+        ).count()
+        receita = db.query(Pagamento).filter(
+            Pagamento.status == "approved"
+        ).all()
+        total_receita = sum(p.valor or 0 for p in receita)
+        erros_hora = len(_erros_recentes)
+        db.close()
+        msg = (
+            f"📊 <b>RELATORIO DIARIO — Emotion Intelligence v20.0</b>\n\n"
+            f"👥 Usuarios total: {total_usuarios}\n"
+            f"🆕 Novos hoje: {novos_hoje}\n"
+            f"🔍 Analises total: {total_analises}\n"
+            f"📈 Analises hoje: {analises_hoje}\n"
+            f"💬 Mensagens total: {total_msgs}\n"
+            f"💰 Pagamentos aprovados: {pagamentos}\n"
+            f"💵 Receita total: R${total_receita:.2f}\n"
+            f"⚠️ Erros recentes: {erros_hora}\n"
+            f"✅ Sistema: ONLINE\n"
+            f"⏰ {datetime.now().strftime('%d/%m/%Y %H:%M')}"
+        )
+        enviar_telegram(msg)
+    except Exception as e:
+        enviar_telegram(f"❌ Erro no relatorio diario: {str(e)[:100]}")
+
+def checar_saude_sistema():
+    """Checa saude do sistema a cada hora"""
+    try:
+        db = SessionLocal()
+        db.execute(text("SELECT 1"))
+        db.close()
+    except Exception as e:
+        enviar_telegram(f"🚨 BANCO DE DADOS OFFLINE!\n{str(e)[:100]}")
+
+# Adicionar jobs ao scheduler
+try:
+    scheduler.add_job(
+        relatorio_diario_sistema,
+        "cron",
+        hour=7,
+        minute=0,
+        id="relatorio_diario"
+    )
+    scheduler.add_job(
+        checar_saude_sistema,
+        "interval",
+        hours=1,
+        id="checar_saude"
+    )
+except Exception as _e:
+    print(f"[MONITOR] Scheduler jobs ja existem: {_e}")
+
+# ================================================================
+# FIM SISTEMA DE MONITORAMENTO
+# ================================================================
+
 @app.get("/checkout/anual", response_class=HTMLResponse)
 async def checkout_anual(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
