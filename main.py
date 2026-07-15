@@ -7577,7 +7577,13 @@ def index(request: Request, ref: str = None, db: Session = Depends(get_db)):
     # Componentes do score (cada um vale ate 25 pontos)
     # 1. Variedade emocional (quantas emocoes diferentes — max 15)
     variedade      = len(emocoes_contagem)
-    score_variedade = min(25, int((variedade / 15) * 25))
+    score_variedade = min(25, int((variedade / 15) * 25)) if variedade > 0 else 0
+
+    # Calcular intensidades com protecao
+    try:
+        intensidades = [a.intensidade for a in todas_analises if a.intensidade]
+    except:
+        intensidades = []
 
     # 2. Consistencia (dias cadastrado com atividade — usa total de analises)
     score_consistencia = min(25, int((min(total_analises_count, 50) / 50) * 25))
@@ -7608,6 +7614,17 @@ def index(request: Request, ref: str = None, db: Session = Depends(get_db)):
         nivel_ie = "Iniciante"
         cor_ie   = "#e74c3c"
 
+    try:
+        streak_data = calcular_streak(usuario.id, db)
+    except Exception as _se:
+        streak_data = {"streak_atual": 0, "streak_maximo": 0, "ultimo_dia": None, "emoji": "✨"}
+
+    try:
+        intensidades_list = [a.intensidade for a in todas_analises if a.intensidade]
+        score_autor = min(100, int((1 - (sum(intensidades_list)/len(intensidades_list) - 1) / 4) * 100)) if intensidades_list else 50
+    except:
+        score_autor = 50
+
     return templates.TemplateResponse(request, "dashboard.html", {
         "usuario":               usuario,
         "analises_hoje":         analises_hoje,
@@ -7636,11 +7653,11 @@ def index(request: Request, ref: str = None, db: Session = Depends(get_db)):
         "score_engajamento":     score_engajamento,
         "score_progresso":       score_progresso,
         # Score IE v3 completo para dashboard
-        "score_autoconsciencia": min(100, int((variedade / 15) * 100)),
-        "score_autorregulacao":  min(100, int((1 - (sum(intensidades)/len(intensidades) - 1) / 4) * 100) if intensidades else 50),
+        "score_autoconsciencia": min(100, int((variedade / 15) * 100)) if variedade > 0 else 0,
+        "score_autorregulacao":  min(100, int((1 - (sum(intensidades)/len(intensidades) - 1) / 4) * 100)) if intensidades else 50,
         "score_conexao":         min(100, int((total_msgs / 20) * 100)),
         "score_reflexao":        min(100, int((total_diarios / 20) * 100)),
-        "streak":                calcular_streak(usuario.id, db),
+        "streak":                streak_data,
     })
 
 # ================================================================
