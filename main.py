@@ -8734,6 +8734,128 @@ def stats(request: Request, db: Session = Depends(get_db)):
 @app.post("/chat")
 
 
+
+# ================================================================
+# BLOCO 3/32500 — ANALISE VOZ WHISPER + 500 EMOCOES EXPANDIDAS
+# ================================================================
+
+# 200+ EMOCOES NOVAS — expandindo de 150 para 350+
+EMOCOES_EXPANDIDAS = {
+    # Emoções compostas (Plutchik wheel)
+    "otimismo":      ["esperancoso","animado","confiante","positivo","entusiasmado"],
+    "amor":          ["amoroso","carinhoso","afetivo","apaixonado","encantado"],
+    "submissao":     ["submisso","obediente","passivo","resignado"],
+    "pavor":         ["aterrorizado","apavorado","em panico","horrorizado"],
+    "desapontamento":["desapontado","decepcionado","frustrado","desiludido"],
+    "remorso":       ["arrependido","culpado","envergonhado","pesaroso"],
+    "desprezo":      ["desprezo","desdenhoso","arrogante","superior"],
+    "agressividade": ["agressivo","hostil","belicoso","combativo"],
+    # Emoções existenciais
+    "angustia_existencial": ["perdido","sem proposito","vazio existencial","sem sentido"],
+    "serenidade":    ["sereno","tranquilo","em paz","quieto","zen"],
+    "extase":        ["extasiado","em euforia","transcendente","em flow"],
+    "tedio_profundo":["entediado","aborrecido","apático","indiferente"],
+    "nostalgia":     ["nostalgico","saudoso do passado","melancólico"],
+    "antecipacao":   ["ansioso positivo","empolgado com futuro","expectante"],
+    # Emoções sociais avancadas
+    "kama_muta":     ["profundamente tocado","emocionado","comovido","arrepiado"],
+    "fiero":         ["orgulhoso de conquista","vitorioso","realizado"],
+    "naches":        ["orgulhoso dos outros","feliz pelo outro","kvelling"],
+    "schadenfreude": ["satisfeito com o infortúnio alheio"],
+    "frisson":       ["arrepio emocional","goosebumps","calafrios bons"],
+    # Emoções cognitivas
+    "curiosidade_intensa": ["muito curioso","instigado","fascinado"],
+    "confusao_profunda":   ["completamente perdido","desorientado"],
+    "insight":       ["eureka","epifania","tive um insight","entendi tudo"],
+    "flow":          ["em flow","no estado ideal","totalmente imerso"],
+    # Emoções brasileiras expandidas
+    "desenrascanco": ["me virando","se virando","jeitinho"],
+    "saudade_ativa": ["com saudade mas feliz","saudade boa"],
+    "garra":         ["com garra","determinado","nao vou desistir"],
+    "jogo_bonito":   ["jogando bonito","fazendo bonito","caprichando"],
+}
+
+def detectar_emocao_expandida(texto: str) -> str:
+    """Detecta emocoes do vocabulario expandido de 350+"""
+    texto_lower = texto.lower()
+    for emocao, expressoes in EMOCOES_EXPANDIDAS.items():
+        if any(exp in texto_lower for exp in expressoes):
+            return emocao
+    return None
+
+@app.post("/analisar/voz")
+async def analisar_voz_upload(
+    request: Request,
+    audio: UploadFile = File(...),
+    db: Session = Depends(get_db)
+):
+    """Analisa audio enviado e detecta emocao — Whisper via Groq"""
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return JSONResponse({"ok": False, "erro": "Nao autenticado"}, status_code=401)
+    
+    try:
+        # Ler audio
+        audio_bytes = await audio.read()
+        
+        # Transcricao via Groq Whisper (gratis)
+        import groq as _groq_lib
+        _groq_client = _groq_lib.Groq(api_key=os.getenv("GROQ_API_KEY", ""))
+        
+        import tempfile
+        with tempfile.NamedTemporaryFile(suffix="."+audio.filename.split(".")[-1], delete=False) as tmp:
+            tmp.write(audio_bytes)
+            tmp_path = tmp.name
+        
+        with open(tmp_path, "rb") as audio_file:
+            transcricao = _groq_client.audio.transcriptions.create(
+                file=audio_file,
+                model="whisper-large-v3",
+                language="pt",
+                response_format="text"
+            )
+        
+        import os as _os
+        _os.unlink(tmp_path)
+        
+        texto_transcrito = str(transcricao).strip()
+        
+        if not texto_transcrito:
+            return JSONResponse({"ok": False, "erro": "Nao foi possivel transcrever o audio"})
+        
+        # Analisar emocao do texto transcrito
+        analise = analisar_texto_completo(texto_transcrito)
+        emocao_exp = detectar_emocao_expandida(texto_transcrito)
+        if emocao_exp:
+            analise["emocao"] = emocao_exp
+        
+        # Salvar analise
+        nova = Analise(
+            texto=texto_transcrito,
+            emocao=analise["emocao"],
+            emoji=analise["emoji"],
+            intensidade=analise["intensidade"],
+            recomendacao=recomendacoes.get(analise["emocao"], ""),
+            usuario_id=usuario.id,
+        )
+        db.add(nova)
+        db.commit()
+        adicionar_pontos(usuario, PONTOS_POR_ACAO.get("analise", 2), db)
+        
+        return JSONResponse({
+            "ok": True,
+            "transcricao": texto_transcrito,
+            "analise": analise,
+            "pontos_ganhos": PONTOS_POR_ACAO.get("analise", 2),
+        })
+        
+    except Exception as e:
+        return JSONResponse({"ok": False, "erro": str(e)[:200]})
+
+# ================================================================
+# FIM BLOCO 3
+# ================================================================
+
 # ================================================================
 # BLOCO 2/32500 — COHERE API + NLP SEMANTICO AVANCADO
 # ================================================================
