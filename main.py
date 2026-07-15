@@ -9629,6 +9629,25 @@ def editar_diario(
 def gamificacao(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
     if not usuario:
+        return RedirectResponse("/login", status_code=302)
+    total_analises = db.query(Analise).filter(Analise.usuario_id == usuario.id).count()
+    conquistas = db.query(Conquista).filter(Conquista.usuario_id == usuario.id).order_by(Conquista.criado_em.desc()).all()
+    dias_cadastrado = (datetime.now() - usuario.criado_em).days if usuario.criado_em else 0
+    prox = proximo_badge(usuario.pontos)
+    return render_template("gamificacao.html",
+        request=request,
+        usuario=usuario,
+        total_analises=total_analises,
+        total_conquistas=len(conquistas),
+        conquistas=conquistas,
+        dias_cadastrado=dias_cadastrado,
+        proximo_badge=prox,
+    )
+
+@app.get("/gamificacao_old")
+def gamificacao_old(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
         raise HTTPException(status_code=401, detail="Não autorizado")
 
     conquistas = db.query(Conquista).filter(

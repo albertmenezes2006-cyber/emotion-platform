@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-JGLER9XVGY');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gamificação — Emotion Intelligence</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#00d2ff;--secondary:#3a7bd5;--gold:#f39c12;--dark:#0f0c29;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1);--success:#2ecc71}
+body{font-family:'Segoe UI',sans-serif;background:var(--dark);color:#fff;min-height:100vh}
+nav{padding:14px 24px;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.logo{font-size:18px;font-weight:bold;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+.container{max-width:900px;margin:0 auto;padding:40px 20px}
+.hero{text-align:center;padding:40px 20px;margin-bottom:32px}
+.hero h1{font-size:36px;font-weight:900;margin-bottom:8px}
+.hero h1 span{background:linear-gradient(90deg,var(--gold),#e67e22);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:rgba(255,255,255,0.5);font-size:15px}
+/* STATS GERAIS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:32px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center;transition:all .2s}
+.stat:hover{transform:translateY(-3px);border-color:var(--primary)}
+.stat-num{font-size:36px;font-weight:900;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.stat-label{font-size:12px;color:rgba(255,255,255,0.5);margin-top:6px}
+/* NIVEL */
+.nivel-card{background:linear-gradient(135deg,rgba(243,156,18,0.1),rgba(230,126,34,0.08));border:2px solid rgba(243,156,18,0.3);border-radius:20px;padding:28px;margin-bottom:24px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.nivel-badge{font-size:56px}
+.nivel-info{flex:1}
+.nivel-nome{font-size:22px;font-weight:900;color:var(--gold);margin-bottom:4px}
+.nivel-desc{font-size:14px;color:rgba(255,255,255,0.6);margin-bottom:12px}
+.nivel-barra{background:rgba(255,255,255,0.1);border-radius:8px;height:10px;overflow:hidden;margin-bottom:6px}
+.nivel-fill{height:100%;background:linear-gradient(90deg,var(--gold),#e67e22);border-radius:8px;transition:width 1s ease}
+.nivel-prox{font-size:12px;color:rgba(255,255,255,0.4)}
+/* PONTOS POR ACAO */
+.acoes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:32px}
+.acao-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;display:flex;align-items:center;gap:12px;transition:all .2s}
+.acao-card:hover{border-color:var(--success);transform:translateX(4px)}
+.acao-icon{font-size:28px;flex-shrink:0}
+.acao-info{flex:1}
+.acao-nome{font-size:14px;font-weight:600}
+.acao-pts{font-size:11px;color:var(--success);margin-top:2px}
+/* BADGES */
+.badges-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:32px}
+.badge-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;text-align:center;transition:all .3s;position:relative}
+.badge-card.desbloqueado{border-color:rgba(243,156,18,0.4);background:rgba(243,156,18,0.06)}
+.badge-card.bloqueado{opacity:0.4;filter:grayscale(1)}
+.badge-emoji{font-size:36px;margin-bottom:8px;display:block}
+.badge-nome{font-size:13px;font-weight:700;margin-bottom:4px}
+.badge-req{font-size:11px;color:rgba(255,255,255,0.4)}
+.badge-desbloqueado-tag{position:absolute;top:8px;right:8px;background:var(--gold);border-radius:10px;padding:2px 8px;font-size:9px;font-weight:bold;color:#000}
+/* CONQUISTAS */
+.conquistas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:32px}
+.conquista{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;align-items:center;gap:12px;transition:all .2s}
+.conquista:hover{border-color:var(--gold)}
+.conquista-emoji{font-size:28px;flex-shrink:0}
+.conquista-nome{font-size:14px;font-weight:600}
+.conquista-desc{font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px}
+/* CTA */
+.cta{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px;text-align:center;margin-top:24px}
+.cta h3{font-size:20px;margin-bottom:8px}
+.cta p{color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:16px}
+.btn{display:inline-block;padding:12px 24px;background:linear-gradient(90deg,var(--primary),var(--secondary));border-radius:12px;color:#fff;font-weight:700;font-size:14px;text-decoration:none;margin:4px;transition:all .2s}
+.btn:hover{transform:translateY(-2px)}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">🧠 Emotion Intelligence</a>
+  <div style="display:flex;gap:10px">
+    <a href="/dashboard" style="color:rgba(255,255,255,0.5);font-size:13px;text-decoration:none">Dashboard</a>
+    <a href="/ranking" style="color:rgba(255,255,255,0.5);font-size:13px;text-decoration:none">🏆 Ranking</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="hero">
+    <h1>🎮 <span>Gamificação</span></h1>
+    <p>Ganhe pontos, suba de nível e desbloqueie badges!</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num">{{ usuario.pontos }}</div>
+      <div class="stat-label">🏆 Pontos Totais</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">{{ total_conquistas }}</div>
+      <div class="stat-label">🏅 Conquistas</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">{{ total_analises }}</div>
+      <div class="stat-label">🔍 Análises</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">{{ dias_cadastrado }}</div>
+      <div class="stat-label">📅 Dias Ativo</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" id="streakNum">--</div>
+      <div class="stat-label">🔥 Streak</div>
+    </div>
+  </div>
+
+  <!-- NIVEL ATUAL -->
+  <div class="nivel-card">
+    <div class="nivel-badge">{{ usuario.badge }}</div>
+    <div class="nivel-info">
+      <div class="nivel-nome">{{ usuario.badge }}</div>
+      <div class="nivel-desc">Você tem {{ usuario.pontos }} pontos</div>
+      {% if proximo_badge and proximo_badge.faltam > 0 %}
+      <div class="nivel-barra">
+        <div class="nivel-fill" style="width:{{ [(usuario.pontos / (usuario.pontos + proximo_badge.faltam) * 100)|int, 100]|min }}%"></div>
+      </div>
+      <div class="nivel-prox">Próximo: {{ proximo_badge.badge }} — faltam {{ proximo_badge.faltam }} pontos</div>
+      {% else %}
+      <div class="nivel-barra"><div class="nivel-fill" style="width:100%"></div></div>
+      <div class="nivel-prox">👑 Nível máximo atingido!</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- ACOES E PONTOS -->
+  <h2 style="margin-bottom:16px;font-size:20px">⚡ Como Ganhar Pontos</h2>
+  <div class="acoes-grid">
+    <div class="acao-card">
+      <div class="acao-icon">🔍</div>
+      <div class="acao-info">
+        <div class="acao-nome">Análise emocional</div>
+        <div class="acao-pts">+2 pts (free) / +5 pts (premium)</div>
+      </div>
+    </div>
+    <div class="acao-card">
+      <div class="acao-icon">💬</div>
+      <div class="acao-info">
+        <div class="acao-nome">Chat com Sofia</div>
+        <div class="acao-pts">+3 pts por conversa</div>
+      </div>
+    </div>
+    <div class="acao-card">
+      <div class="acao-icon">📔</div>
+      <div class="acao-info">
+        <div class="acao-nome">Entrada no diário</div>
+        <div class="acao-pts">+5 pts por entrada</div>
+      </div>
+    </div>
+    <div class="acao-card">
+      <div class="acao-icon">🔗</div>
+      <div class="acao-info">
+        <div class="acao-nome">Indicar amigo</div>
+        <div class="acao-pts">+20 pts por indicação</div>
+      </div>
+    </div>
+    <div class="acao-card">
+      <div class="acao-icon">⭐</div>
+      <div class="acao-info">
+        <div class="acao-nome">Ativar Trial</div>
+        <div class="acao-pts">+10 pts</div>
+      </div>
+    </div>
+    <div class="acao-card">
+      <div class="acao-icon">💎</div>
+      <div class="acao-info">
+        <div class="acao-nome">Assinar Premium</div>
+        <div class="acao-pts">+50 pts de bônus</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BADGES DISPONIVEIS -->
+  <h2 style="margin-bottom:16px;font-size:20px">🏅 Badges do Sistema</h2>
+  <div class="badges-grid">
+    {% set badges_sistema = [
+      ("🥉", "Iniciante", "0 pontos", usuario.pontos >= 0),
+      ("🥈", "Explorador", "100 pontos", usuario.pontos >= 100),
+      ("🥇", "Praticante", "300 pontos", usuario.pontos >= 300),
+      ("🏆", "Avançado", "700 pontos", usuario.pontos >= 700),
+      ("🔥", "Intermediário", "1500 pontos", usuario.pontos >= 1500),
+      ("💎", "Expert", "3000 pontos", usuario.pontos >= 3000),
+      ("🌟", "Mestre", "6000 pontos", usuario.pontos >= 6000),
+      ("👑", "Lenda", "10000 pontos", usuario.pontos >= 10000),
+    ] %}
+    {% for emoji, nome, req, desbloqueado in badges_sistema %}
+    <div class="badge-card {{ 'desbloqueado' if desbloqueado else 'bloqueado' }}">
+      {% if desbloqueado %}<div class="badge-desbloqueado-tag">✓</div>{% endif %}
+      <span class="badge-emoji">{{ emoji }}</span>
+      <div class="badge-nome">{{ nome }}</div>
+      <div class="badge-req">{{ req }}</div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- CONQUISTAS DESBLOQUEADAS -->
+  {% if conquistas %}
+  <h2 style="margin-bottom:16px;font-size:20px">🏅 Suas Conquistas ({{ total_conquistas }})</h2>
+  <div class="conquistas-grid">
+    {% for c in conquistas %}
+    <div class="conquista">
+      <div class="conquista-emoji">{{ c.emoji }}</div>
+      <div>
+        <div class="conquista-nome">{{ c.nome }}</div>
+        <div class="conquista-desc">{{ c.descricao }}</div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="cta">
+    <h3>🚀 Continue evoluindo!</h3>
+    <p>Cada análise te aproxima do próximo nível. Faça uma agora!</p>
+    <a href="/dashboard" class="btn">🔍 Fazer Análise</a>
+    <a href="/ranking" class="btn" style="background:rgba(255,255,255,0.08);border:1px solid var(--border)">🏆 Ver Ranking</a>
+  </div>
+</div>
+
+<script>
+fetch('/api/streak')
+  .then(r => r.json())
+  .then(d => {
+    if(d.ok) document.getElementById('streakNum').textContent = d.streak.streak_atual;
+  }).catch(()=>{});
+gtag('event','ver_gamificacao',{event_category:'engajamento'});
+</script>
+</body>
+</html>
