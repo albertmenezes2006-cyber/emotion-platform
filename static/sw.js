@@ -1,4 +1,4 @@
-const CACHE_NAME = 'emotion-v16';
+const CACHE_NAME = 'emotion-v20';
 const CACHE_STATIC = [
   '/', '/login', '/cadastro', '/blog', '/planos', '/premium',
   '/terapia', '/faq', '/sobre', '/static/favicon.svg'

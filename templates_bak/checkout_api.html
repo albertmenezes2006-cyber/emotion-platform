@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>API Developer — Emotion Intelligence Platform</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#0f0f1a;color:#fff;min-height:100vh}
+.hero{background:linear-gradient(135deg,#1a1a2e,#16213e);padding:50px 20px;text-align:center;border-bottom:2px solid #667eea}
+.hero h1{font-size:2rem;color:#667eea;margin-bottom:10px}
+.container{max-width:600px;margin:0 auto;padding:40px 20px}
+.card{background:#1a1a2e;border-radius:20px;padding:35px;border:2px solid #667eea}
+.planos{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:20px 0}
+.plano{background:#111;border-radius:12px;padding:20px;text-align:center;cursor:pointer;border:2px solid #333;transition:.3s}
+.plano:hover,.plano.ativo{border-color:#667eea}
+.plano h3{margin-bottom:8px}
+.plano .preco{font-size:1.5rem;font-weight:700;color:#667eea}
+.plano .limite{color:#aaa;font-size:.8rem;margin-top:5px}
+.features{list-style:none;margin:20px 0}
+.features li{padding:8px 0;border-bottom:1px solid #333;display:flex;gap:10px}
+.btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:12px;font-size:1.1rem;font-weight:700;cursor:pointer;margin-top:20px;transition:.3s}
+.btn:hover{transform:translateY(-2px)}
+.loader{display:none;text-align:center;padding:20px;color:#667eea}
+</style>
+</head>
+<body>
+<div class="hero">
+  <h1>🔑 API Developer</h1>
+  <p style="color:#aaa">Integre análise emocional em qualquer aplicação</p>
+</div>
+<div class="container">
+  <div class="card">
+    <h2 style="margin-bottom:20px">Escolha seu plano:</h2>
+    <div class="planos">
+      {% for key, d in todos_planos.items() %}
+      <div class="plano {% if key == plano %}ativo{% endif %}" onclick="selecionarPlano('{{key}}',this)">
+        <h3>{{d.nome}}</h3>
+        <div class="preco">R${{d.preco}}<small>/mês</small></div>
+        <div class="limite">{{d.limite}}</div>
+      </div>
+      {% endfor %}
+    </div>
+    <ul class="features">
+      <li>✅ API Key exclusiva</li>
+      <li>✅ Análise de 15 emoções</li>
+      <li>✅ Resposta em JSON</li>
+      <li>✅ Documentação completa</li>
+      <li>✅ Suporte via email</li>
+      <li>✅ Renovação mensal automática</li>
+    </ul>
+    <button class="btn" onclick="comprar()">🚀 ASSINAR API</button>
+    <div class="loader" id="loader">⏳ Redirecionando...</div>
+    <p style="color:#888;font-size:.8rem;text-align:center;margin-top:15px">🔒 Pagamento seguro • API Key gerada automaticamente</p>
+  </div>
+</div>
+<script>
+let planoSelecionado='{{plano}}';
+function selecionarPlano(p,el){
+  planoSelecionado=p;
+  document.querySelectorAll('.plano').forEach(e=>e.classList.remove('ativo'));
+  el.classList.add('ativo');
+}
+async function comprar(){
+  document.querySelector('.btn').style.display='none';
+  document.getElementById('loader').style.display='block';
+  const r=await fetch('/checkout/api/processar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plano:planoSelecionado})});
+  const d=await r.json();
+  if(d.ok) window.location.href=d.url;
+  else { alert('Erro: '+d.erro); document.querySelector('.btn').style.display='block'; document.getElementById('loader').style.display='none'; }
+}
+</script>
+</body>
+</html>

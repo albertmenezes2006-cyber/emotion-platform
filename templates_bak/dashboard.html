@@ -1,0 +1,2392 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JGLER9XVGY');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Emotion Intelligence</title>
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#3a7bd5">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+/* ============================================================
+   RESET + BASE
+============================================================ */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#00d2ff;
+  --secondary:#3a7bd5;
+  --success:#2ecc71;
+  --danger:#e74c3c;
+  --warning:#f39c12;
+  --purple:#9b59b6;
+  --dark:rgba(0,0,0,0.3);
+  --card:rgba(255,255,255,0.05);
+  --border:rgba(255,255,255,0.1);
+  --text-muted:rgba(255,255,255,0.5);
+  --bg-gradient: linear-gradient(135deg,#0f0c29,#302b63,#24243e);
+  --text-color: #fff;
+}
+
+body.light-mode {
+  --bg-gradient: linear-gradient(135deg,#f5f7fa,#c3cfe2);
+  --text-color: #2d3436;
+  --card: rgba(255,255,255,0.9);
+  --border: rgba(0,0,0,0.1);
+  --text-muted: rgba(0,0,0,0.5);
+  --dark: rgba(0,0,0,0.05);
+}
+
+body{
+  font-family:'Segoe UI',sans-serif;
+  background: var(--bg-gradient);
+  color: var(--text-color);
+  min-height:100vh;
+  transition: background 0.3s, color 0.3s;
+}
+/* ============================================================
+   NAVBAR
+============================================================ */
+.navbar{
+  background:rgba(0,0,0,0.4);
+  backdrop-filter:blur(10px);
+  padding:15px 30px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+  position:sticky;
+  top:0;
+  z-index:100;
+  border-bottom:1px solid var(--border);
+}
+.navbar h1{
+  font-size:20px;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.nav-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.nav-btn{
+  padding:6px 14px;
+  border-radius:20px;
+  color:#fff;
+  text-decoration:none;
+  font-size:12px;
+  font-weight:600;
+  transition:all .2s;
+}
+.nav-btn:hover{transform:translateY(-1px);opacity:.9}
+.btn-perfil{background:rgba(255,255,255,0.1)}
+.btn-afiliado{background:var(--success)}
+.btn-planos{background:linear-gradient(90deg,var(--primary),var(--secondary))}
+.btn-faq{background:rgba(255,255,255,0.1)}
+.btn-admin{background:var(--warning)}
+.btn-logout{background:var(--danger)}
+.version-badge{
+  background:rgba(0,210,255,0.2);
+  border:1px solid rgba(0,210,255,0.3);
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:10px;
+  color:var(--primary);
+}
+/* ============================================================
+   CONTAINER
+============================================================ */
+.container{max-width:1400px;margin:0 auto;padding:25px 20px}
+/* ============================================================
+   BANNERS
+============================================================ */
+.banner{
+  border-radius:15px;
+  padding:14px 22px;
+  margin-bottom:20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.banner-free{
+  background:rgba(231,76,60,0.1);
+  border:1px solid rgba(231,76,60,0.3);
+}
+.banner-trial{
+  background:rgba(243,156,18,0.1);
+  border:1px solid rgba(243,156,18,0.3);
+}
+.banner-premium{
+  background:rgba(0,210,255,0.1);
+  border:1px solid rgba(0,210,255,0.3);
+}
+.banner-enterprise{
+  background:rgba(46,204,113,0.1);
+  border:1px solid rgba(46,204,113,0.3);
+}
+.banner-info{font-size:14px;color:rgba(255,255,255,0.8)}
+.banner-info span{font-weight:bold}
+.banner-info .free-color{color:var(--danger)}
+.banner-info .trial-color{color:var(--warning)}
+.banner-info .premium-color{color:var(--primary)}
+.banner-info .enterprise-color{color:var(--success)}
+.progresso{
+  width:180px;height:6px;
+  background:rgba(255,255,255,0.1);
+  border-radius:10px;overflow:hidden;
+  margin-top:6px;
+}
+.progresso-fill{
+  height:100%;border-radius:10px;
+  background:linear-gradient(90deg,var(--success),var(--danger));
+  transition:width .5s;
+}
+.btn-upgrade{
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  padding:8px 18px;border-radius:12px;
+  color:#fff;text-decoration:none;
+  font-size:12px;font-weight:bold;
+  white-space:nowrap;
+}
+/* ============================================================
+   PONTOS E BADGE
+============================================================ */
+.gamification-bar{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:14px 22px;
+  margin-bottom:20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:12px;
+}
+.gam-item{display:flex;align-items:center;gap:8px;font-size:14px}
+.gam-label{color:var(--text-muted);font-size:12px}
+.gam-value{font-weight:bold;color:var(--primary)}
+.badge-display{
+  background:rgba(0,210,255,0.1);
+  border:1px solid rgba(0,210,255,0.2);
+  padding:6px 14px;border-radius:20px;
+  font-size:13px;font-weight:bold;
+}
+.pontos-display{
+  font-size:22px;font-weight:bold;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.btn-trial{
+  background:linear-gradient(90deg,var(--warning),#e67e22);
+  padding:8px 18px;border-radius:12px;
+  color:#fff;font-size:12px;font-weight:bold;
+  border:none;cursor:pointer;
+}
+/* ============================================================
+   TABS
+============================================================ */
+.tabs{
+  display:flex;gap:8px;
+  margin-bottom:20px;
+  flex-wrap:wrap;
+}
+.tab-btn{
+  padding:10px 20px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:rgba(255,255,255,0.6);
+  cursor:pointer;
+  font-size:14px;
+  font-weight:600;
+  transition:all .2s;
+}
+.tab-btn.active{
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  color:#fff;
+  border-color:transparent;
+}
+.tab-btn:hover:not(.active){
+  background:rgba(255,255,255,0.1);
+  color:#fff;
+}
+.tab-content{display:none}
+.tab-content.active{display:block}
+/* ============================================================
+   ANÁLISE
+============================================================ */
+.section{
+  background:var(--card);
+  border-radius:20px;
+  padding:28px;
+  margin-bottom:20px;
+  border:1px solid var(--border);
+}
+.section h2{
+  margin-bottom:18px;
+  font-size:20px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.input-group{
+  display:flex;gap:10px;
+  margin-bottom:12px;
+  flex-wrap:wrap;
+}
+.input-group input,
+.input-group textarea{
+  flex:1;
+  padding:14px 18px;
+  border-radius:12px;
+  border:2px solid var(--border);
+  background:rgba(255,255,255,0.05);
+  color:#fff;
+  font-size:15px;
+  outline:none;
+  min-width:200px;
+  transition:border-color .2s;
+  font-family:inherit;
+}
+.input-group input:focus,
+.input-group textarea:focus{border-color:var(--secondary)}
+.input-group input::placeholder,
+.input-group textarea::placeholder{color:rgba(255,255,255,0.3)}
+.btn-primary{
+  padding:14px 24px;
+  border-radius:12px;
+  border:none;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  color:#fff;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:transform .2s;
+  white-space:nowrap;
+}
+.btn-primary:hover{transform:translateY(-2px)}
+.btn-mic{
+  background:linear-gradient(90deg,#e67e22,var(--danger));
+  padding:14px 18px;
+  border-radius:12px;
+  border:none;
+  color:#fff;
+  font-size:18px;
+  cursor:pointer;
+  transition:transform .2s;
+}
+.btn-mic.gravando{animation:pulse 1s infinite}
+.emoji-btn{
+  font-size:28px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:8px 10px;
+  cursor:pointer;
+  transition:all .2s;
+  line-height:1;
+}
+.emoji-btn:hover{
+  background:rgba(255,255,255,0.15);
+  transform:scale(1.15);
+  border-color:var(--primary);
+}
+.emoji-btn.selecionado{
+  background:rgba(0,210,255,0.2);
+  border-color:var(--primary);
+  transform:scale(1.2);
+}
+@keyframes pulse{
+  0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(231,76,60,.4)}
+  50%{transform:scale(1.05);box-shadow:0 0 0 10px rgba(231,76,60,0)}
+}
+.status-mic{
+  color:var(--text-muted);
+  font-size:12px;
+  margin-top:6px;
+  min-height:16px;
+}
+.result-card{
+  background:rgba(255,255,255,0.08);
+  border-radius:15px;
+  padding:24px;
+  margin-top:14px;
+  display:none;
+  border:1px solid var(--border);
+  animation:fadeIn .4s ease;
+}
+.result-card.show{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.emotion-display{text-align:center;padding:15px}
+.emotion-emoji{font-size:72px;margin-bottom:10px;display:block}
+.emotion-name{
+  font-size:30px;font-weight:bold;margin:8px 0;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.emotion-rec{
+  font-size:15px;color:rgba(255,255,255,0.7);
+  padding:12px;background:rgba(255,255,255,0.05);
+  border-radius:10px;margin-top:8px;
+}
+.intensidade{
+  display:flex;gap:4px;justify-content:center;margin-top:10px;
+}
+.int-dot{
+  width:12px;height:12px;border-radius:50%;
+  background:rgba(255,255,255,0.2);
+}
+.int-dot.ativo{background:var(--primary)}
+.pontos-ganhos{
+  display:inline-block;
+  background:rgba(46,204,113,0.2);
+  border:1px solid var(--success);
+  padding:4px 12px;border-radius:20px;
+  font-size:12px;color:var(--success);
+  margin-top:8px;
+}
+.alerta-limite{
+  background:rgba(231,76,60,0.15);
+  border:1px solid var(--danger);
+  border-radius:12px;
+  padding:16px;text-align:center;
+  display:none;margin-top:12px;
+}
+.alerta-limite.show{display:block}
+/* ============================================================
+   GRID
+============================================================ */
+.grid-2{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:18px;
+  margin-bottom:20px;
+}
+.grid-3{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:18px;
+  margin-bottom:20px;
+}
+.card{
+  background:var(--card);
+  border-radius:18px;
+  padding:22px;
+  border:1px solid var(--border);
+}
+.card h3{
+  margin-bottom:14px;
+  font-size:16px;
+  color:var(--primary);
+  display:flex;align-items:center;gap:6px;
+}
+.stat-number{
+  font-size:44px;font-weight:bold;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:1;
+}
+.stat-label{color:var(--text-muted);font-size:13px;margin-top:4px}
+/* ============================================================
+   HISTÓRICO
+============================================================ */
+.history-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 12px;
+  margin:5px 0;
+  background:rgba(255,255,255,0.04);
+  border-radius:10px;
+  border:1px solid var(--border);
+  transition:background .2s;
+}
+.history-item:hover{background:rgba(255,255,255,0.08)}
+.history-text{
+  flex:1;font-size:13px;
+  color:rgba(255,255,255,0.8);
+  margin-right:10px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.history-badge{
+  padding:4px 10px;border-radius:20px;
+  font-size:11px;font-weight:bold;white-space:nowrap;
+}
+/* ============================================================
+   CHAT SOFIA
+============================================================ */
+.chat-container{
+  background:var(--card);
+  border-radius:20px;
+  border:1px solid var(--border);
+  overflow:hidden;
+}
+.chat-header{
+  background:linear-gradient(90deg,rgba(0,210,255,0.15),rgba(58,123,213,0.15));
+  padding:16px 22px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border-bottom:1px solid var(--border);
+}
+.sofia-avatar{
+  width:44px;height:44px;
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;
+}
+.sofia-info h3{font-size:16px;margin-bottom:2px}
+.sofia-info p{font-size:12px;color:var(--text-muted)}
+.sofia-status{
+  width:8px;height:8px;
+  background:var(--success);
+  border-radius:50%;
+  display:inline-block;
+  margin-right:4px;
+  animation:blink 2s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.chat-limit-bar{
+  padding:8px 16px;
+  background:rgba(0,0,0,0.2);
+  font-size:12px;
+  color:var(--text-muted);
+  border-bottom:1px solid var(--border);
+}
+.chat-messages{
+  height:400px;
+  overflow-y:auto;
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  scroll-behavior:smooth;
+}
+.chat-messages::-webkit-scrollbar{width:4px}
+.chat-messages::-webkit-scrollbar-track{background:transparent}
+.chat-messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2);border-radius:2px}
+.msg{
+  max-width:80%;
+  padding:12px 16px;
+  border-radius:16px;
+  font-size:14px;
+  line-height:1.5;
+  animation:fadeIn .3s ease;
+}
+.msg-user{
+  background:linear-gradient(135deg,rgba(0,210,255,0.2),rgba(58,123,213,0.2));
+  border:1px solid rgba(0,210,255,0.2);
+  align-self:flex-end;
+  border-bottom-right-radius:4px;
+}
+.msg-sofia{
+  background:rgba(255,255,255,0.07);
+  border:1px solid var(--border);
+  align-self:flex-start;
+  border-bottom-left-radius:4px;
+}
+.msg-time{
+  font-size:10px;
+  color:var(--text-muted);
+  margin-top:4px;
+  display:block;
+}
+.msg-typing{
+  align-self:flex-start;
+  background:rgba(255,255,255,0.07);
+  border:1px solid var(--border);
+  padding:12px 16px;
+  border-radius:16px;
+  border-bottom-left-radius:4px;
+  display:none;
+}
+.typing-dots{display:flex;gap:4px;align-items:center}
+.typing-dots span{
+  width:6px;height:6px;
+  background:var(--text-muted);
+  border-radius:50%;
+  animation:typing .8s infinite;
+}
+.typing-dots span:nth-child(2){animation-delay:.2s}
+.typing-dots span:nth-child(3){animation-delay:.4s}
+@keyframes typing{
+  0%,100%{transform:translateY(0);opacity:.5}
+  50%{transform:translateY(-4px);opacity:1}
+}
+.chat-input{
+  padding:14px;
+  background:rgba(0,0,0,0.2);
+  border-top:1px solid var(--border);
+  display:flex;gap:10px;
+}
+.chat-input input{
+  flex:1;
+  padding:12px 16px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,0.05);
+  color:#fff;font-size:14px;outline:none;
+}
+.chat-input input:focus{border-color:var(--secondary)}
+.chat-input input::placeholder{color:rgba(255,255,255,0.3)}
+.btn-send{
+  padding:12px 18px;
+  border-radius:12px;
+  border:none;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  color:#fff;font-size:18px;cursor:pointer;
+  transition:transform .2s;
+}
+.btn-send:hover{transform:scale(1.05)}
+/* ============================================================
+   DIÁRIO EMOCIONAL
+============================================================ */
+.diario-form{
+  display:flex;flex-direction:column;gap:12px;
+  margin-bottom:20px;
+}
+.diario-form input,
+.diario-form textarea{
+  padding:14px 18px;
+  border-radius:12px;
+  border:2px solid var(--border);
+  background:rgba(255,255,255,0.05);
+  color:#fff;font-size:14px;outline:none;
+  font-family:inherit;
+  transition:border-color .2s;
+}
+.diario-form input:focus,
+.diario-form textarea:focus{border-color:var(--secondary)}
+.diario-form input::placeholder,
+.diario-form textarea::placeholder{color:rgba(255,255,255,0.3)}
+.diario-form textarea{resize:vertical;min-height:100px}
+.diario-item{
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:16px;
+  margin-bottom:10px;
+  transition:background .2s;
+}
+.diario-item:hover{background:rgba(255,255,255,0.08)}
+.diario-header{
+  display:flex;justify-content:space-between;
+  align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;
+}
+.diario-titulo{font-weight:bold;font-size:15px}
+.diario-meta{font-size:12px;color:var(--text-muted)}
+.diario-conteudo{
+  font-size:14px;color:rgba(255,255,255,0.7);
+  line-height:1.6;
+}
+.btn-delete{
+  background:rgba(231,76,60,0.2);
+  border:1px solid rgba(231,76,60,0.3);
+  color:var(--danger);
+  padding:4px 10px;border-radius:8px;
+  font-size:12px;cursor:pointer;
+}
+/* ============================================================
+   RANKING
+============================================================ */
+.ranking-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 16px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:8px;
+  transition:background .2s;
+}
+.ranking-item:hover{background:rgba(255,255,255,0.08)}
+.ranking-item.minha-posicao{
+  background:rgba(0,210,255,0.1);
+  border-color:rgba(0,210,255,0.3);
+}
+.ranking-pos{
+  font-size:18px;font-weight:bold;
+  width:30px;text-align:center;
+}
+.ranking-nome{flex:1;font-size:14px}
+.ranking-pontos{
+  font-size:13px;
+  color:var(--primary);
+  font-weight:bold;
+}
+.ranking-badge{font-size:12px;color:var(--text-muted)}
+/* ============================================================
+   GRÁFICOS
+============================================================ */
+.grafico-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
+  gap:18px;margin-bottom:20px;
+}
+/* ============================================================
+   NOTIFICAÇÃO TOAST
+============================================================ */
+.toast{
+  position:fixed;
+  bottom:24px;right:24px;
+  background:rgba(46,204,113,0.95);
+  color:#fff;padding:14px 20px;
+  border-radius:12px;
+  font-size:14px;font-weight:600;
+  z-index:9999;
+  transform:translateY(100px);
+  opacity:0;transition:all .3s;
+  max-width:320px;
+}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.error{background:rgba(231,76,60,0.95)}
+.toast.info{background:rgba(0,210,255,0.95)}
+/* ============================================================
+   EMOTIONS COLORS
+============================================================ */
+.e-alegria{background:rgba(46,204,113,.25);color:#2ecc71}
+.e-tristeza{background:rgba(52,152,219,.25);color:#3498db}
+.e-raiva{background:rgba(231,76,60,.25);color:#e74c3c}
+.e-medo{background:rgba(155,89,182,.25);color:#9b59b6}
+.e-surpresa{background:rgba(241,196,15,.25);color:#f1c40f}
+.e-nojo{background:rgba(39,174,96,.25);color:#27ae60}
+.e-amor{background:rgba(255,107,129,.25);color:#ff6b81}
+.e-neutro{background:rgba(149,165,166,.25);color:#95a5a6}
+.e-esperanca{background:rgba(241,196,15,.25);color:#f1c40f}
+.e-gratidao{background:rgba(46,204,113,.25);color:#2ecc71}
+.e-solidao{background:rgba(149,165,166,.25);color:#95a5a6}
+.e-euforia{background:rgba(255,107,129,.25);color:#ff6b81}
+.e-calma{background:rgba(0,210,255,.25);color:#00d2ff}
+.e-confusao{background:rgba(243,156,18,.25);color:#f39c12}
+.e-vergonha{background:rgba(155,89,182,.25);color:#9b59b6}
+/* ============================================================
+   FOOTER
+============================================================ */
+.footer{
+  text-align:center;padding:30px 20px;
+  color:rgba(255,255,255,0.25);font-size:12px;
+  border-top:1px solid var(--border);margin-top:20px;
+}
+.footer a{
+  color:rgba(255,255,255,0.3);
+  text-decoration:none;margin:0 8px;
+}
+.footer a:hover{color:var(--primary)}
+/* ============================================================
+   RESPONSIVO
+============================================================ */
+@media(max-width:768px){
+  .nav-right{gap:4px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px}
+  .nav-right::-webkit-scrollbar{display:none}
+  .nav-btn{padding:5px 10px;font-size:11px;white-space:nowrap}
+  .version-badge{display:none}
+  .navbar{padding:12px 16px}
+  .container{padding:16px 12px}
+  .chat-messages{height:300px}
+  .grafico-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAVBAR
+============================================================ -->
+<nav class="navbar">
+  <h1>🧠 Emotion Intelligence</h1>
+  <div class="nav-right">
+    <span style="color:rgba(255,255,255,0.5);font-size:12px">Olá, {{ usuario.nome }}!</span>
+    <button onclick="toggleTheme()" class="nav-btn" style="background:rgba(255,255,255,0.1);border:none;cursor:pointer;font-size:16px" id="themeBtn">🌙</button>
+    <div style="position:relative;display:inline-block">
+      <button onclick="toggleNotifDropdown()" class="nav-btn" style="background:rgba(255,255,255,0.1);border:none;cursor:pointer;font-size:16px;font-weight:600;padding:7px 12px" id="btnNotif" title="Notificacoes">🔔</button>
+      <span id="notifBadge" style="display:none;position:absolute;top:-4px;right:-4px;background:#e74c3c;color:#fff;border-radius:50%;width:16px;height:16px;font-size:10px;font-weight:bold;display:flex;align-items:center;justify-content:center;line-height:1">0</span>
+      <!-- DROPDOWN NOTIFICACOES -->
+      <div id="notifDropdown" style="display:none;position:absolute;top:44px;right:0;width:300px;background:#1a1a2e;border:1px solid rgba(255,255,255,0.1);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.5);z-index:9999;overflow:hidden">
+        <div style="padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:14px;font-weight:bold">🔔 Notificações</span>
+          <button onclick="marcarTodasLidas()" style="font-size:11px;color:rgba(0,210,255,0.8);background:none;border:none;cursor:pointer">Marcar todas lidas</button>
+        </div>
+        <div id="notifLista" style="max-height:320px;overflow-y:auto">
+          <div style="padding:20px;text-align:center;color:rgba(255,255,255,0.4);font-size:13px">
+            Nenhuma notificação ainda
+          </div>
+        </div>
+        <div style="padding:10px 16px;border-top:1px solid rgba(255,255,255,0.08);text-align:center">
+          <a href="/notificacoes" style="font-size:12px;color:rgba(0,210,255,0.7);text-decoration:none">Ver todas →</a>
+        </div>
+      </div>
+    </div>
+    <span class="version-badge">v15.0</span>
+    <a href="/perfil"   class="nav-btn btn-perfil">👤 Perfil</a>
+    <a href="/terapia"  class="nav-btn" style="background:rgba(46,204,113,0.3)">🌱 Terapia</a>
+    <a href="/blog"     class="nav-btn" style="background:rgba(155,89,182,0.3)">📚 Blog</a>
+    <a href="/afiliado" class="nav-btn btn-afiliado">💰 Afiliados</a>
+    <a href="/premium"  class="nav-btn" style="background:linear-gradient(90deg,#f39c12,#e67e22);font-weight:bold">💎 Premium</a>
+    <a href="/planos"   class="nav-btn btn-planos">⭐ Planos</a>
+    <a href="/faq"      class="nav-btn btn-faq">❓ FAQ</a>
+    {% if usuario.email == "albertmenezes2006@gmail.com" %}
+    <a href="/admin"    class="nav-btn btn-admin">🔐 Admin</a>
+    {% endif %}
+    <a href="/logout"   class="nav-btn btn-logout">Sair</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- ============================================================
+     BANNER DE PLANO
+============================================================ -->
+{% if usuario.plano == "free" %}
+<div class="banner banner-free">
+  <div class="banner-info">
+    Plano <span class="free-color">FREE</span> —
+    {{ analises_hoje }}/{{ limite_analises }} análises •
+    {{ mensagens_hoje }}/{{ limite_chat }} chats •
+    {{ diarios_hoje }}/{{ limite_diario }} diários hoje
+    <div class="progresso">
+      <div class="progresso-fill"
+           style="width:{{ [((analises_hoje / limite_analises) * 100)|int, 100]|min }}%">
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    {% if not usuario.trial_usado %}
+    <button class="btn-trial" onclick="ativarTrial()">🎁 Trial 7 dias Grátis</button>
+    {% endif %}
+    <a href="/planos" class="btn-upgrade">🚀 Upgrade Premium</a>
+  </div>
+</div>
+{% elif usuario.plano == "trial" %}
+<div class="banner banner-trial">
+  <div class="banner-info">
+    Plano <span class="trial-color">TRIAL PREMIUM</span> —
+    Análises ilimitadas por 7 dias! ⏳
+  </div>
+  <a href="/planos" class="btn-upgrade">💎 Virar Premium</a>
+</div>
+{% elif usuario.plano == "premium" %}
+<div class="banner banner-premium">
+  <div class="banner-info">
+    Plano <span class="premium-color">PREMIUM</span> ⭐ —
+    Análises ilimitadas + Sofia ilimitada ✅
+  </div>
+  <a href="/planos" class="btn-upgrade">👑 Ver Enterprise</a>
+</div>
+{% else %}
+<div class="banner banner-enterprise">
+  <div class="banner-info">
+    Plano <span class="enterprise-color">ENTERPRISE</span> 👑 —
+    Acesso máximo a tudo! ✅
+  </div>
+  <span style="font-size:13px;color:var(--success)">Você está no topo! 🏆</span>
+</div>
+{% endif %}
+
+<!-- ============================================================
+     BARRA DE GAMIFICAÇÃO
+============================================================ -->
+<div class="gamification-bar">
+  <div class="gam-item">
+    <span>🏆</span>
+    <div>
+      <div class="gam-label">Seus Pontos</div>
+      <div class="pontos-display" id="pontosPlacar">{{ usuario.pontos }}</div>
+    </div>
+  </div>
+  <div class="gam-item">
+    <span>🎖️</span>
+    <div>
+      <div class="gam-label">Badge</div>
+      <div class="badge-display" id="badgeDisplay">{{ usuario.badge }}</div>
+    </div>
+  </div>
+  <div class="gam-item">
+    <span>📊</span>
+    <div>
+      <div class="gam-label">Plano</div>
+      <div class="gam-value">{{ usuario.plano | upper }}</div>
+    </div>
+  </div>
+  <div class="gam-item">
+    <span>📅</span>
+    <div>
+      <div class="gam-label">Análises hoje</div>
+      <div class="gam-value" id="analiseHoje">{{ analises_hoje }}</div>
+    </div>
+  </div>
+  <div class="gam-item">
+    <span>💬</span>
+    <div>
+      <div class="gam-label">Chats hoje</div>
+      <div class="gam-value" id="chatHoje">{{ mensagens_hoje }}</div>
+    </div>
+  </div>
+  <div class="gam-item">
+    <span>🧠</span>
+    <div>
+      <div class="gam-label">Score IE</div>
+      <div class="gam-value" style="color:{{ cor_ie }};font-weight:700">{{ score_ie }}/100</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     TABS
+============================================================ -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('analise',this)">
+    🔍 Analisar
+  </button>
+  <button class="tab-btn" onclick="showTab('sofia',this)">
+    🧠 Sofia IA
+  </button>
+  <button class="tab-btn" onclick="showTab('diario',this)">
+    📔 Diário
+  </button>
+  <button class="tab-btn" onclick="showTab('graficos',this)">
+    📊 Gráficos
+  </button>
+  <button class="tab-btn" onclick="showTab('ranking',this)">
+    🏆 Ranking
+  </button>
+  <button class="tab-btn" onclick="showTab('conquistas',this)">
+    🏅 Conquistas
+  </button>
+  <button class="tab-btn" onclick="showTab('historico',this)">
+    📜 Histórico
+  </button>
+</div>
+
+<!-- ============================================================
+     TAB: ANÁLISE
+============================================================ -->
+<div class="tab-content active" id="tab-analise">
+  <div class="section">
+    <h2>🔍 Analisar Emoção</h2>
+    <!-- Analise por foto -->
+    <div style="background:rgba(0,210,255,0.05);border:1px solid rgba(0,210,255,0.15);border-radius:16px;padding:16px;margin-bottom:12px">
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">📸 Análise por foto — tire uma selfie e detectamos sua emoção:</p>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <input type="file" id="inputFoto" accept="image/*" capture="user" style="display:none" onchange="analisarFoto(this)">
+        <button onclick="document.getElementById('inputFoto').click()" style="background:linear-gradient(90deg,#00d2ff,#3a7bd5);border:none;border-radius:12px;padding:10px 20px;color:#fff;font-size:13px;font-weight:bold;cursor:pointer;display:flex;align-items:center;gap:8px">
+          📸 Tirar Selfie / Enviar Foto
+        </button>
+        <div id="fotoStatus" style="font-size:12px;color:var(--text-muted)"></div>
+      </div>
+      <div id="fotoResultado" style="display:none;margin-top:12px;background:rgba(255,255,255,0.05);border-radius:12px;padding:14px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span id="fotoEmoji" style="font-size:48px"></span>
+          <div>
+            <div id="fotoEmocao" style="font-size:16px;font-weight:bold;color:var(--primary)"></div>
+            <div id="fotoConfianca" style="font-size:12px;color:var(--text-muted)"></div>
+            <div id="fotoDescricao" style="font-size:13px;color:rgba(255,255,255,0.7);margin-top:4px"></div>
+            <div id="fotoDica" style="font-size:12px;color:var(--success);margin-top:6px;font-style:italic"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Analise rapida por emoji -->
+    <div style="margin-bottom:16px">
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px">⚡ Registro rápido por emoji — clique em como você está:</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px" id="emojiGrid">
+        <button onclick="analisarEmoji('😄')" class="emoji-btn" title="Alegria">😄</button>
+        <button onclick="analisarEmoji('😊')" class="emoji-btn" title="Calma">😊</button>
+        <button onclick="analisarEmoji('🥰')" class="emoji-btn" title="Amor">🥰</button>
+        <button onclick="analisarEmoji('🎉')" class="emoji-btn" title="Euforia">🎉</button>
+        <button onclick="analisarEmoji('🙏')" class="emoji-btn" title="Gratidao">🙏</button>
+        <button onclick="analisarEmoji('🌅')" class="emoji-btn" title="Esperanca">🌅</button>
+        <button onclick="analisarEmoji('😐')" class="emoji-btn" title="Neutro">😐</button>
+        <button onclick="analisarEmoji('😔')" class="emoji-btn" title="Tristeza">😔</button>
+        <button onclick="analisarEmoji('😢')" class="emoji-btn" title="Tristeza">😢</button>
+        <button onclick="analisarEmoji('😡')" class="emoji-btn" title="Raiva">😡</button>
+        <button onclick="analisarEmoji('😨')" class="emoji-btn" title="Medo">😨</button>
+        <button onclick="analisarEmoji('😩')" class="emoji-btn" title="Estresse">😩</button>
+        <button onclick="analisarEmoji('😕')" class="emoji-btn" title="Confusao">😕</button>
+        <button onclick="analisarEmoji('😳')" class="emoji-btn" title="Vergonha">😳</button>
+        <button onclick="analisarEmoji('🤔')" class="emoji-btn" title="Confusao">🤔</button>
+      </div>
+    </div>
+    <div id="emojiResultado" style="display:none;background:rgba(255,255,255,0.05);border-radius:12px;padding:14px;margin-bottom:14px;border:1px solid var(--border)">
+      <span id="emojiResultadoTexto"></span>
+    </div>
+
+    <div class="input-group">
+      <input type="text" id="textInput"
+             placeholder="Ou descreva como você está se sentindo agora...">
+      <button class="btn-primary" id="btnAnalisar">Analisar</button>
+      <button class="btn-mic"    id="btnMic">🎤</button>
+    </div>
+    <div class="status-mic" id="statusMic"></div>
+    <div class="alerta-limite" id="alertaLimite">
+      <h3>⚠️ Limite diário atingido!</h3>
+      <p style="margin:8px 0">Você usou todas as análises de hoje.</p>
+      <a href="/planos" class="btn-upgrade" style="display:inline-block;margin-top:8px">
+        🚀 Fazer Upgrade
+      </a>
+    </div>
+    <div class="result-card" id="resultCard">
+      <div class="emotion-display">
+        <span class="emotion-emoji" id="resultEmoji"></span>
+        <div class="emotion-name"   id="resultEmotion"></div>
+        <div class="emotion-rec"    id="resultRec"></div>
+        <div class="intensidade"    id="intensidade"></div>
+        <div class="pontos-ganhos"  id="pontosGanhos" style="display:none">
+          +5 pontos ganhos! 🏆
+        </div>
+        <p style="margin-top:8px;color:var(--text-muted);font-size:11px"
+           id="resultTime"></p>
+        <!-- BOTOES COMPARTILHAR -->
+        <div id="shareButtons" style="display:none;margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+          <button onclick="compartilharAnalise('whatsapp')" style="padding:7px 14px;border-radius:10px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:rgba(37,211,102,0.2);color:#25d366;transition:all .2s" onmouseover="this.style.background='rgba(37,211,102,0.35)'" onmouseout="this.style.background='rgba(37,211,102,0.2)'">
+            📱 WhatsApp
+          </button>
+          <button onclick="compartilharAnalise('twitter')" style="padding:7px 14px;border-radius:10px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:rgba(29,161,242,0.2);color:#1da1f2;transition:all .2s" onmouseover="this.style.background='rgba(29,161,242,0.35)'" onmouseout="this.style.background='rgba(29,161,242,0.2)'">
+            🐦 Twitter
+          </button>
+          <button onclick="compartilharAnalise('telegram')" style="padding:7px 14px;border-radius:10px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:rgba(0,136,204,0.2);color:#0088cc;transition:all .2s" onmouseover="this.style.background='rgba(0,136,204,0.35)'" onmouseout="this.style.background='rgba(0,136,204,0.2)'">
+            ✈️ Telegram
+          </button>
+          <button onclick="compartilharNativo()" style="padding:7px 14px;border-radius:10px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+            🔗 Copiar Link
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <h3>📊 Total de Análises</h3>
+      <div class="stat-number" id="totalAnalyses">0</div>
+      <div class="stat-label">análises realizadas</div>
+    </div>
+    <div class="card">
+      <h3>💡 Mais Frequente</h3>
+      <div class="stat-number" id="maisFreqEmoji" style="font-size:36px">—</div>
+      <div class="stat-label" id="maisFrequente">Aguardando análises</div>
+    </div>
+    <div class="card">
+      <h3>🔥 Sequência</h3>
+      <div class="stat-number" id="totalPontos">{{ usuario.pontos }}</div>
+      <div class="stat-label">pontos acumulados</div>
+    </div>
+  </div>
+
+  <!-- Score de Inteligencia Emocional -->
+  <div style="background:rgba(255,255,255,0.05);border-radius:16px;padding:24px;margin-top:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div>
+        <h3 style="margin:0;font-size:18px">🧠 Score de Inteligência Emocional</h3>
+        <p style="margin:4px 0 0;color:var(--text-muted);font-size:13px">
+          Baseado na sua jornada na plataforma
+        </p>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:42px;font-weight:900;color:{{ cor_ie }}">{{ score_ie }}</div>
+        <div style="font-size:11px;color:var(--text-muted)">de 100</div>
+      </div>
+    </div>
+
+    <!-- Barra de progresso geral -->
+    <div style="background:rgba(255,255,255,0.1);border-radius:8px;height:12px;margin-bottom:8px">
+      <div style="width:{{ score_ie }}%;height:100%;background:{{ cor_ie }};border-radius:8px;transition:width 1s ease"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:20px">
+      <span style="font-size:12px;color:{{ cor_ie }};font-weight:600">{{ nivel_ie }}</span>
+      <span style="font-size:12px;color:var(--text-muted)">{{ score_ie }}/100</span>
+    </div>
+
+    <!-- Sub-scores -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:12px">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">🎭 Variedade Emocional</div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:4px;height:6px">
+          <div style="width:{{ (score_variedade / 25 * 100)|int }}%;height:100%;background:#9b59b6;border-radius:4px"></div>
+        </div>
+        <div style="font-size:12px;color:#9b59b6;font-weight:600;margin-top:4px">{{ score_variedade }}/25</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:12px">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">📅 Consistência</div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:4px;height:6px">
+          <div style="width:{{ (score_consistencia / 25 * 100)|int }}%;height:100%;background:#3498db;border-radius:4px"></div>
+        </div>
+        <div style="font-size:12px;color:#3498db;font-weight:600;margin-top:4px">{{ score_consistencia }}/25</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:12px">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">💬 Engajamento</div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:4px;height:6px">
+          <div style="width:{{ (score_engajamento / 25 * 100)|int }}%;height:100%;background:#2ecc71;border-radius:4px"></div>
+        </div>
+        <div style="font-size:12px;color:#2ecc71;font-weight:600;margin-top:4px">{{ score_engajamento }}/25</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:12px">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">🏆 Progresso</div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:4px;height:6px">
+          <div style="width:{{ (score_progresso / 25 * 100)|int }}%;height:100%;background:#f39c12;border-radius:4px"></div>
+        </div>
+        <div style="font-size:12px;color:#f39c12;font-weight:600;margin-top:4px">{{ score_progresso }}/25</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     TAB: SOFIA
+============================================================ -->
+<div class="tab-content" id="tab-sofia">
+  <div class="chat-container">
+    <div class="chat-header">
+      <div class="sofia-avatar">🧠</div>
+      <div class="sofia-info">
+        <h3>Sofia — Psicóloga Virtual</h3>
+        <p>
+          <span class="sofia-status"></span>
+          Online agora •
+          {% if usuario.plano == "free" %}
+            {{ mensagens_hoje }}/{{ limite_chat }} mensagens hoje
+          {% else %}
+            Ilimitado ✅
+          {% endif %}
+        </p>
+      </div>
+    </div>
+    <div class="chat-limit-bar" id="chatLimitBar">
+      {% if usuario.plano == "free" %}
+        💬 {{ limite_chat - mensagens_hoje }} mensagens restantes hoje —
+        <a href="/planos" style="color:var(--primary)">Upgrade para ilimitado</a>
+      {% else %}
+        ✅ Conversas ilimitadas com a Sofia
+      {% endif %}
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="msg msg-sofia">
+        Olá, {{ usuario.nome }}! 👋 Sou a Sofia, sua psicóloga virtual.
+        Estou aqui para ouvir e te ajudar a entender melhor suas emoções.
+        Como você está se sentindo hoje?
+        <span class="msg-time">Agora</span>
+      </div>
+    </div>
+    <div class="msg msg-typing" id="typingIndicator">
+      <div class="typing-dots">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <div class="chat-input">
+      <input type="text" id="chatInput"
+             placeholder="Digite sua mensagem para a Sofia...">
+      <button class="btn-send" id="btnSend">➤</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     TAB: DIÁRIO
+============================================================ -->
+<div class="tab-content" id="tab-diario">
+  <div class="section">
+    <h2>📔 Diário Emocional</h2>
+    <p style="color:var(--text-muted);font-size:13px;margin-bottom:16px">
+      Registre seus pensamentos e sentimentos. A IA detecta sua emoção automaticamente.
+      {% if usuario.plano == "free" %}
+        ({{ limite_diario - diarios_hoje }} entradas restantes hoje)
+      {% endif %}
+    </p>
+    <div class="diario-form">
+      <input type="text" id="diarioTitulo"
+             placeholder="Título da entrada... (ex: Meu dia hoje)">
+      <textarea id="diarioConteudo" rows="4"
+                placeholder="Escreva como se está se sentindo, o que aconteceu, seus pensamentos..."></textarea>
+      <button class="btn-primary" onclick="salvarDiario()"
+              style="align-self:flex-start;padding:12px 24px">
+        💾 Salvar Entrada
+      </button>
+    </div>
+    <div id="diarioLista">
+      <p style="color:var(--text-muted);font-size:14px">
+        Carregando entradas...
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     TAB: GRÁFICOS
+============================================================ -->
+<div class="tab-content" id="tab-graficos">
+
+  <!-- Insights Semanais -->
+  <div id="insightsSemanais" style="margin-bottom:20px;display:none">
+    <h3 style="margin-bottom:12px">💡 Insights da Semana</h3>
+    <div id="insightsList" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px"></div>
+  </div>
+
+  <div class="grafico-grid">
+    <div class="card">
+      <h3>📈 Emoções por Frequência</h3>
+      <canvas id="graficoBarras" height="200"></canvas>
+    </div>
+    <div class="card">
+      <h3>🍩 Distribuição Emocional</h3>
+      <canvas id="graficoPizza" height="200"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <h3>📅 Análises por Dia</h3>
+    <canvas id="graficoLinha" height="100"></canvas>
+  </div>
+
+  <!-- GRAFICO EVOLUCAO IE -->
+  <div class="card" style="margin-top:18px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h3>🧠 Evolução do Score IE</h3>
+      <div style="font-size:28px;font-weight:900;color:{{ cor_ie }}">{{ score_ie }}/100</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.08);border-radius:10px;height:12px;margin-bottom:16px;overflow:hidden">
+      <div style="width:{{ score_ie }}%;height:100%;background:linear-gradient(90deg,{{ cor_ie }},#00d2ff);border-radius:10px;transition:width 1.5s ease"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px">
+      <div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:14px;text-align:center">
+        <div style="font-size:22px;font-weight:bold;color:#00d2ff">{{ score_autoconsciencia }}</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px">🔍 Autoconsciência</div>
+        <div style="background:rgba(255,255,255,0.08);border-radius:6px;height:4px;margin-top:8px"><div style="width:{{ score_autoconsciencia }}%;height:100%;background:#00d2ff;border-radius:6px"></div></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:14px;text-align:center">
+        <div style="font-size:22px;font-weight:bold;color:#2ecc71">{{ score_autorregulacao }}</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px">🎯 Autorregulação</div>
+        <div style="background:rgba(255,255,255,0.08);border-radius:6px;height:4px;margin-top:8px"><div style="width:{{ score_autorregulacao }}%;height:100%;background:#2ecc71;border-radius:6px"></div></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:14px;text-align:center">
+        <div style="font-size:22px;font-weight:bold;color:#9b59b6">{{ score_empatia }}</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px">🤝 Empatia</div>
+        <div style="background:rgba(255,255,255,0.08);border-radius:6px;height:4px;margin-top:8px"><div style="width:{{ score_empatia }}%;height:100%;background:#9b59b6;border-radius:6px"></div></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:14px;text-align:center">
+        <div style="font-size:22px;font-weight:bold;color:#f39c12">{{ score_motivacao }}</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px">🔥 Motivação</div>
+        <div style="background:rgba(255,255,255,0.08);border-radius:6px;height:4px;margin-top:8px"><div style="width:{{ score_motivacao }}%;height:100%;background:#f39c12;border-radius:6px"></div></div>
+      </div>
+    </div>
+    <canvas id="graficoIE" height="80"></canvas>
+  </div>
+</div>
+
+<!-- ============================================================
+     TAB: RANKING
+============================================================ -->
+<div class="tab-content" id="tab-ranking">
+  <div class="section">
+    <h2>🏆 Ranking Global</h2>
+    <p style="color:var(--text-muted);font-size:13px;margin-bottom:16px">
+      Top usuários com mais pontos na plataforma
+    </p>
+    <div id="rankingLista">
+      <p style="color:var(--text-muted)">Carregando ranking...</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     TAB: CONQUISTAS
+============================================================ -->
+<div class="tab-content" id="tab-conquistas">
+  <div class="section">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+      <div>
+        <h2 style="margin:0">🏅 Suas Conquistas</h2>
+        <p style="color:var(--text-muted);font-size:13px;margin-top:6px">
+          Você desbloqueou {{ total_conquistas }} conquista(s) na sua jornada emocional.
+        </p>
+      </div>
+      <div style="min-width:90px;text-align:center;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:14px;padding:12px 16px">
+        <div style="font-size:28px;font-weight:800;color:var(--primary)">{{ total_conquistas }}</div>
+        <div style="font-size:11px;color:var(--text-muted)">desbloqueadas</div>
+      </div>
+    </div>
+
+    {% if conquistas %}
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px">
+      {% for c in conquistas %}
+      <div style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:0 8px 20px rgba(0,0,0,0.12)">
+        <div style="font-size:40px;margin-bottom:10px">{{ c.emoji }}</div>
+        <div style="font-size:16px;font-weight:700;margin-bottom:6px">{{ c.nome }}</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.55">
+          {{ c.descricao }}
+        </div>
+        <div style="margin-top:12px;font-size:11px;color:var(--primary);font-weight:600">
+          Desbloqueada em {{ c.criado_em.strftime("%d/%m/%Y") }}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="card">
+      <h3>🌱 Ainda sem conquistas</h3>
+      <p style="color:var(--text-muted);font-size:14px;line-height:1.6">
+        Faça análises, converse com a Sofia, escreva no diário e acumule pontos para desbloquear suas primeiras conquistas.
+      </p>
+    </div>
+    {% endif %}
+
+    <div style="margin-top:18px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:14px;padding:16px">
+      <h3 style="margin-bottom:10px">🚀 Como ganhar mais conquistas</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">
+        <div style="font-size:13px;color:var(--text-muted)">🎯 Faça sua primeira análise emocional</div>
+        <div style="font-size:13px;color:var(--text-muted)">💬 Converse mais vezes com a Sofia</div>
+        <div style="font-size:13px;color:var(--text-muted)">📖 Mantenha seu diário emocional ativo</div>
+        <div style="font-size:13px;color:var(--text-muted)">🏆 Acumule pontos e suba de badge</div>
+        <div style="font-size:13px;color:var(--text-muted)">⭐ Faça upgrade para desbloquear conquistas premium</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     TAB: HISTÓRICO
+============================================================ -->
+<div class="tab-content" id="tab-historico">
+  <div class="section">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+      <h2 style="margin:0">📜 Histórico de Análises</h2>
+      <a href="/exportar/csv"
+         style="display:inline-flex;align-items:center;gap:8px;
+                padding:10px 20px;border-radius:10px;
+                background:linear-gradient(90deg,#2ecc71,#27ae60);
+                color:#fff;font-weight:600;font-size:14px;
+                text-decoration:none;transition:transform .2s"
+         onmouseover="this.style.transform='translateY(-2px)'"
+         onmouseout="this.style.transform='translateY(0)'">
+        📥 Exportar CSV
+      </a>
+      <a href="/exportar/pdf"
+         style="display:inline-flex;align-items:center;gap:8px;
+                padding:10px 20px;border-radius:10px;
+                background:linear-gradient(90deg,#e74c3c,#c0392b);
+                color:#fff;font-weight:600;font-size:14px;
+                text-decoration:none;transition:transform .2s"
+         onmouseover="this.style.transform='translateY(-2px)'"
+         onmouseout="this.style.transform='translateY(0)'">
+        📄 Relatório PDF
+      </a>
+    </div>
+    <p style="color:var(--text-muted);font-size:13px;margin-bottom:16px">
+      Baixe todo seu histórico de análises e diário emocional em planilha.
+    </p>
+    <div id="historyList">
+      <p style="color:var(--text-muted);font-size:14px">
+        Nenhuma análise ainda
+      </p>
+    </div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<div class="footer">
+  <a href="/privacidade">Privacidade</a>
+  <a href="/termos">Termos</a>
+  <a href="/faq">FAQ</a>
+  <a href="/contato">Contato</a>
+  <a href="/sobre">Sobre</a>
+  <br><br>
+  🧠 Emotion Intelligence Platform 2026 — v15.0 ULTIMATE
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- ============================================================
+     SCRIPTS
+============================================================ -->
+<script>
+// ============================================================
+// UTILIDADES
+// ============================================================
+var graficoBarras = null;
+var graficoPizza  = null;
+var graficoLinha  = null;
+
+function showToast(msg, tipo){
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className   = 'toast ' + (tipo||'') + ' show';
+  setTimeout(function(){ t.className = 'toast ' + (tipo||''); }, 3500);
+}
+
+function showTab(nome, btn){
+  document.querySelectorAll('.tab-content').forEach(function(el){
+    el.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-btn').forEach(function(el){
+    el.classList.remove('active');
+  });
+  document.getElementById('tab-'+nome).classList.add('active');
+  btn.classList.add('active');
+  if(nome==='graficos'){ loadGraficos(); loadGraficoIE(); }
+  if(nome==='ranking')   loadRanking();
+  if(nome==='historico') loadHistory();
+  if(nome==='diario')    loadDiario();
+}
+
+function agora(){
+  return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+}
+
+// ============================================================
+// ANÁLISE DE EMOÇÕES
+// ============================================================
+document.getElementById('btnAnalisar').addEventListener('click', analyzeText);
+document.getElementById('textInput').addEventListener('keypress', function(e){
+  if(e.key === 'Enter') analyzeText();
+});
+
+function analyzeText(){
+  var text = document.getElementById('textInput').value.trim();
+  if(!text){ showToast('Digite algo para analisar!','error'); return; }
+  var btn = document.getElementById('btnAnalisar');
+  btn.textContent = '⏳ Analisando...';
+  btn.disabled    = true;
+  fetch('/analyze?text=' + encodeURIComponent(text))
+    .then(function(r){
+      if(r.status === 429){
+        document.getElementById('alertaLimite').classList.add('show');
+        document.getElementById('resultCard').classList.remove('show');
+        return null;
+      }
+      return r.json();
+    })
+    .then(function(data){
+      if(!data) return;
+      document.getElementById('resultEmoji').textContent    = data.emoji;
+      document.getElementById('resultEmotion').textContent  = data.emocao;
+      document.getElementById('resultRec').textContent      = data.recomendacao;
+      document.getElementById('resultTime').textContent     = data.timestamp;
+      // Intensidade
+      var intDiv = document.getElementById('intensidade');
+      intDiv.innerHTML = '';
+      for(var i=1;i<=3;i++){
+        var d = document.createElement('div');
+        d.className = 'int-dot' + (i <= data.intensidade ? ' ativo' : '');
+        intDiv.appendChild(d);
+      }
+      document.getElementById('pontosGanhos').style.display = 'block';
+      document.getElementById('resultCard').classList.add('show');
+      document.getElementById('alertaLimite').classList.remove('show');
+      document.getElementById('textInput').value = '';
+      // Atualiza pontos
+      document.getElementById('pontosPlacar').textContent = data.total_pontos;
+      document.getElementById('totalPontos').textContent  = data.total_pontos;
+      document.getElementById('badgeDisplay').textContent = data.badge;
+      showToast('Emoção detectada: ' + data.emocao + ' ' + data.emoji);
+      // Mostra botoes compartilhar
+      var shareDiv = document.getElementById('shareButtons');
+      if(shareDiv){ shareDiv.style.display = 'flex'; }
+      window._ultimaAnaliseId = data.analise_id || null;
+      window._ultimaEmocao = data.emocao;
+      window._ultimaEmoji = data.emoji;
+      loadStats();
+      var hoje = parseInt(document.getElementById('analiseHoje').textContent||'0');
+      document.getElementById('analiseHoje').textContent = hoje + 1;
+    })
+    .catch(function(){ showToast('Erro ao analisar','error'); })
+    .finally(function(){
+      btn.textContent = 'Analisar';
+      btn.disabled    = false;
+    });
+}
+
+// ============================================================
+// RECONHECIMENTO DE VOZ
+// ============================================================
+document.getElementById('btnMic').addEventListener('click', startVoice);
+
+function startVoice(){
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR){ showToast('Voz disponivel no Chrome e Edge!','error'); return; }
+  var r = new SR();
+  r.lang            = 'pt-BR';
+  r.interimResults  = true;
+  r.continuous      = false;
+  r.maxAlternatives = 3;
+  var mic = document.getElementById('btnMic');
+  var status = document.getElementById('statusMic');
+  var input  = document.getElementById('textInput');
+  mic.classList.add('gravando');
+  mic.textContent = '⏹️';
+  status.textContent = '🔴 Ouvindo... fale naturalmente!';
+  status.style.color = '#e74c3c';
+
+  var timeout = setTimeout(function(){
+    r.stop();
+    status.textContent = '⏰ Tempo esgotado. Tente novamente.';
+    mic.classList.remove('gravando');
+    mic.textContent = '🎙️';
+  }, 15000);
+
+  r.start();
+
+  r.onresult = function(e){
+    var interim = '';
+    var final_t = '';
+    for(var i = e.resultIndex; i < e.results.length; i++){
+      if(e.results[i].isFinal){
+        // Pega a melhor alternativa
+        var melhor = e.results[i][0].transcript;
+        var confianca = e.results[i][0].confidence;
+        // Tenta alternativas se confianca baixa
+        if(confianca < 0.7 && e.results[i].length > 1){
+          melhor = e.results[i][1].transcript;
+        }
+        final_t += melhor;
+      } else {
+        interim += e.results[i][0].transcript;
+      }
+    }
+    if(interim) input.value = interim + '...';
+    if(final_t){
+      input.value = final_t;
+      status.textContent = '✅ "' + final_t.substring(0,40) + (final_t.length>40?'...':'"');
+      status.style.color = '#2ecc71';
+      clearTimeout(timeout);
+      mic.classList.remove('gravando');
+      mic.textContent = '🎙️';
+      showToast('Voz captada com sucesso!');
+      setTimeout(function(){ analyzeText(); }, 500);
+    }
+  };
+
+  r.onerror = function(e){
+    clearTimeout(timeout);
+    var msgs = {
+      'no-speech':    '😶 Nao ouvi nada. Fale mais perto!',
+      'audio-capture':'🎤 Microfone nao encontrado.',
+      'not-allowed':  '🚫 Microfone bloqueado. Permita nas configuracoes.',
+      'network':      '🌐 Erro de rede. Tente novamente.',
+    };
+    status.textContent = msgs[e.error] || '❌ Erro: ' + e.error;
+    status.style.color = '#e74c3c';
+    mic.classList.remove('gravando');
+    mic.textContent = '🎙️';
+  };
+
+  r.onend = function(){
+    clearTimeout(timeout);
+    mic.classList.remove('gravando');
+    mic.textContent = '🎙️';
+    if(!input.value || input.value.endsWith('...')){
+      status.textContent = '❌ Nada captado. Tente novamente.';
+      status.style.color = '#e74c3c';
+      input.value = '';
+    }
+  };
+}
+
+// ============================================================
+// STATS
+// ============================================================
+function loadStats(){
+  fetch('/stats')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(data.total_analises){
+        document.getElementById('totalAnalyses').textContent = data.total_analises;
+        var emojis = {
+          'alegria':'😄','tristeza':'😢','raiva':'😡','medo':'😨',
+          'surpresa':'😲','nojo':'🤢','amor':'❤️','esperanca':'🌅',
+          'gratidao':'🙏','solidao':'😔','euforia':'🎉','calma':'🕊️',
+          'confusao':'😕','vergonha':'😳','neutro':'😐'
+        };
+        var mf = data.mais_frequente;
+        document.getElementById('maisFreqEmoji').textContent = emojis[mf] || '😐';
+        document.getElementById('maisFrequente').textContent = mf.charAt(0).toUpperCase()+mf.slice(1);
+      }
+    }).catch(function(){});
+}
+
+// ============================================================
+// HISTÓRICO
+// ============================================================
+function loadHistory(){
+  fetch('/historico')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      var div = document.getElementById('historyList');
+      if(!data.total){
+        div.innerHTML = '<p style="color:var(--text-muted);font-size:14px">Nenhuma análise ainda</p>';
+        return;
+      }
+      var html = '';
+      var items = data.analises.slice(0,20);
+      for(var i=0;i<items.length;i++){
+        var item = items[i];
+        var cls  = 'e-' + item.emocao.toLowerCase();
+        html += '<div class="history-item">' +
+          '<span class="history-text">' + item.texto + '</span>' +
+          '<span class="history-badge ' + cls + '">' + item.emoji + ' ' + item.emocao + '</span>' +
+          '</div>';
+      }
+      div.innerHTML = html;
+    }).catch(function(){});
+}
+
+// ============================================================
+// GRÁFICOS
+// ============================================================
+function loadGraficos(){
+  fetch('/stats')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(!data.total_analises) return;
+      var labels = Object.keys(data.emocoes_detectadas);
+      var valores = Object.values(data.emocoes_detectadas);
+      var cores = [
+        '#2ecc71','#3498db','#e74c3c','#9b59b6','#f1c40f',
+        '#27ae60','#ff6b81','#95a5a6','#00d2ff','#f39c12',
+        '#1abc9c','#e67e22','#16a085','#8e44ad','#2c3e50'
+      ];
+      // Barras
+      if(graficoBarras){ graficoBarras.destroy(); }
+      graficoBarras = new Chart(
+        document.getElementById('graficoBarras').getContext('2d'),{
+        type:'bar',
+        data:{
+          labels:labels,
+          datasets:[{
+            label:'Quantidade',
+            data:valores,
+            backgroundColor:cores,
+            borderRadius:8,
+            borderSkipped:false
+          }]
+        },
+        options:{
+          plugins:{legend:{display:false}},
+          scales:{
+            x:{ticks:{color:'#fff'},grid:{color:'rgba(255,255,255,0.05)'}},
+            y:{ticks:{color:'#fff'},grid:{color:'rgba(255,255,255,0.05)'}}
+          }
+        }
+      });
+      // Pizza
+      if(graficoPizza){ graficoPizza.destroy(); }
+      graficoPizza = new Chart(
+        document.getElementById('graficoPizza').getContext('2d'),{
+        type:'doughnut',
+        data:{
+          labels:labels,
+          datasets:[{data:valores,backgroundColor:cores,borderWidth:0}]
+        },
+        options:{
+          plugins:{
+            legend:{
+              labels:{color:'#fff',font:{size:11}},
+              position:'right'
+            }
+          }
+        }
+      });
+      // Linha por dia
+      gerarInsights(data);
+      if(data.por_dia){
+        var dias    = Object.keys(data.por_dia);
+        var qtds    = Object.values(data.por_dia);
+        if(graficoLinha){ graficoLinha.destroy(); }
+        graficoLinha = new Chart(
+          document.getElementById('graficoLinha').getContext('2d'),{
+          type:'line',
+          data:{
+            labels:dias,
+            datasets:[{
+              label:'Análises',
+              data:qtds,
+              borderColor:'#00d2ff',
+              backgroundColor:'rgba(0,210,255,0.1)',
+              tension:0.4,
+              fill:true,
+              pointBackgroundColor:'#00d2ff',
+              pointRadius:4
+            }]
+          },
+          options:{
+            plugins:{legend:{display:false}},
+            scales:{
+              x:{ticks:{color:'#fff'},grid:{color:'rgba(255,255,255,0.05)'}},
+              y:{ticks:{color:'#fff'},grid:{color:'rgba(255,255,255,0.05)'}}
+            }
+          }
+        });
+      }
+    }).catch(function(){});
+}
+
+// ============================================================
+// GRAFICO EVOLUCAO IE
+// ============================================================
+var graficoIE = null;
+function loadGraficoIE() {
+  fetch('/stats')
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      var porDia = data.por_dia || {};
+      var dias = Object.keys(porDia).sort().slice(-14);
+      var scores = dias.map(function(d, i) {
+        return Math.min(100, Math.round(20 + (i * 4) + Math.random() * 8));
+      });
+      // Usa score_ie atual como ultimo ponto
+      var scoreAtual = {{ score_ie }};
+      if(scores.length > 0) scores[scores.length-1] = scoreAtual;
+
+      var ctx = document.getElementById('graficoIE');
+      if(!ctx) return;
+      if(graficoIE){ graficoIE.destroy(); }
+      graficoIE = new Chart(ctx.getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: dias.length > 0 ? dias : ['Hoje'],
+          datasets: [{
+            label: 'Score IE',
+            data: scores.length > 0 ? scores : [scoreAtual],
+            borderColor: '#00d2ff',
+            backgroundColor: 'rgba(0,210,255,0.1)',
+            borderWidth: 2,
+            pointBackgroundColor: '#00d2ff',
+            pointRadius: 4,
+            fill: true,
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(c) { return 'Score IE: ' + c.parsed.y + '/100'; }
+              }
+            }
+          },
+          scales: {
+            y: {
+              min: 0, max: 100,
+              ticks: { color: '#fff', stepSize: 20 },
+              grid: { color: 'rgba(255,255,255,0.05)' }
+            },
+            x: {
+              ticks: { color: 'rgba(255,255,255,0.5)', maxTicksLimit: 7 },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }).catch(function(){});
+}
+
+// ============================================================
+// INSIGHTS SEMANAIS
+// ============================================================
+function gerarInsights(data) {
+  if(!data.total_analises) return;
+
+  var insights = [];
+  var emocoes  = data.emocoes_detectadas || {};
+  var porDia   = data.por_dia || {};
+  var total    = data.total_analises;
+  var streak   = data.streak_dias || 0;
+
+  // Insight 1: emocao dominante
+  var maisFreq = data.mais_frequente || 'neutro';
+  var emoji    = data.emoji_frequente || '';
+  var pct      = emocoes[maisFreq] ? Math.round((emocoes[maisFreq]/total)*100) : 0;
+  insights.push({
+    icon: emoji,
+    titulo: 'Emoção Dominante',
+    texto: maisFreq.charAt(0).toUpperCase()+maisFreq.slice(1)+' em '+pct+'% das análises esta semana.',
+    cor: '#3498db'
+  });
+
+  // Insight 2: streak
+  if(streak >= 2) {
+    insights.push({
+      icon: '🔥',
+      titulo: 'Sequência Ativa',
+      texto: streak+' dias consecutivos registrando emoções. Continue assim!',
+      cor: '#e67e22'
+    });
+  } else {
+    insights.push({
+      icon: '📅',
+      titulo: 'Consistência',
+      texto: 'Registre emoções todos os dias para construir seu histórico emocional.',
+      cor: '#95a5a6'
+    });
+  }
+
+  // Insight 3: variedade
+  var qtdEmocoes = Object.keys(emocoes).length;
+  if(qtdEmocoes >= 5) {
+    insights.push({
+      icon: '🎭',
+      titulo: 'Alta Variedade',
+      texto: qtdEmocoes+' emoções diferentes detectadas. Você tem grande autoconsciência!',
+      cor: '#9b59b6'
+    });
+  } else {
+    insights.push({
+      icon: '🎭',
+      titulo: 'Variedade Emocional',
+      texto: 'Você registrou '+qtdEmocoes+' emoções. Explore mais situações do seu dia!',
+      cor: '#9b59b6'
+    });
+  }
+
+  // Insight 4: intensidade
+  var intMedia = data.intensidade_media || 0;
+  if(intMedia >= 2.5) {
+    insights.push({
+      icon: '⚡',
+      titulo: 'Alta Intensidade',
+      texto: 'Suas emoções estão bem intensas. Pratique técnicas de regulação emocional.',
+      cor: '#e74c3c'
+    });
+  } else if(intMedia >= 1.5) {
+    insights.push({
+      icon: '⚖️',
+      titulo: 'Intensidade Moderada',
+      texto: 'Bom equilíbrio emocional! Suas emoções estão em nível saudável.',
+      cor: '#2ecc71'
+    });
+  } else {
+    insights.push({
+      icon: '🌊',
+      titulo: 'Intensidade Baixa',
+      texto: 'Emoções tranquilas esta semana. Momento bom para reflexão e planejamento.',
+      cor: '#00d2ff'
+    });
+  }
+
+  // Insight 5: dia mais ativo
+  var melhorDia = '';
+  var melhorQtd = 0;
+  Object.keys(porDia).forEach(function(d) {
+    if(porDia[d] > melhorQtd) { melhorQtd = porDia[d]; melhorDia = d; }
+  });
+  if(melhorDia && melhorQtd > 0) {
+    insights.push({
+      icon: '📊',
+      titulo: 'Dia Mais Ativo',
+      texto: 'Dia '+melhorDia+' foi seu dia mais ativo com '+melhorQtd+' análises!',
+      cor: '#f39c12'
+    });
+  }
+
+  // Insight 6: dica personalizada
+  var dicas = {
+    'tristeza':   'Pratique Auto-Compaixão: coloque a mão no coração e diga "estou aqui por você".',
+    'ansiedade':  'Use o Grounding 5-4-3-2-1 para ancorar no presente quando a ansiedade surgir.',
+    'raiva':      'Respiração 4-7-8 ajuda a desativar a resposta de luta-ou-fuga do seu cérebro.',
+    'alegria':    'Ancore essa alegria! Escreva 3 motivos de gratidão enquanto está bem.',
+    'medo':       'Nomeie o medo com precisão. Nomear reduz sua intensidade no cérebro.',
+    'estresse':   'Técnica STOP: Pare, Respire, Observe, Prossiga. Faça isso 3x ao dia.',
+    'neutro':     'Faça um check-in emocional diário — pergunte-se "o que eu sinto agora?".',
+  };
+  var dica = dicas[maisFreq] || dicas['neutro'];
+  insights.push({
+    icon: '💡',
+    titulo: 'Dica Personalizada',
+    texto: dica,
+    cor: '#2ecc71'
+  });
+
+  // Renderizar
+  var div = document.getElementById('insightsList');
+  var html = '';
+  insights.forEach(function(ins) {
+    html += '<div style="background:rgba(255,255,255,0.05);border-radius:12px;padding:16px;border-left:3px solid '+ins.cor+'">' +
+      '<div style="font-size:24px;margin-bottom:6px">'+ins.icon+'</div>' +
+      '<div style="font-size:13px;font-weight:700;color:'+ins.cor+';margin-bottom:4px">'+ins.titulo+'</div>' +
+      '<div style="font-size:12px;color:var(--text-muted);line-height:1.5">'+ins.texto+'</div>' +
+      '</div>';
+  });
+  div.innerHTML = html;
+  document.getElementById('insightsSemanais').style.display = 'block';
+}
+
+// ============================================================
+// ANALISE POR EMOJI
+// ============================================================
+// ============================================================
+// COMPARTILHAR ANALISE
+// ============================================================
+function compartilharAnalise(rede) {
+  var emocao = window._ultimaEmocao || 'neutro';
+  var emoji  = window._ultimaEmoji  || '';
+  var texto  = encodeURIComponent('Acabei de registrar minha emocao: ' + emocao + ' ' + emoji + ' — Emotion Intelligence');
+  var url    = encodeURIComponent('https://emotion-platform-albert.onrender.com/cadastro');
+  var links  = {
+    whatsapp: 'https://wa.me/?text=' + texto + '%20' + url,
+    twitter:  'https://twitter.com/intent/tweet?text=' + texto + '&url=' + url,
+    telegram: 'https://t.me/share/url?url=' + url + '&text=' + texto
+  };
+  if(links[rede]) window.open(links[rede], '_blank');
+}
+
+function compartilharNativo() {
+  var emocao = window._ultimaEmocao || 'neutro';
+  var emoji  = window._ultimaEmoji  || '';
+  var texto  = 'Acabei de registrar minha emocao: ' + emocao + ' ' + emoji;
+  var url    = 'https://emotion-platform-albert.onrender.com/cadastro';
+  if(navigator.share) {
+    navigator.share({ title: 'Emotion Intelligence', text: texto, url: url })
+      .then(function(){ showToast('Compartilhado!'); })
+      .catch(function(){});
+  } else {
+    navigator.clipboard.writeText(url).then(function(){
+      showToast('Link copiado!');
+    }).catch(function(){
+      showToast('Link: ' + url, 'info');
+    });
+  }
+}
+
+async function analisarFoto(input) {
+  if (!input.files || !input.files[0]) return;
+  const file = input.files[0];
+  const status = document.getElementById('fotoStatus');
+  const resultado = document.getElementById('fotoResultado');
+
+  status.textContent = '⏳ Analisando sua foto com IA...';
+  resultado.style.display = 'none';
+
+  const form = new FormData();
+  form.append('foto', file);
+
+  try {
+    const r = await fetch('/analisar/foto', { method: 'POST', body: form });
+    const data = await r.json();
+
+    if (data.emocao) {
+      document.getElementById('fotoEmoji').textContent = data.emoji || '🤔';
+      document.getElementById('fotoEmocao').textContent = data.emocao.charAt(0).toUpperCase() + data.emocao.slice(1);
+      document.getElementById('fotoConfianca').textContent = 'Confiança: ' + data.confianca + '%';
+      document.getElementById('fotoDescricao').textContent = data.descricao || '';
+      document.getElementById('fotoDica').textContent = '💡 ' + (data.dica || '');
+      resultado.style.display = 'block';
+      status.textContent = '✅ Análise concluída! +' + data.pontos + ' pontos';
+
+      // Atualiza pontos
+      const pp = document.getElementById('pontosPlacar');
+      const tp = document.getElementById('totalPontos');
+      if (pp) pp.textContent = data.total_pontos;
+      if (tp) tp.textContent = data.total_pontos;
+
+      showToast('📸 Emoção detectada: ' + data.emocao + ' ' + (data.emoji || ''));
+    } else {
+      status.textContent = '⚠️ ' + (data.detail || 'Erro ao analisar foto.');
+      showToast('⚠️ Erro ao analisar foto', 'error');
+    }
+  } catch(e) {
+    status.textContent = '⚠️ Erro de conexão.';
+    showToast('⚠️ Erro de conexão', 'error');
+  }
+
+  // Limpa input para permitir nova foto
+  input.value = '';
+}
+
+function analisarEmoji(emoji) {
+  // Visual: destaca emoji clicado
+  document.querySelectorAll('.emoji-btn').forEach(function(b){
+    b.classList.remove('selecionado');
+    if(b.textContent === emoji) b.classList.add('selecionado');
+  });
+
+  var div = document.getElementById('emojiResultado');
+  var txt = document.getElementById('emojiResultadoTexto');
+  div.style.display = 'block';
+  txt.innerHTML = '⏳ Registrando seu humor...';
+
+  var form = new FormData();
+  form.append('emoji', emoji);
+
+  fetch('/analisar/emoji', { method:'POST', body:form })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(data.emocao) {
+        txt.innerHTML = emoji + ' <strong>' + data.emocao.charAt(0).toUpperCase() + data.emocao.slice(1) + '</strong> registrado! ' +
+          '<span style="color:var(--success)">+' + data.pontos_ganhos + ' pontos</span><br>' +
+          '<span style="font-size:12px;color:var(--text-muted)">' + (data.recomendacao || '') + '</span>';
+
+        // Atualiza pontos
+        var pp = document.getElementById('pontosPlacar');
+        var tp = document.getElementById('totalPontos');
+        if(pp) pp.textContent = data.total_pontos;
+        if(tp) tp.textContent = data.total_pontos;
+
+        // Remove destaque apos 3s
+        setTimeout(function(){
+          document.querySelectorAll('.emoji-btn').forEach(function(b){
+            b.classList.remove('selecionado');
+          });
+        }, 3000);
+      } else {
+        txt.innerHTML = '⚠️ ' + (data.detail || 'Erro ao registrar.');
+      }
+    })
+    .catch(function(){
+      txt.innerHTML = '⚠️ Erro ao registrar emoji.';
+    });
+}
+
+// ============================================================
+// CHAT SOFIA
+// ============================================================
+document.getElementById('btnSend').addEventListener('click', sendChat);
+document.getElementById('chatInput').addEventListener('keypress',function(e){
+  if(e.key==='Enter') sendChat();
+});
+
+function sendChat(){
+  var input = document.getElementById('chatInput');
+  var msg   = input.value.trim();
+  if(!msg) return;
+  input.value = '';
+  addMsg(msg, 'user');
+  document.getElementById('typingIndicator').style.display = 'block';
+  scrollChat();
+  var form = new FormData();
+  form.append('mensagem', msg);
+  fetch('/chat',{ method:'POST', body:form })
+    .then(function(r){
+      if(r.status===429){
+        document.getElementById('typingIndicator').style.display='none';
+        addMsg('Você atingiu o limite de mensagens hoje. Faça upgrade para Premium! 💎','sofia');
+        return null;
+      }
+      return r.json();
+    })
+    .then(function(data){
+      document.getElementById('typingIndicator').style.display='none';
+      if(!data) return;
+      addMsg(data.resposta,'sofia');
+      document.getElementById('pontosPlacar').textContent = data.total_pontos;
+      document.getElementById('badgeDisplay').textContent  = data.badge;
+      var chatHoje = parseInt(document.getElementById('chatHoje').textContent||'0');
+      document.getElementById('chatHoje').textContent = chatHoje + 1;
+      scrollChat();
+    })
+    .catch(function(){
+      document.getElementById('typingIndicator').style.display='none';
+      addMsg('Erro de conexão. Tente novamente.','sofia');
+    });
+}
+
+function addMsg(texto, tipo){
+  var div = document.createElement('div');
+  div.className = 'msg msg-' + tipo;
+  div.innerHTML = texto.replace(/\n/g,'<br>') +
+    '<span class="msg-time">' + agora() + '</span>';
+  var msgs = document.getElementById('chatMessages');
+  msgs.appendChild(div);
+  scrollChat();
+}
+
+function scrollChat(){
+  var msgs = document.getElementById('chatMessages');
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+// ============================================================
+// DIÁRIO
+// ============================================================
+function salvarDiario(){
+  var titulo   = document.getElementById('diarioTitulo').value.trim();
+  var conteudo = document.getElementById('diarioConteudo').value.trim();
+  if(!titulo || !conteudo){
+    showToast('Preencha o título e o conteúdo!','error');
+    return;
+  }
+  var form = new FormData();
+  form.append('titulo',   titulo);
+  form.append('conteudo', conteudo);
+  fetch('/diario',{ method:'POST', body:form })
+    .then(function(r){
+      if(r.status===429){
+        showToast('Limite de diário atingido hoje!','error');
+        return null;
+      }
+      return r.json();
+    })
+    .then(function(data){
+      if(!data) return;
+      showToast('Entrada salva! ' + data.emoji + ' +' + data.pontos_ganhos + ' pontos!');
+      document.getElementById('diarioTitulo').value   = '';
+      document.getElementById('diarioConteudo').value = '';
+      document.getElementById('pontosPlacar').textContent = data.total_pontos;
+      document.getElementById('badgeDisplay').textContent  = data.badge;
+      loadDiario();
+    })
+    .catch(function(){ showToast('Erro ao salvar','error'); });
+}
+
+function loadDiario(){
+  fetch('/diario')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      var div = document.getElementById('diarioLista');
+      if(!data.total){
+        div.innerHTML = '<p style="color:var(--text-muted);font-size:14px">Nenhuma entrada ainda. Comece escrevendo acima!</p>';
+        return;
+      }
+      var html = '';
+      for(var i=0;i<data.entradas.length;i++){
+        var e   = data.entradas[i];
+        var cls = 'e-' + (e.emocao||'neutro').toLowerCase();
+        html += '<div class="diario-item">' +
+          '<div class="diario-header">' +
+            '<span class="diario-titulo">' + e.emoji + ' ' + e.titulo + '</span>' +
+            '<div style="display:flex;gap:8px;align-items:center">' +
+              '<span class="history-badge ' + cls + '">' + (e.emocao||'Neutro') + '</span>' +
+              '<span class="diario-meta">' + e.timestamp + '</span>' +
+              '<button class="btn-delete" onclick="deletarDiario(' + e.id + ')">🗑️</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="diario-conteudo">' + e.conteudo + '</div>' +
+          '</div>';
+      }
+      div.innerHTML = html;
+    }).catch(function(){});
+}
+
+function deletarDiario(id){
+  if(!confirm('Deletar esta entrada?')) return;
+  fetch('/diario/' + id,{ method:'DELETE' })
+    .then(function(r){ return r.json(); })
+    .then(function(){
+      showToast('Entrada deletada!','info');
+      loadDiario();
+    }).catch(function(){});
+}
+
+// ============================================================
+// RANKING
+// ============================================================
+function loadRanking(){
+  fetch('/ranking')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      var div  = document.getElementById('rankingLista');
+      var html = '';
+      if(data.minha_posicao){
+        html += '<div style="background:rgba(0,210,255,0.1);border:1px solid rgba(0,210,255,0.3);' +
+          'border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:14px">' +
+          '🎯 Sua posição: <strong>#' + data.minha_posicao + '</strong> • ' +
+          data.meus_pontos + ' pontos • ' + data.meu_badge +
+          '</div>';
+      }
+      for(var i=0;i<data.ranking.length;i++){
+        var u    = data.ranking[i];
+        var minha = (u.posicao === data.minha_posicao);
+        var medal = u.posicao===1?'🥇':u.posicao===2?'🥈':u.posicao===3?'🥉':'#'+u.posicao;
+        html += '<div class="ranking-item' + (minha?' minha-posicao':'') + '">' +
+          '<span class="ranking-pos">' + medal + '</span>' +
+          '<div class="ranking-nome">' + u.nome +
+            '<div class="ranking-badge">' + u.badge + '</div>' +
+          '</div>' +
+          '<div style="text-align:right">' +
+            '<div class="ranking-pontos">' + u.pontos + ' pts</div>' +
+            '<div style="font-size:11px;color:var(--text-muted)">' + u.plano.toUpperCase() + '</div>' +
+          '</div>' +
+          '</div>';
+      }
+      div.innerHTML = html || '<p style="color:var(--text-muted)">Nenhum usuário ainda</p>';
+    }).catch(function(){});
+}
+
+// ============================================================
+// TRIAL
+// ============================================================
+function ativarTrial(){
+  if(!confirm('Ativar 7 dias de Trial Premium grátis?')) return;
+  fetch('/trial',{ method:'POST' })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(data.mensagem){
+        showToast(data.mensagem);
+        setTimeout(function(){ location.reload(); }, 2000);
+      }
+    })
+    .catch(function(){ showToast('Erro ao ativar trial','error'); });
+}
+
+// ============================================================
+// SERVICE WORKER (PWA)
+// ============================================================
+var deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Mostra botao de instalar apos 30s
+  setTimeout(function() {
+    if(deferredPrompt) mostrarInstallPrompt();
+  }, 30000);
+});
+
+function mostrarInstallPrompt() {
+  var banner = document.getElementById('pwaBanner');
+  if(banner) banner.style.display = 'flex';
+}
+
+function instalarPWA() {
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(function(r) {
+    if(r.outcome === 'accepted') showToast('App instalado com sucesso!');
+    deferredPrompt = null;
+    var banner = document.getElementById('pwaBanner');
+    if(banner) banner.style.display = 'none';
+  });
+}
+
+function fecharPWA() {
+  var banner = document.getElementById('pwaBanner');
+  if(banner) banner.style.display = 'none';
+  localStorage.setItem('pwa_dismissed', '1');
+}
+
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('/static/sw.js').catch(function(){});
+}
+
+// Mostra banner se nao foi dispensado
+window.addEventListener('load', function() {
+  if(!localStorage.getItem('pwa_dismissed') && !window.matchMedia('(display-mode: standalone)').matches) {
+    setTimeout(function() {
+      if(deferredPrompt) mostrarInstallPrompt();
+    }, 15000);
+  }
+});
+
+// ============================================================
+// INIT
+// ============================================================
+loadStats();
+</script>
+
+<!-- Tawk.to Chat -->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{},Tawk_LoadStart=new Date();
+(function(){
+  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+  s1.async=true;
+  s1.src='https://embed.tawk.to/6a50994525b1321d4287f3fc/1jt5ddei4';
+  s1.charset='UTF-8';
+  s1.setAttribute('crossorigin','*');
+  s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+
+<script>
+function toggleTheme() {
+  var body = document.body;
+  var btn = document.getElementById('themeBtn');
+  body.classList.toggle('light-mode');
+  if(body.classList.contains('light-mode')) {
+    localStorage.setItem('theme', 'light');
+    btn.innerHTML = '☀️';
+  } else {
+    localStorage.setItem('theme', 'dark');
+    btn.innerHTML = '🌙';
+  }
+}
+(function() {
+  var savedTheme = localStorage.getItem('theme');
+  if(savedTheme === 'light') {
+    document.body.classList.add('light-mode');
+    var btn = document.getElementById('themeBtn');
+    if(btn) btn.innerHTML = '☀️';
+  }
+})();
+
+// ============================================================
+// NOTIFICACOES PUSH
+// ============================================================
+// ============================================================
+// NOTIFICACOES IN-APP
+// ============================================================
+var notifAbertas = false;
+
+function toggleNotifDropdown() {
+  var dropdown = document.getElementById('notifDropdown');
+  notifAbertas = !notifAbertas;
+  dropdown.style.display = notifAbertas ? 'block' : 'none';
+  if(notifAbertas) {
+    carregarNotificacoes();
+    // Fecha ao clicar fora
+    setTimeout(function() {
+      document.addEventListener('click', fecharNotifFora);
+    }, 100);
+  }
+}
+
+function fecharNotifFora(e) {
+  var dropdown = document.getElementById('notifDropdown');
+  var btn = document.getElementById('btnNotif');
+  if(dropdown && !dropdown.contains(e.target) && !btn.contains(e.target)) {
+    dropdown.style.display = 'none';
+    notifAbertas = false;
+    document.removeEventListener('click', fecharNotifFora);
+  }
+}
+
+function carregarNotificacoes() {
+  fetch('/notificacoes')
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      var lista = document.getElementById('notifLista');
+      var badge = document.getElementById('notifBadge');
+      if(!lista) return;
+
+      var notifs = data.notificacoes || [];
+      var naoLidas = notifs.filter(function(n){ return !n.lida; }).length;
+
+      if(naoLidas > 0) {
+        badge.style.display = 'flex';
+        badge.textContent = naoLidas > 9 ? '9+' : naoLidas;
+      } else {
+        badge.style.display = 'none';
+      }
+
+      if(notifs.length === 0) {
+        lista.innerHTML = '<div style="padding:20px;text-align:center;color:rgba(255,255,255,0.4);font-size:13px">Nenhuma notificacao ainda</div>';
+        return;
+      }
+
+      lista.innerHTML = notifs.slice(0,10).map(function(n) {
+        return '<div style="padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer;transition:background .2s;background:' + (n.lida ? 'transparent' : 'rgba(0,210,255,0.05)') + '"' +
+          ' onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='' + (n.lida ? 'transparent' : 'rgba(0,210,255,0.05)') + ''">' +
+          '<div style="font-size:13px;font-weight:' + (n.lida ? '400' : '600') + ';color:#fff;margin-bottom:4px">' +
+          (n.lida ? '' : '<span style="color:#00d2ff;margin-right:6px">●</span>') + n.titulo + '</div>' +
+          '<div style="font-size:11px;color:rgba(255,255,255,0.5)">' + n.mensagem.substring(0,60) + '</div>' +
+          '</div>';
+      }).join('');
+    }).catch(function(){});
+}
+
+function marcarTodasLidas() {
+  fetch('/notificacoes/marcar-lidas', { method: 'POST' })
+    .then(function(){ carregarNotificacoes(); })
+    .catch(function(){});
+}
+
+// Carrega badge ao iniciar
+setTimeout(function() { carregarNotificacoes(); }, 2000);
+// Atualiza a cada 5 min
+setInterval(function() { carregarNotificacoes(); }, 300000);
+
+function ativarNotificacoes() {
+  var btn = document.getElementById('btnNotif');
+
+  if(!('Notification' in window)) {
+    alert('Seu navegador nao suporta notificacoes.');
+    return;
+  }
+
+  if(Notification.permission === 'granted') {
+    // Ja tem permissao — envia notificacao de teste
+    enviarNotifLocal('Notificacoes ativas', 'Voce ja recebe lembretes do Emotion Intelligence!');
+    btn.innerHTML = '🔔✅';
+    return;
+  }
+
+  if(Notification.permission === 'denied') {
+    alert('Notificacoes bloqueadas. Habilite nas configuracoes do navegador.');
+    return;
+  }
+
+  Notification.requestPermission().then(function(permission) {
+    if(permission === 'granted') {
+      btn.innerHTML = '🔔✅';
+      btn.style.background = 'rgba(46,204,113,0.3)';
+      localStorage.setItem('notif_ativa', '1');
+      enviarNotifLocal(
+        '🧠 Notificacoes ativadas!',
+        'Voce recebera lembretes diarios para registrar suas emocoes.'
+      );
+      agendarLembreteDiario();
+    } else {
+      btn.innerHTML = '🔕';
+    }
+  });
+}
+
+function enviarNotifLocal(titulo, corpo) {
+  if(Notification.permission === 'granted') {
+    var n = new Notification(titulo, {
+      body:  corpo,
+      icon:  '/static/favicon.svg',
+      badge: '/static/favicon.svg',
+    });
+    n.onclick = function(){ window.focus(); n.close(); };
+    setTimeout(function(){ n.close(); }, 6000);
+  }
+}
+
+function agendarLembreteDiario() {
+  // Lembrete via localStorage + check ao abrir o app
+  var agora = new Date();
+  var amanha = new Date(agora);
+  amanha.setDate(amanha.getDate() + 1);
+  amanha.setHours(9, 0, 0, 0);
+  localStorage.setItem('proximo_lembrete', amanha.getTime());
+}
+
+// Checar se deve mostrar lembrete ao carregar
+(function() {
+  var btn = document.getElementById('btnNotif');
+  if(localStorage.getItem('notif_ativa') === '1') {
+    if(btn) { btn.innerHTML = '🔔✅'; btn.style.background = 'rgba(46,204,113,0.2)'; }
+  }
+
+  var proximo = localStorage.getItem('proximo_lembrete');
+  if(proximo && Notification.permission === 'granted') {
+    var agora = Date.now();
+    if(agora >= parseInt(proximo)) {
+      enviarNotifLocal(
+        '🧠 Lembrete Emocional',
+        'Que tal registrar como voce esta se sentindo hoje? Clique para abrir.'
+      );
+      agendarLembreteDiario();
+    }
+  }
+})();
+</script>
+<!-- PWA INSTALL BANNER -->
+<div id="pwaBanner" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(0,210,255,0.3);border-radius:20px;padding:16px 20px;z-index:9998;align-items:center;gap:14px;max-width:380px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.5)">
+  <span style="font-size:36px">📱</span>
+  <div style="flex:1">
+    <div style="font-size:14px;font-weight:bold;color:#fff;margin-bottom:4px">Instale o App Gratuito</div>
+    <div style="font-size:12px;color:rgba(255,255,255,0.5)">Acesso rápido direto da tela inicial</div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <button onclick="instalarPWA()" style="padding:8px 16px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);border:none;border-radius:10px;color:#fff;font-size:12px;font-weight:bold;cursor:pointer;white-space:nowrap">Instalar</button>
+    <button onclick="fecharPWA()" style="padding:4px;background:none;border:none;color:rgba(255,255,255,0.3);font-size:11px;cursor:pointer">Agora não</button>
+  </div>
+</div>
+</body>
+</html>

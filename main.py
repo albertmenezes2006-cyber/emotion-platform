@@ -1,5 +1,5 @@
 # ================================================================
-# EMOTION INTELLIGENCE PLATFORM - v14.0 ULTIMATE
+# EMOTION INTELLIGENCE PLATFORM - v20.0 ULTIMATE
 # ================================================================
 # Desenvolvido por: Albert Menezes
 # Versão: 14.0 ULTIMATE
@@ -1355,16 +1355,23 @@ def detectar_emocao_com_ia(texto: str, usar_gemini: bool = False, db=None, usuar
     return analise_local
 
 def detectar_idioma(texto: str) -> str:
-    """Detecta idioma aproximado do texto"""
-    palavras_pt = ["estou","sinto","minha","meu","tenho","nao","que","com","uma","para","isso","mas"]
-    palavras_en = ["i am","i feel","i have","my","the","and","but","with","not","feel","this","that"]
-    palavras_es = ["estoy","siento","tengo","mi","que","con","una","para","esto","pero","muy"]
-    
+    """Detecta idioma com precisao maxima — PT tem prioridade"""
+    if not texto or not texto.strip():
+        return "pt"
+    try:
+        from langdetect import detect
+        idioma = detect(texto)
+        if idioma in ["pt","en","es","fr","de","it","ja","ko","ar","ru","hi"]:
+            return idioma
+    except:
+        pass
     texto_lower = texto.lower()
-    score_pt = sum(1 for p in palavras_pt if p in texto_lower)
+    palavras_pt = ["estou","sinto","minha","meu","tenho","nao","que","com","uma","para","isso","mas","voce","ele","ela","nos","eles","muito","mais","como","quando","onde","porque","tambem","ainda","ja","ate","desde","cada","tudo","nada","algo","alguem","nunca","sempre","talvez","hoje","agora","aqui","assim","entao","to","ta","ne","gente","cara","mano","obrigado","obrigada","saudade","brasileiro","brasil","trabalho","dinheiro","oi","ola","tchau"]
+    palavras_en = ["i am","i feel","i have","my","the","and","but","with","not","feel","this","that","you","he","she","we","they","very","how","when","where","because","also","never","always","today","now","here","there"]
+    palavras_es = ["estoy","siento","tengo","mi","con","una","para","esto","pero","muy","usted","nosotros","ellos","tambien","todavia","hoy","ahora","aqui","alli","entonces","aunque","hola","gracias"]
+    score_pt = sum(2 for p in palavras_pt if p in texto_lower) + 3
     score_en = sum(1 for p in palavras_en if p in texto_lower)
     score_es = sum(1 for p in palavras_es if p in texto_lower)
-    
     if score_en > score_pt and score_en > score_es:
         return "en"
     if score_es > score_pt and score_es > score_en:
@@ -1875,8 +1882,14 @@ def calcular_intensidade(texto: str) -> int:
         tem_emoji_intenso
     ])
 
+    if score >= 5:
+        return 5
+    if score >= 4:
+        return 4
     if score >= 3:
         return 3
+    if score >= 2:
+        return 2
     if score >= 1:
         return 2
     return 1
@@ -2208,7 +2221,7 @@ def email_base(conteudo_interno: str) -> str:
                     🧠 Emotion Intelligence
                 </h1>
                 <p style="color: rgba(255,255,255,0.8); margin: 10px 0 0;">
-                    v14.0 ULTIMATE
+                    v20.0 ULTIMATE
                 </p>
             </div>
             <div style="padding: 40px;">
@@ -2814,7 +2827,7 @@ scheduler.start()
 
 app       = FastAPI(
     title="Emotion Intelligence Platform",
-    version="14.0",
+    version="20.0",
     description="Plataforma completa de inteligência emocional com IA"
 )
 templates = Jinja2Templates(directory="templates")
@@ -5271,7 +5284,7 @@ async def health(db: Session = Depends(get_db)):
         uptime          = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         return {
             "status":          "healthy",
-            "version": "19.0 ULTIMATE",
+            "version": "20.0 ULTIMATE",
             "timestamp":       uptime,
             "database":        "connected",
             "usuarios":        total_usuarios,
@@ -5286,7 +5299,7 @@ async def health(db: Session = Depends(get_db)):
         return {
             "status":  "unhealthy",
             "error":   str(e),
-            "version": "19.0 ULTIMATE"
+            "version": "20.0 ULTIMATE"
         }
 
 
@@ -6763,6 +6776,50 @@ async def robots():
 
 @app.get("/sitemap.xml", include_in_schema=False)
 async def sitemap():
+    from datetime import date
+    hoje = date.today().strftime("%Y-%m-%d")
+    paginas = [
+        ("/", "1.0", "daily"),
+        ("/blog", "0.9", "weekly"),
+        ("/premium", "0.9", "weekly"),
+        ("/planos", "0.9", "weekly"),
+        ("/cadastro", "0.8", "monthly"),
+        ("/terapia", "0.8", "monthly"),
+        ("/afiliado", "0.7", "monthly"),
+        ("/sobre", "0.6", "monthly"),
+        ("/faq", "0.6", "monthly"),
+        ("/contato", "0.5", "monthly"),
+        ("/privacidade", "0.4", "monthly"),
+        ("/termos", "0.4", "monthly"),
+        ("/blog/o-que-e-inteligencia-emocional", "0.8", "monthly"),
+        ("/blog/tecnicas-para-controlar-ansiedade", "0.8", "monthly"),
+        ("/blog/como-lidar-com-tristeza", "0.8", "monthly"),
+        ("/blog/diario-emocional-beneficios", "0.8", "monthly"),
+        ("/blog/mindfulness-para-iniciantes", "0.8", "monthly"),
+        ("/blog/como-aumentar-autoestima", "0.8", "monthly"),
+        ("/blog/sono-e-emocoes", "0.8", "monthly"),
+        ("/blog/relacionamentos-e-inteligencia-emocional", "0.8", "monthly"),
+        ("/blog/produtividade-e-bem-estar-emocional", "0.8", "monthly"),
+        ("/blog/superar-trauma-emocional", "0.8", "monthly"),
+        ("/blog/sindrome-do-impostor", "0.8", "monthly"),
+        ("/blog/burnout-o-que-e-como-recuperar", "0.8", "monthly"),
+        ("/blog/inteligencia-emocional-no-trabalho", "0.8", "monthly"),
+        ("/blog/como-controlar-raiva", "0.8", "monthly"),
+        ("/blog/habitos-para-saude-mental", "0.8", "monthly"),
+    ]
+    base = "https://emotion-platform-albert.onrender.com"
+    linhas = ['<?xml version="1.0" encoding="UTF-8"?>']
+    linhas.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
+    for path, priority, freq in paginas:
+        linhas.append("  <url>")
+        linhas.append(f"    <loc>{base}{path}</loc>")
+        linhas.append(f"    <lastmod>{hoje}</lastmod>")
+        linhas.append(f"    <changefreq>{freq}</changefreq>")
+        linhas.append(f"    <priority>{priority}</priority>")
+        linhas.append("  </url>")
+    linhas.append("</urlset>")
+    xml = "\n".join(linhas)
+    return Response(content=xml, media_type="application/xml")
     urls_fixas = [
         "/", "/login", "/cadastro", "/blog", "/planos", "/premium",
         "/sobre", "/contato", "/faq", "/privacidade", "/termos",
@@ -10411,7 +10468,7 @@ def api_analyze(
         "pontos_ganhos": PONTOS_POR_ACAO["analise"],
         "total_pontos":  usuario.pontos,
         "timestamp":     datetime.now().isoformat(),
-        "version":       "14.0",
+        "version":       "20.0",
     }
 
 
@@ -10453,7 +10510,7 @@ def api_stats(
         "proximo_badge":   proximo_badge(usuario.pontos),
         "membro_desde":    usuario.criado_em.strftime("%d/%m/%Y"),
         "timestamp":       datetime.now().isoformat(),
-        "version":         "14.0",
+        "version":         "20.0",
     }
 
 
@@ -10469,7 +10526,7 @@ def api_emocoes(usuario: Usuario = Depends(verificar_token)):
             "tecnica":       tecnicas_por_emocao.get(emocao, ""),
             "total_palavras": len(palavras),
         } for emocao, palavras in palavras_emocoes.items()],
-        "version": "14.0",
+        "version": "20.0",
     }
 
 
@@ -10492,7 +10549,7 @@ def api_ranking(
             "plano":   u.plano,
         } for i, u in enumerate(top)],
         "timestamp": datetime.now().isoformat(),
-        "version":   "14.0",
+        "version":   "20.0",
     }
 
 # ================================================================
