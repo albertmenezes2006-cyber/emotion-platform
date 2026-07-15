@@ -3212,124 +3212,6 @@ def processar_nova_senha(
 
 
 # ================================================================
-# API PUBLICA v2.0 — ENDPOINTS EXTRAS
-# ================================================================
-
-@app.get("/api/v1/emocoes-lista")
-def api_emocoes_lista():
-    """Lista todas as 150+ emocoes disponiveis"""
-    from collections import Counter
-    emocoes_todas = list(palavras_emocoes.keys()) if 'palavras_emocoes' in dir() else []
-    return JSONResponse({
-        "ok": True,
-        "total": len(emocoes_todas),
-        "emocoes": emocoes_todas[:50],  # Top 50
-        "categorias": {
-            "basicas": ["alegria","tristeza","raiva","medo","surpresa","nojo"],
-            "positivas": ["gratidao","amor","esperanca","calma","paz","orgulho","realizacao"],
-            "negativas": ["ansiedade","estresse","burnout","solidao","culpa","vergonha"],
-            "culturais": ["saudade","cafune","schadenfreude","hygge","ikigai","wabi-sabi"],
-        },
-        "version": "v2.0"
-    })
-
-@app.get("/api/v1/score")
-def api_score_publico(request: Request, usuario: Usuario = Depends(verificar_token), db: Session = Depends(get_db)):
-    """Retorna Score IE do usuario autenticado"""
-    score = calcular_score_ie_v3(usuario.id, db)
-    return JSONResponse({"ok": True, "score": score, "version": "v2.0"})
-
-@app.get("/api/v1/historico")
-def api_historico(
-    limite: int = 10,
-    usuario: Usuario = Depends(verificar_token),
-    db: Session = Depends(get_db)
-):
-    """Retorna historico de analises do usuario"""
-    analises = db.query(Analise).filter(
-        Analise.usuario_id == usuario.id
-    ).order_by(Analise.criado_em.desc()).limit(min(limite, 50)).all()
-
-    return JSONResponse({
-        "ok": True,
-        "total": len(analises),
-        "analises": [{
-            "id": a.id,
-            "texto": a.texto[:100] if a.texto else "",
-            "emocao": a.emocao,
-            "emoji": a.emoji,
-            "intensidade": a.intensidade,
-            "criado_em": a.criado_em.isoformat() if a.criado_em else None,
-        } for a in analises],
-        "version": "v2.0"
-    })
-
-@app.get("/api/v1/palavra-do-dia")
-def api_palavra_publica():
-    """Retorna palavra emocional do dia — sem autenticacao"""
-    return JSONResponse({"ok": True, "palavra": get_palavra_do_dia(), "version": "v2.0"})
-
-@app.post("/api/v1/analisar-lote")
-async def api_analisar_lote(
-    request: Request,
-    usuario: Usuario = Depends(verificar_token),
-    db: Session = Depends(get_db)
-):
-    """Analisa multiplos textos de uma vez (max 10)"""
-    body = await request.json()
-    textos = body.get("textos", [])
-    if not textos or not isinstance(textos, list):
-        return JSONResponse({"ok": False, "erro": "Envie uma lista de textos"}, status_code=400)
-    if len(textos) > 10:
-        return JSONResponse({"ok": False, "erro": "Maximo 10 textos por lote"}, status_code=400)
-
-    resultados = []
-    for texto in textos:
-        if not texto or not isinstance(texto, str):
-            continue
-        analise = analisar_texto_completo(texto[:500])
-        resultados.append({
-            "texto": texto[:100],
-            "emocao": analise["emocao"],
-            "emoji": analise["emoji"],
-            "intensidade": analise["intensidade"],
-            "tom": analise["tom"],
-            "idioma": analise["idioma"],
-        })
-
-    return JSONResponse({
-        "ok": True,
-        "total": len(resultados),
-        "resultados": resultados,
-        "version": "v2.0"
-    })
-
-@app.get("/api/v1/saude")
-def api_saude():
-    """Health check da API — sem autenticacao"""
-    return JSONResponse({
-        "ok": True,
-        "status": "online",
-        "version": "v2.0",
-        "endpoints": [
-            "GET /api/v1/analisar?text=",
-            "GET /api/v1/historico",
-            "GET /api/v1/score",
-            "GET /api/v1/emocoes-lista",
-            "GET /api/v1/palavra-do-dia",
-            "GET /api/v1/ranking",
-            "GET /api/v1/stats",
-            "POST /api/v1/analisar-lote",
-        ],
-        "autenticacao": "Header X-Api-Token: seu_token",
-        "docs": "https://emotion-platform-albert.onrender.com/api/v1/docs",
-    })
-
-# ================================================================
-# FIM API v2.0
-# ================================================================
-
-# ================================================================
 # NOTIFICACOES PUSH + 2FA v20.0
 # ================================================================
 
@@ -10632,6 +10514,125 @@ def verificar_token(
 
     return usuario
 
+
+
+# ================================================================
+# API PUBLICA v2.0 — ENDPOINTS EXTRAS
+# ================================================================
+
+@app.get("/api/v1/emocoes-lista")
+def api_emocoes_lista():
+    """Lista todas as 150+ emocoes disponiveis"""
+    from collections import Counter
+    emocoes_todas = list(palavras_emocoes.keys()) if 'palavras_emocoes' in dir() else []
+    return JSONResponse({
+        "ok": True,
+        "total": len(emocoes_todas),
+        "emocoes": emocoes_todas[:50],  # Top 50
+        "categorias": {
+            "basicas": ["alegria","tristeza","raiva","medo","surpresa","nojo"],
+            "positivas": ["gratidao","amor","esperanca","calma","paz","orgulho","realizacao"],
+            "negativas": ["ansiedade","estresse","burnout","solidao","culpa","vergonha"],
+            "culturais": ["saudade","cafune","schadenfreude","hygge","ikigai","wabi-sabi"],
+        },
+        "version": "v2.0"
+    })
+
+@app.get("/api/v1/score")
+def api_score_publico(request: Request, usuario: Usuario = Depends(verificar_token), db: Session = Depends(get_db)):
+    """Retorna Score IE do usuario autenticado"""
+    score = calcular_score_ie_v3(usuario.id, db)
+    return JSONResponse({"ok": True, "score": score, "version": "v2.0"})
+
+@app.get("/api/v1/historico")
+def api_historico(
+    limite: int = 10,
+    usuario: Usuario = Depends(verificar_token),
+    db: Session = Depends(get_db)
+):
+    """Retorna historico de analises do usuario"""
+    analises = db.query(Analise).filter(
+        Analise.usuario_id == usuario.id
+    ).order_by(Analise.criado_em.desc()).limit(min(limite, 50)).all()
+
+    return JSONResponse({
+        "ok": True,
+        "total": len(analises),
+        "analises": [{
+            "id": a.id,
+            "texto": a.texto[:100] if a.texto else "",
+            "emocao": a.emocao,
+            "emoji": a.emoji,
+            "intensidade": a.intensidade,
+            "criado_em": a.criado_em.isoformat() if a.criado_em else None,
+        } for a in analises],
+        "version": "v2.0"
+    })
+
+@app.get("/api/v1/palavra-do-dia")
+def api_palavra_publica():
+    """Retorna palavra emocional do dia — sem autenticacao"""
+    return JSONResponse({"ok": True, "palavra": get_palavra_do_dia(), "version": "v2.0"})
+
+@app.post("/api/v1/analisar-lote")
+async def api_analisar_lote(
+    request: Request,
+    usuario: Usuario = Depends(verificar_token),
+    db: Session = Depends(get_db)
+):
+    """Analisa multiplos textos de uma vez (max 10)"""
+    body = await request.json()
+    textos = body.get("textos", [])
+    if not textos or not isinstance(textos, list):
+        return JSONResponse({"ok": False, "erro": "Envie uma lista de textos"}, status_code=400)
+    if len(textos) > 10:
+        return JSONResponse({"ok": False, "erro": "Maximo 10 textos por lote"}, status_code=400)
+
+    resultados = []
+    for texto in textos:
+        if not texto or not isinstance(texto, str):
+            continue
+        analise = analisar_texto_completo(texto[:500])
+        resultados.append({
+            "texto": texto[:100],
+            "emocao": analise["emocao"],
+            "emoji": analise["emoji"],
+            "intensidade": analise["intensidade"],
+            "tom": analise["tom"],
+            "idioma": analise["idioma"],
+        })
+
+    return JSONResponse({
+        "ok": True,
+        "total": len(resultados),
+        "resultados": resultados,
+        "version": "v2.0"
+    })
+
+@app.get("/api/v1/saude")
+def api_saude():
+    """Health check da API — sem autenticacao"""
+    return JSONResponse({
+        "ok": True,
+        "status": "online",
+        "version": "v2.0",
+        "endpoints": [
+            "GET /api/v1/analisar?text=",
+            "GET /api/v1/historico",
+            "GET /api/v1/score",
+            "GET /api/v1/emocoes-lista",
+            "GET /api/v1/palavra-do-dia",
+            "GET /api/v1/ranking",
+            "GET /api/v1/stats",
+            "POST /api/v1/analisar-lote",
+        ],
+        "autenticacao": "Header X-Api-Token: seu_token",
+        "docs": "https://emotion-platform-albert.onrender.com/api/v1/docs",
+    })
+
+# ================================================================
+# FIM API v2.0
+# ================================================================
 
 @app.get("/exportar/csv")
 def exportar_csv(request: Request, db: Session = Depends(get_db)):
