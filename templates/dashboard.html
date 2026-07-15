@@ -2440,5 +2440,34 @@ function fecharUpsell() {
 setTimeout(verificarUpsell, 3000);
 </script>
 
+
+<!-- STREAK DIAS CONSECUTIVOS -->
+<script>
+function carregarStreak() {
+  fetch('/api/streak')
+    .then(r => r.json())
+    .then(d => {
+      if(d.ok && d.streak) {
+        const s = d.streak;
+        const el = document.getElementById('streakBox');
+        if(el) {
+          el.innerHTML = `
+            <span style="font-size:28px">${s.emoji}</span>
+            <div>
+              <div style="font-size:22px;font-weight:900;color:#f39c12">${s.streak_atual} dias</div>
+              <div style="font-size:11px;color:rgba(255,255,255,0.5)">streak atual • máx: ${s.streak_maximo}</div>
+            </div>
+          `;
+          el.style.display = 'flex';
+        }
+      }
+    }).catch(()=>{});
+}
+carregarStreak();
+</script>
+
+<!-- STREAK BOX HTML — adicionar onde quiser no dashboard -->
+<div id="streakBox" style="display:none;align-items:center;gap:12px;background:rgba(243,156,18,0.1);border:1px solid rgba(243,156,18,0.3);border-radius:14px;padding:14px 18px;margin-bottom:16px"></div>
+
 </body>
 </html>

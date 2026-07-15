@@ -3023,6 +3023,72 @@ def resgatar_presente(codigo: str, usuario_id: int, db) -> dict:
 
 
 
+
+# ================================================================
+# STREAK DE DIAS CONSECUTIVOS v20.0
+# ================================================================
+
+def calcular_streak(usuario_id: int, db) -> dict:
+    """Calcula streak de dias consecutivos de uso"""
+    from datetime import timedelta
+    analises = db.query(Analise).filter(
+        Analise.usuario_id == usuario_id
+    ).order_by(Analise.criado_em.desc()).all()
+    
+    if not analises:
+        return {"streak_atual": 0, "streak_maximo": 0, "ultimo_dia": None}
+    
+    dias_ativos = sorted(set([
+        a.criado_em.date() for a in analises if a.criado_em
+    ]), reverse=True)
+    
+    if not dias_ativos:
+        return {"streak_atual": 0, "streak_maximo": 0, "ultimo_dia": None}
+    
+    hoje = datetime.now().date()
+    ontem = hoje - timedelta(days=1)
+    
+    # Streak atual
+    streak_atual = 0
+    if dias_ativos[0] >= ontem:
+        streak_atual = 1
+        for i in range(1, len(dias_ativos)):
+            esperado = dias_ativos[i-1] - timedelta(days=1)
+            if dias_ativos[i] == esperado:
+                streak_atual += 1
+            else:
+                break
+    
+    # Streak maximo
+    streak_max = 1
+    streak_temp = 1
+    for i in range(1, len(dias_ativos)):
+        esperado = dias_ativos[i-1] - timedelta(days=1)
+        if dias_ativos[i] == esperado:
+            streak_temp += 1
+            streak_max = max(streak_max, streak_temp)
+        else:
+            streak_temp = 1
+    
+    return {
+        "streak_atual": streak_atual,
+        "streak_maximo": streak_max,
+        "ultimo_dia": dias_ativos[0].strftime("%d/%m/%Y") if dias_ativos else None,
+        "emoji": "🔥" if streak_atual >= 7 else "⚡" if streak_atual >= 3 else "✨"
+    }
+
+@app.get("/api/streak")
+def api_streak(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return JSONResponse({"ok": False}, status_code=401)
+    streak = calcular_streak(usuario.id, db)
+    return JSONResponse({"ok": True, "streak": streak})
+
+# ================================================================
+# FIM STREAK
+# ================================================================
+
 # ================================================================
 # RECUPERACAO DE SENHA v20.0
 # ================================================================
@@ -7155,6 +7221,17 @@ async def favicon_svg():
     if os.path.exists(favicon_path):
         return FileResponse(favicon_path, media_type="image/svg+xml")
     return Response(status_code=204)
+
+
+@app.exception_handler(500)
+async def erro_500(request: Request, exc: Exception):
+    monitorar_erro(str(request.url.path), str(exc))
+    return render_template("500.html", request=request)
+
+@app.exception_handler(Exception)
+async def erro_geral(request: Request, exc: Exception):
+    monitorar_erro(str(request.url.path), str(exc))
+    return render_template("500.html", request=request)
 
 @app.exception_handler(StarletteHTTPException)
 async def custom_404(request: Request, exc: StarletteHTTPException):

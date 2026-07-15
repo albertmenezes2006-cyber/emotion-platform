@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JGLER9XVGY');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Erro interno — Emotion Intelligence</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#00d2ff;--secondary:#3a7bd5;--dark:#0f0c29;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1)}
+body{font-family:'Segoe UI',sans-serif;background:var(--dark);color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;text-align:center}
+.container{max-width:500px;width:100%}
+.emoji{font-size:80px;margin-bottom:16px;animation:shake .5s ease infinite}
+@keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-5deg)}75%{transform:rotate(5deg)}}
+.code{font-size:100px;font-weight:900;background:linear-gradient(90deg,#e74c3c,#c0392b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:8px}
+h1{font-size:26px;font-weight:700;margin-bottom:12px}
+p{color:rgba(255,255,255,0.5);font-size:15px;line-height:1.6;margin-bottom:28px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:24px;text-align:left}
+.card h3{font-size:14px;color:var(--primary);margin-bottom:12px}
+.card p{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:0}
+.btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{padding:12px 24px;border-radius:12px;font-size:14px;font-weight:700;text-decoration:none;transition:all .2s}
+.btn-primary{background:linear-gradient(90deg,var(--primary),var(--secondary));color:#fff}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,210,255,0.3)}
+.btn-sec{background:var(--card);border:1px solid var(--border);color:#fff}
+.btn-sec:hover{border-color:var(--primary)}
+.footer{margin-top:24px;color:rgba(255,255,255,0.2);font-size:12px}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="emoji">⚠️</div>
+  <div class="code">500</div>
+  <h1>Algo deu errado</h1>
+  <p>Nosso servidor encontrou um problema inesperado. Já fomos notificados e estamos trabalhando para resolver!</p>
+
+  <div class="card">
+    <h3>🔧 O que fazer agora?</h3>
+    <p>• Aguarde alguns minutos e tente novamente<br>
+    • Limpe o cache do navegador (Ctrl+F5)<br>
+    • Se persistir, entre em contato com o suporte</p>
+  </div>
+
+  <div class="btns">
+    <a href="/" class="btn btn-primary">🏠 Voltar ao Início</a>
+    <a href="/contato" class="btn btn-sec">📧 Suporte</a>
+    <button onclick="window.location.reload()" class="btn btn-sec">🔄 Tentar Novamente</button>
+  </div>
+
+  <div class="footer">
+    🧠 Emotion Intelligence Platform v20.0<br>
+    Se o problema persistir: albertmenezes2006@gmail.com
+  </div>
+</div>
+<script>
+gtag('event','erro_500',{event_category:'erro',event_label:window.location.pathname});
+setTimeout(()=>window.location.href='/', 30000);
+</script>
+</body>
+</html>
