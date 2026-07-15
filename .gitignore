@@ -16,3 +16,10 @@ build/
 logs/
 backups/
 .aider*
+*.db
+*.keystore
+templates_bak/
+main_backup.py
+main_lido.py
+backups/
+logs/
