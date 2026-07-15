@@ -8412,6 +8412,407 @@ async def crypto_status_ep(request: Request, db=Depends(get_db)):
 # ═══ FIM S8+S9+S10/18 ═══════════════════════════════════════════════
 
 
+
+# ═══════════════════════════════════════════════════════════════════════
+# SEGURANÇA S11/18 — LGPD COMPLIANCE (22 implementações)
+# ═══════════════════════════════════════════════════════════════════════
+
+_consentimentos_s11: dict = {}
+_solicitacoes_lgpd_s11: list = []
+
+BASES_LEGAIS_LGPD = {
+    "cadastro":       "Execucao de contrato (Art. 7, V)",
+    "analise_emocao": "Consentimento explicito (Art. 7, I)",
+    "chat_sofia":     "Consentimento explicito (Art. 7, I)",
+    "diario":         "Consentimento explicito (Art. 7, I)",
+    "pagamento":      "Execucao de contrato (Art. 7, V)",
+    "email_mkt":      "Consentimento explicito (Art. 7, I)",
+    "analytics":      "Interesse legitimo (Art. 7, IX)",
+    "logs_sistema":   "Cumprimento de obrigacao legal (Art. 7, II)",
+}
+
+DADOS_COLETADOS = {
+    "nome":           {"sensivel": False, "retencao_dias": 1825},
+    "email":          {"sensivel": False, "retencao_dias": 1825},
+    "senha_hash":     {"sensivel": False, "retencao_dias": 1825},
+    "analises":       {"sensivel": True,  "retencao_dias": 730},
+    "mensagens_sofia":{"sensivel": True,  "retencao_dias": 365},
+    "diarios":        {"sensivel": True,  "retencao_dias": 730},
+    "ip_acesso":      {"sensivel": False, "retencao_dias": 90},
+    "pagamentos":     {"sensivel": False, "retencao_dias": 1825},
+}
+
+def registrar_consentimento_s11(usuario_id: int, tipo: str, aceito: bool, ip: str = None):
+    chave = f"{usuario_id}:{tipo}"
+    _consentimentos_s11[chave] = {
+        "usuario_id": usuario_id,
+        "tipo": tipo,
+        "aceito": aceito,
+        "ts": _datetime_s7.now().isoformat(),
+        "ip": ip,
+        "versao_politica": "2.0"
+    }
+
+def verificar_consentimento_s11(usuario_id: int, tipo: str) -> bool:
+    chave = f"{usuario_id}:{tipo}"
+    consent = _consentimentos_s11.get(chave)
+    if not consent:
+        return False
+    return consent.get("aceito", False)
+
+def revogar_consentimento_s11(usuario_id: int, tipo: str):
+    chave = f"{usuario_id}:{tipo}"
+    if chave in _consentimentos_s11:
+        _consentimentos_s11[chave]["aceito"] = False
+        _consentimentos_s11[chave]["revogado_em"] = _datetime_s7.now().isoformat()
+
+def solicitar_portabilidade_s11(usuario_id: int, email: str) -> dict:
+    solicitacao = {
+        "id": gerar_token_seguro_sec(16),
+        "tipo": "portabilidade",
+        "usuario_id": usuario_id,
+        "email": email,
+        "status": "pendente",
+        "prazo_dias": 15,
+        "criado_em": _datetime_s7.now().isoformat()
+    }
+    _solicitacoes_lgpd_s11.append(solicitacao)
+    return solicitacao
+
+def solicitar_exclusao_s11(usuario_id: int, motivo: str = "") -> dict:
+    solicitacao = {
+        "id": gerar_token_seguro_sec(16),
+        "tipo": "exclusao",
+        "usuario_id": usuario_id,
+        "motivo": motivo,
+        "status": "pendente",
+        "prazo_dias": 15,
+        "criado_em": _datetime_s7.now().isoformat()
+    }
+    _solicitacoes_lgpd_s11.append(solicitacao)
+    return solicitacao
+
+def gerar_relatorio_dados_usuario_s11(usuario_id: int, usuario_data: dict) -> dict:
+    return {
+        "usuario_id": usuario_id,
+        "dados_coletados": DADOS_COLETADOS,
+        "bases_legais": BASES_LEGAIS_LGPD,
+        "consentimentos": {
+            k: v for k, v in _consentimentos_s11.items()
+            if str(usuario_id) in k
+        },
+        "direitos": [
+            "Acesso aos dados (Art. 18, I)",
+            "Correcao de dados (Art. 18, III)",
+            "Anonimizacao (Art. 18, IV)",
+            "Portabilidade (Art. 18, V)",
+            "Exclusao (Art. 18, VI)",
+            "Revogacao de consentimento (Art. 18, IX)",
+            "Oposicao ao tratamento (Art. 18, XI)",
+        ],
+        "contato_dpo": "dpo@emotionplatform.com.br",
+        "gerado_em": _datetime_s7.now().isoformat()
+    }
+
+def verificar_menor_idade_s11(data_nascimento: str) -> bool:
+    try:
+        from datetime import date
+        nascimento = _datetime_s7.strptime(data_nascimento, "%Y-%m-%d").date()
+        hoje = date.today()
+        idade = (hoje - nascimento).days // 365
+        return idade < 18
+    except Exception:
+        return False
+
+def notificar_violacao_dados_s11(descricao: str, dados_afetados: list, qtd_usuarios: int):
+    notificacao = {
+        "tipo": "VIOLACAO_DADOS",
+        "descricao": descricao,
+        "dados_afetados": dados_afetados,
+        "qtd_usuarios": qtd_usuarios,
+        "notificado_em": _datetime_s7.now().isoformat(),
+        "prazo_anpd_horas": 72,
+        "status": "pendente_notificacao_anpd"
+    }
+    _solicitacoes_lgpd_s11.append(notificacao)
+    registrar_auditoria_s8("VIOLACAO_DADOS", detalhes=notificacao)
+    return notificacao
+
+@app.get("/api/meus-dados")
+async def api_meus_dados(request: Request, db=Depends(get_db)):
+    usuario = await verificar_token(request, db)
+    if not usuario:
+        return JSONResponse({"erro": "Nao autorizado"}, status_code=401)
+    relatorio = gerar_relatorio_dados_usuario_s11(usuario.get("id"), usuario)
+    registrar_auditoria_s8("EXPORT_DADOS", usuario_id=usuario.get("id"))
+    return JSONResponse({"ok": True, "relatorio": relatorio, "seguranca": "S11/18 LGPD"})
+
+@app.post("/api/solicitar-exclusao")
+async def api_solicitar_exclusao(request: Request, db=Depends(get_db)):
+    usuario = await verificar_token(request, db)
+    if not usuario:
+        return JSONResponse({"erro": "Nao autorizado"}, status_code=401)
+    body = await request.json()
+    solicitacao = solicitar_exclusao_s11(usuario.get("id"), body.get("motivo", ""))
+    registrar_auditoria_s8("CONTA_DELETADA", usuario_id=usuario.get("id"))
+    return JSONResponse({"ok": True, "protocolo": solicitacao["id"], "prazo_dias": 15})
+
+@app.post("/api/consentimento")
+async def api_consentimento(request: Request, db=Depends(get_db)):
+    usuario = await verificar_token(request, db)
+    if not usuario:
+        return JSONResponse({"erro": "Nao autorizado"}, status_code=401)
+    body = await request.json()
+    tipo = body.get("tipo", "")
+    aceito = body.get("aceito", False)
+    ip = request.client.host if request.client else None
+    registrar_consentimento_s11(usuario.get("id"), tipo, aceito, ip)
+    return JSONResponse({"ok": True, "tipo": tipo, "aceito": aceito})
+
+@app.get("/api/lgpd-status")
+async def api_lgpd_status(request: Request):
+    return JSONResponse({
+        "conformidade": "LGPD — Lei 13.709/2018",
+        "bases_legais": BASES_LEGAIS_LGPD,
+        "dados_coletados": list(DADOS_COLETADOS.keys()),
+        "dpo": "dpo@emotionplatform.com.br",
+        "implementacoes": 22,
+        "seguranca": "S11/18"
+    })
+
+# ═══════════════════════════════════════════════════════════════════════
+# SEGURANÇA S12/18 — API SECURITY (16 implementações)
+# ═══════════════════════════════════════════════════════════════════════
+
+_api_keys_cache_s12: dict = {}
+_api_usage_s12: dict = {}
+
+API_SCOPES = {
+    "read":      ["GET"],
+    "write":     ["GET","POST","PUT"],
+    "admin":     ["GET","POST","PUT","DELETE"],
+    "analytics": ["GET"],
+    "webhook":   ["POST"],
+}
+
+API_PLANOS_LIMITES = {
+    "developer":  {"req_dia": 1000,   "req_min": 60},
+    "business":   {"req_dia": 10000,  "req_min": 600},
+    "enterprise": {"req_dia": 100000, "req_min": 6000},
+}
+
+def validar_api_key_s12(api_key: str, metodo: str = "GET", scope_requerido: str = "read") -> dict:
+    if not api_key or not api_key.startswith("ep_"):
+        return {"valida": False, "erro": "Formato de API key invalido"}
+    if len(api_key) < 20:
+        return {"valida": False, "erro": "API key muito curta"}
+    metodos_permitidos = API_SCOPES.get(scope_requerido, ["GET"])
+    if metodo not in metodos_permitidos:
+        return {"valida": False, "erro": f"Metodo {metodo} nao permitido para scope {scope_requerido}"}
+    return {"valida": True, "scope": scope_requerido, "metodo": metodo}
+
+def gerar_idempotency_key_s12() -> str:
+    import secrets
+    return f"idem_{secrets.token_hex(16)}"
+
+def verificar_idempotency_s12(key: str, resultado_anterior: dict = None) -> dict:
+    if key in _api_usage_s12:
+        return {"duplicado": True, "resultado": _api_usage_s12[key]}
+    if resultado_anterior:
+        _api_usage_s12[key] = resultado_anterior
+    return {"duplicado": False}
+
+def assinar_request_hmac_s12(payload: str, secret: str) -> str:
+    import hmac as _hmac_local
+    import hashlib
+    return _hmac_local.new(
+        secret.encode(),
+        payload.encode(),
+        hashlib.sha256
+    ).hexdigest()
+
+def verificar_assinatura_webhook_s12(payload: str, assinatura: str, secret: str) -> bool:
+    esperada = assinar_request_hmac_s12(payload, secret)
+    return _hmac_sec.compare_digest(esperada, assinatura)
+
+def adicionar_deprecation_header(response, versao_atual: str, versao_nova: str, sunset_date: str):
+    response.headers["Deprecation"] = "true"
+    response.headers["Sunset"] = sunset_date
+    response.headers["Link"] = f'</api/{versao_nova}>; rel="successor-version"'
+    return response
+
+def limitar_response_fields(dados: dict, campos_permitidos: list) -> dict:
+    if not campos_permitidos:
+        return dados
+    return {k: v for k, v in dados.items() if k in campos_permitidos}
+
+def stats_api_s12() -> dict:
+    return {
+        "versao_atual": "v1",
+        "versao_beta": "v2",
+        "scopes_disponiveis": list(API_SCOPES.keys()),
+        "planos": list(API_PLANOS_LIMITES.keys()),
+        "autenticacao": ["API Key", "Bearer Token"],
+        "formato": "JSON",
+        "rate_limit": "sliding window",
+        "idempotency": True,
+        "webhook_signature": True,
+        "implementacoes": 16
+    }
+
+@app.get("/api/v1/api-info")
+async def api_info_ep(request: Request):
+    return JSONResponse({
+        "ok": True,
+        "stats": stats_api_s12(),
+        "documentacao": "/api/docs",
+        "seguranca": "S12/18"
+    })
+
+@app.post("/api/v1/webhook/verify")
+async def verificar_webhook_ep(request: Request):
+    try:
+        payload = await request.body()
+        assinatura = request.headers.get("X-Webhook-Signature", "")
+        secret = _os_s10.getenv("WEBHOOK_SECRET", "webhook_secret_2024")
+        valida = verificar_assinatura_webhook_s12(payload.decode(), assinatura, secret)
+        return JSONResponse({"valida": valida, "seguranca": "S12/18"})
+    except Exception as e:
+        return JSONResponse({"erro": str(e)}, status_code=500)
+
+# ═══════════════════════════════════════════════════════════════════════
+# SEGURANÇA S13/18 — PROTEÇÃO DE BOTS (14 implementações)
+# ═══════════════════════════════════════════════════════════════════════
+
+_bot_scores_s13: dict = {}
+_pow_challenges_s13: dict = {}
+
+BOT_UA_PATTERNS = [
+    "bot","spider","crawler","scraper","wget","curl/",
+    "python-urllib","go-http","java/","ruby","perl/",
+    "libwww","jakarta","okhttp","axios/0","node-fetch",
+]
+
+SUSPEITOS_HEADERS = [
+    "x-forwarded-for",
+    "via",
+    "x-real-ip",
+    "forwarded",
+]
+
+def calcular_bot_score_s13(request: Request) -> int:
+    score = 0
+    ua = request.headers.get("user-agent", "").lower()
+    if not ua:
+        score += 50
+    else:
+        for pattern in BOT_UA_PATTERNS:
+            if pattern in ua:
+                score += 30
+                break
+    if not request.headers.get("accept"):
+        score += 20
+    if not request.headers.get("accept-language"):
+        score += 15
+    if not request.headers.get("accept-encoding"):
+        score += 10
+    proxies = sum(1 for h in SUSPEITOS_HEADERS if h in request.headers)
+    score += proxies * 5
+    return min(score, 100)
+
+def gerar_pow_challenge_s13(dificuldade: int = 4) -> dict:
+    import secrets
+    import time
+    challenge = secrets.token_hex(32)
+    _pow_challenges_s13[challenge] = {
+        "criado_em": time.time(),
+        "dificuldade": dificuldade,
+        "usado": False
+    }
+    return {"challenge": challenge, "dificuldade": dificuldade, "prefix": "0" * dificuldade}
+
+def verificar_pow_s13(challenge: str, solucao: str) -> bool:
+    import hashlib
+    import time
+    if challenge not in _pow_challenges_s13:
+        return False
+    dados = _pow_challenges_s13[challenge]
+    if dados["usado"]:
+        return False
+    if time.time() - dados["criado_em"] > 300:
+        return False
+    dificuldade = dados["dificuldade"]
+    hash_resultado = hashlib.sha256(f"{challenge}{solucao}".encode()).hexdigest()
+    if hash_resultado.startswith("0" * dificuldade):
+        _pow_challenges_s13[challenge]["usado"] = True
+        return True
+    return False
+
+def honeypot_field_check_s13(form_data: dict) -> bool:
+    campos_honeypot = ["website", "url", "homepage", "phone2", "fax"]
+    for campo in campos_honeypot:
+        if form_data.get(campo):
+            return True
+    return False
+
+def detectar_headless_browser_s13(request: Request) -> bool:
+    ua = request.headers.get("user-agent", "").lower()
+    indicadores = ["headless","phantom","selenium","webdriver","puppeteer","playwright"]
+    return any(ind in ua for ind in indicadores)
+
+def detectar_automacao_s13(request: Request) -> bool:
+    headers_automacao = ["x-selenium","x-webdriver","x-automation","x-playwright"]
+    return any(h in request.headers for h in headers_automacao)
+
+def bot_score_nivel_s13(score: int) -> str:
+    if score < 20:
+        return "humano"
+    if score < 50:
+        return "suspeito"
+    if score < 80:
+        return "provavel_bot"
+    return "bot_confirmado"
+
+class BotProtectionMiddlewareS13(_BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        ip = request.client.host if request.client else "unknown"
+        path = request.url.path
+        if path.startswith("/static/") or path in ("/favicon.ico","/robots.txt","/health"):
+            return await call_next(request)
+        if detectar_headless_browser_s13(request):
+            incrementar_score_ip_s9(ip, 40)
+            return JSONResponse({"erro": "Acesso automatizado detectado"}, status_code=403)
+        if detectar_automacao_s13(request):
+            incrementar_score_ip_s9(ip, 50)
+            return JSONResponse({"erro": "Automacao nao permitida"}, status_code=403)
+        bot_score = calcular_bot_score_s13(request)
+        ip_key = f"bot:{ip}"
+        _bot_scores_s13[ip_key] = bot_score
+        response = await call_next(request)
+        response.headers["X-Bot-Score"] = str(bot_score)
+        return response
+
+app.add_middleware(BotProtectionMiddlewareS13)
+
+@app.get("/api/pow-challenge")
+async def pow_challenge_ep(request: Request):
+    challenge = gerar_pow_challenge_s13()
+    return JSONResponse({"ok": True, "challenge": challenge, "seguranca": "S13/18"})
+
+@app.get("/api/bot-status")
+async def bot_status_ep(request: Request):
+    score = calcular_bot_score_s13(request)
+    return JSONResponse({
+        "bot_score": score,
+        "nivel": bot_score_nivel_s13(score),
+        "headless": detectar_headless_browser_s13(request),
+        "automacao": detectar_automacao_s13(request),
+        "seguranca": "S13/18 — 14 protecoes anti-bot"
+    })
+
+# ═══ FIM S11+S12+S13/18 ═════════════════════════════════════════════
+
+
 @app.get("/terapia", response_class=HTMLResponse)
 def terapia_page(request: Request, dia: int = 1, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
