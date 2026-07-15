@@ -8720,6 +8720,50 @@ def stats(request: Request, db: Session = Depends(get_db)):
 # ================================================================
 
 @app.post("/chat")
+
+# ================================================================
+# MEMORIA PERMANENTE DA SOFIA (BLOCO 1/32500)
+# ================================================================
+
+def obter_perfil_sofia(usuario_id: int, db) -> str:
+    """Busca a memoria de longo prazo da Sofia sobre o usuario"""
+    perfil = db.query(PerfilSofia).filter(PerfilSofia.usuario_id == usuario_id).first()
+    if not perfil:
+        return "Nenhum perfil historico ainda. Esta e a primeira interacao profunda."
+    
+    resumo = []
+    if perfil.resumo: resumo.append(f"Resumo: {perfil.resumo}")
+    if perfil.temas_principais: resumo.append(f"Temas: {perfil.temas_principais}")
+    if perfil.tecnicas_usadas: resumo.append(f"Tecnicas que funcionam: {perfil.tecnicas_usadas}")
+    if perfil.alertas: resumo.append(f"ALERTAS: {perfil.alertas}")
+    
+    return " | ".join(resumo) if resumo else "Perfil em construcao."
+
+def atualizar_perfil_assincrono(usuario_id: int, db):
+    """Atualiza o perfil da Sofia em background (para nao atrasar o chat)"""
+    try:
+        # Pega as ultimas 10 mensagens
+        msgs = db.query(Mensagem).filter(Mensagem.usuario_id == usuario_id).order_by(Mensagem.criado_em.desc()).limit(10).all()
+        if not msgs: return
+        
+        texto_analise = " ".join([m.conteudo for m in msgs if m.conteudo])
+        
+        # Pede para IA resumir o paciente
+        prompt = f"Como psicologo, resuma o perfil deste paciente em 10 palavras baseado nestes relatos: {texto_analise[:1000]}"
+        res = chamar_ia(prompt, max_tokens=30, temperatura=0.3)
+        
+        if res["ok"]:
+            perfil = db.query(PerfilSofia).filter(PerfilSofia.usuario_id == usuario_id).first()
+            if not perfil:
+                perfil = PerfilSofia(usuario_id=usuario_id, atualizado_em=datetime.now())
+                db.add(perfil)
+            
+            perfil.resumo = res["texto"].strip()
+            perfil.atualizado_em = datetime.now()
+            db.commit()
+    except Exception as e:
+        print(f"[MEMORIA SOFIA] Erro ao atualizar: {e}")
+
 async def chat(
     request:  Request,
     mensagem: str = Form(...),
@@ -9014,7 +9058,7 @@ async def chat(
         f"• Sessao #{total_sessoes} com voce\n"
         f"• Ha {dias_plataforma} dias na plataforma\n"
         f"• Historico emocional (top 3): {perfil_emocional}\n"
-        f"• Padrao emocional recente: {padrao_emocional or 'primeira sessao'}\n"
+        f"• Padrao emocional recente: {padrao_emocional or 'primeira sessao'}\n"        f"• MEMORIA DE LONGO PRAZO: {obter_perfil_sofia(usuario.id, db)}\n"
         f"• Temas recorrentes: {temas_recentes}\n"
         f"• Primeira mensagem: {primeira_msg}\n"
         f"• Diario recente: {contexto_diario or 'sem entradas'}\n"
