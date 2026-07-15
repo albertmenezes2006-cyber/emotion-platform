@@ -65,6 +65,12 @@ input::placeholder{color:rgba(255,255,255,0.25)}
 }
 .trial-badge span{color:var(--warning);font-weight:700}
 </style>
+<script>
+(function(){
+  const t = localStorage.getItem('theme');
+  if(t === 'light') document.body.style.background = '#f0f2f5';
+})();
+</script>
 </head>
 <body>
 <div class="card">
