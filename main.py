@@ -5869,7 +5869,7 @@ async def health(db: Session = Depends(get_db)):
         uptime          = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         return {
             "status":          "healthy",
-            "version":         "20.0 ULTIMATE",
+            "version":         "21.0 ULTIMATE",
             "timestamp":       uptime,
             "database":        "connected",
             "usuarios":        total_usuarios,
@@ -11255,7 +11255,7 @@ def api_analyze(
         "pontos_ganhos": PONTOS_POR_ACAO["analise"],
         "total_pontos":  usuario.pontos,
         "timestamp":     datetime.now().isoformat(),
-        "version":       "20.0",
+        "version":       "21.0",
     }
 
 
@@ -11313,7 +11313,7 @@ def api_emocoes(usuario: Usuario = Depends(verificar_token)):
             "tecnica":       tecnicas_por_emocao.get(emocao, ""),
             "total_palavras": len(palavras),
         } for emocao, palavras in palavras_emocoes.items()],
-        "version": "20.0",
+        "version": "21.0",
     }
 
 
