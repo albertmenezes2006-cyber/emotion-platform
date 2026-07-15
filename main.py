@@ -89,7 +89,15 @@ SECRET_KEY       = os.environ.get("SECRET_KEY", str(uuid.uuid4()))
 # CLIENTE GEMINI 2.0
 # ================================================================
 
-cliente_ia = genai.Client(api_key=GEMINI_API_KEY)
+try:
+    if GEMINI_API_KEY:
+        cliente_ia = genai.Client(api_key=GEMINI_API_KEY)
+    else:
+        cliente_ia = None
+        print("[GEMINI] API key nao configurada — usando outros modelos")
+except Exception as _gemini_err:
+    cliente_ia = None
+    print(f"[GEMINI] Erro ao inicializar: {_gemini_err}")
 
 # ================================================================
 # LIMITES POR PLANO
@@ -10942,5 +10950,3 @@ def api_ranking(
 # ================================================================
 # FIM DA PARTE 4 — FIM DO ARQUIVO COMPLETO
 # ================================================================
-
-# deploy-force-1784085000
