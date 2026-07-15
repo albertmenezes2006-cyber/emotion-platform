@@ -8041,8 +8041,7 @@ def ativar_trial(request: Request, db: Session = Depends(get_db)):
 @app.get("/ranking")
 def ranking_route(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
-    if not usuario:
-        raise HTTPException(status_code=401, detail="Não autorizado")
+    # Ranking e publico — sem bloqueio por login
 
     top = db.query(Usuario).filter(
         Usuario.ativo == True
