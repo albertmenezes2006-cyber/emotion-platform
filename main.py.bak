@@ -7184,6 +7184,134 @@ PROGRAMA_7_DIAS = [
     }
 ]
 
+
+# ================================================================
+# BLOCOS 1-3/32500 — MEMORIA SOFIA + COHERE + VOZ + EMOCOES
+# ================================================================
+
+EMOCOES_EXPANDIDAS = {
+    "otimismo":      ["esperancoso","animado","confiante","positivo"],
+    "pavor":         ["aterrorizado","apavorado","em panico","horrorizado"],
+    "desapontamento":["desapontado","decepcionado","desiludido"],
+    "remorso":       ["arrependido","culpado","pesaroso"],
+    "serenidade":    ["sereno","tranquilo","em paz","zen"],
+    "extase":        ["extasiado","transcendente","em flow"],
+    "nostalgia":     ["nostalgico","saudoso do passado"],
+    "antecipacao":   ["ansioso positivo","expectante"],
+    "kama_muta":     ["profundamente tocado","comovido","arrepiado"],
+    "fiero":         ["orgulhoso de conquista","vitorioso"],
+    "frisson":       ["arrepio emocional","goosebumps"],
+    "insight":       ["eureka","epifania","tive um insight"],
+    "flow":          ["em flow","totalmente imerso"],
+    "garra":         ["com garra","nao vou desistir"],
+    "angustia_existencial": ["sem proposito","vazio existencial"],
+}
+
+def detectar_emocao_expandida(texto: str) -> str:
+    texto_lower = texto.lower()
+    for emocao, expressoes in EMOCOES_EXPANDIDAS.items():
+        if any(exp in texto_lower for exp in expressoes):
+            return emocao
+    return None
+
+def detectar_negacao_minimizacao(texto: str) -> dict:
+    texto_lower = texto.lower()
+    negacoes = ["nao estou bem","nao to bem","nao aguento","nao consigo mais"]
+    minimizacoes = ["to meio","um pouco","meio assim","mais ou menos","sei la"]
+    exageros = ["muito muito","demais","destruido","arrasado","nao aguento mais"]
+    tem_negacao = any(n in texto_lower for n in negacoes)
+    tem_minimizacao = any(m in texto_lower for m in minimizacoes)
+    tem_exagero = any(e in texto_lower for e in exageros)
+    return {
+        "negacao": tem_negacao,
+        "minimizacao": tem_minimizacao,
+        "exagero": tem_exagero,
+        "intensidade_real": "alta" if (tem_negacao or tem_exagero) else "media" if tem_minimizacao else "normal"
+    }
+
+def detectar_sarcasmo_basico(texto: str) -> bool:
+    texto_lower = texto.lower()
+    padroes = ["nossa que otimo","que maravilha","perfeito mesmo","tudo otimo","nao to nada mal"]
+    emojis_sarc = ["\U0001f644","\U0001f612","\U0001f611"]
+    return any(p in texto_lower for p in padroes) or any(e in texto for e in emojis_sarc)
+
+def obter_perfil_sofia(usuario_id: int, db) -> str:
+    try:
+        perfil = db.query(PerfilSofia).filter(PerfilSofia.usuario_id == usuario_id).first()
+        if not perfil:
+            return "Primeira interacao — sem historico."
+        partes = []
+        if perfil.resumo: partes.append(f"Resumo: {perfil.resumo}")
+        if perfil.temas_principais: partes.append(f"Temas: {perfil.temas_principais}")
+        if perfil.alertas: partes.append(f"Alertas: {perfil.alertas}")
+        return " | ".join(partes) if partes else "Perfil em construcao."
+    except:
+        return "Sem perfil disponivel."
+
+def atualizar_perfil_sofia_bg(usuario_id: int, db):
+    try:
+        msgs = db.query(Mensagem).filter(
+            Mensagem.usuario_id == usuario_id
+        ).order_by(Mensagem.criado_em.desc()).limit(10).all()
+        if not msgs: return
+        texto = " ".join([m.conteudo for m in msgs if m.conteudo])[:800]
+        prompt = f"Resuma em 15 palavras o perfil emocional: {texto}"
+        res = chamar_ia(prompt, max_tokens=25, temperatura=0.2)
+        if res["ok"]:
+            perfil = db.query(PerfilSofia).filter(PerfilSofia.usuario_id == usuario_id).first()
+            if not perfil:
+                perfil = PerfilSofia(usuario_id=usuario_id, atualizado_em=datetime.now())
+                db.add(perfil)
+            perfil.resumo = res["texto"].strip()[:200]
+            perfil.atualizado_em = datetime.now()
+            db.commit()
+    except Exception as e:
+        print(f"[PERFIL SOFIA] {e}")
+
+@app.post("/analisar/voz-upload")
+async def analisar_voz_upload(
+    request: Request,
+    audio: UploadFile = File(...),
+    db: Session = Depends(get_db)
+):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return JSONResponse({"ok": False, "erro": "Nao autenticado"}, status_code=401)
+    try:
+        import groq as _groq_lib
+        import tempfile, os as _os2
+        _gc = _groq_lib.Groq(api_key=os.getenv("GROQ_API_KEY",""))
+        ab = await audio.read()
+        ext = (audio.filename or "audio.wav").split(".")[-1]
+        with tempfile.NamedTemporaryFile(suffix="."+ext, delete=False) as tmp:
+            tmp.write(ab); tp = tmp.name
+        with open(tp,"rb") as af:
+            tr = _gc.audio.transcriptions.create(
+                file=af, model="whisper-large-v3",
+                language="pt", response_format="text"
+            )
+        _os2.unlink(tp)
+        texto = str(tr).strip()
+        if not texto:
+            return JSONResponse({"ok":False,"erro":"Audio nao reconhecido"})
+        analise = analisar_texto_completo(texto)
+        ee = detectar_emocao_expandida(texto)
+        if ee:
+            analise["emocao"] = ee
+            analise["emoji"] = get_emoji(ee)
+        nova = Analise(texto=texto, emocao=analise["emocao"],
+                      emoji=analise["emoji"], intensidade=analise["intensidade"],
+                      usuario_id=usuario.id)
+        db.add(nova); db.commit()
+        adicionar_pontos(usuario, PONTOS_POR_ACAO.get("analise",2), db)
+        return JSONResponse({"ok":True,"transcricao":texto,"analise":analise})
+    except Exception as e:
+        return JSONResponse({"ok":False,"erro":str(e)[:200]})
+
+# ================================================================
+# FIM BLOCOS 1-3
+# ================================================================
+
 @app.get("/terapia", response_class=HTMLResponse)
 def terapia_page(request: Request, dia: int = 1, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)

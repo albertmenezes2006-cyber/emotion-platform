@@ -1,0 +1,18 @@
+repos:
+  - repo: local
+    hooks:
+      - id: syntax-check
+        name: Python Syntax Check
+        entry: python3 -m py_compile
+        language: system
+        files: main\.py
+      - id: ruff-check
+        name: Ruff Linter
+        entry: ruff check main.py --fix
+        language: system
+        pass_filenames: false
+      - id: validar
+        name: Validador Emotion Platform
+        entry: python3 validar.py
+        language: system
+        pass_filenames: false

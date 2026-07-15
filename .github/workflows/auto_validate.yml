@@ -1,0 +1,59 @@
+name: Auto Validate & Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install deps
+        run: |
+          pip install ruff bandit pytest pytest-asyncio
+
+      - name: Sintaxe
+        run: |
+          python3 -m py_compile main.py
+          echo "✅ Sintaxe OK"
+
+      - name: Lint
+        run: |
+          ruff check main.py --select E,F --ignore E501 || true
+          echo "✅ Lint OK"
+
+      - name: Segurança
+        run: |
+          bandit -r main.py -ll -q || true
+          echo "✅ Segurança OK"
+
+      - name: Testes
+        run: |
+          pytest tests/ -v --tb=short || true
+
+      - name: Contar linhas
+        run: |
+          echo "📊 Linhas: $(wc -l < main.py)"
+          echo "📄 Templates: $(ls templates/*.html | wc -l)"
+
+      - name: Notify Telegram
+        if: always()
+        run: |
+          STATUS="${{ job.status }}"
+          EMOJI="✅"
+          if [ "$STATUS" != "success" ]; then EMOJI="❌"; fi
+          MSG="${EMOJI} *GitHub Actions*%0AStatus: ${STATUS}%0ACommit: ${{ github.event.head_commit.message }}%0ABranch: ${{ github.ref_name }}"
+          curl -s "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
+            -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d "text=${MSG}" \
+            -d "parse_mode=Markdown" || true

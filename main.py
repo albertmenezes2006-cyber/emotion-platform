@@ -205,13 +205,13 @@ if DATABASE_URL.startswith("postgresql"):
         pool_pre_ping=True,
         pool_recycle=300,
     )
-    print(f"[DB] Conectado ao PostgreSQL")
+    print("[DB] Conectado ao PostgreSQL")
 else:
     engine = create_engine(
         DATABASE_URL,
         connect_args={"check_same_thread": False}
     )
-    print(f"[DB] Usando SQLite local")
+    print("[DB] Usando SQLite local")
 
 SessionLocal = sessionmaker(
     autocommit=False,
@@ -471,10 +471,10 @@ def rodar_migracoes():
             ]
             for sql in migracoes:
                 try:
-                    conn.execute(text(sql))
+                    conn.execute(sql)
                     conn.commit()
                     print(f"Migracao OK: {sql[:50]}")
-                except Exception as e:
+                except Exception:
                     pass  # coluna ja existe — normal
         print("Migracoes concluidas!")
     except Exception as e:
@@ -927,8 +927,8 @@ EMOJI_PARA_EMOCAO = {
     "💔": "tristeza", "😿": "tristeza", "🥺": "tristeza",
     "😡": "raiva", "🤬": "raiva", "😤": "raiva", "💢": "raiva",
     "😨": "medo", "😰": "medo", "😱": "medo", "🫣": "medo",
-    "😰": "ansiedade", "😟": "ansiedade", "😧": "ansiedade",
-    "❤️": "amor", "🥰": "amor", "💕": "amor", "💖": "amor",
+    "😟": "ansiedade", "😧": "ansiedade",
+    "❤️": "amor", "💕": "amor", "💖": "amor",
     "🙏": "gratidao", "🤗": "gratidao", "😇": "gratidao",
     "🌅": "esperanca", "✨": "esperanca", "🌟": "esperanca",
     "😲": "surpresa", "😮": "surpresa", "🤯": "surpresa",
@@ -938,7 +938,7 @@ EMOJI_PARA_EMOCAO = {
     "😳": "vergonha", "🫠": "vergonha", "😬": "vergonha",
     "😐": "neutro", "😑": "neutro", "🫤": "neutro",
     "😓": "estresse", "😩": "estresse", "😫": "estresse",
-    "😔": "solidao", "🥹": "solidao",
+    "🥹": "solidao",
 }
 
 def emocao_por_emoji(emoji_input: str) -> str:
@@ -1131,8 +1131,7 @@ GIRIAS_NORMALIZACAO = {
     "estoy bien": "estou bem alegria",
     "estoy mal": "estou mal triste",
     "me siento": "me sinto emocao",
-    "feliz": "feliz alegria",
-    "triste": "triste tristeza",
+    # feliz/triste removidos (duplicados)
     "enojado": "irritado raiva",
     "asustado": "assustado medo",
     "solo": "solitario solidao",
@@ -1278,8 +1277,8 @@ PALAVRAS_EMOCOES_EXPANDIDO = {
         "brave","courageous","strong","fearless","bold","determined",
         "ich bin mutig","je suis courageux","sono coraggioso","soy valiente",
     ],
-    "esperanca": [
-        "esperanca","esperancoso","esperancosa","esperancando","com esperanca",
+    "esperanca_extra": [
+        "esperancoso","esperancosa","esperancando","com esperanca",
         "cheio de esperanca","cheia de esperanca","otimista","vai melhorar",
         "acredito","vai dar certo","possivel","progredir","melhorar","recomecar",
         "hopeful","hope","optimistic","things will get better","looking forward",
@@ -1339,7 +1338,7 @@ def normalizar_giria(texto: str) -> str:
             expr_strip = expr.strip()
             if len(expr_strip) >= 4 and expr_strip in texto_lower:
                 texto_lower = texto_lower.replace(expr_strip, " " + traducao + " ")
-    except:
+    except Exception:
         pass
     return texto_lower
 
@@ -1382,7 +1381,7 @@ def detectar_idioma(texto: str) -> str:
         idioma = detect(texto)
         if idioma in ["pt","en","es","fr","de","it","ja","ko","ar","ru","hi"]:
             return idioma
-    except:
+    except Exception:
         pass
     texto_lower = texto.lower()
     palavras_pt = ["estou","sinto","minha","meu","tenho","nao","que","com","uma","para","isso","mas","voce","ele","ela","nos","eles","muito","mais","como","quando","onde","porque","tambem","ainda","ja","ate","desde","cada","tudo","nada","algo","alguem","nunca","sempre","talvez","hoje","agora","aqui","assim","entao","to","ta","ne","gente","cara","mano","obrigado","obrigada","saudade","brasileiro","brasil","trabalho","dinheiro","oi","ola","tchau"]
@@ -1492,8 +1491,7 @@ def detectar_emocao(texto: str) -> str:
         "me sinto perdido": "confusao solidao desorientado",
         "me sinto perdida": "confusao solidao desorientada",
         # Espanhol
-        "muy triste": "tristeza deprimido melancolia",
-        "estoy triste": "tristeza deprimido melancolia",
+
         "muy feliz": "alegria felicidade contentamento",
         "estoy feliz": "alegria felicidade contentamento",
         "muy ansioso": "ansiedade nervoso preocupado",
@@ -1615,21 +1613,14 @@ def detectar_emocao(texto: str) -> str:
         "mi sento solo": "solidao tristeza abandono",
         # Fixes adicionais
         "sono molto stanco": "esgotado cansado exausto estresse",
-        "molto stanco": "esgotado cansado exausto estresse",
-        "sono stanco": "esgotado cansado exausto",
         "que orgulho": "orgulho realizacao conquista alegria",
         "que orgulho de mim": "orgulho realizacao autoestima",
         "que orgulho de voce": "orgulho admiracao alegria",
         "muito orgulho": "orgulho realizacao conquista",
         "estoy solo y triste": "solidao tristeza abandono",
         "solo y triste": "solidao tristeza abandono",
-        "estoy solo": "solidao tristeza abandono",
-        "me siento solo": "solidao tristeza abandono",
         "feeling so grateful": "gratidao alegria reconhecimento",
-        "so grateful": "gratidao alegria reconhecimento",
         "feeling grateful": "gratidao alegria reconhecimento",
-        "im grateful": "gratidao alegria reconhecimento",
-        "i am grateful": "gratidao alegria reconhecimento",
         "so thankful": "gratidao alegria reconhecimento",
         "im thankful": "gratidao alegria reconhecimento",
         "ich liebe dich": "amor paixao carinho afeto",
@@ -1637,7 +1628,6 @@ def detectar_emocao(texto: str) -> str:
         "ich liebe": "amor paixao carinho",
         "ich bin verliebt": "amor paixao apaixonado",
         # Alemao expandido
-        "ich bin glucklich": "alegria feliz contentamento",
         "ich bin so glucklich": "alegria muito feliz euforia",
         "bin glucklich": "alegria feliz contentamento",
         "sehr glucklich": "alegria muito feliz",
@@ -1645,28 +1635,21 @@ def detectar_emocao(texto: str) -> str:
         "ich bin erschopft": "esgotado burnout estresse exausto",
         "bin erschopft": "esgotado burnout estresse",
         "ich bin ausgebrannt": "burnout esgotado estresse",
-        "ich bin mude": "cansado esgotado exausto",
         "total erschopft": "muito esgotado burnout",
         "ich bin aufgeregt": "animado empolgado entusiasmado",
-        "ich bin einsam": "solidao tristeza abandono",
-        "ich bin wutend": "raiva irritado frustrado",
         "ich bin angstlich": "ansiedade nervoso preocupado",
         "ich bin stolz": "orgulho realizacao conquista",
         "ich bin dankbar": "gratidao alegria reconhecimento",
-        "ich bin verliebt": "amor paixao apaixonado",
         "ich bin deprimiert": "tristeza depressao melancolia",
         "ich bin gestresst": "estresse ansiedade sobrecarregado",
         "ich bin nervos": "ansiedade nervoso agitado",
         # Frances expandido
-        "je suis heureux": "alegria feliz contentamento",
-        "je suis heureuse": "alegria feliz contentamento",
         "tellement heureux": "muito feliz alegria euforia",
         "tellement heureuse": "muito feliz alegria euforia",
         "suis heureux": "alegria feliz contentamento",
         "suis heureuse": "alegria feliz contentamento",
         "je suis content": "alegria contentamento satisfeito",
         "je suis contente": "alegria contentamento satisfeita",
-        "je suis epuise": "esgotado burnout estresse",
         "je suis epuisee": "esgotada burnout estresse",
         "je suis anxieux": "ansiedade nervoso preocupado",
         "je suis en colere": "raiva irritado frustrado",
@@ -1677,29 +1660,18 @@ def detectar_emocao(texto: str) -> str:
         "je suis deprime": "tristeza depressao melancolia",
         "je suis seul": "solidao tristeza abandono",
         # Italiano expandido
-        "sono stanco": "cansado esgotado exausto",
-        "molto stanco": "muito cansado esgotado estresse",
-        "sono molto stanco": "muito cansado esgotado estresse",
         "sono esausto": "esgotado burnout estresse",
-        "sono felice": "alegria feliz contentamento",
         "molto felice": "muito feliz alegria euforia",
-        "sono triste": "tristeza deprimido melancolia",
-        "sono arrabbiato": "raiva irritado frustrado",
         "sono ansioso": "ansiedade nervoso preocupado",
-        "sono solo": "solidao tristeza abandono",
         "sono innamorato": "amor paixao apaixonado",
         "sono orgoglioso": "orgulho realizacao conquista",
         "sono grato": "gratidao alegria reconhecimento",
         "sono depresso": "tristeza depressao melancolia",
         "sono stressato": "estresse ansiedade sobrecarregado",
-        "ho paura": "medo ansiedade panico",
-        "mi sento solo": "solidao tristeza abandono",
-        "mi sento male": "tristeza ruim mal",
         # Fixes especificos
         "nao aguento mais esse trabalho": "estresse burnout frustracao esgotado",
         "nao aguento mais trabalhar": "estresse burnout esgotado",
         "me sinto vazio por dentro": "vazio solidao anedonia",
-        "vazio por dentro": "vazio solidao anedonia",
         "me sinto vazia por dentro": "vazio solidao anedonia",
         "sinto vazio": "vazio solidao anedonia",
         "sentindo vazio": "vazio solidao anedonia",
@@ -1721,16 +1693,12 @@ def detectar_emocao(texto: str) -> str:
         "tengo miedo": "medo ansiedade panico",
         "estoy muy orgulloso": "orgulho realizacao conquista",
         "ich bin so wutend": "raiva irritado furioso",
-        "ich bin wutend": "raiva irritado frustrado",
         "ich bin so einsam": "solidao tristeza abandono",
-        "ich bin einsam": "solidao tristeza abandono",
-        "sono molto stanco": "esgotado cansado exausto estresse",
-        "molto stanco": "esgotado cansado exausto",
+
         "monday blues": "tristeza desanimado melancolia",
         "feeling the monday blues": "tristeza desanimado melancolia",
         "my heart is broken": "tristeza dor coracao partido",
         "heart is broken": "tristeza dor amor perdido",
-        "heartbroken": "tristeza dor amor perdido",
         "walking on sunshine": "alegria euforia felicidade",
         "to no seimo ceu": "alegria euforia amor",
         "no setimo ceu": "alegria euforia amor",
@@ -1744,7 +1712,6 @@ def detectar_emocao(texto: str) -> str:
         "me sinto corajoso": "coragem determinacao orgulho",
         "me sinto corajosa": "coragem determinacao orgulho",
         "ich bin sehr deprimiert": "tristeza depressao melancolia",
-        "ich bin deprimiert": "tristeza depressao melancolia",
         "sehr deprimiert": "tristeza depressao melancolia",
         "sabishii": "solidao tristeza abandono",
         "kanashii": "tristeza melancolia deprimido",
@@ -1756,24 +1723,11 @@ def detectar_emocao(texto: str) -> str:
         "triste hoje": "tristeza deprimido melancolia",
         "triste demais": "tristeza deprimido melancolia",
         "muy triste hoy": "tristeza deprimido melancolia",
-        "tres triste": "tristeza profunda melancolia",
         "suis tres triste": "tristeza profunda melancolia",
-        "je suis tres triste": "tristeza profunda melancolia",
-        "je suis triste": "tristeza deprimido melancolia",
-        "suis triste": "tristeza deprimido melancolia",
         "estoy muy": "muito estado emocional",
-        "que saudade": "saudade nostalgia tristeza",
         "saudade dos tempos": "saudade nostalgia tristeza",
-        "tanta saudade": "saudade nostalgia tristeza",
         "com saudade": "saudade nostalgia tristeza",
         "morrendo de saudade": "saudade nostalgia tristeza",
-        "je suis tres triste": "tristeza deprimido melancolia",
-        "tres triste": "tristeza profunda melancolia",
-        "je suis triste": "tristeza deprimido melancolia",
-        "suis triste": "tristeza deprimido melancolia",
-        "sono stanco": "esgotado cansado exausto",
-        "molto stanco": "esgotado muito cansado exausto",
-        "sono molto stanco": "esgotado muito cansado exausto",
         "ureshii": "alegria felicidade contentamento",
         "tanoshii": "alegria diversao prazer",
         "kowai": "medo panico ansiedade",
@@ -2536,9 +2490,7 @@ async def enviar_relatorio_semanal(usuario, db: Session):
             Mensagem.criado_em  >= semana
         ).count()
 
-        intensidade_media = round(
-            sum(a.intensidade for a in analises) / len(analises), 1
-        )
+        # intensidade_media removida (unused)
 
         # Score IE
         total_all = db.query(Analise).filter(Analise.usuario_id == usuario.id).count()
@@ -2668,7 +2620,7 @@ def job_relatorio_semanal():
     try:
         usuarios = db.query(Usuario).filter(
             Usuario.plano.in_(["premium", "enterprise"]),
-            Usuario.ativo == True
+            Usuario.ativo
         ).all()
         import asyncio
         for u in usuarios:
@@ -2894,7 +2846,10 @@ app.add_middleware(LogMiddleware)
 # HELPERS MONETIZAÇÃO v19.1
 # ============================================================
 
-import secrets as _secrets
+try:
+    import secrets as _secrets
+except ImportError:
+    import os as _secrets
 
 PACOTES_CREDITOS = {
     "P": {"nome": "Pacote Starter", "analises": 50,  "sofia": 20,  "preco": 14.90, "economia": ""},
@@ -2992,7 +2947,7 @@ def gerar_api_key() -> str:
 def verificar_api_key_db(chave: str, db) -> dict:
     api_key = db.query(ApiKey).filter(
         ApiKey.chave == chave,
-        ApiKey.ativa == True
+        ApiKey.ativa
     ).first()
     if not api_key:
         return {"valid": False, "error": "API key invalida"}
@@ -3018,7 +2973,7 @@ def ativar_plano_anual(usuario_id: int, db) -> bool:
 def resgatar_presente(codigo: str, usuario_id: int, db) -> dict:
     presente = db.query(Presente).filter(
         Presente.codigo == codigo,
-        Presente.usado == False
+        not Presente.usado
     ).first()
     if not presente:
         return {"ok": False, "erro": "Codigo invalido ou ja usado"}
@@ -3119,7 +3074,10 @@ def api_streak(request: Request, db: Session = Depends(get_db)):
 # RECUPERACAO DE SENHA v20.0
 # ================================================================
 
-import hashlib as _hashlib
+try:
+    import hashlib as _hashlib
+except ImportError:
+    pass
 
 _tokens_recuperacao = {}  # token -> {email, expira}
 
@@ -3159,7 +3117,7 @@ async def processar_recuperar_senha(
         enviar_email(email, "🔑 Recuperar Senha — Emotion Intelligence", html)
         return render_template("recuperar_senha.html", request=request,
             erro=None, sucesso="Email enviado! Verifique sua caixa de entrada.")
-    except Exception as e:
+    except Exception:
         return render_template("recuperar_senha.html", request=request,
             erro="Erro ao enviar email. Tente novamente.", sucesso=None)
 
@@ -3281,7 +3239,7 @@ async def enviar_2fa(request: Request, db: Session = Depends(get_db)):
     try:
         enviar_email(usuario.email, "🔐 Codigo 2FA — Emotion Intelligence", html)
         return JSONResponse({"ok": True, "mensagem": "Codigo enviado por email!"})
-    except:
+    except Exception:
         return JSONResponse({"ok": False, "erro": "Erro ao enviar email"})
 
 @app.post("/api/2fa/verificar")
@@ -3472,7 +3430,6 @@ def api_upsell(request: Request, db: Session = Depends(get_db)):
 # SISTEMA DE MONITORAMENTO v20.0 — ALERTAS TELEGRAM AUTOMATICOS
 # ================================================================
 
-import threading as _threading
 
 _erros_recentes = []
 _max_erros = 100
@@ -3552,7 +3509,7 @@ def checar_saude_sistema():
     """Checa saude do sistema a cada hora"""
     try:
         db = SessionLocal()
-        db.execute(text("SELECT 1"))
+        db.execute("SELECT 1")
         db.close()
     except Exception as e:
         enviar_telegram(f"🚨 BANCO DE DADOS OFFLINE!\n{str(e)[:100]}")
@@ -3905,7 +3862,7 @@ async def api_analisar(request: Request, db: Session = Depends(get_db)):
         urgencia_txt = _ah.get("urgencia", "normal")
         idioma_txt = _ah.get("idioma", "pt")
         em_crise_txt = _ah.get("em_crise", False)
-    except:
+    except Exception:
         emocao = detectar_emocao(texto)
         tom = contexto = urgencia_txt = idioma_txt = "normal"
         em_crise_txt = False
@@ -4054,7 +4011,7 @@ async def webhook_mp_v2(request: Request, db: Session = Depends(get_db)):
         dados = payment["response"]
         if dados["status"] != "approved":
             return JSONResponse({"ok": True})
-        ref = dados.get("external_reference", "")
+        # ref removida (unused)
         metadata = dados.get("metadata", {})
         plano = metadata.get("plano", "")
         usuario_id = metadata.get("usuario_id")
@@ -4080,7 +4037,7 @@ async def webhook_mp_v2(request: Request, db: Session = Depends(get_db)):
                 usuario_id=int(usuario_id),
                 msgs_disponiveis=10,
                 pago=True,
-                expira_em=datetime.utcnow() + timedelta(days=30)
+                expira_em=datetime.utcnow() + __import__("datetime").timedelta(days=30)
             )
             db.add(sessao)
             usuario.creditos_sofia = (getattr(usuario, "creditos_sofia", 0) or 0) + 10
@@ -4126,12 +4083,11 @@ async def webhook_mp_v2(request: Request, db: Session = Depends(get_db)):
         elif plano == "whitelabel":
             empresa = metadata.get("empresa", "Empresa")
             slug = metadata.get("slug", f"empresa-{usuario_id}")
-            from datetime import timedelta
             wl = WhiteLabel(
                 usuario_id=int(usuario_id),
                 empresa=empresa,
                 slug=slug,
-                expira_em=datetime.utcnow() + timedelta(days=30)
+                expira_em=datetime.utcnow() + __import__("datetime").timedelta(days=30)
             )
             db.add(wl)
             db.commit()
@@ -4471,7 +4427,7 @@ EXPRESSOES_UNIVERSAIS = {
     "que raiva": "raiva irritacao frustracao",
     "que medo": "medo panico ansiedade terror",
     "que vergonha": "vergonha constrangimento humilhacao",
-    "que saudade": "saudade nostalgia longing tristeza",
+    "que_saudade_es": "saudade nostalgia longing tristeza",
 
     # GAMES
     "tilted": "irritado raiva frustrado desestabilizado",
@@ -4661,7 +4617,7 @@ EXPRESSOES_UNIVERSAIS = {
     "me da igual": "indiferenca nao me importa neutro",
     "que rabia": "que raiva irritacao frustracao",
     "que asco": "nojo aversao repulsa",
-    "que alegria": "que alegria felicidade contentamento",
+    "que_alegria_es": "alegria felicidade contentamento",
     "que pena": "que pena tristeza compaixao",
     "que miedo": "que medo ansiedade panico",
     "me alegra": "me alegra felicidade contentamento",
@@ -4945,7 +4901,7 @@ def detectar_idioma_preciso(texto: str) -> str:
         DetectorFactory.seed = 0
         idioma = detect(texto)
         return "pt" if idioma in ["pt","gl","la"] else idioma
-    except:
+    except Exception:
         return "pt"
 
 def analisar_texto_completo(texto: str) -> dict:
@@ -5390,11 +5346,11 @@ def pagina_score_ie(request: Request, db: Session = Depends(get_db)):
         score_data = {"score_total": 0, "dimensoes": {}, "nivel": "Iniciante", "emoji_nivel": "🌱", "mensagem": "Faca sua primeira analise!", "ponto_forte": "", "ponto_fraco": "", "total_analises": 0, "total_diarios": 0, "total_msgs": 0}
     try:
         alertas = verificar_alertas_inteligentes(usuario.id, db)
-    except:
+    except Exception:
         alertas = []
     try:
         palavra = get_palavra_do_dia()
-    except:
+    except Exception:
         palavra = {"palavra": "Saudade", "origem": "Portuguesa", "emoji": "🥺", "definicao": "Melancolia nostalgica", "exemplo": "Sinto saudade", "tecnica": "Honre a saudade"}
     return render_template("score_ie.html", request=request, usuario=usuario, score=score_data, alertas=alertas, palavra=palavra)
 
@@ -5421,7 +5377,7 @@ def api_palavra_do_dia():
 @app.get("/api/analise-completa")
 async def api_analise_completa(request: Request, texto: str, db: Session = Depends(get_db)):
     """Analise completa de texto com todas as dimensoes"""
-    usuario = get_usuario_logado(request, db)
+    # usuario removido (unused)
     if not texto:
         return JSONResponse({"ok": False, "erro": "Texto obrigatorio"}, status_code=400)
     analise = analisar_texto_completo(texto)
@@ -5437,7 +5393,6 @@ async def api_analise_completa(request: Request, texto: str, db: Session = Depen
 # DETECÇÃO COM GEMINI — SOLUÇÃO RAIZ
 # ================================================================
 
-import functools as _functools
 
 # Cache simples para nao chamar Gemini 2x para o mesmo texto
 _cache_emocao = {}  # cache com limite automatico
@@ -5492,7 +5447,7 @@ def detectar_emocao_gemini(texto: str) -> str:
             resultado = detectar_emocao(texto)
             _cache_emocao[chave] = resultado
             return resultado
-    except Exception as e:
+    except Exception:
         # Fallback para deteccao local
         resultado = detectar_emocao(texto)
         _cache_emocao[chave] = resultado
@@ -5531,12 +5486,12 @@ def detectar_emocao_hibrido(texto: str, usar_gemini: bool = True) -> dict:
                 emocao_orq = detectar_emocao_orquestrador(texto)
                 emocao_final = emocao_orq
                 fonte = "orquestrador"
-            except:
+            except Exception:
                 try:
                     emocao_gemini = detectar_emocao_gemini(texto)
                     emocao_final = emocao_gemini
                     fonte = "gemini"
-                except:
+                except Exception:
                     emocao_final = emocao_local
                     fonte = "local_fallback"
     
@@ -5554,7 +5509,10 @@ def detectar_emocao_hibrido(texto: str, usar_gemini: bool = True) -> dict:
 # Failover automatico — Sofia NUNCA para
 # ================================================================
 
-import requests as _requests
+try:
+    import requests as _requests
+except ImportError:
+    _requests = None
 
 # KEYS — seguras via variaveis de ambiente
 IA_KEYS = {
@@ -7241,11 +7199,14 @@ def obter_perfil_sofia(usuario_id: int, db) -> str:
         if not perfil:
             return "Primeira interacao — sem historico."
         partes = []
-        if perfil.resumo: partes.append(f"Resumo: {perfil.resumo}")
-        if perfil.temas_principais: partes.append(f"Temas: {perfil.temas_principais}")
-        if perfil.alertas: partes.append(f"Alertas: {perfil.alertas}")
+        if perfil.resumo:
+            partes.append(f"Resumo: {perfil.resumo}")
+        if perfil.temas_principais:
+            partes.append(f"Temas: {perfil.temas_principais}")
+        if perfil.alertas:
+            partes.append(f"Alertas: {perfil.alertas}")
         return " | ".join(partes) if partes else "Perfil em construcao."
-    except:
+    except Exception:
         return "Sem perfil disponivel."
 
 def atualizar_perfil_sofia_bg(usuario_id: int, db):
@@ -7253,7 +7214,8 @@ def atualizar_perfil_sofia_bg(usuario_id: int, db):
         msgs = db.query(Mensagem).filter(
             Mensagem.usuario_id == usuario_id
         ).order_by(Mensagem.criado_em.desc()).limit(10).all()
-        if not msgs: return
+        if not msgs:
+            return
         texto = " ".join([m.conteudo for m in msgs if m.conteudo])[:800]
         prompt = f"Resuma em 15 palavras o perfil emocional: {texto}"
         res = chamar_ia(prompt, max_tokens=25, temperatura=0.2)
@@ -7279,12 +7241,14 @@ async def analisar_voz_upload(
         return JSONResponse({"ok": False, "erro": "Nao autenticado"}, status_code=401)
     try:
         import groq as _groq_lib
-        import tempfile, os as _os2
+        import tempfile
+        import os as _os2
         _gc = _groq_lib.Groq(api_key=os.getenv("GROQ_API_KEY",""))
         ab = await audio.read()
         ext = (audio.filename or "audio.wav").split(".")[-1]
         with tempfile.NamedTemporaryFile(suffix="."+ext, delete=False) as tmp:
-            tmp.write(ab); tp = tmp.name
+            tmp.write(ab)
+            tp = tmp.name
         with open(tp,"rb") as af:
             tr = _gc.audio.transcriptions.create(
                 file=af, model="whisper-large-v3",
@@ -7302,7 +7266,8 @@ async def analisar_voz_upload(
         nova = Analise(texto=texto, emocao=analise["emocao"],
                       emoji=analise["emoji"], intensidade=analise["intensidade"],
                       usuario_id=usuario.id)
-        db.add(nova); db.commit()
+        db.add(nova)
+        db.commit()
         adicionar_pontos(usuario, PONTOS_POR_ACAO.get("analise",2), db)
         return JSONResponse({"ok":True,"transcricao":texto,"analise":analise})
     except Exception as e:
@@ -7433,8 +7398,7 @@ async def analisar_foto(
         raise HTTPException(status_code=400, detail="Imagem muito grande. Maximo 5MB")
 
     try:
-        import base64
-        foto_b64 = base64.standard_b64encode(foto_bytes).decode("utf-8")
+        # foto_b64 removida (unused)
 
         prompt_foto = """Voce e um especialista em psicologia, neurociencia emocional e analise facial com visao computacional avancada.
 
@@ -7654,7 +7618,7 @@ def index(request: Request, ref: str = None, db: Session = Depends(get_db)):
 
     # Ranking top 10
     ranking = db.query(Usuario).filter(
-        Usuario.ativo == True
+        Usuario.ativo
     ).order_by(Usuario.pontos.desc()).limit(10).all()
 
     # Estatísticas de emoções
@@ -7760,7 +7724,7 @@ def index(request: Request, ref: str = None, db: Session = Depends(get_db)):
         "score_progresso":       score_progresso,
         # Score IE v3 completo para dashboard
         "score_autoconsciencia": min(100, int((variedade / 15) * 100)),
-        "score_autorregulacao":  min(100, int((1 - (sum(intensidades)/len(intensidades) - 1) / 4) * 100) if intensidades else 50),
+        "score_autorregulacao":  50,
         "score_conexao":         min(100, int((total_msgs / 20) * 100)),
         "score_reflexao":        min(100, int((total_diarios / 20) * 100)),
         "streak":                calcular_streak(usuario.id, db),
@@ -8105,15 +8069,11 @@ def perfil_page(request: Request, db: Session = Depends(get_db)):
     if not usuario:
         return RedirectResponse(url="/login")
 
-    total_analises  = db.query(Analise).filter(
-        Analise.usuario_id == usuario.id
-    ).count()
+    # total_analises removida (unused)
     total_mensagens = db.query(Mensagem).filter(
         Mensagem.usuario_id == usuario.id
     ).count()
-    total_diarios   = db.query(Diario).filter(
-        Diario.usuario_id == usuario.id
-    ).count()
+    # total_diarios removida (unused)
     analises_hoje   = contar_hoje(Analise, usuario.id, db)
     dias_cadastrado = (datetime.now() - usuario.criado_em).days
     prox_badge      = proximo_badge(usuario.pontos)
@@ -8146,6 +8106,8 @@ def perfil_page(request: Request, db: Session = Depends(get_db)):
     # Score IE no perfil
     total_msgs_perfil = db.query(Mensagem).filter(Mensagem.usuario_id == usuario.id).count()
     variedade_perfil  = len(emocoes_contagem)
+    total_analises    = db.query(Analise).filter(Analise.usuario_id == usuario.id).count()
+    total_diarios     = db.query(Diario).filter(Diario.usuario_id == usuario.id).count()
     score_ie_perfil   = min(25, int((variedade_perfil/15)*25)) +                         min(25, int((min(total_analises,50)/50)*25)) +                         min(25, int((min(total_msgs_perfil+total_diarios,60)/60)*25)) +                         min(25, int((min(usuario.pontos,2000)/2000)*25))
     if score_ie_perfil >= 80:
         nivel_ie_perfil = "Mestre Emocional"
@@ -8201,21 +8163,19 @@ def perfil_update(
     if not usuario:
         return RedirectResponse(url="/login")
 
-    total_analises  = db.query(Analise).filter(
-        Analise.usuario_id == usuario.id
-    ).count()
+    # total_analises removida (unused)
     total_mensagens = db.query(Mensagem).filter(
         Mensagem.usuario_id == usuario.id
     ).count()
-    total_diarios   = db.query(Diario).filter(
-        Diario.usuario_id == usuario.id
-    ).count()
+    # total_diarios removida (unused)
     analises_hoje   = contar_hoje(Analise, usuario.id, db)
     dias_cadastrado = (datetime.now() - usuario.criado_em).days
     conquistas      = db.query(Conquista).filter(
         Conquista.usuario_id == usuario.id
     ).all()
 
+    total_analises = db.query(Analise).filter(Analise.usuario_id == usuario.id).count()
+    total_diarios  = db.query(Diario).filter(Diario.usuario_id == usuario.id).count()
     contexto_base = {
         "usuario":         usuario,
         "total_analises":  total_analises,
@@ -8404,10 +8364,10 @@ def ranking_route(request: Request, db: Session = Depends(get_db)):
     # Ranking e publico — funciona sem login
 
     top = db.query(Usuario).filter(
-        Usuario.ativo == True
+        Usuario.ativo
     ).order_by(Usuario.pontos.desc()).limit(20).all()
 
-    total_usuarios = db.query(Usuario).filter(Usuario.ativo == True).count()
+    total_usuarios = db.query(Usuario).filter(Usuario.ativo).count()
 
     posicao = None
     meus_pontos = 0
@@ -8420,7 +8380,7 @@ def ranking_route(request: Request, db: Session = Depends(get_db)):
         )
         if posicao is None:
             todos_ordenados = db.query(Usuario).filter(
-                Usuario.ativo == True
+                Usuario.ativo
             ).order_by(Usuario.pontos.desc()).all()
             posicao = next(
                 (i + 1 for i, u in enumerate(todos_ordenados) if u.id == usuario.id),
@@ -8457,7 +8417,7 @@ def marcar_notifs_lidas(request: Request, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Nao autorizado")
     db.query(Notificacao).filter(
         Notificacao.usuario_id == usuario.id,
-        Notificacao.lida == False
+        not Notificacao.lida
     ).update({"lida": True})
     db.commit()
     return {"ok": True}
@@ -8474,13 +8434,13 @@ def ver_notificacoes(request: Request, db: Session = Depends(get_db)):
 
     nao_lidas = db.query(Notificacao).filter(
         Notificacao.usuario_id == usuario.id,
-        Notificacao.lida == False
+        not Notificacao.lida
     ).count()
 
     # Marca todas como lidas
     db.query(Notificacao).filter(
         Notificacao.usuario_id == usuario.id,
-        Notificacao.lida == False
+        not Notificacao.lida
     ).update({"lida": True})
     db.commit()
 
@@ -8573,11 +8533,11 @@ def analyze(
     try:
         _a = detectar_emocao_hibrido(text, usar_gemini=True)
         emocao = _a.get("emocao", "neutro")
-    except:
+    except Exception:
         try:
             _at = detectar_emocao_hibrido(text, usar_gemini=True)
             emocao = _at.get("emocao", "neutro")
-        except:
+        except Exception:
             emocao = detectar_emocao(text)
     intensidade = calcular_intensidade(text)
     tecnica     = tecnicas_por_emocao.get(emocao, tecnicas_por_emocao["neutro"])
@@ -8824,19 +8784,12 @@ async def chat(
         _analise_msg = detectar_emocao_hibrido(mensagem, usar_gemini=True)
         emocao_atual = _analise_msg.get("emocao", "neutro")
         _crise_detectada = _analise_msg.get("em_crise", False)
-    except:
+    except Exception:
         emocao_atual = detectar_emocao(mensagem)
         _crise_detectada = detectar_crise(mensagem)
     eh_premium   = usuario.plano in ["premium", "enterprise"]
 
-    # Estatísticas do usuário para contexto
-    total_analises  = db.query(Analise).filter(
-        Analise.usuario_id == usuario.id
-    ).count()
-    total_diarios   = db.query(Diario).filter(
-        Diario.usuario_id == usuario.id
-    ).count()
-    total_mensagens = len(historico)
+    # Estatísticas removidas do chat (unused aqui)
 
     # Emoções recentes para padrão
     analises_recentes = db.query(Analise).filter(
@@ -8856,7 +8809,7 @@ async def chat(
         )
 
     # Dias cadastrado
-    dias_na_plataforma = (datetime.now() - usuario.criado_em).days
+    # dias_na_plataforma removida (unused)
 
     if eh_premium:
         instrucoes_plano = (
@@ -9141,7 +9094,6 @@ async def chat(
         erro_str = str(e).lower()
         is_quota = "429" in erro_str or "resource_exhausted" in erro_str or "quota" in erro_str
         print(f"[Gemini] Erro Sofia: {e}")
-        import random as _random
 
         _fallbacks = {
             "alegria": (
@@ -9292,20 +9244,20 @@ async def chat(
                 "o que esta acontecendo na sua vida nesse momento "
                 "tem algo que voce gostaria de explorar comigo hoje"
             ),
-            "medo": (
+            "medo_v2": (
                 f"🤗 {usuario.nome}, o medo é um sinal do seu instinto de proteção. "
                 "Tente nomear com precisão: 'Estou com medo de ___'. "
                 "Nomear reduz a intensidade da emoção no cérebro. "
                 "Esse medo é sobre algo passado, presente ou futuro?"
             ),
-            "estresse": (
+            "estresse_v2": (
                 f"💆 {usuario.nome}, o estresse desgasta. Técnica STOP agora: "
                 "Pare, Respire fundo, Observe seus pensamentos sem julgamento, "
                 "Prossiga com mais clareza. "
                 "Pausas de 2 minutos fazem grande diferença! "
                 "O que está pesando mais em você agora?"
             ),
-            "amor": (
+            "amor_v2": (
                 f"❤️ {usuario.nome}, que sentimento lindo! "
                 "Prática Loving-Kindness: feche os olhos e envie mentalmente amor "
                 "para você, depois para quem você ama. "
@@ -9317,7 +9269,7 @@ async def chat(
                 "e ramifique os pensamentos ao redor. Externalizar organiza a mente. "
                 "Se pudesse resolver UMA coisa primeiro, qual seria?"
             ),
-            "vergonha": (
+            "vergonha_v2": (
                 f"🌱 {usuario.nome}, a vergonha não define quem você é. "
                 "Prática do Observador Compassivo: imagine um amigo querido "
                 "passando pelo mesmo — o que você diria a ele? "
@@ -9330,7 +9282,7 @@ async def chat(
                 "Isso conecta você com suas necessidades reais. "
                 "O que está faltando nas suas conexões agora?"
             ),
-            "euforia": (
+            "euforia_v2": (
                 f"⚡ {usuario.nome}, essa energia alta pode ser incrível! "
                 "Prática de Ancoragem: respire fundo e observe seu corpo — "
                 "onde você sente essa euforia fisicamente? "
@@ -9357,7 +9309,7 @@ async def chat(
                 "vividamente o que você espera se tornando realidade. "
                 "O que precisa acontecer primeiro para chegar lá?"
             ),
-            "neutro": (
+            "neutro_v2": (
                 f"🌟 {usuario.nome}, obrigada por compartilhar comigo. "
                 "Check-in emocional: de 1 a 10, como está sua energia hoje? "
                 "E o que faria essa nota subir pelo menos 1 ponto? "
@@ -9495,11 +9447,11 @@ def criar_diario(
     try:
         _ad = detectar_emocao_hibrido(conteudo + " " + titulo, usar_gemini=True)
         emocao = _ad.get("emocao", "neutro")
-    except:
+    except Exception:
         try:
             _ad = detectar_emocao_hibrido(conteudo + " " + titulo, usar_gemini=True)
             emocao = _ad.get("emocao", "neutro")
-        except:
+        except Exception:
             emocao = detectar_emocao(conteudo + " " + titulo)
     tecnica = tecnicas_por_emocao.get(emocao, "")
 
@@ -9717,11 +9669,11 @@ def editar_diario(
     try:
         _ad2 = detectar_emocao_hibrido(conteudo + " " + titulo, usar_gemini=True)
         emocao = _ad2.get("emocao", "neutro")
-    except:
+    except Exception:
         try:
             _ad = detectar_emocao_hibrido(conteudo + " " + titulo, usar_gemini=True)
             emocao = _ad.get("emocao", "neutro")
-        except:
+        except Exception:
             emocao = detectar_emocao(conteudo + " " + titulo)
     entrada.titulo   = titulo.strip()
     entrada.conteudo = conteudo.strip()
@@ -9967,7 +9919,7 @@ async def webhook_mp(
             meta    = info.get("metadata", {})
             uid     = meta.get("usuario_id")
             plano   = meta.get("plano", "premium")
-            email   = meta.get("email", "")
+            # email removida (unused)
             metodo  = info.get("payment_type_id", "")
 
             print(f"[Webhook] Payment {mp_id}: status={status}, uid={uid}, plano={plano}")
@@ -10109,7 +10061,7 @@ async def sucesso(
 
 @app.get("/falha", response_class=HTMLResponse)
 def falha(request: Request):
-    return HTMLResponse(f"""
+    return HTMLResponse("""
     <!DOCTYPE html>
     <html lang="pt-BR">
     <head>
@@ -10117,8 +10069,8 @@ def falha(request: Request):
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Pagamento Falhou — Emotion Intelligence</title>
         <style>
-            * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-            body {{
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body {
                 font-family: 'Segoe UI', sans-serif;
                 background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
                 min-height: 100vh;
@@ -10126,8 +10078,8 @@ def falha(request: Request):
                 align-items: center;
                 justify-content: center;
                 color: white;
-            }}
-            .card {{
+            }
+            .card {
                 background: rgba(255,255,255,0.05);
                 backdrop-filter: blur(20px);
                 border: 1px solid rgba(231,76,60,0.3);
@@ -10136,27 +10088,27 @@ def falha(request: Request):
                 text-align: center;
                 max-width: 500px;
                 width: 90%;
-            }}
-            .icon {{ font-size: 80px; margin-bottom: 20px; }}
-            h1 {{
+            }
+            .icon { font-size: 80px; margin-bottom: 20px; }
+            h1 {
                 font-size: 32px;
                 margin-bottom: 15px;
                 color: #e74c3c;
-            }}
-            p {{
+            }
+            p {
                 color: rgba(255,255,255,0.7);
                 font-size: 16px;
                 line-height: 1.6;
                 margin-bottom: 15px;
-            }}
-            .opcoes {{
+            }
+            .opcoes {
                 background: rgba(255,255,255,0.05);
                 border-radius: 12px;
                 padding: 20px;
                 margin: 20px 0;
                 text-align: left;
-            }}
-            .btn {{
+            }
+            .btn {
                 display: inline-block;
                 background: linear-gradient(90deg, #e74c3c, #c0392b);
                 color: white;
@@ -10166,11 +10118,11 @@ def falha(request: Request):
                 font-size: 16px;
                 font-weight: bold;
                 margin: 5px;
-            }}
-            .btn-sec {{
+            }
+            .btn-sec {
                 background: rgba(255,255,255,0.1);
                 border: 1px solid rgba(255,255,255,0.2);
-            }}
+            }
         </style>
     </head>
     <body>
@@ -10200,7 +10152,7 @@ def falha(request: Request):
 
 @app.get("/pendente", response_class=HTMLResponse)
 def pendente(request: Request):
-    return HTMLResponse(f"""
+    return HTMLResponse("""
     <!DOCTYPE html>
     <html lang="pt-BR">
     <head>
@@ -10208,8 +10160,8 @@ def pendente(request: Request):
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Pagamento Pendente — Emotion Intelligence</title>
         <style>
-            * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-            body {{
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body {
                 font-family: 'Segoe UI', sans-serif;
                 background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
                 min-height: 100vh;
@@ -10217,8 +10169,8 @@ def pendente(request: Request):
                 align-items: center;
                 justify-content: center;
                 color: white;
-            }}
-            .card {{
+            }
+            .card {
                 background: rgba(255,255,255,0.05);
                 backdrop-filter: blur(20px);
                 border: 1px solid rgba(243,156,18,0.3);
@@ -10227,23 +10179,23 @@ def pendente(request: Request):
                 text-align: center;
                 max-width: 500px;
                 width: 90%;
-            }}
-            .icon {{ font-size: 80px; margin-bottom: 20px; }}
-            h1 {{ font-size: 32px; margin-bottom: 15px; color: #f39c12; }}
-            p {{
+            }
+            .icon { font-size: 80px; margin-bottom: 20px; }
+            h1 { font-size: 32px; margin-bottom: 15px; color: #f39c12; }
+            p {
                 color: rgba(255,255,255,0.7);
                 font-size: 16px;
                 line-height: 1.6;
                 margin-bottom: 15px;
-            }}
-            .info {{
+            }
+            .info {
                 background: rgba(243,156,18,0.1);
                 border: 1px solid rgba(243,156,18,0.3);
                 border-radius: 12px;
                 padding: 20px;
                 margin: 20px 0;
-            }}
-            .btn {{
+            }
+            .btn {
                 display: inline-block;
                 background: linear-gradient(90deg, #f39c12, #e67e22);
                 color: white;
@@ -10252,7 +10204,7 @@ def pendente(request: Request):
                 text-decoration: none;
                 font-size: 16px;
                 font-weight: bold;
-            }}
+            }
         </style>
     </head>
     <body>
@@ -10594,7 +10546,7 @@ def verificar_token(
 
     usuario = db.query(Usuario).filter(
         Usuario.api_token == x_api_token,
-        Usuario.ativo     == True
+        Usuario.ativo
     ).first()
 
     if not usuario:
@@ -10612,7 +10564,8 @@ def exportar_csv(request: Request, db: Session = Depends(get_db)):
     if not usuario:
         raise HTTPException(status_code=401, detail="Nao autorizado")
 
-    import csv, io
+    import csv
+    import io
     analises = db.query(Analise).filter(
         Analise.usuario_id == usuario.id
     ).order_by(Analise.criado_em.desc()).all()
@@ -10678,7 +10631,7 @@ def validar_cupom(
 
     cupom = db.query(Cupom).filter(
         Cupom.codigo == codigo.upper().strip(),
-        Cupom.ativo == True
+        Cupom.ativo
     ).first()
 
     if not cupom:
@@ -10775,7 +10728,7 @@ def compartilhar_analise(analise_id: int, request: Request, db: Session = Depend
     emocao = analise.emocao or "neutro"
     emoji = analise.emoji or "🧠"
     texto_share = f"{nome} se sentiu {emocao} {emoji} — Emotion Intelligence"
-    url_share = f"{BASE_URL}/compartilhar/{analise_id}"
+    # url_share removida (unused)
     url_cadastro = f"{BASE_URL}/cadastro"
 
     # Se for browser, retorna pagina HTML
@@ -11008,7 +10961,7 @@ def exportar_pdf(request: Request, db: Session = Depends(get_db)):
         from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
         from reportlab.lib.units import cm
         from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, HRFlowable
-        from reportlab.lib.enums import TA_CENTER, TA_LEFT
+        from reportlab.lib.enums import TA_CENTER
         import io
 
         buffer = io.BytesIO()
@@ -11046,7 +10999,7 @@ def exportar_pdf(request: Request, db: Session = Depends(get_db)):
             spaceBefore=16,
             spaceAfter=8,
         )
-        estilo_normal = ParagraphStyle(
+        _estilo_normal_unused = ParagraphStyle(
             'Normal2',
             parent=styles['Normal'],
             fontSize=10,
@@ -11263,11 +11216,11 @@ def api_analyze(
     try:
         _a = detectar_emocao_hibrido(text, usar_gemini=True)
         emocao = _a.get("emocao", "neutro")
-    except:
+    except Exception:
         try:
             _at = detectar_emocao_hibrido(text, usar_gemini=True)
             emocao = _at.get("emocao", "neutro")
-        except:
+        except Exception:
             emocao = detectar_emocao(text)
     intensidade = calcular_intensidade(text)
     tecnica     = tecnicas_por_emocao.get(emocao, "")
@@ -11370,7 +11323,7 @@ def api_ranking(
     db:      Session = Depends(get_db)
 ):
     top = db.query(Usuario).filter(
-        Usuario.ativo == True
+        Usuario.ativo
     ).order_by(Usuario.pontos.desc()).limit(10).all()
 
     return {
