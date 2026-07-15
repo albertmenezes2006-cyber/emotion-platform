@@ -760,6 +760,106 @@ body{
 
 <div class="container">
 
+<!-- WIDGET BOAS-VINDAS PERSONALIZADO -->
+<div id="widget-bv" style="background:linear-gradient(135deg,rgba(0,210,255,0.1),rgba(58,123,213,0.1));border:1px solid rgba(0,210,255,0.2);border-radius:20px;padding:24px;margin-bottom:20px;position:relative;overflow:hidden">
+  <div style="position:absolute;top:-30px;right:-30px;font-size:100px;opacity:0.06">🧠</div>
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+    <div>
+      <div id="saudacao" style="font-size:22px;font-weight:900;margin-bottom:4px">Olá! 👋</div>
+      <div style="font-size:14px;color:rgba(255,255,255,0.6)" id="msgDia">Como você está se sentindo hoje?</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:12px;color:rgba(255,255,255,0.4)" id="dataHoje"></div>
+      <div id="saudeMental" style="font-size:13px;color:var(--success);margin-top:4px">✨ Pronto para se conhecer melhor</div>
+    </div>
+  </div>
+</div>
+
+<!-- INSIGHTS DO DIA -->
+<div id="insights-card" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:20px">
+  <div style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);border-radius:16px;padding:18px;display:flex;align-items:center;gap:14px">
+    <div style="font-size:32px">🔥</div>
+    <div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:2px">STREAK ATUAL</div>
+      <div id="streakValor" style="font-size:24px;font-weight:900;color:#2ecc71">--</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4)">dias consecutivos</div>
+    </div>
+  </div>
+  <div style="background:rgba(0,210,255,0.08);border:1px solid rgba(0,210,255,0.2);border-radius:16px;padding:18px;display:flex;align-items:center;gap:14px">
+    <div style="font-size:32px">🧠</div>
+    <div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:2px">SCORE IE</div>
+      <div id="scoreIeValor" style="font-size:24px;font-weight:900;color:#00d2ff">{{ score_ie }}</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4)">{{ nivel_ie }}</div>
+    </div>
+  </div>
+  <div style="background:rgba(155,89,182,0.08);border:1px solid rgba(155,89,182,0.2);border-radius:16px;padding:18px;display:flex;align-items:center;gap:14px">
+    <div style="font-size:32px">📊</div>
+    <div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:2px">ANÁLISES HOJE</div>
+      <div style="font-size:24px;font-weight:900;color:#9b59b6">{{ analises_hoje }}/{{ limite_analises }}</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4)">disponíveis hoje</div>
+    </div>
+  </div>
+  <div style="background:rgba(243,156,18,0.08);border:1px solid rgba(243,156,18,0.2);border-radius:16px;padding:18px;display:flex;align-items:center;gap:14px">
+    <div style="font-size:32px">🏆</div>
+    <div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:2px">PONTOS</div>
+      <div style="font-size:24px;font-weight:900;color:#f39c12">{{ usuario.pontos }}</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4)">{{ usuario.badge }}</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Saudacao personalizada por horario
+function initWidget() {
+  const hora = new Date().getHours();
+  const nome = "{{ usuario.nome.split()[0] }}";
+  let saudacao, msg;
+
+  if(hora >= 5 && hora < 12) {
+    saudacao = `Bom dia, ${nome}! ☀️`;
+    msg = "Como você acordou hoje? Faça sua primeira análise!";
+  } else if(hora >= 12 && hora < 18) {
+    saudacao = `Boa tarde, ${nome}! 🌤️`;
+    msg = "Como está sendo seu dia? Registre suas emoções agora.";
+  } else if(hora >= 18 && hora < 22) {
+    saudacao = `Boa noite, ${nome}! 🌙`;
+    msg = "Como foi seu dia? O diário emocional te espera.";
+  } else {
+    saudacao = `Olá, ${nome}! 🌟`;
+    msg = "Cuidando de você mesmo à meia-noite? Isso é dedicação!";
+  }
+
+  document.getElementById('saudacao').textContent = saudacao;
+  document.getElementById('msgDia').textContent = msg;
+
+  // Data atual
+  const agora = new Date();
+  const opts = {weekday:'long',year:'numeric',month:'long',day:'numeric'};
+  document.getElementById('dataHoje').textContent = agora.toLocaleDateString('pt-BR', opts);
+}
+
+// Carregar streak
+fetch('/api/streak')
+  .then(r => r.json())
+  .then(d => {
+    if(d.ok && d.streak) {
+      const s = d.streak;
+      document.getElementById('streakValor').textContent = s.streak_atual;
+      if(s.streak_atual >= 7) {
+        document.getElementById('saudeMental').textContent = '🔥 ' + s.streak_atual + ' dias de streak! Incrível!';
+      } else if(s.streak_atual >= 3) {
+        document.getElementById('saudeMental').textContent = '⚡ ' + s.streak_atual + ' dias seguidos! Continue!';
+      }
+    }
+  }).catch(()=>{});
+
+initWidget();
+</script>
+
+
 <!-- ============================================================
      BANNER DE PLANO
 ============================================================ -->
