@@ -8732,15 +8732,24 @@ async def chat(
 
     if eh_premium:
         instrucoes_plano = (
-            f"PREMIUM: acolha com empatia, reflita sobre {emocao_atual}, "
-            f"ensine 1 tecnica terapeutica pratica, exercicio para hoje, "
-            f"2 perguntas abertas, encoraje. 10-15 linhas. "
-            f"{padrao_emocional}. Crise grave: indique CVV 188."
+            f"PREMIUM — sessao terapeutica completa:\n"
+            f"1. Valide profundamente a emocao '{emocao_atual}' com empatia real\n"
+            f"2. Explore o que esta POR BAIXO dessa emocao — causas, padroes, crencas\n"
+            f"3. Ofeca UMA tecnica especifica e pratica com instrucoes passo a passo\n"
+            f"4. Proponha um exercicio concreto para HOJE\n"
+            f"5. Termine com 1-2 perguntas abertas que aprofundem a reflexao\n"
+            f"Tamanho: 12-18 linhas. Tom: terapeuta habilidosa e humana.\n"
+            f"Padrao emocional historico: {padrao_emocional}\n"
+            f"Em crise grave: mencione CVV 188 com carinho."
         )
     else:
         instrucoes_plano = (
-            "FREE: 4-6 linhas. Acolha + 1 dica pratica + 1 pergunta reflexiva. "
-            "Mencione gentilmente que Premium tem sessoes terapeuticas completas."
+            "FREE — resposta de apoio breve:\n"
+            "1. Valide o sentimento em 1-2 linhas genuinas\n"
+            "2. Ofeca 1 dica pratica simples e acionavel\n"
+            "3. Termine com 1 pergunta reflexiva\n"
+            "Tamanho: 4-7 linhas. Tom: amiga que se importa.\n"
+            "No final, mencione SUTILMENTE (nao forcado) que o Premium tem sessoes terapeuticas completas."
         )
 
     # Historico compacto - ultimas 6 trocas (memoria ampliada)
