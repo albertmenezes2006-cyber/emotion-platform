@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -9,68 +10,146 @@
   gtag('config', 'G-JGLER9XVGY');
 </script>
 <meta charset="UTF-8">
-
-<meta property="og:type" content="website">
-<meta property="og:title" content="Página não encontrada — Emotion Intelligence">
-<meta property="og:description" content="A página que você procura não existe. Volte para a Emotion Intelligence.">
-<meta property="og:url" content="https://emotion-platform-albert.onrender.com">
-<meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/favicon.svg">
-<meta property="og:site_name" content="Emotion Intelligence">
-<meta property="og:locale" content="pt_BR">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Página não encontrada — Emotion Intelligence">
-<meta name="twitter:description" content="A página que você procura não existe. Volte para a Emotion Intelligence.">
-<meta name="twitter:image" content="https://emotion-platform-albert.onrender.com/static/favicon.svg">
-<link rel="canonical" href="https://emotion-platform-albert.onrender.com">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Página não encontrada — Emotion Intelligence</title>
+<meta name="description" content="A página que você procura não existe. Volte para a Emotion Intelligence.">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;text-align:center}
-.container{max-width:600px;width:100%}
-.emoji{font-size:100px;margin-bottom:20px;animation:float 3s ease infinite}
+:root{--primary:#00d2ff;--secondary:#3a7bd5;--dark:#0f0c29;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1)}
+body{font-family:'Segoe UI',sans-serif;background:var(--dark);color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;overflow:hidden}
+.bg{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at center,rgba(0,210,255,0.06) 0%,transparent 70%);pointer-events:none}
+.container{max-width:600px;width:100%;position:relative;z-index:1}
+.emoji-404{font-size:80px;margin-bottom:16px;animation:float 3s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
-.code{font-size:120px;font-weight:900;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:8px}
-h1{font-size:28px;font-weight:bold;margin-bottom:12px}
-p{color:rgba(255,255,255,0.5);font-size:16px;margin-bottom:32px;line-height:1.6}
-.links{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
-.btn{padding:12px 24px;border-radius:12px;text-decoration:none;font-size:14px;font-weight:600;transition:all .2s}
-.btn-primary{background:linear-gradient(90deg,#00d2ff,#3a7bd5);color:#fff}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,210,255,0.3)}
-.btn-secondary{background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.15)}
-.btn-secondary:hover{background:rgba(255,255,255,0.15)}
-.sugestoes{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:24px}
-.sugestoes h3{font-size:15px;color:rgba(255,255,255,0.5);margin-bottom:16px}
-.sug-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
-.sug-item{background:rgba(255,255,255,0.04);border-radius:12px;padding:14px;text-decoration:none;color:#fff;transition:all .2s;border:1px solid rgba(255,255,255,0.06)}
-.sug-item:hover{background:rgba(0,210,255,0.1);border-color:rgba(0,210,255,0.2);transform:translateY(-2px)}
-.sug-icon{font-size:24px;margin-bottom:6px;display:block}
-.sug-label{font-size:12px;color:rgba(255,255,255,0.7)}
+.code{font-size:120px;font-weight:900;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:8px}
+h1{font-size:28px;font-weight:700;margin-bottom:12px}
+p{color:rgba(255,255,255,0.5);font-size:16px;line-height:1.6;margin-bottom:32px;max-width:400px;margin-left:auto;margin-right:auto}
+/* LINKS UTEIS */
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:32px}
+.link-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;text-decoration:none;color:#fff;transition:all .2s;display:block}
+.link-card:hover{border-color:var(--primary);transform:translateY(-4px)}
+.link-icon{font-size:28px;margin-bottom:8px;display:block}
+.link-label{font-size:13px;font-weight:600}
+.link-desc{font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px}
+/* BUSCA */
+.busca{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:24px}
+.busca h3{font-size:14px;color:var(--primary);margin-bottom:12px}
+.busca-row{display:flex;gap:10px}
+.busca-input{flex:1;padding:11px 16px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,0.05);color:#fff;font-size:14px;outline:none}
+.busca-input:focus{border-color:var(--primary)}
+.busca-btn{padding:11px 20px;background:linear-gradient(90deg,var(--primary),var(--secondary));border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer}
+/* BTN */
+.btn-home{display:inline-block;padding:14px 32px;background:linear-gradient(90deg,var(--primary),var(--secondary));border-radius:12px;color:#fff;font-size:15px;font-weight:700;text-decoration:none;transition:all .3s}
+.btn-home:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,210,255,0.3)}
+.footer{margin-top:32px;color:rgba(255,255,255,0.2);font-size:12px}
+.footer a{color:rgba(255,255,255,0.3);text-decoration:none;margin:0 8px}
+.footer a:hover{color:var(--primary)}
 </style>
 </head>
 <body>
+<div class="bg"></div>
 <div class="container">
-  <div class="emoji">🧠</div>
+  <div class="emoji-404">🔍</div>
   <div class="code">404</div>
   <h1>Página não encontrada</h1>
-  <p>Parece que essa página sumiu... mas sua jornada emocional continua!<br>Explore uma das páginas abaixo:</p>
-  <div class="links">
-    <a href="/" class="btn btn-primary">🏠 Página Inicial</a>
-    <a href="/dashboard" class="btn btn-secondary">📊 Dashboard</a>
-    <a href="/blog" class="btn btn-secondary">📚 Blog</a>
-  </div>
-  <div class="sugestoes">
-    <h3>O que você pode fazer agora:</h3>
-    <div class="sug-grid">
-      <a href="/analyze" class="sug-item"><span class="sug-icon">🧠</span><div class="sug-label">Análise Emocional</div></a>
-      <a href="/chat" class="sug-item"><span class="sug-icon">💬</span><div class="sug-label">Sofia IA</div></a>
-      <a href="/terapia" class="sug-item"><span class="sug-icon">🌱</span><div class="sug-label">Terapia 7 Dias</div></a>
-      <a href="/premium" class="sug-item"><span class="sug-icon">⭐</span><div class="sug-label">Ver Premium</div></a>
-      <a href="/blog" class="sug-item"><span class="sug-icon">📚</span><div class="sug-label">Blog</div></a>
-      <a href="/ranking" class="sug-item"><span class="sug-icon">🏆</span><div class="sug-label">Ranking</div></a>
+  <p>Ops! A página que você está procurando não existe ou foi movida. Mas não se preocupe — ainda temos muito para explorar!</p>
+
+  <!-- BUSCA -->
+  <div class="busca">
+    <h3>🔎 O que você estava procurando?</h3>
+    <div class="busca-row">
+      <input class="busca-input" id="buscaInput" type="text" placeholder="Ex: análise emocional, Sofia, planos...">
+      <button class="busca-btn" onclick="buscar()">Buscar</button>
     </div>
   </div>
+
+  <!-- LINKS UTEIS -->
+  <div class="links">
+    <a href="/" class="link-card">
+      <span class="link-icon">🏠</span>
+      <div class="link-label">Início</div>
+      <div class="link-desc">Voltar ao começo</div>
+    </a>
+    <a href="/dashboard" class="link-card">
+      <span class="link-icon">📊</span>
+      <div class="link-label">Dashboard</div>
+      <div class="link-desc">Suas análises</div>
+    </a>
+    <a href="/blog" class="link-card">
+      <span class="link-icon">📚</span>
+      <div class="link-label">Blog</div>
+      <div class="link-desc">Artigos sobre IE</div>
+    </a>
+    <a href="/premium" class="link-card">
+      <span class="link-icon">⭐</span>
+      <div class="link-label">Premium</div>
+      <div class="link-desc">Desbloqueie tudo</div>
+    </a>
+    <a href="/terapia" class="link-card">
+      <span class="link-icon">🌱</span>
+      <div class="link-label">Terapia 7 Dias</div>
+      <div class="link-desc">Programa guiado</div>
+    </a>
+    <a href="/contato" class="link-card">
+      <span class="link-icon">📧</span>
+      <div class="link-label">Contato</div>
+      <div class="link-desc">Fale conosco</div>
+    </a>
+  </div>
+
+  <a href="/" class="btn-home">🏠 Voltar ao Início</a>
+
+  <div class="footer">
+    <a href="/privacidade">Privacidade</a>
+    <a href="/termos">Termos</a>
+    <a href="/faq">FAQ</a>
+    <br><br>🧠 Emotion Intelligence Platform v20.0
+  </div>
 </div>
-<script>gtag('event','page_not_found',{event_category:'erro',event_label:window.location.pathname});</script>
+
+<script>
+function buscar() {
+  const q = document.getElementById('buscaInput').value.trim();
+  if(!q) return;
+  const mapa = {
+    'analise': '/dashboard',
+    'sofia': '/chat',
+    'chat': '/chat',
+    'premium': '/premium',
+    'plano': '/planos',
+    'preco': '/planos',
+    'diario': '/diario',
+    'score': '/score-ie',
+    'ie': '/score-ie',
+    'afiliado': '/afiliado',
+    'blog': '/blog',
+    'terapia': '/terapia',
+    'login': '/login',
+    'cadastro': '/cadastro',
+    'conta': '/perfil',
+    'perfil': '/perfil',
+    'carteira': '/carteira',
+    'credito': '/carteira',
+    'api': '/api/v1/docs',
+    'faq': '/faq',
+    'contato': '/contato',
+    'sobre': '/sobre',
+  };
+  const ql = q.toLowerCase();
+  for(const [key, url] of Object.entries(mapa)) {
+    if(ql.includes(key)) {
+      window.location.href = url;
+      return;
+    }
+  }
+  window.location.href = '/blog';
+}
+
+document.getElementById('buscaInput').addEventListener('keypress', function(e) {
+  if(e.key === 'Enter') buscar();
+});
+
+gtag('event','page_not_found',{event_category:'erro',event_label:window.location.pathname});
+</script>
 </body>
 </html>
