@@ -3,107 +3,257 @@
 <head>
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-JGLER9XVGY');
-</script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-JGLER9XVGY');</script>
 <meta charset="UTF-8">
-
-<meta property="og:type" content="website">
-<meta property="og:title" content="White-Label — Emotion Intelligence">
-<meta property="og:description" content="Ofereça a Emotion Intelligence com sua marca. Solução white-label completa.">
-<meta property="og:url" content="https://emotion-platform-albert.onrender.com/whitelabel">
-<meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/favicon.svg">
-<meta property="og:site_name" content="Emotion Intelligence">
-<meta property="og:locale" content="pt_BR">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="White-Label — Emotion Intelligence">
-<meta name="twitter:description" content="Ofereça a Emotion Intelligence com sua marca. Solução white-label completa.">
-<meta name="twitter:image" content="https://emotion-platform-albert.onrender.com/static/favicon.svg">
-<link rel="canonical" href="https://emotion-platform-albert.onrender.com/whitelabel">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>White-label - Emotion Intelligence Platform</title>
+<title>White-Label — Emotion Intelligence</title>
+<meta name="description" content="Ofereça a Emotion Intelligence com sua marca. Solução white-label completa para empresas.">
+<meta property="og:title" content="White-Label — Emotion Intelligence">
+<meta property="og:description" content="Plataforma de análise emocional com sua marca. Até 50 usuários incluídos.">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',sans-serif;background:#0f0f1a;color:#fff;min-height:100vh}
-.hero{background:linear-gradient(135deg,#1a1a2e,#16213e);padding:70px 20px;text-align:center;border-bottom:1px solid #333}
-.hero h1{font-size:2.5rem;margin-bottom:15px}
-.badge{background:#667eea;padding:6px 18px;border-radius:20px;font-size:.9rem;display:inline-block;margin-bottom:20px}
-.container{max-width:800px;margin:0 auto;padding:40px 20px}
-.card{background:#1a1a2e;border-radius:20px;padding:35px;border:1px solid #333;margin-bottom:25px}
-.card h2{color:#667eea;margin-bottom:20px}
-.features-list{list-style:none;margin:15px 0}
-.features-list li{padding:10px 0;border-bottom:1px solid #333;display:flex;gap:10px;align-items:center}
-.casos{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin:20px 0}
-.caso{background:#111;border-radius:10px;padding:15px;text-align:center}
-.caso .icon{font-size:2rem;margin-bottom:8px}
-.preco-box{background:#667eea22;border:2px solid #667eea;border-radius:16px;padding:30px;text-align:center;margin:25px 0}
-.preco{font-size:3rem;font-weight:700;color:#667eea}
-.form-group{margin:15px 0}
-.form-group label{display:block;margin-bottom:8px;color:#aaa}
-.form-group input{width:100%;padding:12px;background:#111;border:1px solid #333;border-radius:8px;color:#fff;font-size:1rem}
-.btn{width:100%;padding:18px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:12px;font-size:1.1rem;font-weight:700;cursor:pointer;transition:.3s}
+:root{--primary:#00d2ff;--secondary:#3a7bd5;--dark:#0f0c29;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1);--success:#2ecc71;--gold:#f39c12}
+body{font-family:'Segoe UI',sans-serif;background:var(--dark);color:#fff;min-height:100vh}
+nav{padding:16px 40px;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.logo{font-size:20px;font-weight:bold;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+.nav-btn{padding:9px 20px;border-radius:20px;text-decoration:none;color:#fff;font-size:13px;border:1px solid var(--border);transition:all .2s}
+.nav-btn:hover{border-color:var(--primary);color:var(--primary)}
+.container{max-width:1000px;margin:0 auto;padding:50px 20px}
+/* HERO */
+.hero{text-align:center;padding:60px 20px;background:var(--card);border-radius:24px;border:1px solid var(--border);margin-bottom:40px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(0,210,255,0.06) 0%,transparent 60%);pointer-events:none}
+.hero-badge{display:inline-block;background:rgba(0,210,255,0.1);border:1px solid rgba(0,210,255,0.2);padding:5px 16px;border-radius:20px;font-size:12px;color:var(--primary);margin-bottom:16px;font-weight:600}
+h1{font-size:42px;font-weight:900;margin-bottom:14px}
+h1 span{background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:17px;color:rgba(255,255,255,0.6);max-width:560px;margin:0 auto 32px;line-height:1.7}
+.preco-hero{font-size:52px;font-weight:900;background:linear-gradient(90deg,var(--gold),#e67e22);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:4px}
+.preco-periodo{font-size:15px;color:rgba(255,255,255,0.5);margin-bottom:24px}
+/* FEATURES */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-bottom:40px}
+.feature-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;transition:all .3s}
+.feature-card:hover{border-color:var(--primary);transform:translateY(-4px)}
+.feature-icon{font-size:40px;margin-bottom:16px}
+.feature-card h3{font-size:18px;font-weight:700;color:var(--primary);margin-bottom:10px}
+.feature-card p{font-size:14px;color:rgba(255,255,255,0.6);line-height:1.6}
+/* PLANOS */
+.planos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-bottom:40px}
+.plano-card{background:var(--card);border:2px solid var(--border);border-radius:20px;padding:28px;text-align:center;transition:all .3s;position:relative}
+.plano-card.destaque{border-color:var(--primary);background:rgba(0,210,255,0.05)}
+.plano-card.destaque::before{content:'MAIS POPULAR';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--primary),var(--secondary));padding:4px 16px;border-radius:20px;font-size:11px;font-weight:bold;white-space:nowrap}
+.plano-nome{font-size:20px;font-weight:700;color:var(--primary);margin-bottom:8px}
+.plano-preco{font-size:42px;font-weight:900;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:4px}
+.plano-periodo{font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:20px}
+.plano-features{list-style:none;text-align:left;margin-bottom:24px}
+.plano-features li{padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:14px;display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.8)}
+.plano-features li:last-child{border-bottom:none}
+/* FORM */
+.form-section{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:40px;margin-bottom:40px}
+.form-section h2{font-size:24px;font-weight:700;margin-bottom:8px;text-align:center}
+.form-section p{color:rgba(255,255,255,0.5);text-align:center;margin-bottom:28px;font-size:14px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:600px){.form-grid{grid-template-columns:1fr}}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;margin-bottom:6px;color:rgba(255,255,255,0.6);font-size:13px;font-weight:600}
+.form-group input{width:100%;padding:13px 16px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,0.05);color:#fff;font-size:14px;outline:none;transition:border .2s}
+.form-group input:focus{border-color:var(--primary)}
+.form-group input::placeholder{color:rgba(255,255,255,0.3)}
+.btn-contratar{width:100%;padding:16px;background:linear-gradient(90deg,var(--primary),var(--secondary));border:none;border-radius:14px;color:#fff;font-size:17px;font-weight:bold;cursor:pointer;transition:all .3s;margin-top:8px}
+.btn-contratar:hover{transform:translateY(-2px);box-shadow:0 15px 40px rgba(0,210,255,0.4)}
+/* CASOS USO */
+.casos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:40px}
+.caso{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center}
+.caso-icon{font-size:36px;margin-bottom:10px}
+.caso h3{font-size:15px;font-weight:700;color:var(--primary);margin-bottom:6px}
+.caso p{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.5}
+/* GARANTIA */
+.garantia{background:rgba(46,204,113,0.06);border:1px solid rgba(46,204,113,0.2);border-radius:20px;padding:32px;text-align:center;margin-bottom:40px}
+.garantia h2{font-size:24px;margin-bottom:10px}
+.garantia p{color:rgba(255,255,255,0.6);font-size:14px;max-width:500px;margin:0 auto}
+.btn{display:inline-block;padding:13px 28px;border-radius:12px;background:linear-gradient(90deg,var(--primary),var(--secondary));color:#fff;text-decoration:none;font-size:15px;font-weight:bold;transition:all .2s;margin:4px}
 .btn:hover{transform:translateY(-2px)}
-.loader{display:none;text-align:center;padding:20px;color:#667eea}
+.toast{position:fixed;bottom:24px;right:24px;background:rgba(46,204,113,.95);color:#fff;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s}
+.toast.show{transform:translateY(0);opacity:1}
+.footer{text-align:center;padding:30px;color:rgba(255,255,255,0.25);font-size:12px}
+.footer a{color:rgba(255,255,255,0.3);text-decoration:none;margin:0 8px}
+.footer a:hover{color:var(--primary)}
+@media(max-width:768px){nav{padding:12px 16px}.container{padding:30px 14px}h1{font-size:30px}}
 </style>
 </head>
 <body>
-<div class="hero">
-  <div class="badge">SOLUCAO EMPRESARIAL</div>
-  <h1>White-label para sua empresa</h1>
-  <p style="color:#aaa;max-width:500px;margin:15px auto 0">Oferea analise emocional com a sua marca para seus clientes ou colaboradores</p>
-</div>
+<nav>
+  <a href="/" class="logo">🧠 Emotion Intelligence</a>
+  <a href="/contato" class="nav-btn">📧 Falar com Vendas</a>
+</nav>
+
 <div class="container">
-  <div class="card">
-    <h2>Casos de uso</h2>
-    <div class="casos">
-      <div class="caso"><div class="icon">🏥</div><strong>Clinicas</strong><p style="color:#aaa;font-size:.85rem;margin-top:5px">Psicologia</p></div>
-      <div class="caso"><div class="icon">🏢</div><strong>RH</strong><p style="color:#aaa;font-size:.85rem;margin-top:5px">Empresarial</p></div>
-      <div class="caso"><div class="icon">🎓</div><strong>Educacao</strong><p style="color:#aaa;font-size:.85rem;margin-top:5px">Escolas</p></div>
-      <div class="caso"><div class="icon">💼</div><strong>Coaches</strong><p style="color:#aaa;font-size:.85rem;margin-top:5px">Terapeutas</p></div>
+  <div class="hero">
+    <div class="hero-badge">🏢 SOLUÇÃO EMPRESARIAL</div>
+    <h1>Emotion Intelligence<br><span>White-Label</span></h1>
+    <p class="hero-sub">Ofereça análise emocional com IA com a sua marca. Perfeito para empresas de RH, clínicas, escolas e consultórios.</p>
+    <div class="preco-hero">R$299</div>
+    <div class="preco-periodo">/mês — até 50 usuários incluídos</div>
+    <a href="#contratar" class="btn">🏢 Contratar White-Label</a>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="features-grid">
+    {% for feature in features %}
+    <div class="feature-card">
+      <div class="feature-icon">
+        {% if loop.index == 1 %}🎨
+        {% elif loop.index == 2 %}👥
+        {% elif loop.index == 3 %}📊
+        {% elif loop.index == 4 %}⚡
+        {% elif loop.index == 5 %}🌐
+        {% else %}📋{% endif %}
+      </div>
+      <h3>{{feature}}</h3>
+      <p>
+        {% if loop.index == 1 %}Logo, cores e identidade visual 100% da sua empresa{% endif %}
+        {% if loop.index == 2 %}Gerencie até 50 usuários com painel admin dedicado{% endif %}
+        {% if loop.index == 3 %}Relatórios de bem-estar emocional da sua equipe{% endif %}
+        {% if loop.index == 4 %}Acesso prioritário com SLA garantido{% endif %}
+        {% if loop.index == 5 %}Use seu próprio domínio (ex: emocoes.suaempresa.com){% endif %}
+        {% if loop.index == 6 %}Exportação de dados e relatórios mensais em PDF{% endif %}
+      </p>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- CASOS DE USO -->
+  <h2 style="text-align:center;margin-bottom:20px;font-size:28px">🎯 Para quem é ideal?</h2>
+  <div class="casos-grid">
+    <div class="caso">
+      <div class="caso-icon">🏢</div>
+      <h3>RH Empresarial</h3>
+      <p>Monitore bem-estar emocional da equipe e previna burnout</p>
+    </div>
+    <div class="caso">
+      <div class="caso-icon">🏥</div>
+      <h3>Clínicas</h3>
+      <p>Ofereça acompanhamento emocional digital aos pacientes</p>
+    </div>
+    <div class="caso">
+      <div class="caso-icon">🎓</div>
+      <h3>Escolas</h3>
+      <p>Apoio emocional para alunos com relatórios para professores</p>
+    </div>
+    <div class="caso">
+      <div class="caso-icon">💼</div>
+      <h3>Coaches</h3>
+      <p>Ferramenta profissional de análise emocional para clientes</p>
+    </div>
+    <div class="caso">
+      <div class="caso-icon">🧘</div>
+      <h3>Psicólogos</h3>
+      <p>Complemento digital para acompanhamento entre sessões</p>
+    </div>
+    <div class="caso">
+      <div class="caso-icon">🚀</div>
+      <h3>Startups</h3>
+      <p>Integre análise emocional no seu produto rapidamente</p>
     </div>
   </div>
-  <div class="card">
-    <h2>O que esta incluido</h2>
-    <ul class="features-list">
-      {% for f in features %}
-      <li><span>✅</span><span>{{f}}</span></li>
-      {% endfor %}
-    </ul>
+
+  <!-- FORM CONTRATAR -->
+  <div class="form-section" id="contratar">
+    <h2>🏢 Contratar White-Label</h2>
+    <p>Preencha os dados e nossa equipe entrará em contato em até 24h</p>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Nome da empresa *</label>
+        <input type="text" id="empresa" placeholder="Ex: TechCorp Soluções">
+      </div>
+      <div class="form-group">
+        <label>Slug (identificador único) *</label>
+        <input type="text" id="slug" placeholder="Ex: techcorp" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9-]/g,'')">
+      </div>
+      <div class="form-group">
+        <label>Seu nome *</label>
+        <input type="text" id="nome_contato" placeholder="Seu nome completo">
+      </div>
+      <div class="form-group">
+        <label>Email corporativo *</label>
+        <input type="email" id="email_contato" placeholder="voce@empresa.com">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Domínio customizado (opcional)</label>
+      <input type="text" id="dominio" placeholder="Ex: emocoes.suaempresa.com">
+    </div>
+    <button class="btn-contratar" onclick="contratar()">🏢 Contratar — R$299/mês</button>
+    <p style="text-align:center;margin-top:12px;font-size:12px;color:rgba(255,255,255,0.3)">
+      🔒 Pagamento seguro via MercadoPago · Ativação em até 24h
+    </p>
   </div>
-  <div class="card">
-    <div class="preco-box">
-      <div style="color:#aaa;margin-bottom:10px">Investimento mensal</div>
-      <div class="preco">R$299<span style="font-size:1.2rem">/mes</span></div>
-      <div style="color:#aaa;margin-top:10px">Ate 50 usuarios - Cancele quando quiser</div>
-    </div>
-    <div class="form-group">
-      <label>Nome da empresa:</label>
-      <input type="text" id="empresa" placeholder="Ex: Clinica Bem Estar">
-    </div>
-    <div class="form-group">
-      <label>Slug (URL personalizada):</label>
-      <input type="text" id="slug" placeholder="ex: clinica-bem-estar" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9-]/g,'-')">
-      <small style="color:#888">Seu link: emotion-platform-albert.onrender.com/wl/seu-slug</small>
-    </div>
-    <button class="btn" onclick="contratar()">CONTRATAR WHITE-LABEL</button>
-    <div class="loader" id="loader">Processando...</div>
-    <p style="color:#888;font-size:.8rem;text-align:center;margin-top:15px">Pagamento seguro - Ativacao em ate 24h</p>
+
+  <!-- GARANTIA -->
+  <div class="garantia">
+    <div style="font-size:48px;margin-bottom:12px">🛡️</div>
+    <h2>Garantia de 7 dias</h2>
+    <p>Se não estiver satisfeito com a solução white-label, devolvemos 100% do valor. Sem perguntas.</p>
+  </div>
+
+  <div style="text-align:center;margin-bottom:40px">
+    <a href="/contato" class="btn">📧 Falar com um especialista</a>
+    <a href="/planos" class="btn" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1)">Ver todos os planos</a>
   </div>
 </div>
+
+<div class="footer">
+  <a href="/">Início</a><a href="/planos">Planos</a><a href="/api/v1/docs">API</a>
+  <a href="/contato">Contato</a><a href="/privacidade">Privacidade</a>
+  <br><br>🧠 Emotion Intelligence Platform v20.0
+</div>
+
+<div class="toast" id="toast"></div>
+
 <script>
-async function contratar(){
-  var empresa=document.getElementById('empresa').value;
-  var slug=document.getElementById('slug').value;
-  if(!empresa||!slug){alert('Preencha empresa e slug');return;}
-  document.querySelector('.btn').style.display='none';
-  document.getElementById('loader').style.display='block';
-  var r=await fetch('/checkout/whitelabel/processar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({empresa:empresa,slug:slug})});
-  var d=await r.json();
-  if(d.ok) window.location.href=d.url;
-  else{alert('Erro: '+d.erro);document.querySelector('.btn').style.display='block';document.getElementById('loader').style.display='none';}
+function contratar() {
+  const empresa = document.getElementById('empresa').value.trim();
+  const slug = document.getElementById('slug').value.trim();
+  const nome = document.getElementById('nome_contato').value.trim();
+  const email = document.getElementById('email_contato').value.trim();
+
+  if(!empresa || !slug || !nome || !email) {
+    showToast('Preencha todos os campos obrigatórios', 'erro');
+    return;
+  }
+
+  const btn = document.querySelector('.btn-contratar');
+  btn.disabled = true;
+  btn.textContent = '⏳ Processando...';
+
+  gtag('event','begin_checkout',{event_category:'conversao',event_label:'whitelabel',value:299});
+
+  fetch('/checkout/whitelabel/processar', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({empresa, slug, dominio: document.getElementById('dominio').value.trim()})
+  })
+  .then(r => r.json())
+  .then(d => {
+    if(d.url) {
+      window.location.href = d.url;
+    } else {
+      showToast('Erro: ' + (d.erro || 'Tente novamente'), 'erro');
+      btn.disabled = false;
+      btn.textContent = '🏢 Contratar — R$299/mês';
+    }
+  })
+  .catch(() => {
+    showToast('Erro de conexão. Tente novamente.', 'erro');
+    btn.disabled = false;
+    btn.textContent = '🏢 Contratar — R$299/mês';
+  });
+}
+
+function showToast(msg, tipo) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = tipo === 'erro' ? 'rgba(231,76,60,0.95)' : 'rgba(46,204,113,0.95)';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
 }
 </script>
 </body>

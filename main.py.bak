@@ -1,5 +1,5 @@
 # ================================================================
-# EMOTION INTELLIGENCE PLATFORM - v14.0 ULTIMATE
+# EMOTION INTELLIGENCE PLATFORM - v20.0 ULTIMATE
 # ================================================================
 # Desenvolvido por: Albert Menezes
 # Versão: 14.0 ULTIMATE
@@ -89,7 +89,15 @@ SECRET_KEY       = os.environ.get("SECRET_KEY", str(uuid.uuid4()))
 # CLIENTE GEMINI 2.0
 # ================================================================
 
-cliente_ia = genai.Client(api_key=GEMINI_API_KEY)
+try:
+    if GEMINI_API_KEY:
+        cliente_ia = genai.Client(api_key=GEMINI_API_KEY)
+    else:
+        cliente_ia = None
+        print("[GEMINI] API key nao configurada — usando outros modelos")
+except Exception as _gemini_err:
+    cliente_ia = None
+    print(f"[GEMINI] Erro ao inicializar: {_gemini_err}")
 
 # ================================================================
 # LIMITES POR PLANO
@@ -164,6 +172,17 @@ PONTOS_POR_ACAO = {
 # ================================================================
 
 rate_limit_store = defaultdict(list)
+
+def limpar_rate_limit_store():
+    """Limpa entradas antigas do rate limit store — previne memory leak"""
+    agora = time.time()
+    keys_remover = []
+    for ip, acessos in rate_limit_store.items():
+        rate_limit_store[ip] = [t for t in acessos if agora - t < 3600]
+        if not rate_limit_store[ip]:
+            keys_remover.append(ip)
+    for k in keys_remover:
+        del rate_limit_store[k]
 
 # ================================================================
 # BANCO DE DADOS
@@ -1355,16 +1374,23 @@ def detectar_emocao_com_ia(texto: str, usar_gemini: bool = False, db=None, usuar
     return analise_local
 
 def detectar_idioma(texto: str) -> str:
-    """Detecta idioma aproximado do texto"""
-    palavras_pt = ["estou","sinto","minha","meu","tenho","nao","que","com","uma","para","isso","mas"]
-    palavras_en = ["i am","i feel","i have","my","the","and","but","with","not","feel","this","that"]
-    palavras_es = ["estoy","siento","tengo","mi","que","con","una","para","esto","pero","muy"]
-    
+    """Detecta idioma com precisao maxima — PT tem prioridade"""
+    if not texto or not texto.strip():
+        return "pt"
+    try:
+        from langdetect import detect
+        idioma = detect(texto)
+        if idioma in ["pt","en","es","fr","de","it","ja","ko","ar","ru","hi"]:
+            return idioma
+    except:
+        pass
     texto_lower = texto.lower()
-    score_pt = sum(1 for p in palavras_pt if p in texto_lower)
+    palavras_pt = ["estou","sinto","minha","meu","tenho","nao","que","com","uma","para","isso","mas","voce","ele","ela","nos","eles","muito","mais","como","quando","onde","porque","tambem","ainda","ja","ate","desde","cada","tudo","nada","algo","alguem","nunca","sempre","talvez","hoje","agora","aqui","assim","entao","to","ta","ne","gente","cara","mano","obrigado","obrigada","saudade","brasileiro","brasil","trabalho","dinheiro","oi","ola","tchau"]
+    palavras_en = ["i am","i feel","i have","my","the","and","but","with","not","feel","this","that","you","he","she","we","they","very","how","when","where","because","also","never","always","today","now","here","there"]
+    palavras_es = ["estoy","siento","tengo","mi","con","una","para","esto","pero","muy","usted","nosotros","ellos","tambien","todavia","hoy","ahora","aqui","alli","entonces","aunque","hola","gracias"]
+    score_pt = sum(2 for p in palavras_pt if p in texto_lower) + 3
     score_en = sum(1 for p in palavras_en if p in texto_lower)
     score_es = sum(1 for p in palavras_es if p in texto_lower)
-    
     if score_en > score_pt and score_en > score_es:
         return "en"
     if score_es > score_pt and score_es > score_en:
@@ -1875,8 +1901,14 @@ def calcular_intensidade(texto: str) -> int:
         tem_emoji_intenso
     ])
 
+    if score >= 5:
+        return 5
+    if score >= 4:
+        return 4
     if score >= 3:
         return 3
+    if score >= 2:
+        return 2
     if score >= 1:
         return 2
     return 1
@@ -2208,7 +2240,7 @@ def email_base(conteudo_interno: str) -> str:
                     🧠 Emotion Intelligence
                 </h1>
                 <p style="color: rgba(255,255,255,0.8); margin: 10px 0 0;">
-                    v14.0 ULTIMATE
+                    v20.0 ULTIMATE
                 </p>
             </div>
             <div style="padding: 40px;">
@@ -2770,25 +2802,32 @@ async def enviar_email_dia14(nome: str, email: str):
 
 def job_onboarding_emails():
     from sqlalchemy.orm import Session
+    import asyncio
     db: Session = SessionLocal()
     try:
         agora = datetime.now()
         usuarios = db.query(Usuario).filter(Usuario.plano == 'free').all()
-        import asyncio
         for u in usuarios:
             if not u.criado_em:
                 continue
             dias = (agora - u.criado_em).days
-            if dias == 1:
-                asyncio.run(enviar_email_dia1(u.nome, u.email))
-            elif dias == 3:
-                asyncio.run(enviar_email_dia3(u.nome, u.email))
-            elif dias == 7:
-                asyncio.run(enviar_email_dia7(u.nome, u.email))
-            elif dias == 14:
-                asyncio.run(enviar_email_dia14(u.nome, u.email))
+            try:
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                if dias == 1:
+                    loop.run_until_complete(enviar_email_dia1(u.nome, u.email))
+                elif dias == 3:
+                    loop.run_until_complete(enviar_email_dia3(u.nome, u.email))
+                elif dias == 7:
+                    loop.run_until_complete(enviar_email_dia7(u.nome, u.email))
+                elif dias == 14:
+                    loop.run_until_complete(enviar_email_dia14(u.nome, u.email))
+                loop.close()
+            except Exception as email_err:
+                print(f'[ONBOARDING] Email erro para {u.email}: {email_err}')
     except Exception as e:
-        print(f'[ONBOARDING] Erro: {e}')
+        print(f'[ONBOARDING] Erro geral: {e}')
+        enviar_telegram(f"⚠️ Erro onboarding: {str(e)[:100]}")
     finally:
         db.close()
 
@@ -2814,7 +2853,7 @@ scheduler.start()
 
 app       = FastAPI(
     title="Emotion Intelligence Platform",
-    version="14.0",
+    version="20.0",
     description="Plataforma completa de inteligência emocional com IA"
 )
 templates = Jinja2Templates(directory="templates")
@@ -3007,6 +3046,339 @@ def resgatar_presente(codigo: str, usuario_id: int, db) -> dict:
 # ============================================================
 
 # --- PLANO ANUAL ---
+
+
+
+
+# ================================================================
+# STREAK DE DIAS CONSECUTIVOS v20.0
+# ================================================================
+
+def calcular_streak(usuario_id: int, db) -> dict:
+    """Calcula streak de dias consecutivos de uso"""
+    from datetime import timedelta
+    analises = db.query(Analise).filter(
+        Analise.usuario_id == usuario_id
+    ).order_by(Analise.criado_em.desc()).all()
+    
+    if not analises:
+        return {"streak_atual": 0, "streak_maximo": 0, "ultimo_dia": None}
+    
+    dias_ativos = sorted(set([
+        a.criado_em.date() for a in analises if a.criado_em
+    ]), reverse=True)
+    
+    if not dias_ativos:
+        return {"streak_atual": 0, "streak_maximo": 0, "ultimo_dia": None}
+    
+    hoje = datetime.now().date()
+    ontem = hoje - timedelta(days=1)
+    
+    # Streak atual
+    streak_atual = 0
+    if dias_ativos[0] >= ontem:
+        streak_atual = 1
+        for i in range(1, len(dias_ativos)):
+            esperado = dias_ativos[i-1] - timedelta(days=1)
+            if dias_ativos[i] == esperado:
+                streak_atual += 1
+            else:
+                break
+    
+    # Streak maximo
+    streak_max = 1
+    streak_temp = 1
+    for i in range(1, len(dias_ativos)):
+        esperado = dias_ativos[i-1] - timedelta(days=1)
+        if dias_ativos[i] == esperado:
+            streak_temp += 1
+            streak_max = max(streak_max, streak_temp)
+        else:
+            streak_temp = 1
+    
+    return {
+        "streak_atual": streak_atual,
+        "streak_maximo": streak_max,
+        "ultimo_dia": dias_ativos[0].strftime("%d/%m/%Y") if dias_ativos else None,
+        "emoji": "🔥" if streak_atual >= 7 else "⚡" if streak_atual >= 3 else "✨"
+    }
+
+@app.get("/api/streak")
+def api_streak(request: Request, db: Session = Depends(get_db)):
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return JSONResponse({"ok": False}, status_code=401)
+    streak = calcular_streak(usuario.id, db)
+    return JSONResponse({"ok": True, "streak": streak})
+
+# ================================================================
+# FIM STREAK
+# ================================================================
+
+# ================================================================
+# RECUPERACAO DE SENHA v20.0
+# ================================================================
+
+import hashlib as _hashlib
+
+_tokens_recuperacao = {}  # token -> {email, expira}
+
+@app.get("/recuperar-senha", response_class=HTMLResponse)
+def pagina_recuperar_senha(request: Request):
+    return render_template("recuperar_senha.html", request=request, erro=None, sucesso=None)
+
+@app.post("/recuperar-senha")
+async def processar_recuperar_senha(
+    request: Request,
+    email: str = Form(...),
+    db: Session = Depends(get_db)
+):
+    usuario = db.query(Usuario).filter(Usuario.email == email.lower().strip()).first()
+    if not usuario:
+        return render_template("recuperar_senha.html", request=request,
+            erro="Email não encontrado", sucesso=None)
+    # Gerar token unico
+    token = _hashlib.sha256(f"{email}{datetime.now().isoformat()}{uuid.uuid4()}".encode()).hexdigest()[:32]
+    _tokens_recuperacao[token] = {
+        "email": email.lower().strip(),
+        "expira": datetime.now() + timedelta(hours=2)
+    }
+    # Enviar email
+    link = f"{BASE_URL}/nova-senha?token={token}"
+    html = email_base(f"""
+        <h2 style="color:#333;margin-top:0">🔑 Recuperação de Senha</h2>
+        <p>Olá, <strong>{usuario.nome}</strong>!</p>
+        <p>Recebemos uma solicitação para redefinir sua senha na Emotion Intelligence.</p>
+        <p>Clique no botão abaixo para criar uma nova senha:</p>
+        {botao_email("🔑 Criar Nova Senha", link)}
+        <p style="color:#999;font-size:13px;margin-top:20px">
+        Este link expira em 2 horas. Se você não solicitou isso, ignore este email.
+        </p>
+    """)
+    try:
+        enviar_email(email, "🔑 Recuperar Senha — Emotion Intelligence", html)
+        return render_template("recuperar_senha.html", request=request,
+            erro=None, sucesso="Email enviado! Verifique sua caixa de entrada.")
+    except Exception as e:
+        return render_template("recuperar_senha.html", request=request,
+            erro="Erro ao enviar email. Tente novamente.", sucesso=None)
+
+@app.get("/nova-senha", response_class=HTMLResponse)
+def pagina_nova_senha(request: Request, token: str = ""):
+    if not token or token not in _tokens_recuperacao:
+        return render_template("recuperar_senha.html", request=request,
+            erro="Link inválido ou expirado", sucesso=None)
+    dados = _tokens_recuperacao[token]
+    if datetime.now() > dados["expira"]:
+        del _tokens_recuperacao[token]
+        return render_template("recuperar_senha.html", request=request,
+            erro="Link expirado. Solicite um novo.", sucesso=None)
+    return render_template("nova_senha.html", request=request, token=token, erro=None)
+
+@app.post("/nova-senha")
+def processar_nova_senha(
+    request: Request,
+    token: str = Form(...),
+    senha: str = Form(...),
+    confirmar: str = Form(...),
+    db: Session = Depends(get_db)
+):
+    if token not in _tokens_recuperacao:
+        return render_template("nova_senha.html", request=request,
+            token=token, erro="Token inválido")
+    if senha != confirmar:
+        return render_template("nova_senha.html", request=request,
+            token=token, erro="Senhas não coincidem")
+    valida, msg = validar_senha(senha)
+    if not valida:
+        return render_template("nova_senha.html", request=request,
+            token=token, erro=msg)
+    dados = _tokens_recuperacao[token]
+    usuario = db.query(Usuario).filter(Usuario.email == dados["email"]).first()
+    if not usuario:
+        return render_template("nova_senha.html", request=request,
+            token=token, erro="Usuário não encontrado")
+    usuario.senha = hash_senha(senha)
+    db.commit()
+    del _tokens_recuperacao[token]
+    enviar_telegram(f"🔑 Senha alterada\n👤 {usuario.email}")
+    return RedirectResponse("/login?msg=Senha alterada com sucesso!", status_code=302)
+
+# ================================================================
+# FIM RECUPERACAO DE SENHA
+# ================================================================
+
+# ================================================================
+# UPSELL AUTOMATICO v20.0
+# ================================================================
+
+@app.get("/api/upsell")
+def api_upsell(request: Request, db: Session = Depends(get_db)):
+    """Retorna dados de upsell quando usuario atinge limite"""
+    usuario = get_usuario_logado(request, db)
+    if not usuario:
+        return JSONResponse({"show": False})
+    if usuario_tem_acesso_premium(usuario):
+        return JSONResponse({"show": False})
+    analises_hoje = contar_hoje(Analise, usuario.id, db)
+    msgs_hoje = contar_hoje(Mensagem, usuario.id, db)
+    diarios_hoje = contar_hoje(Diario, usuario.id, db)
+    limite_analises = get_limite(usuario, "analises")
+    limite_chat = get_limite(usuario, "chat")
+    limite_diario = get_limite(usuario, "diario")
+    upsell = None
+    if analises_hoje >= limite_analises:
+        upsell = {
+            "show": True,
+            "tipo": "analises",
+            "emoji": "🔍",
+            "titulo": f"Limite de {limite_analises} análises atingido!",
+            "mensagem": "Faça upgrade para análises ilimitadas por menos de R$1,60/dia",
+            "cta": "⭐ Assinar Premium — R$49/mês",
+            "url": "/checkout-page?plano=premium",
+            "cor": "#00d2ff"
+        }
+    elif msgs_hoje >= limite_chat:
+        upsell = {
+            "show": True,
+            "tipo": "chat",
+            "emoji": "💬",
+            "titulo": f"Limite de {limite_chat} mensagens atingido!",
+            "mensagem": "Continue conversando com a Sofia sem limites com o Premium",
+            "cta": "⭐ Assinar Premium — R$49/mês",
+            "url": "/checkout-page?plano=premium",
+            "cor": "#9b59b6"
+        }
+    elif diarios_hoje >= limite_diario:
+        upsell = {
+            "show": True,
+            "tipo": "diario",
+            "emoji": "📔",
+            "titulo": f"Limite de {limite_diario} diários atingido!",
+            "mensagem": "Registre quantas entradas quiser com o Premium",
+            "cta": "⭐ Assinar Premium — R$49/mês",
+            "url": "/checkout-page?plano=premium",
+            "cor": "#2ecc71"
+        }
+    else:
+        return JSONResponse({"show": False})
+    return JSONResponse(upsell)
+
+# ================================================================
+# FIM UPSELL
+# ================================================================
+
+# ================================================================
+# SISTEMA DE MONITORAMENTO v20.0 — ALERTAS TELEGRAM AUTOMATICOS
+# ================================================================
+
+import threading as _threading
+
+_erros_recentes = []
+_max_erros = 100
+
+def monitorar_erro(rota: str, erro: str, usuario_id: int = None):
+    """Registra erro e alerta no Telegram se critico"""
+    global _erros_recentes
+    _erros_recentes.append({
+        "rota": rota,
+        "erro": erro[:200],
+        "usuario_id": usuario_id,
+        "timestamp": datetime.now().strftime("%d/%m %H:%M:%S")
+    })
+    if len(_erros_recentes) > _max_erros:
+        _erros_recentes = _erros_recentes[-_max_erros:]
+    # Alertar no Telegram para erros criticos
+    erros_criticos = ["500","database","connection","timeout","crash","memory"]
+    if any(e in erro.lower() for e in erros_criticos):
+        msg = (
+            f"🚨 <b>ERRO CRITICO DETECTADO</b>\n"
+            f"🔴 Rota: {rota}\n"
+            f"💥 Erro: {erro[:150]}\n"
+            f"⏰ {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}"
+        )
+        enviar_telegram(msg)
+
+def monitorar_ia_falha(modelo: str, erro: str):
+    """Alerta quando modelo de IA falha"""
+    msg = (
+        f"⚠️ <b>IA FALHOU</b>\n"
+        f"🤖 Modelo: {modelo}\n"
+        f"❌ Erro: {erro[:100]}\n"
+        f"⏰ {datetime.now().strftime('%H:%M:%S')}"
+    )
+    enviar_telegram(msg)
+
+def relatorio_diario_sistema():
+    """Envia relatorio diario de saude do sistema"""
+    try:
+        db = SessionLocal()
+        total_usuarios = db.query(Usuario).count()
+        total_analises = db.query(Analise).count()
+        total_msgs = db.query(Mensagem).count()
+        novos_hoje = db.query(Usuario).filter(
+            Usuario.criado_em >= datetime.now().replace(hour=0,minute=0,second=0)
+        ).count()
+        analises_hoje = db.query(Analise).filter(
+            Analise.criado_em >= datetime.now().replace(hour=0,minute=0,second=0)
+        ).count()
+        pagamentos = db.query(Pagamento).filter(
+            Pagamento.status == "approved"
+        ).count()
+        receita = db.query(Pagamento).filter(
+            Pagamento.status == "approved"
+        ).all()
+        total_receita = sum(p.valor or 0 for p in receita)
+        erros_hora = len(_erros_recentes)
+        db.close()
+        msg = (
+            f"📊 <b>RELATORIO DIARIO — Emotion Intelligence v20.0</b>\n\n"
+            f"👥 Usuarios total: {total_usuarios}\n"
+            f"🆕 Novos hoje: {novos_hoje}\n"
+            f"🔍 Analises total: {total_analises}\n"
+            f"📈 Analises hoje: {analises_hoje}\n"
+            f"💬 Mensagens total: {total_msgs}\n"
+            f"💰 Pagamentos aprovados: {pagamentos}\n"
+            f"💵 Receita total: R${total_receita:.2f}\n"
+            f"⚠️ Erros recentes: {erros_hora}\n"
+            f"✅ Sistema: ONLINE\n"
+            f"⏰ {datetime.now().strftime('%d/%m/%Y %H:%M')}"
+        )
+        enviar_telegram(msg)
+    except Exception as e:
+        enviar_telegram(f"❌ Erro no relatorio diario: {str(e)[:100]}")
+
+def checar_saude_sistema():
+    """Checa saude do sistema a cada hora"""
+    try:
+        db = SessionLocal()
+        db.execute(text("SELECT 1"))
+        db.close()
+    except Exception as e:
+        enviar_telegram(f"🚨 BANCO DE DADOS OFFLINE!\n{str(e)[:100]}")
+
+# Adicionar jobs ao scheduler
+try:
+    scheduler.add_job(
+        relatorio_diario_sistema,
+        "cron",
+        hour=7,
+        minute=0,
+        id="relatorio_diario"
+    )
+    scheduler.add_job(
+        checar_saude_sistema,
+        "interval",
+        hours=1,
+        id="checar_saude"
+    )
+except Exception as _e:
+    print(f"[MONITOR] Scheduler jobs ja existem: {_e}")
+
+# ================================================================
+# FIM SISTEMA DE MONITORAMENTO
+# ================================================================
+
 @app.get("/checkout/anual", response_class=HTMLResponse)
 async def checkout_anual(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
@@ -4839,12 +5211,15 @@ async def api_analise_completa(request: Request, texto: str, db: Session = Depen
 import functools as _functools
 
 # Cache simples para nao chamar Gemini 2x para o mesmo texto
-_cache_emocao = {}
+_cache_emocao = {}  # cache com limite automatico
+_cache_emocao_max = 500
 
 def detectar_emocao_gemini(texto: str) -> str:
     """Usa Gemini para detectar emocao com precisao maxima"""
     global _cache_emocao
-    
+    # Limpar cache se muito grande
+    if len(_cache_emocao) > _cache_emocao_max:
+        _cache_emocao = {}
     # Checar cache
     chave = texto.strip().lower()[:100]
     if chave in _cache_emocao:
@@ -5216,11 +5591,46 @@ def pagina_analises(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
     if not usuario:
         return RedirectResponse("/login", status_code=302)
+    from collections import Counter
+    from datetime import timedelta
     analises = db.query(Analise).filter(
         Analise.usuario_id == usuario.id
-    ).order_by(Analise.criado_em.desc()).limit(50).all()
-    return render_template("analises.html", request=request, usuario=usuario, analises=analises, total=len(analises))
-
+    ).order_by(Analise.criado_em.desc()).all()
+    # Stats
+    total = len(analises)
+    analises_hoje = contar_hoje(Analise, usuario.id, db)
+    emocoes_lista = [a.emocao.lower() for a in analises if a.emocao]
+    counter_emocoes = Counter(emocoes_lista)
+    emocao_top = counter_emocoes.most_common(1)[0][0] if counter_emocoes else "neutro"
+    intensidades = [a.intensidade for a in analises if a.intensidade]
+    media_intensidade = round(sum(intensidades)/len(intensidades), 1) if intensidades else 0
+    dias_ativos = len(set([a.criado_em.date() for a in analises if a.criado_em]))
+    # Grafico emocoes
+    emocoes_json = json.dumps(dict(counter_emocoes.most_common(8)))
+    # Grafico evolucao 7 dias
+    evolucao = {}
+    for i in range(6, -1, -1):
+        dia = (datetime.now() - timedelta(days=i)).strftime("%d/%m")
+        evolucao[dia] = 0
+    for a in analises:
+        if a.criado_em:
+            dia = a.criado_em.strftime("%d/%m")
+            if dia in evolucao:
+                evolucao[dia] += 1
+    evolucao_json = json.dumps(evolucao)
+    return render_template("analises.html",
+        request=request,
+        usuario=usuario,
+        analises=analises,
+        total=total,
+        analises_hoje=analises_hoje,
+        emocao_top=emocao_top,
+        media_intensidade=media_intensidade,
+        dias_ativos=dias_ativos,
+        emocoes_json=emocoes_json,
+        evolucao_json=evolucao_json,
+    )
+    # ROTA ORIGINAL REMOVIDA — substituida acima
 @app.get("/configuracoes", response_class=HTMLResponse)
 def pagina_configuracoes(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
@@ -5271,7 +5681,7 @@ async def health(db: Session = Depends(get_db)):
         uptime          = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         return {
             "status":          "healthy",
-            "version": "19.0 ULTIMATE",
+            "version": "20.0 ULTIMATE",
             "timestamp":       uptime,
             "database":        "connected",
             "usuarios":        total_usuarios,
@@ -5286,7 +5696,7 @@ async def health(db: Session = Depends(get_db)):
         return {
             "status":  "unhealthy",
             "error":   str(e),
-            "version": "19.0 ULTIMATE"
+            "version": "20.0 ULTIMATE"
         }
 
 
@@ -6763,21 +7173,50 @@ async def robots():
 
 @app.get("/sitemap.xml", include_in_schema=False)
 async def sitemap():
-    urls_fixas = [
-        "/", "/login", "/cadastro", "/blog", "/planos", "/premium",
-        "/sobre", "/contato", "/faq", "/privacidade", "/termos",
-        "/terapia", "/ranking", "/afiliado",
+    from datetime import date
+    hoje = date.today().strftime("%Y-%m-%d")
+    paginas = [
+        ("/", "1.0", "daily"),
+        ("/blog", "0.9", "weekly"),
+        ("/premium", "0.9", "weekly"),
+        ("/planos", "0.9", "weekly"),
+        ("/cadastro", "0.8", "monthly"),
+        ("/terapia", "0.8", "monthly"),
+        ("/afiliado", "0.7", "monthly"),
+        ("/sobre", "0.6", "monthly"),
+        ("/faq", "0.6", "monthly"),
+        ("/contato", "0.5", "monthly"),
+        ("/privacidade", "0.4", "monthly"),
+        ("/termos", "0.4", "monthly"),
+        ("/blog/o-que-e-inteligencia-emocional", "0.8", "monthly"),
+        ("/blog/tecnicas-para-controlar-ansiedade", "0.8", "monthly"),
+        ("/blog/como-lidar-com-tristeza", "0.8", "monthly"),
+        ("/blog/diario-emocional-beneficios", "0.8", "monthly"),
+        ("/blog/mindfulness-para-iniciantes", "0.8", "monthly"),
+        ("/blog/como-aumentar-autoestima", "0.8", "monthly"),
+        ("/blog/sono-e-emocoes", "0.8", "monthly"),
+        ("/blog/relacionamentos-e-inteligencia-emocional", "0.8", "monthly"),
+        ("/blog/produtividade-e-bem-estar-emocional", "0.8", "monthly"),
+        ("/blog/superar-trauma-emocional", "0.8", "monthly"),
+        ("/blog/sindrome-do-impostor", "0.8", "monthly"),
+        ("/blog/burnout-o-que-e-como-recuperar", "0.8", "monthly"),
+        ("/blog/inteligencia-emocional-no-trabalho", "0.8", "monthly"),
+        ("/blog/como-controlar-raiva", "0.8", "monthly"),
+        ("/blog/habitos-para-saude-mental", "0.8", "monthly"),
     ]
-    slugs = [a["slug"] for a in ARTIGOS_BLOG]
-    hoje = datetime.now().strftime("%Y-%m-%d")
+    base = "https://emotion-platform-albert.onrender.com"
     linhas = ['<?xml version="1.0" encoding="UTF-8"?>']
     linhas.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
-    for u in urls_fixas:
-        linhas.append(f'  <url><loc>{BASE_URL}{u}</loc><lastmod>{hoje}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>')
-    for s in slugs:
-        linhas.append(f'  <url><loc>{BASE_URL}/blog/{s}</loc><lastmod>{hoje}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>')
-    linhas.append('</urlset>')
-    return Response(content=chr(10).join(linhas), media_type="application/xml")
+    for path, priority, freq in paginas:
+        linhas.append("  <url>")
+        linhas.append(f"    <loc>{base}{path}</loc>")
+        linhas.append(f"    <lastmod>{hoje}</lastmod>")
+        linhas.append(f"    <changefreq>{freq}</changefreq>")
+        linhas.append(f"    <priority>{priority}</priority>")
+        linhas.append("  </url>")
+    linhas.append("</urlset>")
+    xml = "\n".join(linhas)
+    return Response(content=xml, media_type="application/xml")
 
 @app.get("/favicon.ico", include_in_schema=False)
 async def favicon():
@@ -6796,6 +7235,17 @@ async def favicon_svg():
     if os.path.exists(favicon_path):
         return FileResponse(favicon_path, media_type="image/svg+xml")
     return Response(status_code=204)
+
+
+@app.exception_handler(500)
+async def erro_500(request: Request, exc: Exception):
+    monitorar_erro(str(request.url.path), str(exc))
+    return render_template("500.html", request=request)
+
+@app.exception_handler(Exception)
+async def erro_geral(request: Request, exc: Exception):
+    monitorar_erro(str(request.url.path), str(exc))
+    return render_template("500.html", request=request)
 
 @app.exception_handler(StarletteHTTPException)
 async def custom_404(request: Request, exc: StarletteHTTPException):
@@ -7584,36 +8034,40 @@ def ativar_trial(request: Request, db: Session = Depends(get_db)):
 @app.get("/ranking")
 def ranking_route(request: Request, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
-    if not usuario:
-        raise HTTPException(status_code=401, detail="Não autorizado")
+    # Ranking e publico — funciona sem login
 
     top = db.query(Usuario).filter(
         Usuario.ativo == True
     ).order_by(Usuario.pontos.desc()).limit(20).all()
 
-    posicao = next(
-        (i + 1 for i, u in enumerate(top) if u.id == usuario.id),
-        None
-    )
+    total_usuarios = db.query(Usuario).filter(Usuario.ativo == True).count()
 
-    # Se não está no top 20, busca posição real
-    if posicao is None:
-        todos_ordenados = db.query(Usuario).filter(
-            Usuario.ativo == True
-        ).order_by(Usuario.pontos.desc()).all()
+    posicao = None
+    meus_pontos = 0
+    meu_badge = ""
+
+    if usuario:
         posicao = next(
-            (i + 1 for i, u in enumerate(todos_ordenados)
-             if u.id == usuario.id),
+            (i + 1 for i, u in enumerate(top) if u.id == usuario.id),
             None
         )
+        if posicao is None:
+            todos_ordenados = db.query(Usuario).filter(
+                Usuario.ativo == True
+            ).order_by(Usuario.pontos.desc()).all()
+            posicao = next(
+                (i + 1 for i, u in enumerate(todos_ordenados) if u.id == usuario.id),
+                None
+            )
+        meus_pontos = usuario.pontos
+        meu_badge = usuario.badge
 
     return {
-        "minha_posicao": posicao,
-        "meus_pontos":   usuario.pontos,
-        "meu_badge":     usuario.badge,
-        "total_usuarios": db.query(Usuario).filter(
-            Usuario.ativo == True
-        ).count(),
+        "minha_posicao":  posicao,
+        "meus_pontos":    meus_pontos,
+        "meu_badge":      meu_badge,
+        "total_usuarios": total_usuarios,
+        "logado":         usuario is not None,
         "ranking": [{
             "posicao": i + 1,
             "nome":    u.nome[:25],
@@ -7621,7 +8075,7 @@ def ranking_route(request: Request, db: Session = Depends(get_db)):
             "badge":   u.badge,
             "plano":   u.plano,
             "emoji":   "👑" if i == 0 else "🥈" if i == 1 else "🥉" if i == 2 else "🏅",
-            "eu":      u.id == usuario.id,
+            "eu":      usuario is not None and u.id == usuario.id,
         } for i, u in enumerate(top)]
     }
 
@@ -9489,16 +9943,14 @@ def admin(request: Request, db: Session = Depends(get_db)):
     inativos   = [u for u in todos if not u.ativo]
 
     receita_total = sum(
-        49  if p.plano == "premium"    else
-        199 if p.plano == "enterprise" else 0
+        p.valor or 0
         for p in pagamentos_aprovados
     )
 
     receita_mensal = sum(
-        49  if p.plano == "premium"    else
-        199 if p.plano == "enterprise" else 0
+        p.valor or 0
         for p in pagamentos_aprovados
-        if p.criado_em >= datetime.now() - timedelta(days=30)
+        if p.criado_em and p.criado_em >= datetime.now() - timedelta(days=30)
     )
 
     logs_recentes = db.query(LogAcesso).order_by(
@@ -10411,7 +10863,7 @@ def api_analyze(
         "pontos_ganhos": PONTOS_POR_ACAO["analise"],
         "total_pontos":  usuario.pontos,
         "timestamp":     datetime.now().isoformat(),
-        "version":       "14.0",
+        "version":       "20.0",
     }
 
 
@@ -10453,7 +10905,7 @@ def api_stats(
         "proximo_badge":   proximo_badge(usuario.pontos),
         "membro_desde":    usuario.criado_em.strftime("%d/%m/%Y"),
         "timestamp":       datetime.now().isoformat(),
-        "version":         "14.0",
+        "version":         "20.0",
     }
 
 
@@ -10469,7 +10921,7 @@ def api_emocoes(usuario: Usuario = Depends(verificar_token)):
             "tecnica":       tecnicas_por_emocao.get(emocao, ""),
             "total_palavras": len(palavras),
         } for emocao, palavras in palavras_emocoes.items()],
-        "version": "14.0",
+        "version": "20.0",
     }
 
 
@@ -10492,7 +10944,7 @@ def api_ranking(
             "plano":   u.plano,
         } for i, u in enumerate(top)],
         "timestamp": datetime.now().isoformat(),
-        "version":   "14.0",
+        "version":   "20.0",
     }
 
 # ================================================================
