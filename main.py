@@ -35,6 +35,14 @@
 # IMPORTS
 # ================================================================
 
+import re as _re_sec
+import hmac as _hmac_sec
+import time as _time_sec
+import threading as _threading_sec
+import unicodedata as _unicodedata_sec
+from collections import deque as _deque_sec
+from datetime import timedelta as _timedelta_sec
+from starlette.middleware.base import BaseHTTPMiddleware as _BaseHTTPMiddleware
 from fastapi import (
     FastAPI, HTTPException, Request, Depends,
     Form, BackgroundTasks, Header, UploadFile, File
@@ -56,7 +64,7 @@ from sqlalchemy.orm import sessionmaker, Session, relationship
 from passlib.context import CryptContext
 from datetime import datetime, date, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
-from collections import deque, defaultdict
+from collections import defaultdict
 from google import genai
 from google.genai import types
 
@@ -66,12 +74,10 @@ import sendgrid
 from sendgrid.helpers.mail import Mail
 import uuid
 import os
-import re
-import time
 import json
 import hashlib
-import threading
-import hmac
+import time
+import re
 
 # ================================================================
 # CONFIGURAÇÕES GLOBAIS
@@ -5871,7 +5877,7 @@ async def health(db: Session = Depends(get_db)):
         uptime          = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         return {
             "status":          "healthy",
-            "version":         "21.0 ULTIMATE",
+            "version":         "20.0 ULTIMATE",
             "timestamp":       uptime,
             "database":        "connected",
             "usuarios":        total_usuarios,
@@ -7281,11 +7287,10 @@ async def analisar_voz_upload(
 
 
 # ═══════════════════════════════════════════════════════════════════════
-# SEGURANÇA S1/18 — SENHAS E AUTENTICAÇÃO (18 implementações)
+# SEGURANÇA S1/18 — SENHAS E AUTENTICAÇÃO
 # ═══════════════════════════════════════════════════════════════════════
 
 
-# ── S1.1 Configurações de segurança
 BCRYPT_ROUNDS = 12
 SENHA_MIN_CHARS = 8
 MAX_TENTATIVAS_LOGIN = 5
@@ -7294,50 +7299,43 @@ MAX_SESSOES_SIMULTANEAS = 5
 TOKEN_EXPIRACAO_MINUTOS = 15
 HISTORICO_SENHAS = 5
 
-# ── S1.2 Storage em memória (fallback sem Redis)
-_tentativas_login: dict = defaultdict(list)
-_contas_bloqueadas: dict = {}
-_historico_senhas: dict = defaultdict(deque)
-_sessoes_ativas: dict = defaultdict(list)
-_dispositivos_conhecidos: dict = defaultdict(set)
+_tentativas_login_sec = {}
+_contas_bloqueadas_sec = {}
+_historico_senhas_sec = {}
+_sessoes_ativas_sec = {}
+_dispositivos_conhecidos_sec = {}
+_tokens_invalidados_sec = set()
 
-# ── S1.3 Validação de força de senha
 def validar_forca_senha(senha: str) -> dict:
     erros = []
     score = 0
     if len(senha) < SENHA_MIN_CHARS:
-        erros.append(f"Mínimo {SENHA_MIN_CHARS} caracteres")
+        erros.append(f"Minimo {SENHA_MIN_CHARS} caracteres")
     else:
         score += 1
-    if not re.search(r"[A-Z]", senha):
-        erros.append("Pelo menos 1 letra maiúscula")
+    if not _re_sec.search(r"[A-Z]", senha):
+        erros.append("Pelo menos 1 maiuscula")
     else:
         score += 1
-    if not re.search(r"[a-z]", senha):
-        erros.append("Pelo menos 1 letra minúscula")
+    if not _re_sec.search(r"[a-z]", senha):
+        erros.append("Pelo menos 1 minuscula")
     else:
         score += 1
-    if not re.search(r"\d", senha):
-        erros.append("Pelo menos 1 número")
+    if not _re_sec.search(r"\d", senha):
+        erros.append("Pelo menos 1 numero")
     else:
         score += 1
-    if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", senha):
-        erros.append("Pelo menos 1 caractere especial")
+    if not _re_sec.search(r"[!@#$%^&*(),.?\":{}|<>]", senha):
+        erros.append("Pelo menos 1 especial")
     else:
         score += 1
     if len(senha) >= 12:
         score += 1
     if len(senha) >= 16:
         score += 1
-    niveis = {0:"Muito fraca",1:"Muito fraca",2:"Fraca",3:"Média",4:"Boa",5:"Forte",6:"Muito forte",7:"Excelente"}
-    return {
-        "valida": len(erros) == 0,
-        "score": score,
-        "nivel": niveis.get(score, "Fraca"),
-        "erros": erros
-    }
+    niveis = {0:"Muito fraca",1:"Muito fraca",2:"Fraca",3:"Media",4:"Boa",5:"Forte",6:"Muito forte",7:"Excelente"}
+    return {"valida": len(erros)==0, "score": score, "nivel": niveis.get(score,"Fraca"), "erros": erros}
 
-# ── S1.4 Hash seguro de senha com bcrypt
 def hash_senha_seguro(senha: str) -> str:
     try:
         import bcrypt
@@ -7353,404 +7351,177 @@ def hash_senha_seguro(senha: str) -> str:
 def verificar_senha_segura(senha: str, hash_armazenado: str) -> bool:
     try:
         if hash_armazenado.startswith("pbkdf2:"):
+            import hashlib
             _, salt, h = hash_armazenado.split(":")
             novo_h = hashlib.pbkdf2_hmac("sha256", senha.encode(), salt.encode(), 310000)
-            return hmac.compare_digest(h, novo_h.hex())
+            return _hmac_sec.compare_digest(h, novo_h.hex())
         import bcrypt
         return bcrypt.checkpw(senha.encode(), hash_armazenado.encode())
     except Exception:
         return False
 
-# ── S1.5 Histórico de senhas
-def senha_ja_usada(usuario_id: int, nova_senha: str) -> bool:
-    historico = _historico_senhas.get(usuario_id, deque(maxlen=HISTORICO_SENHAS))
-    for hash_antigo in historico:
-        if verificar_senha_segura(nova_senha, hash_antigo):
-            return True
-    return False
-
-def registrar_senha_historico(usuario_id: int, hash_senha: str):
-    if usuario_id not in _historico_senhas:
-        _historico_senhas[usuario_id] = deque(maxlen=HISTORICO_SENHAS)
-    _historico_senhas[usuario_id].append(hash_senha)
-
-# ── S1.6 Controle de tentativas de login
-def registrar_tentativa_login(identificador: str, sucesso: bool) -> dict:
-    agora = datetime.now()
-    janela = agora - timedelta(minutes=BLOQUEIO_MINUTOS)
-    if identificador not in _tentativas_login:
-        _tentativas_login[identificador] = []
-    _tentativas_login[identificador] = [
-        t for t in _tentativas_login[identificador] if t > janela
-    ]
-    if not sucesso:
-        _tentativas_login[identificador].append(agora)
-    tentativas = len(_tentativas_login[identificador])
-    if tentativas >= MAX_TENTATIVAS_LOGIN:
-        _contas_bloqueadas[identificador] = agora + timedelta(minutes=BLOQUEIO_MINUTOS)
-    return {
-        "tentativas": tentativas,
-        "bloqueado": tentativas >= MAX_TENTATIVAS_LOGIN,
-        "restantes": max(0, MAX_TENTATIVAS_LOGIN - tentativas)
-    }
-
-def conta_bloqueada(identificador: str) -> bool:
-    if identificador not in _contas_bloqueadas:
+def conta_bloqueada_sec(identificador: str) -> bool:
+    from datetime import datetime
+    if identificador not in _contas_bloqueadas_sec:
         return False
-    if datetime.now() > _contas_bloqueadas[identificador]:
-        del _contas_bloqueadas[identificador]
-        _tentativas_login.pop(identificador, None)
+    if datetime.now() > _contas_bloqueadas_sec[identificador]:
+        del _contas_bloqueadas_sec[identificador]
+        _tentativas_login_sec.pop(identificador, None)
         return False
     return True
 
-def tempo_desbloqueio(identificador: str) -> int | None:
-    if identificador not in _contas_bloqueadas:
-        return None
-    delta = (_contas_bloqueadas[identificador] - datetime.now()).total_seconds()
-    return max(0, int(delta // 60))
+def registrar_tentativa_login_sec(identificador: str, sucesso: bool) -> dict:
+    from datetime import datetime
+    agora = datetime.now()
+    janela = agora - _timedelta_sec(minutes=BLOQUEIO_MINUTOS)
+    if identificador not in _tentativas_login_sec:
+        _tentativas_login_sec[identificador] = []
+    _tentativas_login_sec[identificador] = [
+        t for t in _tentativas_login_sec[identificador] if t > janela
+    ]
+    if not sucesso:
+        _tentativas_login_sec[identificador].append(agora)
+    tentativas = len(_tentativas_login_sec[identificador])
+    if tentativas >= MAX_TENTATIVAS_LOGIN:
+        _contas_bloqueadas_sec[identificador] = agora + _timedelta_sec(minutes=BLOQUEIO_MINUTOS)
+    return {"tentativas": tentativas, "bloqueado": tentativas >= MAX_TENTATIVAS_LOGIN, "restantes": max(0, MAX_TENTATIVAS_LOGIN - tentativas)}
 
-# ── S1.7 Device fingerprinting
-def gerar_fingerprint_dispositivo(request: Request) -> str:
+def gerar_fingerprint_dispositivo_sec(request: Request) -> str:
+    import hashlib
     ua = request.headers.get("user-agent", "")
     ip = request.client.host if request.client else ""
     accept = request.headers.get("accept-language", "")
-    raw = f"{ua}:{ip}:{accept}"
-    return hashlib.sha256(raw.encode()).hexdigest()[:32]
+    return hashlib.sha256(f"{ua}:{ip}:{accept}".encode()).hexdigest()[:32]
 
-def dispositivo_conhecido(usuario_id: int, fingerprint: str) -> bool:
-    return fingerprint in _dispositivos_conhecidos.get(usuario_id, set())
-
-def registrar_dispositivo(usuario_id: int, fingerprint: str):
-    if usuario_id not in _dispositivos_conhecidos:
-        _dispositivos_conhecidos[usuario_id] = set()
-    _dispositivos_conhecidos[usuario_id].add(fingerprint)
-
-# ── S1.8 Controle de sessões simultâneas
-def registrar_sessao(usuario_id: int, token: str, fingerprint: str):
-    if usuario_id not in _sessoes_ativas:
-        _sessoes_ativas[usuario_id] = []
-    _sessoes_ativas[usuario_id].append({
-        "token": token[:16],
-        "fingerprint": fingerprint,
-        "criado_em": datetime.now().isoformat()
-    })
-    if len(_sessoes_ativas[usuario_id]) > MAX_SESSOES_SIMULTANEAS:
-        _sessoes_ativas[usuario_id] = _sessoes_ativas[usuario_id][-MAX_SESSOES_SIMULTANEAS:]
-
-def revogar_todas_sessoes(usuario_id: int):
-    _sessoes_ativas.pop(usuario_id, None)
-
-# ── S1.9 Token seguro de recuperação de senha
-def gerar_token_seguro(tamanho: int = 32) -> str:
+def gerar_token_seguro_sec(tamanho: int = 32) -> str:
     import secrets
     return secrets.token_urlsafe(tamanho)
 
-def token_expirado(criado_em: datetime, minutos: int = TOKEN_EXPIRACAO_MINUTOS) -> bool:
-    return datetime.now() > criado_em + timedelta(minutes=minutos)
+def invalidar_token_sec(token: str):
+    _tokens_invalidados_sec.add(token[:32])
 
-# ── S1.10 Proteção contra enumeração de usuários
-def resposta_generica_auth() -> dict:
-    time.sleep(0.1)
-    return {"erro": "Email ou senha incorretos"}
+def token_invalido_sec(token: str) -> bool:
+    return token[:32] in _tokens_invalidados_sec
 
-# ── S1.11 Endpoint — verificar força de senha
-@app.post("/api/verificar-senha")
-async def api_verificar_senha(request: Request):
-    try:
-        body = await request.json()
-        senha = body.get("senha", "")
-        if not senha:
-            return JSONResponse({"erro": "Senha obrigatória"}, status_code=400)
-        resultado = validar_forca_senha(senha)
-        return JSONResponse({
-            "ok": True,
-            "valida": resultado["valida"],
-            "score": resultado["score"],
-            "nivel": resultado["nivel"],
-            "erros": resultado["erros"],
-            "seguranca": "S1/18"
-        })
-    except Exception as e:
-        return JSONResponse({"erro": str(e)}, status_code=500)
-
-# ── S1.12 Endpoint — status de bloqueio
-@app.get("/api/status-login/{identificador}")
-async def api_status_login(identificador: str):
-    bloqueado = conta_bloqueada(identificador)
-    tempo = tempo_desbloqueio(identificador)
-    return JSONResponse({
-        "bloqueado": bloqueado,
-        "desbloqueio_em_minutos": tempo,
-        "max_tentativas": MAX_TENTATIVAS_LOGIN,
-        "seguranca": "S1/18"
-    })
-
-# ── S1.13 Auditoria de autenticação
-async def auditar_login(usuario_id: int, ip: str, sucesso: bool, motivo: str = "", db = None):
-    try:
-        if db:
-            await db.execute(
-                "INSERT INTO logs_acesso (usuario_id, acao, detalhes, created_at) VALUES ($1,$2,$3,NOW())",
-                usuario_id,
-                "LOGIN_SUCESSO" if sucesso else "LOGIN_FALHA",
-                f"IP:{ip} | {motivo}"
-            )
-    except Exception:
-        pass
-
-# ── S1.14 Validação completa de senha no cadastro
-def validar_senha_cadastro(senha: str, confirmar: str, usuario_id: int = None) -> dict:
-    if senha != confirmar:
-        return {"valida": False, "erro": "Senhas não coincidem"}
-    forca = validar_forca_senha(senha)
-    if not forca["valida"]:
-        return {"valida": False, "erro": " | ".join(forca["erros"])}
-    if usuario_id and senha_ja_usada(usuario_id, senha):
-        return {"valida": False, "erro": f"Não reutilize as últimas {HISTORICO_SENHAS} senhas"}
-    return {"valida": True, "erro": None, "nivel": forca["nivel"]}
-
-# ── S1.15 Detecção de senha comprometida (HaveIBeenPwned)
-async def senha_comprometida(senha: str) -> bool:
-    try:
-        import hashlib
-        import httpx
-        sha1 = hashlib.sha1(senha.encode()).hexdigest().upper()
-        prefix, suffix = sha1[:5], sha1[5:]
-        async with httpx.AsyncClient(timeout=3) as client:
-            r = await client.get(f"https://api.pwnedpasswords.com/range/{prefix}")
-            return suffix in r.text
-    except Exception:
-        return False
-
-# ── S1.16 Proteção timing attack no login
-def comparacao_segura(a: str, b: str) -> bool:
-    return hmac.compare_digest(
+def comparacao_segura_sec(a: str, b: str) -> bool:
+    return _hmac_sec.compare_digest(
         a.encode() if isinstance(a, str) else a,
         b.encode() if isinstance(b, str) else b
     )
 
-# ── S1.17 Logout seguro com invalidação
-_tokens_invalidados: set = set()
-
-def invalidar_token(token: str):
-    _tokens_invalidados.add(token[:32])
-
-def token_invalido(token: str) -> bool:
-    return token[:32] in _tokens_invalidados
-
-# ── S1.18 Score de risco de login
-def calcular_risco_login(ip: str, fingerprint: str, usuario_id: int = None) -> dict:
+def calcular_risco_login_sec(ip: str, fingerprint: str, usuario_id: int = None) -> dict:
     score = 0
     fatores = []
-    tentativas = len(_tentativas_login.get(ip, []))
+    tentativas = len(_tentativas_login_sec.get(ip, []))
     if tentativas > 0:
         score += tentativas * 10
         fatores.append(f"{tentativas} tentativas recentes")
-    if usuario_id and not dispositivo_conhecido(usuario_id, fingerprint):
+    if usuario_id and fingerprint not in _dispositivos_conhecidos_sec.get(usuario_id, set()):
         score += 25
         fatores.append("Dispositivo desconhecido")
     nivel = "baixo" if score < 25 else "medio" if score < 50 else "alto"
     return {"score": score, "nivel": nivel, "fatores": fatores}
 
-# ═══ FIM S1/18 — SENHAS E AUTENTICAÇÃO ══════════════════════════════
-
-
+@app.post("/api/verificar-senha")
+async def api_verificar_senha(request: Request):
+    try:
+        body = await request.json()
+        senha = body.get("senha", "")
+        resultado = validar_forca_senha(senha)
+        return JSONResponse({"ok": True, "valida": resultado["valida"], "score": resultado["score"], "nivel": resultado["nivel"], "erros": resultado["erros"]})
+    except Exception as e:
+        return JSONResponse({"erro": str(e)}, status_code=500)
 
 # ═══════════════════════════════════════════════════════════════════════
-# SEGURANÇA S2/18 — HEADERS DE SEGURANÇA (22 implementações)
+# SEGURANÇA S2/18 — HEADERS DE SEGURANÇA
 # ═══════════════════════════════════════════════════════════════════════
 
-# ── S2.1 Configurações de headers
-SECURITY_HEADERS = {
-    # S2.2 Previne clickjacking
+SECURITY_HEADERS_S2 = {
     "X-Frame-Options": "DENY",
-    # S2.3 Previne MIME sniffing
     "X-Content-Type-Options": "nosniff",
-    # S2.4 Força HTTPS por 1 ano
     "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
-    # S2.5 Controla referrer
     "Referrer-Policy": "strict-origin-when-cross-origin",
-    # S2.6 Remove informações do servidor
     "Server": "Emotion-Platform",
-    # S2.7 XSS protection legado
     "X-XSS-Protection": "1; mode=block",
-    # S2.8 Permissões de features do browser
-    "Permissions-Policy": (
-        "camera=(), microphone=(self), geolocation=(), "
-        "payment=(), usb=(), bluetooth=(), "
-        "accelerometer=(), gyroscope=()"
-    ),
-    # S2.9 Cross-Origin políticas
-    "Cross-Origin-Embedder-Policy": "require-corp",
+    "Permissions-Policy": "camera=(), microphone=(self), geolocation=(), payment=()",
     "Cross-Origin-Opener-Policy": "same-origin",
     "Cross-Origin-Resource-Policy": "same-origin",
-    # S2.10 Cache para dados sensíveis
     "Cache-Control": "no-store, no-cache, must-revalidate, private",
     "Pragma": "no-cache",
 }
 
-# S2.11 CSP completo
-CSP_POLICY = (
+CSP_POLICY_S2 = (
     "default-src 'self'; "
     "script-src 'self' 'unsafe-inline' 'unsafe-eval' "
     "https://cdn.jsdelivr.net https://cdnjs.cloudflare.com "
-    "https://www.googletagmanager.com https://www.google-analytics.com "
-    "https://pagead2.googlesyndication.com; "
-    "style-src 'self' 'unsafe-inline' "
-    "https://cdn.jsdelivr.net https://cdnjs.cloudflare.com "
+    "https://www.googletagmanager.com https://www.google-analytics.com; "
+    "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net "
     "https://fonts.googleapis.com; "
-    "font-src 'self' https://fonts.gstatic.com "
-    "https://cdnjs.cloudflare.com; "
+    "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
     "img-src 'self' data: https: blob:; "
-    "connect-src 'self' https://api.groq.com https://api.mistral.ai "
-    "https://generativelanguage.googleapis.com "
-    "https://www.google-analytics.com; "
-    "frame-src 'none'; "
-    "object-src 'none'; "
-    "base-uri 'self'; "
-    "form-action 'self'; "
-    "upgrade-insecure-requests;"
+    "connect-src 'self' https://api.groq.com https://www.google-analytics.com; "
+    "frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';"
 )
 
-# S2.12 Headers para rotas de API (sem cache)
-API_HEADERS = {
-    "Cache-Control": "no-store, no-cache, must-revalidate",
-    "Pragma": "no-cache",
-    "X-Content-Type-Options": "nosniff",
-    "X-Frame-Options": "DENY",
-}
 
-# S2.13 Headers para logout (limpar dados)
-LOGOUT_HEADERS = {
-    "Clear-Site-Data": '"cache", "cookies", "storage"',
-    "Cache-Control": "no-store",
-}
-
-# ── S2.14 Middleware de segurança principal
-class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+class SecurityHeadersMiddleware(_BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         response = await call_next(request)
         path = request.url.path
-
-        # Aplicar headers base em todas as rotas
-        for header, value in SECURITY_HEADERS.items():
-            response.headers[header] = value
-
-        # S2.15 CSP em páginas HTML
+        for h, v in SECURITY_HEADERS_S2.items():
+            response.headers[h] = v
         if not path.startswith("/api/"):
-            response.headers["Content-Security-Policy"] = CSP_POLICY
-
-        # S2.16 Headers extras para API
-        if path.startswith("/api/"):
-            for header, value in API_HEADERS.items():
-                response.headers[header] = value
-
-        # S2.17 Headers de logout
-        if path in ("/logout", "/api/logout"):
-            for header, value in LOGOUT_HEADERS.items():
-                response.headers[header] = value
-
-        # S2.18 Remover headers perigosos
+            response.headers["Content-Security-Policy"] = CSP_POLICY_S2
         response.headers.pop("X-Powered-By", None)
-        response.headers.pop("X-AspNet-Version", None)
-        response.headers.pop("X-AspNetMvc-Version", None)
-
-        # S2.19 CORS restrito
         origin = request.headers.get("origin", "")
-        allowed_origins = [
-            "https://emotion-platform-albert.onrender.com",
-            "http://localhost:10000",
-            "http://127.0.0.1:10000",
-        ]
-        if origin in allowed_origins:
+        allowed = ["https://emotion-platform-albert.onrender.com","http://localhost:10000"]
+        if origin in allowed:
             response.headers["Access-Control-Allow-Origin"] = origin
             response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
             response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization, X-API-Key"
             response.headers["Access-Control-Allow-Credentials"] = "true"
-            response.headers["Access-Control-Max-Age"] = "3600"
             response.headers["Vary"] = "Origin"
-
-        # S2.20 Feature Policy adicional
-        response.headers["Feature-Policy"] = (
-            "geolocation 'none'; "
-            "microphone 'self'; "
-            "camera 'none'; "
-            "payment 'none'"
-        )
-
-        # S2.21 Report-To para violações CSP
-        response.headers["Report-To"] = '{"group":"csp-endpoint","max_age":10886400,"endpoints":[{"url":"/api/csp-report"}]}'
-
-        # S2.22 Expect-CT
-        response.headers["Expect-CT"] = "max-age=86400, enforce"
-
         return response
 
-# ── Registrar middleware
 app.add_middleware(SecurityHeadersMiddleware)
 
-# ── Endpoint para receber relatórios CSP
 @app.post("/api/csp-report")
 async def receber_csp_report(request: Request):
-    try:
-        body = await request.json()
-        print(f"CSP Violation: {body}")
-    except Exception:
-        pass
     return JSONResponse({"ok": True})
 
-# ── Endpoint para verificar headers
 @app.get("/api/security-headers")
-async def verificar_security_headers(request: Request):
-    return JSONResponse({
-        "headers_ativos": list(SECURITY_HEADERS.keys()),
-        "csp_ativo": True,
-        "cors_restrito": True,
-        "total_headers": len(SECURITY_HEADERS) + 4,
-        "seguranca": "S2/18 — 22 headers ativos"
-    })
-
-# ═══ FIM S2/18 — HEADERS DE SEGURANÇA ═══════════════════════════════
-
-
+async def verificar_security_headers_ep(request: Request):
+    return JSONResponse({"headers_ativos": list(SECURITY_HEADERS_S2.keys()), "csp_ativo": True, "seguranca": "S2/18"})
 
 # ═══════════════════════════════════════════════════════════════════════
-# SEGURANÇA S3/18 — RATE LIMITING AVANÇADO (15 implementações)
+# SEGURANÇA S3/18 — RATE LIMITING AVANCADO
 # ═══════════════════════════════════════════════════════════════════════
 
-
-# ── S3.1 Configurações de rate limit
-RATE_LIMITS = {
+RATE_LIMITS_S3 = {
     "global":          {"requisicoes": 1000, "janela_seg": 3600},
     "login":           {"requisicoes": 5,    "janela_seg": 300},
     "cadastro":        {"requisicoes": 3,    "janela_seg": 3600},
     "recuperar_senha": {"requisicoes": 3,    "janela_seg": 1800},
     "api_publica":     {"requisicoes": 100,  "janela_seg": 3600},
     "api_premium":     {"requisicoes": 1000, "janela_seg": 3600},
-    "api_enterprise":  {"requisicoes": 10000,"janela_seg": 3600},
     "analisar":        {"requisicoes": 50,   "janela_seg": 3600},
     "chat":            {"requisicoes": 100,  "janela_seg": 3600},
     "upload":          {"requisicoes": 10,   "janela_seg": 3600},
     "admin":           {"requisicoes": 200,  "janela_seg": 3600},
-    "webhook":         {"requisicoes": 50,   "janela_seg": 60},
-    "csp_report":      {"requisicoes": 20,   "janela_seg": 60},
-    "export":          {"requisicoes": 5,    "janela_seg": 3600},
     "free":            {"requisicoes": 200,  "janela_seg": 3600},
 }
 
-# ── S3.2 Armazenamento thread-safe
-_rate_store: dict = {}
-_rate_lock = threading.Lock()
-_blacklist_ips: set = set()
-_whitelist_ips: set = {"127.0.0.1", "::1"}
+_rate_store_s3 = {}
+_rate_lock_s3 = _threading_sec.Lock()
+_blacklist_ips_s3: set = set()
+_whitelist_ips_s3: set = {"127.0.0.1", "::1"}
 
-# ── S3.3 Sliding Window Algorithm
-def sliding_window_check(chave: str, limite: int, janela_seg: int) -> dict:
-    agora = time.time()
-    with _rate_lock:
-        if chave not in _rate_store:
-            _rate_store[chave] = deque()
-        janela = _rate_store[chave]
+def sliding_window_s3(chave: str, limite: int, janela_seg: int) -> dict:
+    agora = _time_sec.time()
+    with _rate_lock_s3:
+        if chave not in _rate_store_s3:
+            _rate_store_s3[chave] = _deque_sec()
+        janela = _rate_store_s3[chave]
         limite_tempo = agora - janela_seg
         while janela and janela[0] < limite_tempo:
             janela.popleft()
@@ -7758,129 +7529,34 @@ def sliding_window_check(chave: str, limite: int, janela_seg: int) -> dict:
         restantes = max(0, limite - count)
         reset_em = int(janela[0] + janela_seg - agora) if janela else janela_seg
         if count >= limite:
-            return {
-                "permitido": False,
-                "count": count,
-                "limite": limite,
-                "restantes": 0,
-                "reset_em": reset_em,
-                "bloqueado": True
-            }
+            return {"permitido": False, "count": count, "limite": limite, "restantes": 0, "reset_em": reset_em}
         janela.append(agora)
-        return {
-            "permitido": True,
-            "count": count + 1,
-            "limite": limite,
-            "restantes": restantes - 1,
-            "reset_em": janela_seg,
-            "bloqueado": False
-        }
+        return {"permitido": True, "count": count+1, "limite": limite, "restantes": restantes-1, "reset_em": janela_seg}
 
-# ── S3.4 Token Bucket Algorithm
-_token_buckets: dict = {}
-
-def token_bucket_check(chave: str, capacidade: int, taxa_por_seg: float) -> bool:
-    agora = time.time()
-    with _rate_lock:
-        if chave not in _token_buckets:
-            _token_buckets[chave] = {"tokens": capacidade, "ultimo": agora}
-        bucket = _token_buckets[chave]
-        delta = agora - bucket["ultimo"]
-        bucket["tokens"] = min(capacidade, bucket["tokens"] + delta * taxa_por_seg)
-        bucket["ultimo"] = agora
-        if bucket["tokens"] >= 1:
-            bucket["tokens"] -= 1
-            return True
-        return False
-
-# ── S3.5 Verificador principal de rate limit
-def verificar_rate_limit(ip: str, tipo: str, usuario_id: int = None, plano: str = "free") -> dict:
-    if ip in _whitelist_ips:
+def verificar_rate_limit_s3(ip: str, tipo: str, plano: str = "free") -> dict:
+    if ip in _whitelist_ips_s3:
         return {"permitido": True, "restantes": 999, "reset_em": 0}
-    if ip in _blacklist_ips:
-        return {"permitido": False, "restantes": 0, "reset_em": 3600, "bloqueado": True}
-    config = RATE_LIMITS.get(tipo, RATE_LIMITS["global"])
+    if ip in _blacklist_ips_s3:
+        return {"permitido": False, "restantes": 0, "reset_em": 3600}
+    config = RATE_LIMITS_S3.get(tipo, RATE_LIMITS_S3["global"])
     limite = config["requisicoes"]
-    janela = config["janela_seg"]
     if plano == "premium":
         limite = int(limite * 3)
     elif plano == "enterprise":
         limite = int(limite * 10)
-    chave_ip = f"rl:{tipo}:ip:{ip}"
-    resultado = sliding_window_check(chave_ip, limite, janela)
-    if usuario_id:
-        chave_user = f"rl:{tipo}:user:{usuario_id}"
-        resultado_user = sliding_window_check(chave_user, limite, janela)
-        if not resultado_user["permitido"]:
-            return resultado_user
-    if not resultado["permitido"]:
-        abusos = len(_rate_store.get(chave_ip, []))
-        if abusos >= limite * 3:
-            _blacklist_ips.add(ip)
-    return resultado
+    return sliding_window_s3(f"rl:{tipo}:{ip}", limite, config["janela_seg"])
 
-# ── S3.6 Headers de rate limit na resposta
-def headers_rate_limit(resultado: dict) -> dict:
-    return {
-        "X-RateLimit-Limit": str(resultado.get("limite", 0)),
-        "X-RateLimit-Remaining": str(resultado.get("restantes", 0)),
-        "X-RateLimit-Reset": str(int(time.time()) + resultado.get("reset_em", 0)),
-        "X-RateLimit-Policy": "sliding-window",
-    }
+def ip_bloqueado_s3(ip: str) -> bool:
+    return ip in _blacklist_ips_s3
 
-# ── S3.7 Resposta de rate limit excedido
-def resposta_rate_limit(resultado: dict) -> JSONResponse:
-    retry_after = resultado.get("reset_em", 60)
-    return JSONResponse(
-        status_code=429,
-        content={
-            "erro": "Rate limit excedido",
-            "retry_after_segundos": retry_after,
-            "msg": f"Tente novamente em {retry_after // 60 + 1} minutos",
-            "upgrade": "https://emotion-platform-albert.onrender.com/premium"
-        },
-        headers={
-            "Retry-After": str(retry_after),
-            "X-RateLimit-Remaining": "0",
-        }
-    )
-
-# ── S3.8 Blacklist management
-def adicionar_blacklist(ip: str, motivo: str = ""):
-    _blacklist_ips.add(ip)
-
-def remover_blacklist(ip: str):
-    _blacklist_ips.discard(ip)
-
-def adicionar_whitelist(ip: str):
-    _whitelist_ips.add(ip)
-
-def ip_bloqueado(ip: str) -> bool:
-    return ip in _blacklist_ips
-
-# ── S3.9 Limpeza automática do store
-def limpar_rate_store_antigo():
-    agora = time.time()
-    with _rate_lock:
-        for chave in list(_rate_store.keys()):
-            janela = _rate_store[chave]
-            while janela and janela[0] < agora - 7200:
-                janela.popleft()
-            if not janela:
-                del _rate_store[chave]
-
-# ── S3.10 Middleware de rate limit global
-class RateLimitMiddleware(BaseHTTPMiddleware):
+class RateLimitMiddlewareS3(_BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         ip = request.client.host if request.client else "unknown"
         path = request.url.path
         if path.startswith("/static/") or path in ("/favicon.ico", "/robots.txt"):
             return await call_next(request)
-        if ip_bloqueado(ip):
-            return JSONResponse(
-                {"erro": "IP bloqueado por abuso"},
-                status_code=403
-            )
+        if ip_bloqueado_s3(ip):
+            return JSONResponse({"erro": "IP bloqueado"}, status_code=403)
         tipo = "global"
         if "/login" in path:
             tipo = "login"
@@ -7894,81 +7570,148 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             tipo = "admin"
         elif "/upload" in path:
             tipo = "upload"
-        resultado = verificar_rate_limit(ip, tipo)
+        resultado = verificar_rate_limit_s3(ip, tipo)
         if not resultado["permitido"]:
-            return resposta_rate_limit(resultado)
+            return JSONResponse(
+                {"erro": "Rate limit excedido", "retry_after": resultado.get("reset_em", 60)},
+                status_code=429,
+                headers={"Retry-After": str(resultado.get("reset_em", 60))}
+            )
         response = await call_next(request)
-        for h, v in headers_rate_limit(resultado).items():
-            response.headers[h] = v
+        response.headers["X-RateLimit-Remaining"] = str(resultado.get("restantes", 0))
         return response
 
-app.add_middleware(RateLimitMiddleware)
+app.add_middleware(RateLimitMiddlewareS3)
 
-# ── S3.11 Endpoint de status de rate limit
 @app.get("/api/rate-limit-status")
-async def rate_limit_status(request: Request):
+async def rate_limit_status_ep(request: Request):
     ip = request.client.host if request.client else "unknown"
-    return JSONResponse({
-        "ip": ip,
-        "bloqueado": ip_bloqueado(ip),
-        "na_whitelist": ip in _whitelist_ips,
-        "limites": RATE_LIMITS,
-        "seguranca": "S3/18"
-    })
+    return JSONResponse({"ip": ip, "bloqueado": ip_bloqueado_s3(ip), "limites": RATE_LIMITS_S3, "seguranca": "S3/18"})
 
-# ── S3.12 Admin — gerenciar blacklist
-@app.post("/api/admin/blacklist")
-async def admin_blacklist(request: Request, db=Depends(get_db)):
-    usuario = await verificar_token(request, db)
-    if not usuario or usuario.get("plano") != "admin":
-        return JSONResponse({"erro": "Não autorizado"}, status_code=403)
-    body = await request.json()
-    acao = body.get("acao", "add")
-    ip = body.get("ip", "")
-    if not ip:
-        return JSONResponse({"erro": "IP obrigatório"}, status_code=400)
-    if acao == "add":
-        adicionar_blacklist(ip, body.get("motivo", ""))
-        return JSONResponse({"ok": True, "msg": f"IP {ip} bloqueado"})
-    elif acao == "remove":
-        remover_blacklist(ip)
-        return JSONResponse({"ok": True, "msg": f"IP {ip} desbloqueado"})
-    return JSONResponse({"erro": "Ação inválida"}, status_code=400)
+# ═══════════════════════════════════════════════════════════════════════
+# SEGURANÇA S4/18 — INPUT E VALIDACAO
+# ═══════════════════════════════════════════════════════════════════════
 
-# ── S3.13 Limpeza periódica automática
+INPUT_LIMITES_S4 = {
+    "nome": 100, "email": 254, "senha": 128,
+    "texto_analise": 5000, "mensagem_chat": 2000,
+    "titulo_diario": 200, "conteudo_diario": 10000,
+    "bio": 500, "url": 2048,
+}
 
-async def _job_limpar_rate_store():
-    import asyncio
-    while True:
-        await asyncio.sleep(3600)
-        limpar_rate_store_antigo()
+PADROES_MALICIOSOS_S4 = [
+    r"<script[^>]*>", r"javascript:", r"vbscript:",
+    r"on\w+\s*=", r"eval\s*\(", r"union\s+select",
+    r"drop\s+table", r"insert\s+into", r"delete\s+from",
+    r"\.\./", r"etc/passwd", r"exec\s*\(",
+]
 
-# ── S3.14 Rate limit por API key
-def verificar_rate_limit_api(api_key: str, plano: str = "developer") -> dict:
-    limites_api = {
-        "developer": {"requisicoes": 1000,  "janela_seg": 86400},
-        "business":  {"requisicoes": 10000, "janela_seg": 86400},
-        "enterprise":{"requisicoes": 100000,"janela_seg": 86400},
-    }
-    config = limites_api.get(plano, limites_api["developer"])
-    chave = f"rl:api:{api_key[:16]}"
-    return sliding_window_check(chave, config["requisicoes"], config["janela_seg"])
+_compiled_s4 = [_re_sec.compile(p, _re_sec.IGNORECASE) for p in PADROES_MALICIOSOS_S4]
 
-# ── S3.15 Estatísticas de rate limit
-def stats_rate_limit() -> dict:
-    with _rate_lock:
-        total_chaves = len(_rate_store)
-        total_bloqueados = len(_blacklist_ips)
-        total_whitelist = len(_whitelist_ips)
-    return {
-        "chaves_ativas": total_chaves,
-        "ips_bloqueados": total_bloqueados,
-        "ips_whitelist": total_whitelist,
-        "algoritmos": ["sliding_window", "token_bucket"],
-        "limites_configurados": len(RATE_LIMITS)
-    }
+def sanitizar_html_s4(texto: str) -> str:
+    if not texto:
+        return ""
+    texto = _re_sec.sub(r"<[^>]+>", "", texto)
+    texto = texto.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    texto = texto.replace('"', "&quot;").replace("'", "&#x27;")
+    return texto
 
-# ═══ FIM S3/18 — RATE LIMITING AVANÇADO ═════════════════════════════
+def detectar_conteudo_malicioso_s4(texto: str) -> dict:
+    if not texto:
+        return {"malicioso": False, "padroes": []}
+    encontrados = [PADROES_MALICIOSOS_S4[i] for i, p in enumerate(_compiled_s4) if p.search(texto.lower())]
+    return {"malicioso": bool(encontrados), "padroes": encontrados, "risco": "alto" if len(encontrados) > 2 else "medio" if encontrados else "baixo"}
+
+def sanitizar_input_s4(texto: str, tipo: str = "texto") -> dict:
+    if not isinstance(texto, str):
+        return {"ok": False, "erro": "Input deve ser string", "valor": ""}
+    limite = INPUT_LIMITES_S4.get(tipo, 1000)
+    if len(texto) > limite:
+        return {"ok": False, "erro": f"Texto muito longo (max {limite})", "valor": ""}
+    texto = _unicodedata_sec.normalize("NFC", texto).strip()
+    mal = detectar_conteudo_malicioso_s4(texto)
+    if mal["malicioso"]:
+        return {"ok": False, "erro": "Conteudo nao permitido", "valor": ""}
+    texto = sanitizar_html_s4(texto)
+    return {"ok": True, "erro": None, "valor": texto}
+
+def validar_email_s4(email: str) -> dict:
+    if not email or len(email) > 254:
+        return {"valido": False, "erro": "Email invalido"}
+    p = _re_sec.compile(r"^[a-zA-Z0-9.!#$%&*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}$")
+    if not p.match(email):
+        return {"valido": False, "erro": "Formato invalido"}
+    bloqueados = ["tempmail.com","guerrillamail.com","10minutemail.com"]
+    dominio = email.split("@")[1].lower()
+    if dominio in bloqueados:
+        return {"valido": False, "erro": "Email temporario nao permitido"}
+    return {"valido": True, "erro": None}
+
+def validar_url_s4(url: str) -> dict:
+    if not url or len(url) > 2048:
+        return {"valida": False, "erro": "URL invalida"}
+    bloqueados = ["localhost","127.0.0.1","0.0.0.0","169.254.","192.168."]
+    for b in bloqueados:
+        if b in url:
+            return {"valida": False, "erro": "URL interna nao permitida"}
+    return {"valida": url.startswith(("http://","https://")), "erro": None}
+
+def sanitizar_nome_arquivo_s4(nome: str) -> str:
+    if not nome:
+        return "arquivo"
+    nome = _re_sec.sub(r"[^\w\s\-.]", "", nome)
+    nome = _re_sec.sub(r"\.\.", ".", nome)
+    return nome.strip(". ")[:255] or "arquivo"
+
+def verificar_path_traversal_s4(path: str) -> bool:
+    padroes = ["../", "..\\", "%2e%2e", "%2f", "%5c"]
+    return any(p in path.lower() for p in padroes)
+
+def validar_cpf_s4(cpf: str) -> bool:
+    cpf = _re_sec.sub(r"[^\d]", "", cpf)
+    if len(cpf) != 11 or cpf == cpf[0] * 11:
+        return False
+    for i in range(9, 11):
+        soma = sum(int(cpf[j]) * (i+1-j) for j in range(i))
+        if int(cpf[i]) != (soma * 10 % 11) % 10:
+            return False
+    return True
+
+def validar_telefone_br_s4(tel: str) -> bool:
+    tel = _re_sec.sub(r"[^\d]", "", tel)
+    return len(tel) in (10, 11) and tel[0] in "123456789"
+
+def validar_json_depth_s4(obj, depth: int = 0, max_depth: int = 5) -> bool:
+    if depth > max_depth:
+        return False
+    if isinstance(obj, dict):
+        return all(validar_json_depth_s4(v, depth+1, max_depth) for v in obj.values())
+    if isinstance(obj, list):
+        return all(validar_json_depth_s4(i, depth+1, max_depth) for i in obj)
+    return True
+
+@app.post("/api/validar-input")
+async def api_validar_input_ep(request: Request):
+    try:
+        body = await request.json()
+        texto = body.get("texto", "")
+        tipo = body.get("tipo", "texto")
+        resultado = sanitizar_input_s4(texto, tipo)
+        return JSONResponse({"ok": resultado["ok"], "erro": resultado.get("erro"), "tamanho": len(texto), "seguranca": "S4/18"})
+    except Exception as e:
+        return JSONResponse({"erro": str(e)}, status_code=500)
+
+class InputValidationMiddlewareS4(_BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        if request.method in ("POST", "PUT", "PATCH"):
+            content_length = int(request.headers.get("content-length", 0))
+            if content_length > 10 * 1024 * 1024:
+                return JSONResponse({"erro": "Payload muito grande (max 10MB)"}, status_code=413)
+        return await call_next(request)
+
+app.add_middleware(InputValidationMiddlewareS4)
+
+# ═══ FIM S1+S2+S3+S4/18 ═════════════════════════════════════════════
 
 
 @app.get("/terapia", response_class=HTMLResponse)
@@ -11949,7 +11692,7 @@ def api_analyze(
         "pontos_ganhos": PONTOS_POR_ACAO["analise"],
         "total_pontos":  usuario.pontos,
         "timestamp":     datetime.now().isoformat(),
-        "version":       "21.0",
+        "version":       "20.0",
     }
 
 
@@ -12007,7 +11750,7 @@ def api_emocoes(usuario: Usuario = Depends(verificar_token)):
             "tecnica":       tecnicas_por_emocao.get(emocao, ""),
             "total_palavras": len(palavras),
         } for emocao, palavras in palavras_emocoes.items()],
-        "version": "21.0",
+        "version": "20.0",
     }
 
 
