@@ -2829,24 +2829,26 @@ app       = FastAPI(
 
 
 # ═══════════════════════════════════════════════
-# EMOTION PLATFORM — PLUGIN SYSTEM AUTO-LOAD
+# EMOTION PLATFORM — PLUGIN SYSTEM v23.0
 # ═══════════════════════════════════════════════
 try:
     from fastapi.staticfiles import StaticFiles as _SF_ep
     import os as _os_ep
     if _os_ep.path.exists("static"):
         try:
-            app.mount("/static", _SF_ep(directory="static"), name="static")
+            app.mount("/static", _SF_ep(directory="static"), name="static_main")
         except Exception:
             pass
 except Exception:
     pass
 
 try:
-    from plugins.loader import load_all_plugins as _lap_ep
-    _lap_ep(app)
+    from plugins.loader import create_plugin_app as _cpa_ep
+    _plugin_app = _cpa_ep()
+    app.mount("/ep", _plugin_app)
 except Exception as _e_pl:
-    pass
+    import logging as _lg_ep
+    _lg_ep.getLogger(__name__).error(f"Plugin mount error: {_e_pl}")
 # ═══════════════════════════════════════════════
 templates = Jinja2Templates(directory="templates")
 

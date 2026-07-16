@@ -104,7 +104,7 @@ async function assinar(plano) {
   const userId = localStorage.getItem('emotion_userid') || 'user_' + Math.random().toString(36).substr(2,6);
 
   try {
-    const resp = await fetch('/api/v1/stripe/checkout/criar', {
+    const resp = await fetch('/ep/api/v1/stripe/checkout/criar', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({user_id:userId, plano, email})

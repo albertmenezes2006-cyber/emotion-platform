@@ -170,7 +170,7 @@ document.getElementById('phq9-form').addEventListener('submit', async (e) => {
   }
   const userId = document.getElementById('phq9-userid').value || 'anonimo';
   try {
-    const resp = await fetch(`/api/v1/phq9/aplicar?user_id=${encodeURIComponent(userId)}`, {
+    const resp = await fetch(`/ep/api/v1/phq9/aplicar?user_id=${encodeURIComponent(userId)}`, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify(respostas)
@@ -224,7 +224,7 @@ document.getElementById('gad7-form').addEventListener('submit', async (e) => {
   }
   const userId = document.getElementById('gad7-userid').value || 'anonimo';
   try {
-    const resp = await fetch(`/api/v1/gad7/aplicar?user_id=${encodeURIComponent(userId)}`, {
+    const resp = await fetch(`/ep/api/v1/gad7/aplicar?user_id=${encodeURIComponent(userId)}`, {
       method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(respostas)
     });
     const data = await resp.json();

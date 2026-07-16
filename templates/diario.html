@@ -148,7 +148,7 @@ async function salvarEntrada() {
       tags: tags
     });
 
-    const resp = await fetch('/api/v1/diario-emocional/entrada?' + params, { method:'POST' });
+    const resp = await fetch('/ep/api/v1/diario-emocional/entrada?' + params, { method:'POST' });
     const data = await resp.json();
     mostrarResultado(data);
     carregarHistorico(uid);
@@ -188,7 +188,7 @@ function limparForm() {
 async function carregarHistorico(uid) {
   uid = uid || document.getElementById('diario-userid').value || userId;
   try {
-    const resp = await fetch(`/api/v1/diario-emocional/historico/${encodeURIComponent(uid)}?limite=10`);
+    const resp = await fetch(`/ep/api/v1/diario-emocional/historico/${encodeURIComponent(uid)}?limite=10`);
     const data = await resp.json();
     const lista = document.getElementById('historico-lista');
     if(!data.entradas || data.entradas.length === 0) {
