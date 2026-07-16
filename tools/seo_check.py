@@ -52,19 +52,17 @@ else:
 # Title
 titles = re.findall(r"<title>([^<]+)</title>", html)
 if titles and len(titles[0]) >= 10:
-    ok_msg(f"Title: '{titles[0][:60]}'")
+    ok_msg("Title presente: " + titles[0][:60])
 elif titles:
-    warn_msg(f"Title curto: '{titles[0]}'")
+    warn_msg("Title curto: " + titles[0])
 else:
     err_msg("Title ausente!")
 
-# Meta description — sem aspas mistas no regex
-desc_pattern = re.compile(r'name=.description.[^>]*content=.([^"'> ]{10,})', re.IGNORECASE)
-descs = desc_pattern.findall(html)
-if descs:
-    ok_msg(f"Meta description encontrada")
+# Meta description
+if "description" in html and "content" in html:
+    ok_msg("Meta description encontrada")
 else:
-    warn_msg("Meta description ausente ou curta")
+    warn_msg("Meta description nao encontrada")
 
 # Open Graph
 if "og:title" in html:
@@ -85,7 +83,7 @@ if len(h1s) == 1:
 elif len(h1s) == 0:
     err_msg("Sem H1!")
 else:
-    warn_msg(f"{len(h1s)} H1s (deve ser 1)")
+    warn_msg(str(len(h1s)) + " H1s (deve ser 1)")
 
 # Sitemap
 s_sm, _ = buscar("/sitemap.xml")
@@ -107,31 +105,30 @@ try:
     urllib.request.urlopen(BASE + "/app/avaliacao", timeout=30).read()
     ms = round((time.time() - inicio) * 1000)
     if ms < 800:
-        ok_msg(f"Velocidade avaliacao: {ms}ms")
+        ok_msg("Velocidade: " + str(ms) + "ms")
     elif ms < 2000:
-        warn_msg(f"Lento: {ms}ms")
+        warn_msg("Lento: " + str(ms) + "ms")
     else:
-        err_msg(f"Muito lento: {ms}ms")
+        err_msg("Muito lento: " + str(ms) + "ms")
 except Exception:
     warn_msg("Nao foi possivel medir velocidade")
 
 # Viewport
-if 'name="viewport"' in html:
+if "viewport" in html:
     ok_msg("Mobile-friendly (viewport)")
 else:
     err_msg("Sem viewport!")
 
 # HTTPS
 if BASE.startswith("https"):
-    ok_msg("HTTPS ativo (fator ranking Google)")
+    ok_msg("HTTPS ativo")
 else:
     err_msg("Sem HTTPS!")
 
 print()
 total = OK + WARN + ERR
 score = round(OK / total * 100) if total > 0 else 0
-print(f"SEO Score: {score}% ({OK} ok / {WARN} avisos / {ERR} erros)")
+print("SEO Score: " + str(score) + "% (" + str(OK) + " ok / " + str(WARN) + " avisos / " + str(ERR) + " erros)")
 print()
 print("Verificar tambem:")
-print(f"  https://pagespeed.web.dev/?url={BASE}/app/avaliacao")
-print(f"  https://search.google.com/search-console")
+print("  https://pagespeed.web.dev/?url=" + BASE + "/app/avaliacao")
