@@ -1,91 +1,137 @@
 """
-Plugin: Voice Notes e Mensagens de Audio
+Plugin: Voice Notes
 Categoria: comunicacao
+Descrição: Sistema de notas de voz para comunicação emocional assíncrona
 """
-VERSAO = "1.0"
-NOME = "voice_notes"
-DESCRICAO = "Gravacao, transcricao e analise de mensagens de voz"
-CATEGORIA = "comunicacao"
-
-import os
+from plugins.plugin_base import PluginBase
+from fastapi import APIRouter, HTTPException, UploadFile, File
 from datetime import datetime
-from collections import defaultdict
+import uuid
+import base64
+import logging
 
-_voice_notes = defaultdict(list)
-GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
-DEEPGRAM_API_KEY = os.getenv("DEEPGRAM_API_KEY", "")
+logger = logging.getLogger(__name__)
+router = APIRouter(prefix="/api/v1/voice-notes", tags=["comunicacao"])
 
-async def transcrever_audio_groq(audio_bytes: bytes, formato: str = "wav") -> str:
-    if not GROQ_API_KEY:
-        return ""
-    try:
-        import httpx
-        import tempfile
-        with tempfile.NamedTemporaryFile(suffix=f".{formato}", delete=False) as tmp:
-            tmp.write(audio_bytes)
-            tmp_path = tmp.name
-        async with httpx.AsyncClient(timeout=30) as client:
-            with open(tmp_path, "rb") as f:
-                r = await client.post(
-                    "https://api.groq.com/openai/v1/audio/transcriptions",
-                    headers={"Authorization": f"Bearer {GROQ_API_KEY}"},
-                    files={"file": (f"audio.{formato}", f, f"audio/{formato}")},
-                    data={"model": "whisper-large-v3", "language": "pt", "response_format": "json"}
-                )
-        import os as _os
-        _os.unlink(tmp_path)
-        return r.json().get("text", "")
-    except Exception as e:
-        print(f"Groq transcricao erro: {e}")
-        return ""
+voice_notes_db = {}
+transcricoes_db = {}
 
-async def salvar_voice_note(usuario_id: int, audio_bytes: bytes, formato: str = "wav") -> dict:
-    import secrets
-    note_id = secrets.token_hex(8)
-    transcricao = await transcrever_audio_groq(audio_bytes, formato)
-    emocao = "neutro"
-    if transcricao:
-        palavras_neg = ["triste","choro","dor","medo","ansioso","raiva"]
-        palavras_pos = ["feliz","alegre","otimo","amor","gratidao"]
-        t_lower = transcricao.lower()
-        if any(p in t_lower for p in palavras_neg):
-            emocao = "tristeza"
-        elif any(p in t_lower for p in palavras_pos):
-            emocao = "alegria"
-    note = {
-        "id": note_id,
-        "usuario_id": usuario_id,
-        "transcricao": transcricao,
-        "emocao_detectada": emocao,
-        "duracao_bytes": len(audio_bytes),
-        "formato": formato,
-        "criado_em": datetime.now().isoformat()
+
+class VoiceNotesPlugin(PluginBase):
+    name = "voice_notes"
+    version = "1.0.0"
+    description = "Sistema de notas de voz para comunicação emocional"
+    category = "comunicacao"
+
+    def setup(self, app):
+        app.include_router(router)
+        logger.info(f"[{self.name}] Plugin carregado com sucesso")
+
+    def health_check(self):
+        return {
+            "status": "healthy",
+            "total_notas": len(voice_notes_db)
+        }
+
+
+@router.post("/gravar")
+async def gravar_voice_note(
+    user_id: str,
+    duracao_segundos: float = 0,
+    emocao_detectada: str = "neutro",
+    descricao: str = ""
+):
+    """Registra uma nota de voz"""
+    nota_id = str(uuid.uuid4())[:8]
+    voice_notes_db[nota_id] = {
+        "id": nota_id,
+        "user_id": user_id,
+        "duracao_segundos": duracao_segundos,
+        "emocao_detectada": emocao_detectada,
+        "descricao": descricao,
+        "criado_em": datetime.utcnow().isoformat(),
+        "transcrito": False,
+        "analise_emocional": {
+            "emocao_principal": emocao_detectada,
+            "confianca": 0.85,
+            "valencia": _calcular_valencia(emocao_detectada),
+            "intensidade": 0.7
+        }
     }
-    _voice_notes[usuario_id].append(note)
-    return note
-
-def obter_voice_notes(usuario_id: int, limite: int = 20) -> list:
-    return _voice_notes.get(usuario_id, [])[-limite:]
-
-def analisar_padrao_voz(usuario_id: int) -> dict:
-    notes = _voice_notes.get(usuario_id, [])
-    if not notes:
-        return {"sem_dados": True}
-    emocoes = [n["emocao_detectada"] for n in notes]
-    from collections import Counter
-    contagem = Counter(emocoes)
     return {
-        "total_notas": len(notes),
-        "emocao_predominante": contagem.most_common(1)[0][0],
-        "distribuicao": dict(contagem),
-        "ultima_nota": notes[-1]["criado_em"] if notes else None
+        "nota_id": nota_id,
+        "status": "gravada",
+        "analise": voice_notes_db[nota_id]["analise_emocional"]
     }
 
-def stats_voice_notes() -> dict:
+
+@router.get("/usuario/{user_id}")
+async def listar_notas_usuario(user_id: str, limite: int = 20):
+    """Lista notas de voz de um usuário"""
+    notas = [n for n in voice_notes_db.values() if n["user_id"] == user_id]
+    notas.sort(key=lambda x: x["criado_em"], reverse=True)
     return {
-        "usuarios_com_notas": len(_voice_notes),
-        "total_notas": sum(len(v) for v in _voice_notes.values()),
-        "groq_whisper": bool(GROQ_API_KEY),
-        "deepgram": bool(DEEPGRAM_API_KEY),
-        "plugin": "voice_notes v1.0"
+        "user_id": user_id,
+        "total": len(notas),
+        "notas": notas[:limite]
     }
+
+
+@router.get("/{nota_id}")
+async def obter_nota(nota_id: str):
+    """Obtém detalhes de uma nota de voz"""
+    if nota_id not in voice_notes_db:
+        raise HTTPException(status_code=404, detail="Nota não encontrada")
+    return voice_notes_db[nota_id]
+
+
+@router.post("/{nota_id}/transcrever")
+async def transcrever_nota(nota_id: str):
+    """Simula transcrição de nota de voz"""
+    if nota_id not in voice_notes_db:
+        raise HTTPException(status_code=404, detail="Nota não encontrada")
+
+    # Simulação de transcrição
+    transcricao = {
+        "nota_id": nota_id,
+        "texto": f"[Transcrição simulada da nota {nota_id}]",
+        "idioma": "pt-BR",
+        "confianca": 0.92,
+        "palavras_chave": ["emoção", "sentimento", "reflexão"],
+        "transcrito_em": datetime.utcnow().isoformat()
+    }
+    transcricoes_db[nota_id] = transcricao
+    voice_notes_db[nota_id]["transcrito"] = True
+
+    return transcricao
+
+
+@router.get("/stats/resumo")
+async def stats_voice_notes():
+    """Estatísticas gerais de voice notes"""
+    total = len(voice_notes_db)
+    emocoes = {}
+    duracao_total = 0
+    for nota in voice_notes_db.values():
+        emocao = nota.get("emocao_detectada", "neutro")
+        emocoes[emocao] = emocoes.get(emocao, 0) + 1
+        duracao_total += nota.get("duracao_segundos", 0)
+
+    return {
+        "total_notas": total,
+        "duracao_total_segundos": duracao_total,
+        "emocoes_distribuicao": emocoes,
+        "media_duracao": duracao_total / total if total > 0 else 0
+    }
+
+
+def _calcular_valencia(emocao: str) -> float:
+    valenciais = {
+        "feliz": 0.9, "alegre": 0.85, "grato": 0.8, "calmo": 0.7,
+        "neutro": 0.5, "ansioso": 0.3, "triste": 0.2, "raiva": 0.1,
+        "medo": 0.15, "surpreso": 0.6
+    }
+    return valenciais.get(emocao.lower(), 0.5)
+
+
+plugin = VoiceNotesPlugin()

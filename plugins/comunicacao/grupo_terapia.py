@@ -1,98 +1,190 @@
 """
-Plugin: Sala de Grupo Terapeutico
+Plugin: Grupo de Terapia
 Categoria: comunicacao
+Descrição: Sistema de grupos terapêuticos online com moderação profissional
 """
-VERSAO = "1.0"
-NOME = "grupo_terapia"
-DESCRICAO = "Salas de grupo terapeutico com facilitador e participantes"
-CATEGORIA = "comunicacao"
-
+from plugins.plugin_base import PluginBase
+from fastapi import APIRouter, HTTPException
 from datetime import datetime
-from collections import defaultdict
+import uuid
+import logging
 
-_grupos = {}
-_sessoes_grupo = defaultdict(list)
-_participantes_grupo = defaultdict(list)
+logger = logging.getLogger(__name__)
+router = APIRouter(prefix="/api/v1/grupo-terapia", tags=["comunicacao"])
 
-TIPOS_GRUPO = [
-    "ansiedade", "depressao", "luto", "relacionamentos",
-    "autoestima", "estresse", "fobia", "trauma", "geral"
+grupos_db = {}
+membros_db = {}
+atividades_grupo = {}
+
+TEMAS_TERAPEUTICOS = [
+    "ansiedade", "depressao", "luto", "autoestima", "relacionamentos",
+    "estresse", "burnout", "fobias", "compulsoes", "trauma",
+    "mindfulness", "resiliencia", "comunicacao_nao_violenta",
+    "inteligencia_emocional", "autocuidado"
 ]
 
-def criar_grupo(nome: str, tipo: str, facilitador_id: int, max_participantes: int = 8, descricao: str = "") -> dict:
-    import secrets
-    grupo_id = secrets.token_hex(6)
-    _grupos[grupo_id] = {
+
+class GrupoTerapiaPlugin(PluginBase):
+    name = "grupo_terapia"
+    version = "1.0.0"
+    description = "Grupos terapêuticos online com moderação"
+    category = "comunicacao"
+
+    def setup(self, app):
+        app.include_router(router)
+        logger.info(f"[{self.name}] Plugin carregado com sucesso")
+
+    def health_check(self):
+        return {
+            "status": "healthy",
+            "grupos_ativos": sum(1 for g in grupos_db.values() if g["ativo"]),
+            "temas_disponiveis": len(TEMAS_TERAPEUTICOS)
+        }
+
+
+@router.post("/criar")
+async def criar_grupo(
+    nome: str,
+    tema: str,
+    terapeuta_id: str,
+    max_membros: int = 12,
+    descricao: str = ""
+):
+    """Cria um grupo terapêutico"""
+    if tema not in TEMAS_TERAPEUTICOS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Tema inválido. Temas: {TEMAS_TERAPEUTICOS}"
+        )
+
+    grupo_id = str(uuid.uuid4())[:8]
+    grupos_db[grupo_id] = {
         "id": grupo_id,
         "nome": nome,
-        "tipo": tipo,
-        "facilitador_id": facilitador_id,
-        "max_participantes": max_participantes,
-        "descricao": descricao[:300],
-        "participantes": [facilitador_id],
-        "ativo": True,
-        "sessoes": 0,
-        "criado_em": datetime.now().isoformat()
-    }
-    return _grupos[grupo_id]
-
-def entrar_grupo(grupo_id: str, usuario_id: int, nome: str) -> dict:
-    if grupo_id not in _grupos:
-        return {"erro": "Grupo nao encontrado"}
-    grupo = _grupos[grupo_id]
-    if not grupo["ativo"]:
-        return {"erro": "Grupo inativo"}
-    if len(grupo["participantes"]) >= grupo["max_participantes"]:
-        return {"erro": f"Grupo cheio (max {grupo['max_participantes']})"}
-    if usuario_id not in grupo["participantes"]:
-        grupo["participantes"].append(usuario_id)
-        _participantes_grupo[grupo_id].append({"usuario_id": usuario_id, "nome": nome, "entrou_em": datetime.now().isoformat()})
-    return {"ok": True, "grupo": grupo["nome"], "participantes": len(grupo["participantes"])}
-
-def iniciar_sessao_grupo(grupo_id: str, facilitador_id: int, tema: str) -> dict:
-    if grupo_id not in _grupos:
-        return {"erro": "Grupo nao encontrado"}
-    grupo = _grupos[grupo_id]
-    if grupo["facilitador_id"] != facilitador_id:
-        return {"erro": "Apenas o facilitador pode iniciar sessoes"}
-    import secrets
-    sessao_id = secrets.token_hex(6)
-    sessao = {
-        "id": sessao_id,
-        "grupo_id": grupo_id,
         "tema": tema,
-        "facilitador_id": facilitador_id,
-        "inicio": datetime.now().isoformat(),
-        "fim": None,
-        "mensagens": [],
-        "ativa": True
+        "terapeuta_id": terapeuta_id,
+        "descricao": descricao,
+        "max_membros": max_membros,
+        "ativo": True,
+        "criado_em": datetime.utcnow().isoformat(),
+        "regras": [
+            "Respeito mútuo",
+            "Confidencialidade total",
+            "Sem julgamentos",
+            "Escuta ativa",
+            "Participação voluntária"
+        ]
     }
-    _sessoes_grupo[grupo_id].append(sessao)
-    grupo["sessoes"] += 1
-    return sessao
+    membros_db[grupo_id] = []
+    atividades_grupo[grupo_id] = []
 
-def encerrar_sessao_grupo(grupo_id: str, sessao_id: str, resumo: str = "") -> dict:
-    sessoes = _sessoes_grupo.get(grupo_id, [])
-    for sessao in sessoes:
-        if sessao["id"] == sessao_id:
-            sessao["ativa"] = False
-            sessao["fim"] = datetime.now().isoformat()
-            sessao["resumo"] = resumo[:500]
-            return {"ok": True, "duracao_mensagens": len(sessao["mensagens"])}
-    return {"erro": "Sessao nao encontrada"}
-
-def listar_grupos(tipo: str = None, apenas_ativos: bool = True) -> list:
-    grupos = list(_grupos.values())
-    if tipo:
-        grupos = [g for g in grupos if g["tipo"] == tipo]
-    if apenas_ativos:
-        grupos = [g for g in grupos if g["ativo"]]
-    return grupos
-
-def stats_grupo_terapia() -> dict:
     return {
-        "grupos_ativos": sum(1 for g in _grupos.values() if g["ativo"]),
-        "total_grupos": len(_grupos),
-        "tipos_disponiveis": TIPOS_GRUPO,
-        "plugin": "grupo_terapia v1.0"
+        "grupo_id": grupo_id,
+        "nome": nome,
+        "tema": tema,
+        "status": "grupo criado com sucesso"
     }
+
+
+@router.post("/{grupo_id}/entrar")
+async def entrar_grupo(grupo_id: str, user_id: str, nome_exibicao: str = "Membro"):
+    """Entra em um grupo terapêutico"""
+    if grupo_id not in grupos_db:
+        raise HTTPException(status_code=404, detail="Grupo não encontrado")
+
+    grupo = grupos_db[grupo_id]
+    membros = membros_db[grupo_id]
+
+    if len(membros) >= grupo["max_membros"]:
+        raise HTTPException(status_code=400, detail="Grupo lotado")
+
+    # Verificar duplicata
+    if any(m["user_id"] == user_id for m in membros):
+        raise HTTPException(status_code=400, detail="Já é membro do grupo")
+
+    membro = {
+        "user_id": user_id,
+        "nome_exibicao": nome_exibicao,
+        "entrou_em": datetime.utcnow().isoformat(),
+        "papel": "membro",
+        "participacoes": 0
+    }
+    membros.append(membro)
+
+    return {
+        "status": "bem-vindo ao grupo",
+        "grupo": grupo["nome"],
+        "tema": grupo["tema"],
+        "membros_atuais": len(membros),
+        "regras": grupo["regras"]
+    }
+
+
+@router.post("/{grupo_id}/atividade")
+async def registrar_atividade(
+    grupo_id: str,
+    tipo: str = "discussao",
+    titulo: str = "",
+    descricao: str = "",
+    terapeuta_id: str = ""
+):
+    """Registra uma atividade no grupo"""
+    if grupo_id not in grupos_db:
+        raise HTTPException(status_code=404, detail="Grupo não encontrado")
+
+    atividade = {
+        "id": str(uuid.uuid4())[:8],
+        "tipo": tipo,
+        "titulo": titulo,
+        "descricao": descricao,
+        "terapeuta_id": terapeuta_id,
+        "data": datetime.utcnow().isoformat(),
+        "participantes": []
+    }
+    atividades_grupo[grupo_id].append(atividade)
+
+    return {"status": "atividade registrada", "atividade": atividade}
+
+
+@router.get("/{grupo_id}")
+async def detalhes_grupo(grupo_id: str):
+    """Detalhes de um grupo"""
+    if grupo_id not in grupos_db:
+        raise HTTPException(status_code=404, detail="Grupo não encontrado")
+
+    return {
+        "grupo": grupos_db[grupo_id],
+        "membros": len(membros_db.get(grupo_id, [])),
+        "atividades": len(atividades_grupo.get(grupo_id, []))
+    }
+
+
+@router.get("/listar/todos")
+async def listar_grupos(tema: str = None):
+    """Lista grupos disponíveis"""
+    grupos = list(grupos_db.values())
+    if tema:
+        grupos = [g for g in grupos if g["tema"] == tema]
+    grupos = [g for g in grupos if g["ativo"]]
+
+    resultado = []
+    for g in grupos:
+        resultado.append({
+            "id": g["id"],
+            "nome": g["nome"],
+            "tema": g["tema"],
+            "membros": len(membros_db.get(g["id"], [])),
+            "max_membros": g["max_membros"],
+            "vagas": g["max_membros"] - len(membros_db.get(g["id"], []))
+        })
+
+    return {"total": len(resultado), "grupos": resultado}
+
+
+@router.get("/temas/disponiveis")
+async def listar_temas():
+    """Lista temas terapêuticos disponíveis"""
+    return {"temas": TEMAS_TERAPEUTICOS}
+
+
+plugin = GrupoTerapiaPlugin()

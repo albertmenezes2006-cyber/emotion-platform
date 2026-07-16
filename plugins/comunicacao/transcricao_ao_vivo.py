@@ -1,111 +1,148 @@
 """
-Plugin: Transcricao ao Vivo e Traducao em Tempo Real
+Plugin: Transcrição ao Vivo
 Categoria: comunicacao
+Descrição: Sistema de transcrição em tempo real para sessões terapêuticas
 """
-VERSAO = "1.0"
-NOME = "transcricao_ao_vivo"
-DESCRICAO = "Transcricao em tempo real durante sessoes terapeuticas"
-CATEGORIA = "comunicacao"
-
-import os
+from plugins.plugin_base import PluginBase
+from fastapi import APIRouter, HTTPException
 from datetime import datetime
-from collections import defaultdict
+import uuid
+import logging
 
-_sessoes_transcricao = {}
-_chunks_processados = defaultdict(list)
+logger = logging.getLogger(__name__)
+router = APIRouter(prefix="/api/v1/transcricao-live", tags=["comunicacao"])
 
-DEEPGRAM_API_KEY = os.getenv("DEEPGRAM_API_KEY", "")
-GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+sessoes_transcricao = {}
+segmentos_db = {}
 
-async def iniciar_sessao_transcricao(sessao_id: str, idioma: str = "pt-BR") -> dict:
-    _sessoes_transcricao[sessao_id] = {
+
+class TranscricaoAoVivoPlugin(PluginBase):
+    name = "transcricao_ao_vivo"
+    version = "1.0.0"
+    description = "Transcrição em tempo real para sessões terapêuticas"
+    category = "comunicacao"
+
+    def setup(self, app):
+        app.include_router(router)
+        logger.info(f"[{self.name}] Plugin carregado com sucesso")
+
+    def health_check(self):
+        return {
+            "status": "healthy",
+            "sessoes_ativas": sum(1 for s in sessoes_transcricao.values() if s["status"] == "ativa")
+        }
+
+
+@router.post("/sessao/iniciar")
+async def iniciar_sessao(
+    terapeuta_id: str,
+    paciente_id: str = "anonimo",
+    idioma: str = "pt-BR"
+):
+    """Inicia uma sessão de transcrição ao vivo"""
+    sessao_id = str(uuid.uuid4())[:8]
+    sessoes_transcricao[sessao_id] = {
         "id": sessao_id,
+        "terapeuta_id": terapeuta_id,
+        "paciente_id": paciente_id,
         "idioma": idioma,
-        "iniciado_em": datetime.now().isoformat(),
-        "ativa": True,
-        "chunks": 0,
-        "texto_completo": ""
+        "status": "ativa",
+        "inicio": datetime.utcnow().isoformat(),
+        "fim": None,
+        "total_segmentos": 0,
+        "palavras_totais": 0,
+        "emocoes_detectadas": []
     }
-    return {"ok": True, "sessao_id": sessao_id, "provider": "deepgram" if DEEPGRAM_API_KEY else "groq"}
+    segmentos_db[sessao_id] = []
 
-async def processar_chunk_audio(sessao_id: str, audio_chunk: bytes) -> dict:
-    if sessao_id not in _sessoes_transcricao:
-        return {"erro": "Sessao nao encontrada"}
-    sessao = _sessoes_transcricao[sessao_id]
-    if not sessao["ativa"]:
-        return {"erro": "Sessao encerrada"}
-    texto = ""
-    if DEEPGRAM_API_KEY:
-        try:
-            import httpx
-            async with httpx.AsyncClient(timeout=10) as client:
-                r = await client.post(
-                    f"https://api.deepgram.com/v1/listen?language={sessao['idioma']}&model=nova-2&punctuate=true",
-                    headers={"Authorization": f"Token {DEEPGRAM_API_KEY}", "Content-Type": "audio/wav"},
-                    content=audio_chunk
-                )
-                resultado = r.json()
-                channels = resultado.get("results", {}).get("channels", [])
-                if channels:
-                    texto = channels[0].get("alternatives", [{}])[0].get("transcript", "")
-        except Exception:
-            pass
-    elif GROQ_API_KEY and len(audio_chunk) > 1000:
-        import tempfile, os as _os
-        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp:
-            tmp.write(audio_chunk)
-            tmp_path = tmp.name
-        try:
-            import httpx
-            async with httpx.AsyncClient(timeout=15) as client:
-                with open(tmp_path, "rb") as f:
-                    r = await client.post(
-                        "https://api.groq.com/openai/v1/audio/transcriptions",
-                        headers={"Authorization": f"Bearer {GROQ_API_KEY}"},
-                        files={"file": ("chunk.wav", f, "audio/wav")},
-                        data={"model": "whisper-large-v3", "language": "pt"}
-                    )
-                texto = r.json().get("text", "")
-        except Exception:
-            pass
-        finally:
-            _os.unlink(tmp_path)
-    if texto:
-        sessao["texto_completo"] += " " + texto
-        sessao["chunks"] += 1
-        _chunks_processados[sessao_id].append({"texto": texto, "ts": datetime.now().isoformat()})
-    return {"texto": texto, "texto_acumulado": sessao["texto_completo"].strip(), "chunks": sessao["chunks"]}
-
-async def traduzir_em_tempo_real(texto: str, idioma_origem: str = "pt", idioma_destino: str = "en") -> str:
-    if not texto:
-        return ""
-    try:
-        import httpx
-        if GROQ_API_KEY:
-            async with httpx.AsyncClient(timeout=15) as client:
-                r = await client.post(
-                    "https://api.groq.com/openai/v1/chat/completions",
-                    headers={"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"},
-                    json={"model": "llama-3.1-8b-instant", "messages": [{"role": "user", "content": f"Translate to {idioma_destino} without explanation: {texto}"}], "max_tokens": 200}
-                )
-                return r.json()["choices"][0]["message"]["content"]
-    except Exception:
-        pass
-    return texto
-
-def encerrar_sessao_transcricao(sessao_id: str) -> dict:
-    if sessao_id not in _sessoes_transcricao:
-        return {"erro": "Sessao nao encontrada"}
-    sessao = _sessoes_transcricao[sessao_id]
-    sessao["ativa"] = False
-    sessao["encerrado_em"] = datetime.now().isoformat()
-    return {"ok": True, "texto_final": sessao["texto_completo"].strip(), "chunks_processados": sessao["chunks"]}
-
-def stats_transcricao() -> dict:
     return {
-        "sessoes_ativas": sum(1 for s in _sessoes_transcricao.values() if s.get("ativa")),
-        "total_sessoes": len(_sessoes_transcricao),
-        "deepgram": bool(DEEPGRAM_API_KEY),
-        "groq_whisper": bool(GROQ_API_KEY),
-        "plugin": "transcricao_ao_vivo v1.0"
+        "sessao_id": sessao_id,
+        "status": "sessão de transcrição iniciada",
+        "idioma": idioma
     }
+
+
+@router.post("/sessao/{sessao_id}/segmento")
+async def adicionar_segmento(
+    sessao_id: str,
+    texto: str,
+    falante: str = "paciente",
+    emocao: str = "neutro",
+    confianca: float = 0.9
+):
+    """Adiciona um segmento de transcrição"""
+    if sessao_id not in sessoes_transcricao:
+        raise HTTPException(status_code=404, detail="Sessão não encontrada")
+
+    sessao = sessoes_transcricao[sessao_id]
+    if sessao["status"] != "ativa":
+        raise HTTPException(status_code=400, detail="Sessão não está ativa")
+
+    segmento = {
+        "id": len(segmentos_db[sessao_id]) + 1,
+        "texto": texto,
+        "falante": falante,
+        "emocao": emocao,
+        "confianca": confianca,
+        "timestamp": datetime.utcnow().isoformat(),
+        "palavras": len(texto.split())
+    }
+    segmentos_db[sessao_id].append(segmento)
+
+    # Atualizar stats da sessão
+    sessao["total_segmentos"] += 1
+    sessao["palavras_totais"] += segmento["palavras"]
+    if emocao != "neutro":
+        sessao["emocoes_detectadas"].append(emocao)
+
+    return {"status": "segmento adicionado", "segmento": segmento}
+
+
+@router.post("/sessao/{sessao_id}/finalizar")
+async def finalizar_sessao(sessao_id: str):
+    """Finaliza sessão de transcrição"""
+    if sessao_id not in sessoes_transcricao:
+        raise HTTPException(status_code=404, detail="Sessão não encontrada")
+
+    sessao = sessoes_transcricao[sessao_id]
+    sessao["status"] = "finalizada"
+    sessao["fim"] = datetime.utcnow().isoformat()
+
+    # Gerar resumo
+    segmentos = segmentos_db.get(sessao_id, [])
+    emocoes_count = {}
+    for seg in segmentos:
+        e = seg.get("emocao", "neutro")
+        emocoes_count[e] = emocoes_count.get(e, 0) + 1
+
+    resumo = {
+        "sessao_id": sessao_id,
+        "duracao_segmentos": sessao["total_segmentos"],
+        "palavras_totais": sessao["palavras_totais"],
+        "distribuicao_emocoes": emocoes_count,
+        "emocao_predominante": max(emocoes_count, key=emocoes_count.get) if emocoes_count else "neutro"
+    }
+
+    return {"status": "finalizada", "resumo": resumo}
+
+
+@router.get("/sessao/{sessao_id}")
+async def obter_sessao(sessao_id: str):
+    """Obtém detalhes da sessão"""
+    if sessao_id not in sessoes_transcricao:
+        raise HTTPException(status_code=404, detail="Sessão não encontrada")
+
+    return {
+        "sessao": sessoes_transcricao[sessao_id],
+        "segmentos": segmentos_db.get(sessao_id, [])[-50:]
+    }
+
+
+@router.get("/sessoes/ativas")
+async def listar_sessoes_ativas():
+    """Lista sessões de transcrição ativas"""
+    ativas = [s for s in sessoes_transcricao.values() if s["status"] == "ativa"]
+    return {"total_ativas": len(ativas), "sessoes": ativas}
+
+
+plugin = TranscricaoAoVivoPlugin()

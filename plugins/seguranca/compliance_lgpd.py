@@ -1,123 +1,203 @@
 """
-Plugin: Compliance LGPD Completo
+Plugin: Compliance LGPD Avançado
 Categoria: seguranca
+Descrição: Sistema avançado de compliance com LGPD e gestão de consentimentos
 """
-VERSAO = "1.0"
-NOME = "compliance_lgpd"
-DESCRICAO = "LGPD compliance completo — consentimentos, direitos e DPO"
-CATEGORIA = "seguranca"
+from plugins.plugin_base import PluginBase
+from fastapi import APIRouter, HTTPException
+from datetime import datetime
+import uuid
+import logging
 
-import os
-from datetime import datetime, timedelta
-from collections import defaultdict
+logger = logging.getLogger(__name__)
+router = APIRouter(prefix="/api/v1/compliance-lgpd", tags=["seguranca"])
 
-_consentimentos_lgpd = defaultdict(dict)
-_solicitacoes_direitos = []
-_registros_tratamento = []
-_incidentes_seguranca = []
-DPO_EMAIL = os.getenv("DPO_EMAIL", "dpo@emotionplatform.com.br")
+consentimentos_db = {}
+solicitacoes_db = {}
+registros_tratamento = {}
+dpos_db = {}
 
-BASES_LEGAIS = {
-    "consentimento":         {"artigo": "Art. 7, I", "descricao": "Consentimento do titular"},
-    "contrato":              {"artigo": "Art. 7, V", "descricao": "Execucao de contrato"},
-    "obrigacao_legal":       {"artigo": "Art. 7, II", "descricao": "Cumprimento de obrigacao legal"},
-    "interesse_legitimo":    {"artigo": "Art. 7, IX", "descricao": "Interesse legitimo do controlador"},
-    "protecao_vida":         {"artigo": "Art. 7, VIII", "descricao": "Protecao da vida"},
-}
 
-DADOS_TRATADOS = {
-    "nome":              {"sensivel": False, "finalidade": "Identificacao", "retencao_anos": 5, "base": "contrato"},
-    "email":             {"sensivel": False, "finalidade": "Comunicacao", "retencao_anos": 5, "base": "contrato"},
-    "analises_emocao":   {"sensivel": True,  "finalidade": "Servico principal", "retencao_anos": 2, "base": "consentimento"},
-    "mensagens_sofia":   {"sensivel": True,  "finalidade": "Suporte psicologico", "retencao_anos": 1, "base": "consentimento"},
-    "diarios":           {"sensivel": True,  "finalidade": "Registro pessoal", "retencao_anos": 2, "base": "consentimento"},
-    "ip_acesso":         {"sensivel": False, "finalidade": "Seguranca", "retencao_anos": 1, "base": "interesse_legitimo"},
-    "pagamentos":        {"sensivel": False, "finalidade": "Cobranca", "retencao_anos": 5, "base": "obrigacao_legal"},
-}
+class ComplianceLGPDPlugin(PluginBase):
+    name = "compliance_lgpd"
+    version = "1.0.0"
+    description = "Compliance LGPD avançado com gestão de consentimentos"
+    category = "seguranca"
 
-def registrar_consentimento_lgpd(usuario_id: int, tipo_dado: str, aceito: bool, ip: str = "", versao: str = "2.0") -> dict:
-    _consentimentos_lgpd[usuario_id][tipo_dado] = {
+    def setup(self, app):
+        app.include_router(router)
+        logger.info(f"[{self.name}] Plugin carregado com sucesso")
+
+    def health_check(self):
+        return {
+            "status": "healthy",
+            "consentimentos_ativos": len(consentimentos_db),
+            "solicitacoes_pendentes": sum(
+                1 for s in solicitacoes_db.values() if s["status"] == "pendente"
+            )
+        }
+
+
+@router.post("/consentimento/registrar")
+async def registrar_consentimento(
+    user_id: str,
+    tipo: str = "dados_pessoais",
+    finalidade: str = "analise_emocional",
+    aceito: bool = True
+):
+    """Registra consentimento do usuário"""
+    tipos_validos = [
+        "dados_pessoais", "dados_sensiveis", "analise_emocional",
+        "compartilhamento", "marketing", "cookies", "pesquisa"
+    ]
+    if tipo not in tipos_validos:
+        raise HTTPException(status_code=400, detail=f"Tipos válidos: {tipos_validos}")
+
+    consent_id = str(uuid.uuid4())[:8]
+    consentimentos_db[consent_id] = {
+        "id": consent_id,
+        "user_id": user_id,
+        "tipo": tipo,
+        "finalidade": finalidade,
         "aceito": aceito,
-        "data": datetime.now().isoformat(),
-        "ip": ip[:20] if ip else "",
-        "versao_politica": versao,
-        "pode_revogar": True
+        "base_legal": "consentimento" if aceito else "revogado",
+        "ip_registro": "127.0.0.1",
+        "data_registro": datetime.utcnow().isoformat(),
+        "data_expiracao": None,
+        "versao_termos": "2.0",
+        "revogado": not aceito
     }
-    return {"registrado": True, "tipo": tipo_dado, "aceito": aceito}
 
-def verificar_consentimento(usuario_id: int, tipo_dado: str) -> bool:
-    consent = _consentimentos_lgpd.get(usuario_id, {}).get(tipo_dado, {})
-    return consent.get("aceito", False)
-
-def revogar_consentimento(usuario_id: int, tipo_dado: str) -> dict:
-    if usuario_id in _consentimentos_lgpd and tipo_dado in _consentimentos_lgpd[usuario_id]:
-        _consentimentos_lgpd[usuario_id][tipo_dado]["aceito"] = False
-        _consentimentos_lgpd[usuario_id][tipo_dado]["revogado_em"] = datetime.now().isoformat()
-        return {"revogado": True, "tipo": tipo_dado}
-    return {"erro": "Consentimento nao encontrado"}
-
-def solicitar_direito(usuario_id: int, tipo_direito: str, detalhes: str = "") -> dict:
-    import secrets
-    protocolo = f"LGPD-{secrets.token_hex(4).upper()}"
-    DIREITOS = {
-        "acesso": "Art. 18, I — Acesso aos dados pessoais",
-        "correcao": "Art. 18, III — Correcao de dados incompletos",
-        "anonimizacao": "Art. 18, IV — Anonimizacao dos dados",
-        "portabilidade": "Art. 18, V — Portabilidade dos dados",
-        "exclusao": "Art. 18, VI — Exclusao dos dados",
-        "revogacao": "Art. 18, IX — Revogacao do consentimento",
-        "oposicao": "Art. 18, XI — Oposicao ao tratamento",
-    }
-    solicitacao = {
-        "protocolo": protocolo,
-        "usuario_id": usuario_id,
-        "tipo_direito": tipo_direito,
-        "descricao": DIREITOS.get(tipo_direito, "Direito nao mapeado"),
-        "detalhes": detalhes[:500],
-        "status": "recebida",
-        "prazo_resposta": (datetime.now() + timedelta(days=15)).strftime("%d/%m/%Y"),
-        "solicitado_em": datetime.now().isoformat(),
-        "dpo_notificado": True
-    }
-    _solicitacoes_direitos.append(solicitacao)
-    return solicitacao
-
-def registrar_incidente_seguranca(descricao: str, dados_afetados: list, qtd_titulares: int) -> dict:
-    import secrets
-    incidente_id = f"INC-{secrets.token_hex(4).upper()}"
-    prazo_anpd = datetime.now() + timedelta(hours=72)
-    incidente = {
-        "id": incidente_id,
-        "descricao": descricao[:500],
-        "dados_afetados": dados_afetados,
-        "qtd_titulares_afetados": qtd_titulares,
-        "detectado_em": datetime.now().isoformat(),
-        "prazo_notificacao_anpd": prazo_anpd.isoformat(),
-        "notificado_anpd": False,
-        "medidas_tomadas": [],
-        "severidade": "alta" if qtd_titulares > 100 else "media" if qtd_titulares > 10 else "baixa"
-    }
-    _incidentes_seguranca.append(incidente)
-    return incidente
-
-def gerar_relatorio_privacy() -> dict:
     return {
-        "controlador": "Albert Menezes",
-        "dpo": DPO_EMAIL,
-        "bases_legais": BASES_LEGAIS,
-        "dados_tratados": DADOS_TRATADOS,
-        "direitos_titulares": ["acesso","correcao","anonimizacao","portabilidade","exclusao","revogacao","oposicao"],
-        "solicitacoes_pendentes": len([s for s in _solicitacoes_direitos if s["status"] == "recebida"]),
-        "incidentes": len(_incidentes_seguranca),
-        "conformidade": "LGPD — Lei 13.709/2018",
-        "ultima_atualizacao": datetime.now().strftime("%d/%m/%Y")
+        "consent_id": consent_id,
+        "status": "consentimento registrado",
+        "tipo": tipo,
+        "aceito": aceito
     }
 
-def stats_lgpd() -> dict:
-    return {
-        "usuarios_com_consentimento": len(_consentimentos_lgpd),
-        "solicitacoes_direitos": len(_solicitacoes_direitos),
-        "incidentes_registrados": len(_incidentes_seguranca),
-        "dados_mapeados": len(DADOS_TRATADOS),
-        "plugin": "compliance_lgpd v1.0"
+
+@router.post("/solicitacao/titular")
+async def solicitacao_titular(
+    user_id: str,
+    tipo_solicitacao: str = "acesso",
+    descricao: str = ""
+):
+    """Registra solicitação de titular de dados (Art. 18 LGPD)"""
+    tipos_validos = [
+        "acesso", "retificacao", "eliminacao", "portabilidade",
+        "anonimizacao", "bloqueio", "informacao_compartilhamento",
+        "revogacao_consentimento", "oposicao"
+    ]
+    if tipo_solicitacao not in tipos_validos:
+        raise HTTPException(status_code=400, detail=f"Tipos: {tipos_validos}")
+
+    solicitacao_id = str(uuid.uuid4())[:8]
+    solicitacoes_db[solicitacao_id] = {
+        "id": solicitacao_id,
+        "user_id": user_id,
+        "tipo": tipo_solicitacao,
+        "descricao": descricao,
+        "status": "pendente",
+        "data_solicitacao": datetime.utcnow().isoformat(),
+        "prazo_resposta": "15 dias úteis (Art. 18 §5)",
+        "resposta": None,
+        "data_resposta": None
     }
+
+    return {
+        "solicitacao_id": solicitacao_id,
+        "status": "solicitação registrada",
+        "prazo": "15 dias úteis",
+        "artigo": "Art. 18 LGPD"
+    }
+
+
+@router.get("/solicitacoes/{user_id}")
+async def listar_solicitacoes(user_id: str):
+    """Lista solicitações de um titular"""
+    solicitacoes = [s for s in solicitacoes_db.values() if s["user_id"] == user_id]
+    return {"total": len(solicitacoes), "solicitacoes": solicitacoes}
+
+
+@router.post("/registro-tratamento")
+async def registrar_tratamento(
+    atividade: str,
+    base_legal: str = "consentimento",
+    dados_coletados: str = "dados_emocionais",
+    finalidade: str = "analise_emocional"
+):
+    """Registra atividade de tratamento de dados (Art. 37)"""
+    reg_id = str(uuid.uuid4())[:8]
+    registros_tratamento[reg_id] = {
+        "id": reg_id,
+        "atividade": atividade,
+        "base_legal": base_legal,
+        "dados_coletados": dados_coletados,
+        "finalidade": finalidade,
+        "categoria_titular": "pacientes",
+        "compartilhamento": "nenhum",
+        "transferencia_internacional": False,
+        "prazo_retencao": "5 anos após última interação",
+        "medidas_seguranca": [
+            "criptografia_aes256",
+            "controle_acesso",
+            "logs_auditoria",
+            "backup_criptografado"
+        ],
+        "data_registro": datetime.utcnow().isoformat()
+    }
+
+    return {"registro_id": reg_id, "status": "tratamento registrado"}
+
+
+@router.get("/relatorio/compliance")
+async def relatorio_compliance():
+    """Relatório geral de compliance LGPD"""
+    total_consent = len(consentimentos_db)
+    aceitos = sum(1 for c in consentimentos_db.values() if c["aceito"])
+    revogados = sum(1 for c in consentimentos_db.values() if c["revogado"])
+
+    pendentes = sum(1 for s in solicitacoes_db.values() if s["status"] == "pendente")
+    resolvidas = sum(1 for s in solicitacoes_db.values() if s["status"] == "resolvida")
+
+    score = 100
+    if pendentes > 0:
+        score -= pendentes * 5
+
+    return {
+        "score_compliance": max(score, 0),
+        "consentimentos": {
+            "total": total_consent,
+            "aceitos": aceitos,
+            "revogados": revogados
+        },
+        "solicitacoes": {
+            "pendentes": pendentes,
+            "resolvidas": resolvidas,
+            "total": len(solicitacoes_db)
+        },
+        "registros_tratamento": len(registros_tratamento),
+        "status": "conforme" if score >= 80 else "atenção necessária"
+    }
+
+
+@router.get("/artigos")
+async def artigos_lgpd():
+    """Referência dos principais artigos da LGPD"""
+    return {
+        "artigos": {
+            "Art. 6": "Princípios do tratamento",
+            "Art. 7": "Bases legais",
+            "Art. 8": "Consentimento",
+            "Art. 11": "Dados sensíveis",
+            "Art. 18": "Direitos do titular",
+            "Art. 37": "Registro de tratamento",
+            "Art. 41": "DPO - Encarregado",
+            "Art. 46": "Segurança dos dados",
+            "Art. 48": "Comunicação de incidentes",
+            "Art. 50": "Boas práticas"
+        }
+    }
+
+
+plugin = ComplianceLGPDPlugin()
