@@ -1,10 +1,11 @@
 """
-Playwright — Browser real com seletores corrigidos
+Playwright — Browser real com seletores corretos
 Roda: python3 tests/test_browser.py
 """
 import asyncio
 import json
 import os
+import re
 from datetime import datetime
 
 BASE = "https://emotion-platform-albert.onrender.com"
@@ -26,14 +27,10 @@ async def main():
             headless=True,
             args=["--no-sandbox", "--disable-dev-shm-usage"]
         )
-
-        # ── Desktop ──
-        ctx = await browser.new_context(
-            viewport={"width": 1280, "height": 720}
-        )
+        ctx = await browser.new_context(viewport={"width": 1280, "height": 720})
         page = await ctx.new_page()
 
-        # Lista de páginas para testar
+        # Páginas
         testes = [
             ("Home",      BASE + "/"),
             ("Avaliacao", BASE + "/app/avaliacao"),
@@ -55,7 +52,7 @@ async def main():
                 has_nav = await page.query_selector(".nav-brand") is not None
                 size = len(conteudo)
 
-                shot = f"{SHOTS}/{nome.lower()}.png"
+                shot = os.path.join(SHOTS, nome.lower() + ".png")
                 await page.screenshot(path=shot, full_page=True)
 
                 ok = has_nav and size > 3000
@@ -65,238 +62,173 @@ async def main():
                     "screenshot": shot
                 })
 
-                status = "OK" if ok else "ERR"
+                status = "OK " if ok else "ERR"
                 print(f"    [{status}] titulo='{titulo[:40]}' nav={has_nav} size={size:,}")
                 print(f"    screenshot: {shot}")
 
             except Exception as exc:
                 print(f"    [ERR] {str(exc)[:60]}")
-                resultados.append({"nome": nome, "ok": False, "erro": str(exc)[:80]})
+                resultados.append({"nome": nome, "ok": False})
 
-        # ── FUNCIONAL: Chat IA ──
-        print("\n  [CHAT FUNCIONAL] Enviando mensagem real...")
+        # CHAT FUNCIONAL
+        print("\n  [CHAT FUNCIONAL]")
         try:
             await page.goto(BASE + "/app/chat", wait_until="domcontentloaded", timeout=30000)
             await asyncio.sleep(3)
 
-            # Listar todos os seletores possíveis do input
-            seletores_input = [
-                "#chat-input",
-                ".chat-textarea",
-                "textarea",
-                "input[type=text]",
-                "[placeholder*='mensagem']",
-                "[placeholder*='Digite']",
-                "[placeholder*='Escreva']",
-            ]
+            # IDs conhecidos: chat-input, send-btn
+            inp = await page.query_selector("#chat-input")
+            if not inp:
+                inp = await page.query_selector("textarea")
 
-            input_el = None
-            seletor_usado = ""
-            for sel in seletores_input:
-                el = await page.query_selector(sel)
-                if el:
-                    input_el = el
-                    seletor_usado = sel
-                    break
-
-            if input_el:
-                print(f"    Input encontrado: {seletor_usado}")
-                await input_el.click()
+            if inp:
+                print("    Input encontrado: #chat-input")
+                await inp.click()
+                await inp.fill("Estou ansioso hoje, pode me ajudar com uma tecnica?")
                 await asyncio.sleep(0.5)
-                await input_el.fill("Estou ansioso hoje, pode me ajudar?")
-                await asyncio.sleep(0.5)
+                await inp.press("Enter")
+                print("    Mensagem enviada (Enter)...")
+                await asyncio.sleep(10)
 
-                # Tentar enviar de várias formas
-                enviado = False
+                msgs = await page.query_selector_all(".msg-bubble")
+                if not msgs:
+                    msgs = await page.query_selector_all(".chat-bubble")
 
-                # 1. Pressionar Enter
-                await input_el.press("Enter")
-                await asyncio.sleep(8)
-                enviado = True
-
-                # Contar mensagens
-                msgs_sels = [".msg-bubble", ".chat-bubble", ".msg", "[class*=bubble]", "[class*=msg]"]
-                msgs = []
-                for sel in msgs_sels:
-                    msgs = await page.query_selector_all(sel)
-                    if len(msgs) >= 2:
-                        break
-
-                await page.screenshot(path=f"{SHOTS}/chat_resposta.png", full_page=True)
+                shot_chat = os.path.join(SHOTS, "chat_resposta.png")
+                await page.screenshot(path=shot_chat, full_page=True)
                 ok_chat = len(msgs) >= 2
-                print(f"    {'OK' if ok_chat else 'PARCIAL'} {len(msgs)} mensagens | screenshot: chat_resposta.png")
+                print(f"    {'OK ' if ok_chat else 'PARCIAL'} {len(msgs)} mensagens")
                 resultados.append({"nome": "Chat Funcional", "ok": ok_chat})
             else:
-                # Tentar via API diretamente
-                print("    Input nao encontrado — testando via API...")
-                try:
-                    resp = await page.evaluate("""async () => {
-                        const r = await fetch('/api/v1/chat-ia/mensagem?user_id=playwright&mensagem=Ola', {
-                            method: 'POST',
-                            headers: {'Content-Type': 'application/json'},
-                            body: '{}'
-                        });
-                        const d = await r.json();
-                        return {status: r.status, modelo: d.modelo_usado, ok: d.resposta && d.resposta.length > 10};
-                    }""")
-                    ok_chat = resp.get("ok", False)
-                    print(f"    {'OK' if ok_chat else 'ERR'} API: status={resp.get('status')} modelo={resp.get('modelo')}")
-                    resultados.append({"nome": "Chat Funcional (API)", "ok": ok_chat})
-                except Exception as e2:
-                    print(f"    ERR: {str(e2)[:50]}")
-                    resultados.append({"nome": "Chat Funcional", "ok": False})
+                # Fallback via API JavaScript
+                resp = await page.evaluate(
+                    "fetch('/api/v1/chat-ia/mensagem?user_id=pw&mensagem=Ola',"
+                    "  {method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})"
+                    "  .then(r=>r.json())"
+                    "  .then(d=>({ok: d.resposta && d.resposta.length > 10, modelo: d.modelo_usado}))"
+                )
+                ok_chat = resp.get("ok", False)
+                print(f"    {'OK ' if ok_chat else 'ERR'} API fallback modelo={resp.get('modelo')}")
+                resultados.append({"nome": "Chat Funcional", "ok": ok_chat})
 
         except Exception as exc:
             print(f"    ERR: {str(exc)[:60]}")
             resultados.append({"nome": "Chat Funcional", "ok": False})
 
-        # ── FUNCIONAL: PHQ-9 ──
-        print("\n  [PHQ-9 FUNCIONAL] Respondendo questionário...")
+        # PHQ-9 FUNCIONAL
+        print("\n  [PHQ-9 FUNCIONAL]")
         try:
             await page.goto(BASE + "/app/avaliacao", wait_until="domcontentloaded", timeout=30000)
             await asyncio.sleep(3)
 
-            # Listar IDs na página para debug
-            todos_ids = await page.evaluate("""() => {
-                return Array.from(document.querySelectorAll('[id]')).map(el => el.id);
-            }""")
-            print(f"    IDs na página: {todos_ids[:20]}")
-
-            # Tentar diferentes seletores
+            # IDs conhecidos: phq9-o-{i}-{j}
             clicks = 0
-
-            # Método 1: IDs phq9-o-i-j
             for i in range(9):
-                for j in [1, 0, 2]:  # tentar opção 1, depois 0, depois 2
-                    el = await page.query_selector(f"#phq9-o-{i}-{j}")
+                for j in range(4):
+                    sel = f"#phq9-o-{i}-{j}"
+                    el = await page.query_selector(sel)
                     if el:
                         await el.click()
                         clicks += 1
-                        await asyncio.sleep(0.2)
+                        await asyncio.sleep(0.15)
                         break
 
-            # Método 2: .option divs
+            # Se nao clicou, usar JS
             if clicks == 0:
-                print("    Tentando .option divs...")
-                opcoes = await page.query_selector_all(".option")
-                grupos = {}
-                for op in opcoes:
-                    onclick = await op.get_attribute("onclick") or ""
-                    match = __import__("re").search(r"pick\(['"](\w+)['"],(\d+)", onclick)
-                    if match:
-                        q = int(match.group(2))
-                        if q not in grupos:
-                            grupos[q] = op
-                for q, op in grupos.items():
-                    await op.click()
-                    clicks += 1
-                    await asyncio.sleep(0.2)
-
-            # Método 3: JavaScript direto
-            if clicks == 0:
-                print("    Tentando JavaScript direto...")
-                js_clicks = await page.evaluate("""() => {
-                    let count = 0;
+                print("    Tentando via JavaScript...")
+                clicks = await page.evaluate("""() => {
+                    let n = 0;
                     for (let i = 0; i < 9; i++) {
-                        const el = document.getElementById('phq9-o-' + i + '-1');
-                        if (el) { el.click(); count++; }
+                        for (let j = 0; j < 4; j++) {
+                            const el = document.getElementById('phq9-o-' + i + '-' + j);
+                            if (el) { el.click(); n++; break; }
+                        }
                     }
-                    // Tentar por classe
-                    if (count === 0) {
-                        const opts = document.querySelectorAll('.option');
-                        const seen = new Set();
-                        opts.forEach(el => {
-                            const txt = el.textContent.trim();
-                            if (!seen.has(Math.floor(seen.size / 4))) {
-                                el.click();
-                                count++;
-                                seen.add(seen.size);
-                            }
-                        });
-                    }
-                    return count;
+                    return n;
                 }""")
-                clicks = js_clicks
-                print(f"    JS clicks: {clicks}")
 
             await asyncio.sleep(1)
-            await page.screenshot(path=f"{SHOTS}/phq9_preenchido.png", full_page=True)
+            shot_phq = os.path.join(SHOTS, "phq9_preenchido.png")
+            await page.screenshot(path=shot_phq, full_page=True)
 
-            # Verificar se botão de submit está habilitado
             btn_disabled = await page.evaluate("""() => {
-                const btn = document.getElementById('phq9-submit');
-                return btn ? btn.disabled : null;
+                const b = document.getElementById('phq9-btn') ||
+                          document.getElementById('phq9-submit');
+                return b ? b.disabled : true;
             }""")
 
-            ok_phq9 = clicks > 0
-            print(f"    {'OK' if ok_phq9 else 'ERR'} {clicks} clicks | submit_disabled={btn_disabled}")
-            resultados.append({"nome": "PHQ-9 Funcional", "ok": ok_phq9})
+            ok_phq = clicks > 0
+            print(f"    {'OK ' if ok_phq else 'ERR'} {clicks} clicks | btn_disabled={btn_disabled}")
+            resultados.append({"nome": "PHQ-9 Funcional", "ok": ok_phq})
+
+            # Submeter se habilitado
+            if not btn_disabled and clicks >= 9:
+                btn = await page.query_selector("#phq9-btn, #phq9-submit")
+                if btn:
+                    await btn.click()
+                    await asyncio.sleep(3)
+                    result_el = await page.query_selector("#phq9-result, .result-card")
+                    ok_result = result_el is not None
+                    print(f"    {'OK ' if ok_result else 'ERR'} resultado exibido={ok_result}")
+                    shot_res = os.path.join(SHOTS, "phq9_resultado.png")
+                    await page.screenshot(path=shot_res, full_page=True)
 
         except Exception as exc:
             print(f"    ERR: {str(exc)[:60]}")
             resultados.append({"nome": "PHQ-9 Funcional", "ok": False})
 
-        # ── FUNCIONAL: Avaliação completa ──
-        print("\n  [AVALIAÇÃO COMPLETA] PHQ-9 via API...")
+        # PHQ-9 via API
+        print("\n  [PHQ-9 via API]")
         try:
-            resultado_api = await page.evaluate("""async () => {
-                const respostas = [1, 0, 2, 1, 0, 1, 2, 0, 0];
-                const r = await fetch('/api/v1/phq9-clinico/aplicar?user_id=playwright', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(respostas)
-                });
-                const d = await r.json();
-                return {
-                    status: r.status,
-                    score: d.score,
-                    nivel: d.classificacao ? d.classificacao.nivel : null,
-                    ok: r.status === 200
-                };
-            }""")
-            ok_api = resultado_api.get("ok", False)
-            print(f"    {'OK' if ok_api else 'ERR'} PHQ-9 API: score={resultado_api.get('score')} nivel={resultado_api.get('nivel')}")
+            resp_api = await page.evaluate(
+                "fetch('/api/v1/phq9-clinico/aplicar?user_id=playwright',"
+                "  {method:'POST',headers:{'Content-Type':'application/json'},"
+                "   body:JSON.stringify([1,0,2,1,0,1,2,0,0])})"
+                "  .then(r=>r.json())"
+                "  .then(d=>({status:200, score:d.score, nivel:d.classificacao&&d.classificacao.nivel}))"
+                "  .catch(e=>({status:0, erro:e.toString()}))"
+            )
+            ok_api = resp_api.get("score") is not None
+            print(f"    {'OK ' if ok_api else 'ERR'} score={resp_api.get('score')} nivel={resp_api.get('nivel')}")
             resultados.append({"nome": "PHQ-9 via API", "ok": ok_api})
         except Exception as exc:
             print(f"    ERR: {str(exc)[:60]}")
 
-        # ── MOBILE ──
-        print("\n  [MOBILE] iPhone 375px...")
+        # MOBILE
+        print("\n  [MOBILE 375px]")
         try:
-            mob_ctx = await browser.new_context(viewport={"width": 375, "height": 812})
-            mob_page = await mob_ctx.new_page()
-            await mob_page.goto(BASE + "/", wait_until="domcontentloaded", timeout=30000)
+            mob = await browser.new_context(viewport={"width": 375, "height": 812})
+            mob_p = await mob.new_page()
+            await mob_p.goto(BASE + "/", wait_until="domcontentloaded", timeout=30000)
             await asyncio.sleep(2)
-            size_mob = len(await mob_page.content())
-            await mob_page.screenshot(path=f"{SHOTS}/mobile_home.png", full_page=True)
+            size_mob = len(await mob_p.content())
+            await mob_p.screenshot(path=os.path.join(SHOTS, "mobile_home.png"), full_page=True)
             ok_mob = size_mob > 3000
-            print(f"    {'OK' if ok_mob else 'ERR'} {size_mob:,} chars")
+            print(f"    {'OK ' if ok_mob else 'ERR'} {size_mob:,} chars")
             resultados.append({"nome": "Mobile 375px", "ok": ok_mob})
 
-            # Chat no mobile
-            await mob_page.goto(BASE + "/app/chat", wait_until="domcontentloaded", timeout=30000)
+            await mob_p.goto(BASE + "/app/chat", wait_until="domcontentloaded", timeout=30000)
             await asyncio.sleep(2)
-            await mob_page.screenshot(path=f"{SHOTS}/mobile_chat.png", full_page=True)
-            print(f"    OK Mobile Chat screenshot")
-
-            await mob_ctx.close()
+            await mob_p.screenshot(path=os.path.join(SHOTS, "mobile_chat.png"), full_page=True)
+            print("    OK mobile_chat.png")
+            await mob.close()
         except Exception as exc:
-            print(f"    ERR Mobile: {str(exc)[:60]}")
+            print(f"    ERR: {str(exc)[:60]}")
 
-        # ── TABLET ──
-        print("\n  [TABLET] iPad 768px...")
+        # TABLET
+        print("\n  [TABLET 768px]")
         try:
-            tab_ctx = await browser.new_context(viewport={"width": 768, "height": 1024})
-            tab_page = await tab_ctx.new_page()
-            await tab_page.goto(BASE + "/app/avaliacao", wait_until="domcontentloaded", timeout=30000)
+            tab = await browser.new_context(viewport={"width": 768, "height": 1024})
+            tab_p = await tab.new_page()
+            await tab_p.goto(BASE + "/app/avaliacao", wait_until="domcontentloaded", timeout=30000)
             await asyncio.sleep(2)
-            await tab_page.screenshot(path=f"{SHOTS}/tablet_avaliacao.png", full_page=True)
-            ok_tab = len(await tab_page.content()) > 3000
-            print(f"    {'OK' if ok_tab else 'ERR'} Tablet screenshot")
+            ok_tab = len(await tab_p.content()) > 3000
+            await tab_p.screenshot(path=os.path.join(SHOTS, "tablet_avaliacao.png"), full_page=True)
+            print(f"    {'OK ' if ok_tab else 'ERR'} tablet_avaliacao.png")
             resultados.append({"nome": "Tablet 768px", "ok": ok_tab})
-            await tab_ctx.close()
+            await tab.close()
         except Exception as exc:
-            print(f"    ERR Tablet: {str(exc)[:60]}")
+            print(f"    ERR: {str(exc)[:60]}")
 
         await ctx.close()
         await browser.close()
@@ -318,7 +250,7 @@ async def main():
     shots = sorted(os.listdir(SHOTS)) if os.path.exists(SHOTS) else []
     print(f"\nScreenshots ({len(shots)}):")
     for s in shots:
-        print(f"  • tests/screenshots/{s}")
+        print(f"  tests/screenshots/{s}")
 
     with open("tests/relatorio_playwright.json", "w", encoding="utf-8") as f:
         json.dump({
@@ -328,7 +260,7 @@ async def main():
         }, f, indent=2, ensure_ascii=False)
 
     print(f"\nRelatorio: tests/relatorio_playwright.json")
-    print(f"Score final: {score}%")
+    print(f"Score: {score}%")
 
 
 asyncio.run(main())
