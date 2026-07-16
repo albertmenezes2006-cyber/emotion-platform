@@ -13,3 +13,4 @@ services:
         value: "."
       - key: PYTHONUNBUFFERED
         value: "1"
+# deploy qui 16 jul 2026 01:25:20 -03
