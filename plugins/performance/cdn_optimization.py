@@ -66,25 +66,26 @@ async def cloudflare_obter_analytics() -> dict:
         return {"erro": str(e)}
 
 def gerar_config_nginx_cdn() -> str:
-    return """
-# Configuracao Nginx para CDN local
-location /static/ {
-    alias /app/static/;
-    expires 1y;
-    add_header Cache-Control "public, max-age=31536000, immutable";
-    add_header Vary "Accept-Encoding";
-    gzip_static on;
-    brotli_static on;
-}
-location ~* \.(jpg|jpeg|png|gif|webp|svg|ico)$ {
-    expires 30d;
-    add_header Cache-Control "public, max-age=2592000";
-}
-location ~* \.(css|js)$ {
-    expires 1y;
-    add_header Cache-Control "public, max-age=31536000, immutable";
-}
-"""
+    linhas = [
+        "# Configuracao Nginx para CDN local",
+        "location /static/ {",
+        "    alias /app/static/;",
+        "    expires 1y;",
+        '    add_header Cache-Control "public, max-age=31536000, immutable";',
+        '    add_header Vary "Accept-Encoding";',
+        "    gzip_static on;",
+        "    brotli_static on;",
+        "}",
+        r"location ~* \.(jpg|jpeg|png|gif|webp|svg|ico)$ {",
+        "    expires 30d;",
+        '    add_header Cache-Control "public, max-age=2592000";',
+        "}",
+        r"location ~* \.(css|js)$ {",
+        "    expires 1y;",
+        '    add_header Cache-Control "public, max-age=31536000, immutable";',
+        "}",
+    ]
+    return "\n".join(linhas)
 
 def calcular_savings_cdn(requests_por_dia: int, bytes_por_request: int) -> dict:
     cache_hit_rate = 0.85
