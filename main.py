@@ -51,7 +51,7 @@ import os as _os_s10
 from pathlib import Path as _Path_s8
 import random as _random_p3
 import subprocess as _subprocess_q9
-from plugins.loader import status_plugins, listar_plugins
+# # REMOVED: # REMOVED: from plugins.loader import status_plugins  # removido, listar_plugins
 from fastapi import WebSocket as _WebSocket, WebSocketDisconnect as _WebSocketDisconnect
 from fastapi import (
     FastAPI, HTTPException, Request, Depends,
