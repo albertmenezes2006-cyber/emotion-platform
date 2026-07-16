@@ -2826,6 +2826,28 @@ app       = FastAPI(
     version="20.0",
     description="Plataforma completa de inteligência emocional com IA"
 )
+
+
+# ═══════════════════════════════════════════════
+# EMOTION PLATFORM — PLUGIN SYSTEM AUTO-LOAD
+# ═══════════════════════════════════════════════
+try:
+    from fastapi.staticfiles import StaticFiles as _SF_ep
+    import os as _os_ep
+    if _os_ep.path.exists("static"):
+        try:
+            app.mount("/static", _SF_ep(directory="static"), name="static")
+        except Exception:
+            pass
+except Exception:
+    pass
+
+try:
+    from plugins.loader import load_all_plugins as _lap_ep
+    _lap_ep(app)
+except Exception as _e_pl:
+    pass
+# ═══════════════════════════════════════════════
 templates = Jinja2Templates(directory="templates")
 
 try:
