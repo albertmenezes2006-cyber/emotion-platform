@@ -1,0 +1,85 @@
+{
+  "data": "2026-07-16 05:00:58.411204",
+  "score": "9/11",
+  "resultados": [
+    {
+      "nome": "Home",
+      "ok": true,
+      "titulo": "EmotionAI — Saúde Mental com Inteligência Artificial",
+      "size": 18406,
+      "nav": true,
+      "footer": true,
+      "screenshot": "tests/screenshots/home.png"
+    },
+    {
+      "nome": "Avaliacao",
+      "ok": true,
+      "titulo": "Avaliação Clínica — EmotionAI",
+      "size": 36534,
+      "nav": true,
+      "footer": false,
+      "screenshot": "tests/screenshots/avaliacao.png"
+    },
+    {
+      "nome": "Chat",
+      "ok": true,
+      "titulo": "Chat IA Terapêutico — EmotionAI",
+      "size": 20017,
+      "nav": true,
+      "footer": false,
+      "screenshot": "tests/screenshots/chat.png"
+    },
+    {
+      "nome": "Diario",
+      "ok": true,
+      "titulo": "Diário Emocional — EmotionAI",
+      "size": 11755,
+      "nav": true,
+      "footer": false,
+      "screenshot": "tests/screenshots/diario.png"
+    },
+    {
+      "nome": "Dashboard",
+      "ok": true,
+      "titulo": "Dashboard — EmotionAI",
+      "size": 6947,
+      "nav": true,
+      "footer": false,
+      "screenshot": "tests/screenshots/dashboard.png"
+    },
+    {
+      "nome": "Login",
+      "ok": true,
+      "titulo": "Login — EmotionAI",
+      "size": 6204,
+      "nav": true,
+      "footer": false,
+      "screenshot": "tests/screenshots/login.png"
+    },
+    {
+      "nome": "Planos",
+      "ok": true,
+      "titulo": "Planos — EmotionAI",
+      "size": 6302,
+      "nav": true,
+      "footer": false,
+      "screenshot": "tests/screenshots/planos.png"
+    },
+    {
+      "nome": "Chat Funcional",
+      "ok": false
+    },
+    {
+      "nome": "PHQ-9 Funcional",
+      "ok": false
+    },
+    {
+      "nome": "Mobile 375px",
+      "ok": true
+    },
+    {
+      "nome": "Tablet 768px",
+      "ok": true
+    }
+  ]
+}
