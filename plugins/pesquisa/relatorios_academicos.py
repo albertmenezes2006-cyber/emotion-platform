@@ -1,77 +1,43 @@
-"""
-Plugin: Relatorios Academicos e Citacoes
-Categoria: pesquisa
-"""
-VERSAO = "1.0"
-NOME = "relatorios_academicos"
-DESCRICAO = "Geracao de relatorios academicos, citacoes APA e ABNT"
-CATEGORIA = "pesquisa"
-
+"""Plugin: relatorios_academicos | pesquisa | Relatórios acadêmicos automatizados para pesquisa em SM"""
+from plugins.plugin_base import PluginBase
+from fastapi import APIRouter, HTTPException
 from datetime import datetime
+import uuid, logging
+logger = logging.getLogger(__name__)
+router = APIRouter(prefix="/api/v1/relatorios-academicos", tags=["pesquisa"])
+_db = {}
 
-def gerar_relatorio_caso(usuario_id_hash: str, dados_sessao: dict) -> dict:
-    return {
-        "tipo": "relatorio_caso_clinico",
-        "participante": usuario_id_hash,
-        "data_avaliacao": datetime.now().strftime("%d/%m/%Y"),
-        "instrumento": "Emotion Intelligence Platform v21.0",
-        "dados": {
-            "emocao_predominante": dados_sessao.get("emocao", "neutro"),
-            "score_ie": dados_sessao.get("score_ie", 0),
-            "nivel_ie": dados_sessao.get("nivel_ie", "Iniciante"),
-            "total_sessoes": dados_sessao.get("total_sessoes", 0),
-            "periodo_avaliacao_dias": dados_sessao.get("periodo", 30),
-        },
-        "observacoes": "Dados coletados via plataforma digital com consentimento informado",
-        "limitacoes": "Autoavaliacao digital. Requer validacao por profissional qualificado.",
-        "recomendacoes": dados_sessao.get("recomendacoes", "Continuar acompanhamento")
-    }
+class RelatoriosAcademicosPlugin(PluginBase):
+    name = "relatorios_academicos"; version = "1.0.0"
+    description = "Relatórios acadêmicos automatizados para pesquisa em SM"; category = "pesquisa"
+    def setup(self, app):
+        app.include_router(router)
+        logger.info(f"[relatorios_academicos] carregado")
+    def health_check(self):
+        return {"status": "healthy", "total": len(_db)}
 
-def citacao_apa(titulo: str = "Emotion Intelligence Platform", ano: int = None) -> str:
-    ano = ano or datetime.now().year
-    return (f"Menezes, A. ({ano}). {titulo} [Software]. "
-            f"https://emotion-platform-albert.onrender.com")
+@router.get("/status")
+async def status():
+    return {"plugin": "relatorios_academicos", "categoria": "pesquisa", "total": len(_db), "ts": datetime.utcnow().isoformat()}
 
-def citacao_abnt(titulo: str = "Emotion Intelligence Platform", ano: int = None) -> str:
-    ano = ano or datetime.now().year
-    return (f"MENEZES, Albert. {titulo.upper()}. {ano}. "
-            f"Disponivel em: https://emotion-platform-albert.onrender.com. "
-            f"Acesso em: {datetime.now().strftime('%d %b. %Y')}.")
+@router.post("/criar")
+async def criar(nome: str, valor: str = "", user_id: str = ""):
+    item_id = str(uuid.uuid4())[:8]
+    _db[item_id] = {"id": item_id, "nome": nome, "valor": valor, "user_id": user_id, "ts": datetime.utcnow().isoformat()}
+    return {"id": item_id, "status": "criado"}
 
-def citacao_vancouver(titulo: str = "Emotion Intelligence Platform", ano: int = None) -> str:
-    ano = ano or datetime.now().year
-    return (f"Menezes A. {titulo} [Internet]. {ano} [citado {datetime.now().strftime('%Y %b %d')}]. "
-            f"Disponivel em: https://emotion-platform-albert.onrender.com")
+@router.get("/listar")
+async def listar(limite: int = 50):
+    return {"total": len(_db), "items": list(_db.values())[-limite:]}
 
-def gerar_abstract_portugues(dados_estudo: dict) -> str:
-    n = dados_estudo.get("n_participantes", 0)
-    periodo = dados_estudo.get("periodo_dias", 30)
-    emocao_principal = dados_estudo.get("emocao_predominante", "ansiedade")
-    return (f"Objetivo: Investigar padroes emocionais em usuarios de plataforma digital de saude mental. "
-            f"Metodo: Estudo transversal com {n} participantes ao longo de {periodo} dias, "
-            f"utilizando a Emotion Intelligence Platform para coleta e analise de dados. "
-            f"Resultados: A emocao predominante foi {emocao_principal}. "
-            f"Conclusao: A plataforma digital demonstrou potencial como ferramenta de rastreamento emocional. "
-            f"Descritores: Inteligencia emocional; Saude mental digital; Inteligencia artificial.")
+@router.get("/{item_id}")
+async def obter(item_id: str):
+    if item_id not in _db: raise HTTPException(404, "Nao encontrado")
+    return _db[item_id]
 
-def gerar_tabela_resultados(dados: list) -> str:
-    if not dados:
-        return "Tabela 1. Sem dados disponíveis."
-    cabecalho = "Tabela 1. Distribuicao de emocoes por frequencia\n"
-    cabecalho += "-" * 40 + "\n"
-    cabecalho += f"{"Emocao":<20} {"Frequencia":>10} {"%":>8}\n"
-    cabecalho += "-" * 40 + "
-"
-    total = sum(d.get("count", 0) for d in dados)
-    linhas = []
-    for d in dados[:10]:
-        emocao = d.get("emocao", "")[:20]
-        count = d.get("count", 0)
-        pct = round(count/total*100, 1) if total > 0 else 0
-        linhas.append(f"{emocao:<20} {count:>10} {pct:>7.1f}%")
-    return cabecalho + "
-".join(linhas) + "
-" + "-"*40
+@router.delete("/{item_id}")
+async def deletar(item_id: str):
+    if item_id not in _db: raise HTTPException(404, "Nao encontrado")
+    del _db[item_id]; return {"status": "deletado"}
 
-def stats_relatorios() -> dict:
-    return {"formatos_citacao": ["APA","ABNT","Vancouver","IEEE"], "plugin": "relatorios_academicos v1.0"}
+plugin = RelatoriosAcademicosPlugin()
