@@ -51,6 +51,7 @@ import os as _os_s10
 from pathlib import Path as _Path_s8
 import random as _random_p3
 import subprocess as _subprocess_q9
+from plugins.loader import status_plugins, listar_plugins
 from fastapi import WebSocket as _WebSocket, WebSocketDisconnect as _WebSocketDisconnect
 from fastapi import (
     FastAPI, HTTPException, Request, Depends,
@@ -13785,6 +13786,25 @@ async def pentest_ep(request: Request, db=Depends(get_db)):
 # main.py: ~17.000+ linhas | Deploy: Render.com
 # ═══════════════════════════════════════════════════════════════════════
 
+
+
+# ═══════════════════════════════════════════════════════
+# SISTEMA DE PLUGINS — Status e gerenciamento
+# ═══════════════════════════════════════════════════════
+
+@app.get("/api/plugins/status")
+async def plugins_status_ep(request: Request):
+    return JSONResponse({
+        "plugins": status_plugins(),
+        "sistema": "Plugin Architecture v1.0"
+    })
+
+@app.get("/api/plugins/lista")
+async def plugins_lista_ep(request: Request):
+    return JSONResponse({
+        "plugins": listar_plugins(),
+        "total": len(listar_plugins())
+    })
 
 @app.get("/terapia", response_class=HTMLResponse)
 def terapia_page(request: Request, dia: int = 1, db: Session = Depends(get_db)):
