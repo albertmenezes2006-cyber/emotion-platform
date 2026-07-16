@@ -1,0 +1,71 @@
+{
+  "versao": "v24.4.0",
+  "data": "2026-07-16 14:43",
+  "scores": {
+    "pytest_api": {
+      "score": "30/30",
+      "pct": 100
+    },
+    "seguranca": {
+      "score": "8/8",
+      "pct": 100
+    },
+    "seo": {
+      "score": "11/11",
+      "pct": 100
+    },
+    "acessibilidade": {
+      "score": "36/36",
+      "pct": 100
+    },
+    "endpoints": {
+      "score": "24/24",
+      "pct": 100
+    },
+    "playwright": {
+      "score": "12/12",
+      "pct": 100
+    }
+  },
+  "novos_recursos": {
+    "auth_postgresql": "/api/v1/auth-pg/",
+    "analytics_ga4": "/api/v1/analytics/",
+    "stripe_checkout": "/api/v1/stripe-checkout/",
+    "wcag_21_aa": "/api/v1/acessibilidade/",
+    "static_files": "/static/wcag.js + wcag.css"
+  },
+  "problema_resolvido": {
+    "causa": "conflito fastapi-mail==1.6.5 vs starlette==0.52.1 no requirements.txt",
+    "solucao": "remover fastapi-mail do requirements.txt",
+    "phq9_playwright": "elementos sao divs id=phq9-opt-{i}-{j}, usa selectOpt()"
+  },
+  "endpoints_online": [
+    "/health",
+    "/ping",
+    "/docs",
+    "/api/v1/auth/status",
+    "/api/v1/auth-pg/status",
+    "/api/v1/analytics/status",
+    "/api/v1/analytics/snippet",
+    "/api/v1/stripe/planos",
+    "/api/v1/stripe-checkout/planos",
+    "/api/v1/stripe-checkout/configuracao",
+    "/api/v1/acessibilidade/status",
+    "/api/v1/acessibilidade/checklist",
+    "/api/v1/phq9-clinico/perguntas",
+    "/api/v1/gad7-clinico/perguntas",
+    "/api/v1/chat-ia/modelos/disponiveis",
+    "/api/mobile/v1/sdk/config",
+    "/static/wcag.js",
+    "/static/wcag.css",
+    "/sitemap.xml",
+    "/robots.txt",
+    "/app/avaliacao",
+    "/app/chat",
+    "/app/dashboard",
+    "/app/planos"
+  ],
+  "plugins": 1485,
+  "commits": "260+",
+  "site": "https://emotion-platform-albert.onrender.com"
+}
