@@ -1,6 +1,6 @@
 {
-  "data": "2026-07-16 14:40:14.991864",
-  "score": "11/12 (92%)",
+  "data": "2026-07-16 14:42:32.278257",
+  "score": "12/12 (100%)",
   "resultados": [
     {
       "nome": "Home",
@@ -57,7 +57,7 @@
     },
     {
       "nome": "PHQ-9 Funcional",
-      "ok": false
+      "ok": true
     },
     {
       "nome": "PHQ-9 via API",

@@ -120,136 +120,108 @@ async def main():
             await page.goto(BASE + "/app/avaliacao", wait_until="domcontentloaded", timeout=30000)
             await asyncio.sleep(3)
 
-            # Garante que renderQuestions() rodou
-            await page.evaluate("""() => {
-                if (typeof renderQuestions === 'function') {
-                    renderQuestions('phq9');
-                }
-            }""")
-            await asyncio.sleep(2)
-
-            # Usa selectOpt() — função real do JS da página
+            # Chama selectOpt('phq9', questao, valor) para cada questão
+            # Os elementos são DIVs com id="phq9-opt-{i}-{j}" não inputs!
             resultado_js = await page.evaluate("""() => {
                 let clicks = 0;
                 let erros  = [];
 
-                // Estratégia 1: usa selectOpt() direto
+                // Estratégia 1: selectOpt() direto (função real da página)
                 if (typeof selectOpt === 'function') {
                     for (let i = 0; i < 9; i++) {
                         try {
                             selectOpt('phq9', i, 0);
                             clicks++;
                         } catch(e) {
-                            erros.push('selectOpt phq9 ' + i + ': ' + e.message);
+                            erros.push('q' + i + ': ' + e.message);
                         }
                     }
                 }
 
-                // Estratégia 2: clica nos inputs gerados
+                // Estratégia 2: clica nas divs phq9-opt-{i}-{j}
                 if (clicks === 0) {
                     for (let i = 0; i < 9; i++) {
-                        for (let j = 0; j < 4; j++) {
-                            const el = document.getElementById('phq9-o-' + i + '-' + j);
-                            if (el) {
-                                el.checked = true;
-                                el.click();
-                                el.dispatchEvent(new Event('change', {bubbles: true}));
-                                clicks++;
-                                break;
-                            }
+                        const el = document.getElementById('phq9-opt-' + i + '-0');
+                        if (el) {
+                            el.click();
+                            clicks++;
+                        } else {
+                            erros.push('phq9-opt-' + i + '-0 nao encontrado');
                         }
                     }
                 }
 
-                // Estratégia 3: qualquer radio dentro do form phq9
+                // Estratégia 3: clica qualquer div.option dentro do form phq9
                 if (clicks === 0) {
-                    const form = document.getElementById('phq9-form') ||
-                                 document.getElementById('phq9-questions') ||
-                                 document.querySelector('[id*=phq9]');
-                    if (form) {
-                        const radios = form.querySelectorAll('input[type=radio]');
-                        let lastQ = -1;
-                        radios.forEach(r => {
-                            const q = parseInt(r.dataset.q || r.name.replace(/\D/g,'') || '-1');
-                            if (q !== lastQ) {
-                                r.checked = true;
-                                r.click();
-                                r.dispatchEvent(new Event('change', {bubbles: true}));
+                    const container = document.getElementById('phq9-questions');
+                    if (container) {
+                        const questions = container.querySelectorAll('.question');
+                        questions.forEach((q, qi) => {
+                            const opts = q.querySelectorAll('.option');
+                            if (opts.length > 0) {
+                                opts[0].click();
                                 clicks++;
-                                lastQ = q;
                             }
                         });
                     }
                 }
 
-                // Estratégia 4: todos os radios da página agrupados por name
-                if (clicks === 0) {
-                    const radios = document.querySelectorAll('input[type=radio]');
-                    const grupos = {};
-                    radios.forEach(r => {
-                        const n = r.name || r.id;
-                        if (!grupos[n]) grupos[n] = r;
-                    });
-                    Object.values(grupos).forEach(r => {
-                        r.checked = true;
-                        r.click();
-                        r.dispatchEvent(new Event('change', {bubbles: true}));
-                        clicks++;
-                    });
+                // Habilita o botão manualmente se necessário
+                const btn = document.getElementById('phq9-btn');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.removeAttribute('disabled');
                 }
 
-                // Habilita botão de submit
-                ['phq9-btn','phq9-submit','btn-calcular'].forEach(id => {
-                    const b = document.getElementById(id);
-                    if (b) { b.disabled = false; b.removeAttribute('disabled'); }
-                });
-                document.querySelectorAll('button[type=submit], button.btn-submit').forEach(b => {
-                    if (b.id && b.id.includes('phq9')) {
-                        b.disabled = false;
-                        b.removeAttribute('disabled');
-                    }
-                });
-
-                return {clicks: clicks, erros: erros, selectOpt: typeof selectOpt};
+                return {
+                    clicks: clicks,
+                    erros:  erros,
+                    selectOpt_existe: typeof selectOpt === 'function',
+                    btn_existe: !!document.getElementById('phq9-btn'),
+                    opt_0_0_existe: !!document.getElementById('phq9-opt-0-0')
+                };
             }""")
 
-            clicks = resultado_js.get('clicks', 0)
-            selectopt_tipo = resultado_js.get('selectOpt', 'undefined')
-            print(f"    selectOpt: {selectopt_tipo} | clicks: {clicks}")
-            if resultado_js.get('erros'):
-                for e in resultado_js['erros'][:3]:
+            clicks   = resultado_js.get('clicks', 0)
+            so_exist = resultado_js.get('selectOpt_existe', False)
+            opt_exist = resultado_js.get('opt_0_0_existe', False)
+            btn_exist = resultado_js.get('btn_existe', False)
+            erros_js = resultado_js.get('erros', [])
+
+            print(f"    selectOpt()={so_exist} | phq9-opt-0-0={opt_exist} | #phq9-btn={btn_exist}")
+            print(f"    clicks={clicks}")
+            if erros_js:
+                for e in erros_js[:3]:
                     print(f"    erro: {e}")
 
             await asyncio.sleep(1)
 
-            # Clica no botão phq9-btn
+            # Clica no botão #phq9-btn
             btn = await page.query_selector("#phq9-btn")
+            btn_clicado = False
             if btn:
+                is_disabled = await btn.get_attribute("disabled")
+                if is_disabled is not None:
+                    await page.evaluate("document.getElementById('phq9-btn').removeAttribute('disabled')")
                 await btn.click()
+                btn_clicado = True
                 await asyncio.sleep(2)
-                print("    Botão #phq9-btn clicado!")
-            else:
-                # Tenta submit do form
-                form = await page.query_selector("#phq9-form")
-                if form:
-                    await page.evaluate("document.getElementById('phq9-form').dispatchEvent(new Event('submit', {bubbles:true, cancelable:true}))")
-                    await asyncio.sleep(2)
-                    print("    Form submit disparado!")
+                print("    #phq9-btn clicado!")
 
             await page.screenshot(path=os.path.join(SHOTS, "phq9_preenchido.png"), full_page=True)
 
             # Verifica resultado
-            result_el = await page.query_selector("#phq9-result, #phq9-resultado, .result-card, [id*=result]")
-            score_el  = await page.query_selector("#phq9-score")
-            score_val = await score_el.inner_text() if score_el else None
+            score_el = await page.query_selector("#phq9-score")
+            score_val = await score_el.inner_text() if score_el else "?"
+            result_el = await page.query_selector("#phq9-result")
+            result_vis = result_el is not None
 
             ok_phq = clicks > 0
-            detalhe = f"{clicks} clicks | score={score_val}" if score_val else f"{clicks} clicks"
-            print(f"    {'OK ' if ok_phq else 'ERR'} {detalhe}")
+            print(f"    {'OK ' if ok_phq else 'ERR'} {clicks} clicks | score={score_val} | resultado={result_vis}")
             resultados.append({"nome": "PHQ-9 Funcional", "ok": ok_phq})
 
         except Exception as exc:
-            print(f"    ERR: {str(exc)[:80]}")
+            print(f"    ERR: {str(exc)[:100]}")
             resultados.append({"nome": "PHQ-9 Funcional", "ok": False})
 
 
