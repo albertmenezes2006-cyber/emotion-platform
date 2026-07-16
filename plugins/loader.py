@@ -1,55 +1,39 @@
 """
-Plugin Loader — Emotion Intelligence Platform v21.0
-Carrega todos os plugins automaticamente no startup.
+Loader Universal — detecta e carrega TODOS os plugins automaticamente
 """
-import importlib
-import os
+import os, importlib, logging, traceback
 from pathlib import Path
-from typing import List
 
-PLUGINS_DIR = Path(__file__).parent
-_plugins_carregados = []
-_plugins_com_erro = []
+logger = logging.getLogger(__name__)
 
-def carregar_plugin(caminho_modulo: str) -> bool:
-    try:
-        modulo = importlib.import_module(caminho_modulo)
-        _plugins_carregados.append({
-            "modulo": caminho_modulo,
-            "versao": getattr(modulo, "VERSAO", "1.0"),
-            "nome": getattr(modulo, "NOME", caminho_modulo.split(".")[-1]),
-        })
-        return True
-    except Exception as e:
-        _plugins_com_erro.append({"modulo": caminho_modulo, "erro": str(e)})
-        print(f"⚠️  Plugin {caminho_modulo}: {e}")
-        return False
+def load_all_plugins(app):
+    plugins_dir = Path(__file__).parent
+    total_ok = 0
+    total_err = 0
+    erros = []
 
-def carregar_todos_plugins(app=None) -> dict:
-    total = 0
-    sucesso = 0
-    categorias = ["seguranca","sistemas","ia","saude","social","analytics","performance","monetizacao","integracao","frontend"]
-    for categoria in categorias:
-        pasta = PLUGINS_DIR / categoria
-        if not pasta.exists():
-            continue
-        for arquivo in sorted(pasta.glob("*.py")):
-            if arquivo.name.startswith("_"):
-                continue
-            modulo = f"plugins.{categoria}.{arquivo.stem}"
-            total += 1
-            if carregar_plugin(modulo):
-                sucesso += 1
-    print(f"✅ Plugins: {sucesso}/{total} carregados")
-    return {"total": total, "sucesso": sucesso, "erros": len(_plugins_com_erro)}
+    for cat_dir in sorted(plugins_dir.iterdir()):
+        if not cat_dir.is_dir(): continue
+        if cat_dir.name.startswith("_"): continue
 
-def listar_plugins() -> List[dict]:
-    return _plugins_carregados
+        for plugin_file in sorted(cat_dir.glob("*.py")):
+            if plugin_file.name.startswith("_"): continue
+            if plugin_file.name in ("loader.py", "plugin_base.py"): continue
 
-def status_plugins() -> dict:
-    return {
-        "carregados": len(_plugins_carregados),
-        "erros": len(_plugins_com_erro),
-        "lista": _plugins_carregados,
-        "erros_detalhes": _plugins_com_erro
-    }
+            module_path = f"plugins.{cat_dir.name}.{plugin_file.stem}"
+            try:
+                mod = importlib.import_module(module_path)
+                if hasattr(mod, "plugin"):
+                    mod.plugin.setup(app)
+                    total_ok += 1
+                    logger.debug(f"[OK] {module_path}")
+            except Exception as e:
+                total_err += 1
+                erros.append(f"{module_path}: {e}")
+                logger.warning(f"[ERRO] {module_path}: {e}")
+
+    logger.info(f"Plugins carregados: {total_ok} OK, {total_err} erros")
+    if erros:
+        for e in erros:
+            logger.warning(f"  ↳ {e}")
+    return total_ok, total_err
