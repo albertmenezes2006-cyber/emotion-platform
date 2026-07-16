@@ -1,594 +1,127 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-JGLER9XVGY');
-</script>
-<meta charset="UTF-8">
-<meta name="keywords" content="planos emotion intelligence, preços, premium, enterprise, grátis">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Planos Emotion Intelligence — Free, Premium e Enterprise. Análises emocionais com IA a partir de R$49/mês.">
-<meta property="og:title" content="Planos — Emotion Intelligence">
-<meta property="og:description" content="Análises emocionais com IA a partir de R$49/mês. Cancele quando quiser.">
-<title>Planos e Preços — Emotion Intelligence</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --primary:#00d2ff;
-  --secondary:#3a7bd5;
-  --success:#2ecc71;
-  --danger:#e74c3c;
-  --warning:#f39c12;
-  --card:rgba(255,255,255,0.05);
-  --border:rgba(255,255,255,0.1);
-  --text-muted:rgba(255,255,255,0.5);
-}
-body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh}
-.navbar{background:rgba(0,0,0,0.4);backdrop-filter:blur(10px);padding:15px 30px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border)}
-.navbar h1{font-size:20px;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.nav-right{display:flex;gap:8px;align-items:center}
-.nav-btn{padding:7px 16px;border-radius:20px;color:#fff;text-decoration:none;font-size:12px;font-weight:600;transition:all .2s}
-.nav-btn:hover{transform:translateY(-1px)}
-.btn-back{background:var(--secondary)}
-.btn-logout{background:var(--danger)}
-.container{max-width:1200px;margin:0 auto;padding:50px 20px}
-/* HERO */
-.hero{text-align:center;margin-bottom:50px}
-.hero h1{font-size:52px;font-weight:bold;margin-bottom:14px;line-height:1.1}
-.hero h1 span{background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{font-size:18px;color:var(--text-muted);max-width:500px;margin:0 auto}
-/* PLANO ATUAL */
-.plano-atual-banner{
-  background:linear-gradient(90deg,rgba(0,210,255,0.1),rgba(58,123,213,0.1));
-  border:1px solid rgba(0,210,255,0.3);
-  border-radius:15px;padding:14px 24px;
-  text-align:center;margin-bottom:40px;font-size:15px;
-}
-.plano-atual-banner span{color:var(--primary);font-weight:bold}
-/* TRIAL BANNER */
-.trial-banner{
-  background:linear-gradient(90deg,rgba(243,156,18,0.1),rgba(230,126,34,0.1));
-  border:1px solid rgba(243,156,18,0.3);
-  border-radius:15px;padding:18px 24px;
-  text-align:center;margin-bottom:30px;
-}
-.trial-banner h3{font-size:18px;color:var(--warning);margin-bottom:6px}
-.trial-banner p{font-size:13px;color:var(--text-muted);margin-bottom:12px}
-.btn-trial{
-  background:linear-gradient(90deg,var(--warning),#e67e22);
-  padding:10px 28px;border-radius:12px;
-  color:#fff;font-size:14px;font-weight:bold;
-  border:none;cursor:pointer;transition:transform .2s;
-}
-.btn-trial:hover{transform:translateY(-2px)}
-/* PLANOS GRID */
-.planos-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:24px;margin-bottom:50px;
-  align-items:start;
-}
-.plano{
-  background:var(--card);
-  border-radius:24px;
-  padding:36px 28px;
-  border:1px solid var(--border);
-  position:relative;
-  transition:transform .3s;
-}
-.plano:hover{transform:translateY(-6px)}
-.plano.destaque{
-  border:2px solid var(--primary);
-  background:rgba(0,210,255,0.05);
-  transform:scale(1.02);
-}
-.plano.destaque:hover{transform:scale(1.02) translateY(-6px)}
-.plano.atual{
-  border:2px solid var(--success);
-  background:rgba(46,204,113,0.05);
-}
-.plano.enterprise-plan{
-  border:2px solid var(--warning);
-  background:rgba(241,196,15,0.03);
-}
-.top-badge{
-  position:absolute;top:-14px;
-  left:50%;transform:translateX(-50%);
-  padding:5px 22px;border-radius:20px;
-  font-size:12px;font-weight:bold;
-  white-space:nowrap;
-}
-.badge-popular{background:linear-gradient(90deg,var(--primary),var(--secondary))}
-.badge-atual{background:linear-gradient(90deg,var(--success),#27ae60)}
-.badge-enterprise{background:linear-gradient(90deg,var(--warning),#e67e22)}
-.plano-icon{font-size:40px;text-align:center;margin-bottom:12px;display:block}
-.plano-nome{font-size:26px;font-weight:bold;text-align:center;margin-bottom:8px}
-.plano-preco{
-  font-size:54px;font-weight:bold;
-  text-align:center;margin:16px 0 4px;
-  background:linear-gradient(90deg,var(--primary),var(--secondary));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  line-height:1;
-}
-.plano-preco.enterprise-preco{
-  background:linear-gradient(90deg,var(--warning),#e67e22);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-.plano-periodo{text-align:center;color:var(--text-muted);font-size:14px;margin-bottom:8px}
-.plano-desc{text-align:center;color:var(--text-muted);font-size:13px;margin-bottom:24px;padding:10px;background:rgba(255,255,255,0.03);border-radius:10px}
-.plano-features{list-style:none;margin:0 0 28px}
-.plano-features li{
-  padding:9px 0;
-  border-bottom:1px solid rgba(255,255,255,0.05);
-  color:rgba(255,255,255,0.8);
-  font-size:14px;
-  display:flex;align-items:center;gap:10px;
-}
-.plano-features li:last-child{border-bottom:none}
-.check{color:var(--success);font-size:16px;flex-shrink:0}
-.x{color:var(--danger);font-size:16px;flex-shrink:0}
-.highlight{color:var(--primary);font-weight:600}
-/* BOTÕES */
-.btn-plano{
-  width:100%;padding:15px;
-  border-radius:14px;border:none;
-  font-size:16px;font-weight:bold;
-  cursor:pointer;transition:all .3s;
-}
-.btn-free-plan{background:rgba(255,255,255,0.1);color:#fff}
-.btn-free-plan:hover{background:rgba(255,255,255,0.2)}
-.btn-premium-plan{
-  background:linear-gradient(90deg,var(--primary),var(--secondary));
-  color:#fff;
-}
-.btn-premium-plan:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(58,123,213,0.4)}
-.btn-enterprise-plan{
-  background:linear-gradient(90deg,var(--warning),#e67e22);
-  color:#fff;
-}
-.btn-enterprise-plan:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(241,196,15,0.3)}
-.btn-atual-plan{
-  background:rgba(46,204,113,0.15);
-  color:var(--success);
-  border:1px solid rgba(46,204,113,0.3);
-  cursor:default;
-}
-/* COMPARATIVO */
-.comparativo{
-  background:var(--card);
-  border-radius:20px;
-  padding:32px;
-  border:1px solid var(--border);
-  margin-bottom:40px;
-  overflow-x:auto;
-}
-.comparativo h2{font-size:22px;color:var(--primary);margin-bottom:22px;text-align:center}
-.comp-table{width:100%;border-collapse:collapse;min-width:500px}
-.comp-table th{
-  padding:12px 16px;
-  text-align:center;
-  font-size:13px;
-  color:var(--text-muted);
-  border-bottom:1px solid var(--border);
-  font-weight:600;
-}
-.comp-table th:first-child{text-align:left}
-.comp-table td{
-  padding:12px 16px;
-  text-align:center;
-  font-size:13px;
-  border-bottom:1px solid rgba(255,255,255,0.04);
-}
-.comp-table td:first-child{text-align:left;color:rgba(255,255,255,0.7)}
-.comp-table tr:last-child td{border-bottom:none}
-.comp-table tr:hover td{background:rgba(255,255,255,0.02)}
-.col-free{color:var(--text-muted)}
-.col-premium{color:var(--primary);font-weight:600}
-.col-enterprise{color:var(--warning);font-weight:600}
-/* GARANTIA */
-.garantia{
-  text-align:center;
-  padding:40px;
-  background:rgba(46,204,113,0.05);
-  border:1px solid rgba(46,204,113,0.2);
-  border-radius:20px;
-  margin-bottom:40px;
-}
-.garantia h2{font-size:28px;margin-bottom:12px}
-.garantia p{color:var(--text-muted);font-size:15px;max-width:550px;margin:0 auto;line-height:1.6}
-/* PAGAMENTOS */
-.pagamentos{
-  text-align:center;margin-bottom:40px;
-}
-.pagamentos h3{font-size:16px;color:var(--text-muted);margin-bottom:16px}
-.metodos{
-  display:flex;justify-content:center;gap:12px;flex-wrap:wrap;
-}
-.metodo{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:10px 20px;
-  font-size:13px;font-weight:600;
-}
-/* FAQ */
-.faq-section{margin-bottom:40px}
-.faq-section h2{text-align:center;font-size:28px;margin-bottom:24px}
-.faq-item{
-  background:var(--card);
-  border-radius:14px;
-  padding:20px 24px;
-  margin-bottom:10px;
-  border:1px solid var(--border);
-  cursor:pointer;
-  transition:background .2s;
-}
-.faq-item:hover{background:rgba(255,255,255,0.08)}
-.faq-item h3{font-size:15px;color:var(--primary);margin-bottom:8px;display:flex;justify-content:space-between}
-.faq-item p{color:var(--text-muted);font-size:13px;line-height:1.7}
-/* DEPOIMENTOS */
-.depoimentos{margin-bottom:40px}
-.depoimentos h2{text-align:center;font-size:28px;margin-bottom:24px}
-.dep-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
-.dep-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:20px;
-}
-.dep-stars{color:var(--warning);font-size:16px;margin-bottom:10px}
-.dep-text{font-size:13px;color:rgba(255,255,255,0.7);line-height:1.6;margin-bottom:12px;font-style:italic}
-.dep-autor{font-size:12px;color:var(--text-muted);font-weight:600}
-/* TOAST */
-.toast{position:fixed;bottom:24px;right:24px;background:rgba(46,204,113,.95);color:#fff;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s;max-width:300px}
-.toast.show{transform:translateY(0);opacity:1}
-/* FOOTER */
-.footer{text-align:center;padding:30px;color:rgba(255,255,255,0.25);font-size:12px;border-top:1px solid var(--border)}
-.footer a{color:rgba(255,255,255,0.3);text-decoration:none;margin:0 8px}
-.footer a:hover{color:var(--primary)}
-@media(max-width:768px){
-  .hero h1{font-size:36px}
-  .plano.destaque{transform:none}
-  .container{padding:30px 16px}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planos — EmotionAI</title>
+  <link rel="stylesheet" href="/static/css/emotion.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
-
-<nav class="navbar">
-  <h1>🧠 Emotion Intelligence</h1>
-  <div class="nav-right">
-    <a href="/"       class="nav-btn btn-back">← Dashboard</a>
-    <a href="/logout" class="nav-btn btn-logout">Sair</a>
-  </div>
+<nav class="nav">
+  <a href="/" class="nav-brand">🧠 EmotionAI</a>
+  <ul class="nav-links">
+    <li><a href="/app/avaliacao">Avaliação</a></li>
+    <li><a href="/app/chat">Chat IA</a></li>
+    <li><a href="/app/planos">Planos</a></li>
+  </ul>
+  <a href="/app/login" class="btn btn-primary">Entrar</a>
 </nav>
 
-<div class="container">
-
-<!-- HERO -->
-<div class="hero">
-  <h1>Escolha seu <span>Plano Ideal</span></h1>
-  <p>Comece grátis. Faça upgrade quando quiser. Cancele a qualquer momento.</p>
-</div>
-
-<!-- PLANO ATUAL -->
-<div class="plano-atual-banner">
-  Seu plano atual: <span>{{ usuario.plano|upper }}</span>
-  {% if usuario.plano == "free" %}
-   — Faça upgrade para desbloquear tudo! 🚀
-  {% elif usuario.plano == "trial" %}
-   — Aproveite seu trial! Faça upgrade antes de expirar. ⏳
-  {% elif usuario.plano == "premium" %}
-   — Obrigado por ser Premium! ⭐
-  {% else %}
-   — Você está no plano máximo! 👑
-  {% endif %}
-</div>
-
-<!-- TRIAL BANNER -->
-{% if usuario.plano == "free" and not usuario.trial_usado %}
-<div class="trial-banner">
-  <h3>🎁 Trial Premium Grátis por 7 dias!</h3>
-  <p>Experimente todas as funcionalidades Premium sem pagar nada. Sem cartão de crédito.</p>
-  <button class="btn-trial" onclick="ativarTrial()">✨ Ativar Trial Grátis</button>
-</div>
-{% endif %}
-
-<!-- PLANOS -->
-<div class="planos-grid">
-
-  <!-- FREE -->
-  <div class="plano {% if usuario.plano == 'free' %}atual{% endif %}">
-    {% if usuario.plano == "free" %}
-    <div class="top-badge badge-atual">✅ Plano Atual</div>
-    {% endif %}
-    <span class="plano-icon">🆓</span>
-    <div class="plano-nome">Free</div>
-    <div class="plano-preco">R$0</div>
-    <div class="plano-periodo">para sempre</div>
-    <div class="plano-desc">Perfeito para começar a explorar suas emoções</div>
-    <ul class="plano-features">
-      <li><span class="check">✅</span> <span class="highlight">10</span> análises por dia</li>
-      <li><span class="check">✅</span> <span class="highlight">5</span> chats com Sofia por dia</li>
-      <li><span class="check">✅</span> <span class="highlight">3</span> entradas no diário por dia</li>
-      <li><span class="check">✅</span> Análise por voz</li>
-      <li><span class="check">✅</span> Gráficos básicos</li>
-      <li><span class="check">✅</span> Sistema de pontos e badges</li>
-      <li><span class="check">✅</span> Link de afiliado (20% comissão)</li>
-      <li><span class="x">❌</span> Análises ilimitadas</li>
-      <li><span class="x">❌</span> Sofia ilimitada</li>
-      <li><span class="x">❌</span> Relatório semanal por email</li>
-      <li><span class="x">❌</span> API pública</li>
-    </ul>
-    {% if usuario.plano == "free" %}
-    <button class="btn-plano btn-atual-plan">✅ Plano Atual</button>
-    {% else %}
-    <button class="btn-plano btn-free-plan" onclick="window.location.href='/'">Usar Grátis</button>
-    {% endif %}
+<section class="hero" style="padding:3rem 2rem">
+  <div class="container">
+    <div class="badge badge-green" style="margin-bottom:1rem">💰 Comece grátis hoje</div>
+    <h1>Planos simples e transparentes</h1>
+    <p style="color:var(--text2)">Sem surpresas. Cancele quando quiser.</p>
   </div>
+</section>
 
-  <!-- PREMIUM -->
-  <div class="plano destaque {% if usuario.plano == 'premium' %}atual{% endif %}">
-    <div class="top-badge badge-popular">⭐ MAIS POPULAR</div>
-    <span class="plano-icon" style="margin-top:10px">💎</span>
-    <div class="plano-nome">Premium</div>
-    <div class="plano-preco">R$49</div>
-    <div class="plano-periodo">por mês</div>
-    <div class="plano-desc">Para uso intenso e resultados profissionais</div>
-    <ul class="plano-features">
-      <li><span class="check">✅</span> <span class="highlight">Análises ilimitadas</span></li>
-      <li><span class="check">✅</span> <span class="highlight">Sofia ilimitada</span> 🧠</li>
-      <li><span class="check">✅</span> <span class="highlight">Diário ilimitado</span> 📔</li>
-      <li><span class="check">✅</span> Análise por voz</li>
-      <li><span class="check">✅</span> Gráficos avançados</li>
-      <li><span class="check">✅</span> Relatório semanal por email 📊</li>
-      <li><span class="check">✅</span> Sistema de pontos e badges</li>
-      <li><span class="check">✅</span> Link de afiliado (20% comissão)</li>
-      <li><span class="check">✅</span> API pública com token</li>
-      <li><span class="check">✅</span> Suporte prioritário</li>
-      <li><span class="check">✅</span> Sem anúncios</li>
-    </ul>
-    {% if usuario.plano == "premium" %}
-    <button class="btn-plano btn-atual-plan">✅ Plano Atual</button>
-    {% else %}
-    <button class="btn-plano btn-premium-plan"
-            onclick="window.location.href='/checkout-page?plano=premium'">
-      🚀 Assinar Premium — R$49/mês
-    </button>
-    {% endif %}
-  </div>
+<section class="section">
+  <div class="container">
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.5rem; max-width:1100px; margin:0 auto">
 
-  <!-- ENTERPRISE -->
-  <div class="plano enterprise-plan {% if usuario.plano == 'enterprise' %}atual{% endif %}">
-    <div class="top-badge badge-enterprise">👑 ENTERPRISE</div>
-    <span class="plano-icon" style="margin-top:10px">🏢</span>
-    <div class="plano-nome">Enterprise</div>
-    <div class="plano-preco enterprise-preco">R$199</div>
-    <div class="plano-periodo">por mês</div>
-    <div class="plano-desc">Para empresas, clínicas e equipes de RH</div>
-    <ul class="plano-features">
-      <li><span class="check">✅</span> <span class="highlight">Tudo do Premium</span></li>
-      <li><span class="check">✅</span> Múltiplos usuários</li>
-      <li><span class="check">✅</span> Dashboard corporativo</li>
-      <li><span class="check">✅</span> API avançada com rate limit alto</li>
-      <li><span class="check">✅</span> Relatórios personalizados</li>
-      <li><span class="check">✅</span> Suporte 24/7 dedicado</li>
-      <li><span class="check">✅</span> SLA garantido</li>
-      <li><span class="check">✅</span> Treinamento da equipe</li>
-      <li><span class="check">✅</span> Integração customizada</li>
-      <li><span class="check">✅</span> Fatura mensal</li>
-      <li><span class="check">✅</span> NF fiscal</li>
-    </ul>
-    {% if usuario.plano == "enterprise" %}
-    <button class="btn-plano btn-atual-plan">✅ Plano Atual</button>
-    {% else %}
-    <button class="btn-plano btn-enterprise-plan"
-            onclick="window.location.href='/checkout-page?plano=enterprise'">
-      👑 Assinar Enterprise — R$199/mês
-    </button>
-    {% endif %}
-  </div>
+      <div class="card">
+        <div class="badge badge-purple" style="margin-bottom:1rem">Gratuito</div>
+        <div style="font-size:2.5rem;font-weight:900;margin:1rem 0">R$ 0</div>
+        <div style="color:var(--text2);margin-bottom:1.5rem">Para sempre</div>
+        <ul style="list-style:none;margin-bottom:2rem">
+          <li style="padding:0.4rem 0;color:var(--text2)">✅ 5 avaliações/mês</li>
+          <li style="padding:0.4rem 0;color:var(--text2)">✅ 20 msgs chat IA/mês</li>
+          <li style="padding:0.4rem 0;color:var(--text2)">✅ Diário emocional</li>
+          <li style="padding:0.4rem 0;color:var(--text2)">✅ Dashboard básico</li>
+        </ul>
+        <a href="/app/cadastro" class="btn btn-secondary" style="width:100%;justify-content:center">Começar Grátis</a>
+      </div>
 
-</div>
+      <div class="card" style="border-color:var(--primary);position:relative">
+        <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gradient);color:white;padding:0.25rem 1rem;border-radius:50px;font-size:0.8rem;font-weight:700">⭐ MAIS POPULAR</div>
+        <div class="badge badge-purple" style="margin-bottom:1rem">Pro</div>
+        <div style="font-size:2.5rem;font-weight:900;margin:1rem 0">R$ 49<span style="font-size:1rem;color:var(--text2)">,90/mês</span></div>
+        <div style="color:var(--text2);margin-bottom:1.5rem">Cobrança mensal</div>
+        <ul style="list-style:none;margin-bottom:2rem">
+          <li style="padding:0.4rem 0">✅ Avaliações ilimitadas</li>
+          <li style="padding:0.4rem 0">✅ Chat IA ilimitado</li>
+          <li style="padding:0.4rem 0">✅ Prontuário completo</li>
+          <li style="padding:0.4rem 0">✅ Agenda de sessões</li>
+          <li style="padding:0.4rem 0">✅ Relatórios PDF</li>
+          <li style="padding:0.4rem 0">✅ Suporte prioritário</li>
+        </ul>
+        <button onclick="assinar('pro')" class="btn btn-primary" style="width:100%;justify-content:center">Assinar Pro →</button>
+      </div>
 
-<!-- COMPARATIVO -->
-<div class="comparativo">
-  <h2>📊 Comparativo Completo</h2>
-  <table class="comp-table">
-    <tr>
-      <th>Recurso</th>
-      <th class="col-free">Free</th>
-      <th class="col-premium">Premium</th>
-      <th class="col-enterprise">Enterprise</th>
-    </tr>
-    <tr>
-      <td>Análises por dia</td>
-      <td class="col-free">10</td>
-      <td class="col-premium">Ilimitado</td>
-      <td class="col-enterprise">Ilimitado</td>
-    </tr>
-    <tr>
-      <td>Chat com Sofia (IA)</td>
-      <td class="col-free">5/dia</td>
-      <td class="col-premium">Ilimitado</td>
-      <td class="col-enterprise">Ilimitado</td>
-    </tr>
-    <tr>
-      <td>Diário emocional</td>
-      <td class="col-free">3/dia</td>
-      <td class="col-premium">Ilimitado</td>
-      <td class="col-enterprise">Ilimitado</td>
-    </tr>
-    <tr>
-      <td>Análise por voz</td>
-      <td class="col-free">✅</td>
-      <td class="col-premium">✅</td>
-      <td class="col-enterprise">✅</td>
-    </tr>
-    <tr>
-      <td>Gráficos e estatísticas</td>
-      <td class="col-free">Básico</td>
-      <td class="col-premium">Avançado</td>
-      <td class="col-enterprise">Completo</td>
-    </tr>
-    <tr>
-      <td>Relatório semanal por email</td>
-      <td class="col-free">❌</td>
-      <td class="col-premium">✅</td>
-      <td class="col-enterprise">✅</td>
-    </tr>
-    <tr>
-      <td>API pública</td>
-      <td class="col-free">❌</td>
-      <td class="col-premium">✅</td>
-      <td class="col-enterprise">✅ Avançada</td>
-    </tr>
-    <tr>
-      <td>Sistema de afiliados</td>
-      <td class="col-free">✅ 20%</td>
-      <td class="col-premium">✅ 20%</td>
-      <td class="col-enterprise">✅ 20%</td>
-    </tr>
-    <tr>
-      <td>Suporte</td>
-      <td class="col-free">Email</td>
-      <td class="col-premium">Prioritário</td>
-      <td class="col-enterprise">24/7 Dedicado</td>
-    </tr>
-    <tr>
-      <td>Múltiplos usuários</td>
-      <td class="col-free">❌</td>
-      <td class="col-premium">❌</td>
-      <td class="col-enterprise">✅</td>
-    </tr>
-    <tr>
-      <td>SLA garantido</td>
-      <td class="col-free">❌</td>
-      <td class="col-premium">❌</td>
-      <td class="col-enterprise">✅</td>
-    </tr>
-    <tr>
-      <td>Preço</td>
-      <td class="col-free">R$0</td>
-      <td class="col-premium">R$49/mês</td>
-      <td class="col-enterprise">R$199/mês</td>
-    </tr>
-  </table>
-</div>
+      <div class="card">
+        <div class="badge badge-green" style="margin-bottom:1rem">Clínica</div>
+        <div style="font-size:2.5rem;font-weight:900;margin:1rem 0">R$ 199<span style="font-size:1rem;color:var(--text2)">,90/mês</span></div>
+        <div style="color:var(--text2);margin-bottom:1.5rem">Até 50 terapeutas</div>
+        <ul style="list-style:none;margin-bottom:2rem">
+          <li style="padding:0.4rem 0">✅ Tudo do Pro</li>
+          <li style="padding:0.4rem 0">✅ 50 terapeutas</li>
+          <li style="padding:0.4rem 0">✅ Multi-clínica</li>
+          <li style="padding:0.4rem 0">✅ API completa</li>
+          <li style="padding:0.4rem 0">✅ White label</li>
+          <li style="padding:0.4rem 0">✅ Suporte 24/7</li>
+        </ul>
+        <button onclick="assinar('clinica')" class="btn btn-secondary" style="width:100%;justify-content:center">Assinar Clínica</button>
+      </div>
 
-<!-- FORMAS DE PAGAMENTO -->
-<div class="pagamentos">
-  <h3>💳 Formas de pagamento aceitas</h3>
-  <div class="metodos">
-    <div class="metodo">💳 Cartão de Crédito</div>
-    <div class="metodo">🏦 Débito</div>
-    <div class="metodo">📱 PIX</div>
-    <div class="metodo">📄 Boleto</div>
-  </div>
-  <p style="font-size:12px;color:var(--text-muted);margin-top:12px">
-    Processado com segurança pelo MercadoPago 🔒
-  </p>
-</div>
-
-<!-- GARANTIA -->
-<div class="garantia">
-  <h2>🔒 Pagamento 100% Seguro</h2>
-  <p>
-    Seus dados são protegidos com criptografia de ponta a ponta.
-    Cancele quando quiser, sem multas ou burocracia.
-    Processado pelo MercadoPago, líder em pagamentos na América Latina.
-  </p>
-</div>
-
-<!-- DEPOIMENTOS -->
-<div class="depoimentos">
-  <h2>💬 O que dizem nossos usuários</h2>
-  <div class="dep-grid">
-    <div class="dep-card">
-      <div class="dep-stars">⭐⭐⭐⭐⭐</div>
-      <div class="dep-text">"A Sofia me ajudou a entender minha ansiedade de uma forma que nunca tinha conseguido antes. Incrível!"</div>
-      <div class="dep-autor">— Maria S., usuária Premium</div>
+      <div class="card" style="background:var(--bg2)">
+        <div class="badge badge-yellow" style="margin-bottom:1rem">Enterprise</div>
+        <div style="font-size:2.5rem;font-weight:900;margin:1rem 0">Custom</div>
+        <div style="color:var(--text2);margin-bottom:1.5rem">Preço sob consulta</div>
+        <ul style="list-style:none;margin-bottom:2rem">
+          <li style="padding:0.4rem 0">✅ Tudo do Clínica</li>
+          <li style="padding:0.4rem 0">✅ Terapeutas ilimitados</li>
+          <li style="padding:0.4rem 0">✅ Infra dedicada</li>
+          <li style="padding:0.4rem 0">✅ SLA 99.99%</li>
+          <li style="padding:0.4rem 0">✅ HIPAA Compliance</li>
+        </ul>
+        <a href="mailto:albertmenezes2006@gmail.com" class="btn btn-secondary" style="width:100%;justify-content:center">Falar com vendas</a>
+      </div>
     </div>
-    <div class="dep-card">
-      <div class="dep-stars">⭐⭐⭐⭐⭐</div>
-      <div class="dep-text">"O diário emocional mudou minha rotina. Consigo identificar padrões que antes passavam despercebidos."</div>
-      <div class="dep-autor">— João P., usuário Premium</div>
-    </div>
-    <div class="dep-card">
-      <div class="dep-stars">⭐⭐⭐⭐⭐</div>
-      <div class="dep-text">"Implementamos no nosso RH e os resultados foram surpreendentes. Equipe mais engajada e saudável."</div>
-      <div class="dep-autor">— Ana L., Enterprise</div>
+
+    <div style="text-align:center;margin-top:3rem">
+      <div id="checkout-msg" class="alert alert-info" style="display:none;max-width:500px;margin:0 auto"></div>
+      <p style="color:var(--text2);margin-top:1rem">🔒 Pagamento seguro via Stripe · Cancele quando quiser</p>
+      <p style="color:var(--text2);font-size:0.85rem">Em caso de dúvidas: albertmenezes2006@gmail.com</p>
     </div>
   </div>
-</div>
-
-<!-- FAQ -->
-<div class="faq-section">
-  <h2>❓ Dúvidas Frequentes</h2>
-  <div class="faq-item">
-    <h3>Posso cancelar quando quiser? <span>+</span></h3>
-    <p>Sim! Entre em contato pelo email ou chat e cancelamos em até 24 horas, sem perguntas.</p>
-  </div>
-  <div class="faq-item">
-    <h3>O Trial realmente é grátis? <span>+</span></h3>
-    <p>100% grátis! 7 dias de Premium sem precisar de cartão de crédito. Sem cobranças automáticas.</p>
-  </div>
-  <div class="faq-item">
-    <h3>Quais formas de pagamento são aceitas? <span>+</span></h3>
-    <p>PIX, cartão de crédito, débito e boleto através do MercadoPago.</p>
-  </div>
-  <div class="faq-item">
-    <h3>A Sofia substitui um psicólogo? <span>+</span></h3>
-    <p>Não! A Sofia é uma ferramenta de apoio emocional baseada em IA. Para questões sérias de saúde mental, sempre recomendamos buscar um profissional.</p>
-  </div>
-  <div class="faq-item">
-    <h3>O programa de afiliados funciona em todos os planos? <span>+</span></h3>
-    <p>Sim! Todos os usuários, incluindo Free, recebem um link de afiliado e ganham 20% de comissão por cada indicado que se tornar Premium ou Enterprise.</p>
-  </div>
-  <div class="faq-item">
-    <h3>Meus dados são seguros? <span>+</span></h3>
-    <p>Sim! Seguimos as melhores práticas de segurança e a LGPD. Seus dados emocionais são privados e nunca compartilhados com terceiros.</p>
-  </div>
-</div>
-
-</div>
-
-<div class="footer">
-  <a href="/faq">FAQ</a>
-  <a href="/contato">Contato</a>
-  <a href="/privacidade">Privacidade</a>
-  <a href="/termos">Termos</a>
-  <a href="/sobre">Sobre</a>
-  <br><br>
-  🧠 Emotion Intelligence Platform 2026 — v13.0
-</div>
-
-<div class="toast" id="toast"></div>
+</section>
 
 <script>
-function showToast(msg,tipo){
-  var t=document.getElementById('toast');
-  t.textContent=msg;
-  t.className='toast '+(tipo||'')+' show';
-  setTimeout(function(){t.className='toast '+(tipo||'')},3500);
-}
+async function assinar(plano) {
+  const email = prompt('Seu e-mail para continuar:');
+  if (!email || !email.includes('@')) return;
+  const userId = localStorage.getItem('emotion_userid') || 'user_' + Math.random().toString(36).substr(2,6);
 
-function ativarTrial(){
-  if(!confirm('Ativar 7 dias de Trial Premium grátis agora?')) return;
-  fetch('/trial',{method:'POST'})
-    .then(function(r){return r.json()})
-    .then(function(data){
-      if(data.mensagem){
-        showToast(data.mensagem);
-        setTimeout(function(){window.location.href='/'},2000);
+  try {
+    const resp = await fetch('/api/v1/stripe/checkout/criar', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({user_id:userId, plano, email})
+    });
+    const data = await resp.json();
+    if (data.checkout_url) {
+      const msg = document.getElementById('checkout-msg');
+      msg.style.display = 'flex';
+      if (data.stripe_configurado) {
+        window.location.href = data.checkout_url;
+      } else {
+        msg.innerHTML = '⚠️ Stripe em modo teste. Configure STRIPE_SECRET_KEY no Render para pagamentos reais.';
       }
-    })
-    .catch(function(){showToast('Erro ao ativar trial','error')});
+    }
+  } catch(e) {
+    alert('Erro ao criar checkout. Tente novamente.');
+  }
 }
 </script>
 </body>
