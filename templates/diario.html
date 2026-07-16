@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Emocional — EmotionAI</title>
+  <link rel="stylesheet" href="/static/css/emotion.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-brand">🧠 EmotionAI</a>
+  <ul class="nav-links">
+    <li><a href="/app/avaliacao">Avaliação</a></li>
+    <li><a href="/app/chat">Chat IA</a></li>
+    <li><a href="/app/diario">Diário</a></li>
+  </ul>
+</nav>
+
+<div class="container" style="padding-top:2rem; padding-bottom:4rem">
+  <div style="max-width:700px; margin:0 auto">
+
+    <div style="margin-bottom:2rem">
+      <h1 style="font-size:1.75rem; margin-bottom:0.5rem">📔 Diário Emocional</h1>
+      <p style="color:var(--text2)">Registre suas emoções e acompanhe seu bem-estar ao longo do tempo</p>
+    </div>
+
+    <div class="card" style="margin-bottom:2rem">
+      <h3 style="margin-bottom:1.5rem">Como você está agora?</h3>
+
+      <div class="form-group">
+        <label class="form-label">Emoção principal</label>
+        <div class="mood-grid" id="mood-grid">
+          <button type="button" class="mood-btn" onclick="selectMood('alegria')"><span>😊</span>Alegria</button>
+          <button type="button" class="mood-btn" onclick="selectMood('gratidao')"><span>🙏</span>Gratidão</button>
+          <button type="button" class="mood-btn" onclick="selectMood('serenidade')"><span>😌</span>Serenidade</button>
+          <button type="button" class="mood-btn" onclick="selectMood('esperanca')"><span>🌱</span>Esperança</button>
+          <button type="button" class="mood-btn" onclick="selectMood('neutro')"><span>😐</span>Neutro</button>
+          <button type="button" class="mood-btn" onclick="selectMood('ansiedade')"><span>😰</span>Ansiedade</button>
+          <button type="button" class="mood-btn" onclick="selectMood('tristeza')"><span>😢</span>Tristeza</button>
+          <button type="button" class="mood-btn" onclick="selectMood('raiva')"><span>😠</span>Raiva</button>
+          <button type="button" class="mood-btn" onclick="selectMood('medo')"><span>😨</span>Medo</button>
+          <button type="button" class="mood-btn" onclick="selectMood('interesse')"><span>🤔</span>Interesse</button>
+          <button type="button" class="mood-btn" onclick="selectMood('desespero')"><span>😱</span>Desespero</button>
+          <button type="button" class="mood-btn" onclick="selectMood('alegria')"><span>🥰</span>Amor</button>
+        </div>
+        <input type="hidden" id="emocao-selected" value="neutro">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Intensidade da emoção: <span id="intensidade-val">5</span>/10</label>
+        <input type="range" id="intensidade" min="0" max="10" value="5" step="0.5"
+          oninput="document.getElementById('intensidade-val').textContent=this.value"
+          style="width:100%; accent-color:var(--primary)">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Humor geral hoje: <span id="humor-val">5</span>/10</label>
+        <input type="range" id="humor" min="0" max="10" value="5" step="0.5"
+          oninput="document.getElementById('humor-val').textContent=this.value"
+          style="width:100%; accent-color:var(--primary)">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">O que está acontecendo? (opcional)</label>
+        <textarea class="form-control" id="texto-entrada" placeholder="Escreva livremente sobre como você está se sentindo, o que aconteceu hoje, seus pensamentos..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Tags (opcional)</label>
+        <input type="text" class="form-control" id="tags" placeholder="trabalho, família, saúde, relacionamento...">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Seu nome ou ID</label>
+        <input type="text" class="form-control" id="diario-userid" placeholder="Seu nome (para salvar histórico)">
+      </div>
+
+      <button class="btn btn-primary" style="width:100%" onclick="salvarEntrada()">
+        💾 Salvar Entrada
+      </button>
+    </div>
+
+    <!-- RESULTADO -->
+    <div id="diario-result" class="result-box" style="margin-bottom:2rem">
+      <div style="font-size:3rem" id="diario-emoji">😊</div>
+      <h3 style="margin:1rem 0" id="diario-emocao">Entrada salva!</h3>
+      <p style="color:var(--text2)" id="diario-insight"></p>
+      <div style="margin-top:1rem; display:flex; gap:0.5rem; justify-content:center; flex-wrap:wrap">
+        <a href="/app/chat" class="btn btn-secondary" style="font-size:0.85rem">💬 Falar sobre isso</a>
+        <button onclick="limparForm()" class="btn btn-primary" style="font-size:0.85rem">+ Nova entrada</button>
+      </div>
+    </div>
+
+    <!-- HISTÓRICO -->
+    <div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem">
+        <h3>Histórico Recente</h3>
+        <button onclick="carregarHistorico()" class="btn btn-secondary" style="font-size:0.8rem">🔄 Atualizar</button>
+      </div>
+      <div id="historico-lista">
+        <div style="text-align:center; color:var(--text2); padding:2rem">
+          <span style="font-size:2rem">📝</span>
+          <p style="margin-top:0.5rem">Salve sua primeira entrada para ver o histórico</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let emocaoAtual = 'neutro';
+const userId = localStorage.getItem('emotion_userid') || 'user_' + Math.random().toString(36).substr(2,6);
+localStorage.setItem('emotion_userid', userId);
+document.getElementById('diario-userid').value = userId;
+
+const EMOJIS = {
+  alegria:'😊', gratidao:'🙏', serenidade:'😌', esperanca:'🌱',
+  neutro:'😐', ansiedade:'😰', tristeza:'😢', raiva:'😠',
+  medo:'😨', interesse:'🤔', desespero:'😱'
+};
+
+function selectMood(emocao) {
+  emocaoAtual = emocao;
+  document.getElementById('emocao-selected').value = emocao;
+  document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+}
+
+async function salvarEntrada() {
+  const texto = document.getElementById('texto-entrada').value;
+  const intensidade = document.getElementById('intensidade').value;
+  const humor = document.getElementById('humor').value;
+  const tags = document.getElementById('tags').value;
+  const uid = document.getElementById('diario-userid').value || userId;
+
+  localStorage.setItem('emotion_userid', uid);
+
+  try {
+    const params = new URLSearchParams({
+      user_id: uid,
+      texto: texto || `Emoção: ${emocaoAtual}`,
+      emocao_principal: emocaoAtual,
+      intensidade: intensidade,
+      humor_geral: humor,
+      tags: tags
+    });
+
+    const resp = await fetch('/api/v1/diario-emocional/entrada?' + params, { method:'POST' });
+    const data = await resp.json();
+    mostrarResultado(data);
+    carregarHistorico(uid);
+  } catch(err) {
+    const insight = {
+      alegria: 'Que ótimo! Continue cultivando esses momentos positivos! 🌟',
+      tristeza: 'Momentos difíceis passam. Você é mais forte do que imagina. 💙',
+      ansiedade: 'Respire fundo. Você está aqui, agora, e isso já é muito. 🌬️',
+      neutro: 'Obrigado por registrar. A autoconsciência é o primeiro passo! 📝',
+    }[emocaoAtual] || 'Entrada registrada com sucesso! 📝';
+
+    mostrarResultado({entrada:{emocao_principal:emocaoAtual, emocao_emoji:EMOJIS[emocaoAtual]||'😐'}, insight});
+  }
+}
+
+function mostrarResultado(data) {
+  const entrada = data.entrada || {};
+  document.getElementById('diario-emoji').textContent = entrada.emocao_emoji || EMOJIS[emocaoAtual] || '😐';
+  document.getElementById('diario-emocao').textContent = `${entrada.emocao_principal || emocaoAtual} registrado!`;
+  document.getElementById('diario-insight').textContent = data.insight || 'Entrada salva com sucesso!';
+  document.getElementById('diario-result').classList.add('show');
+  document.getElementById('diario-result').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function limparForm() {
+  document.getElementById('texto-entrada').value = '';
+  document.getElementById('tags').value = '';
+  document.getElementById('intensidade').value = 5;
+  document.getElementById('humor').value = 5;
+  document.getElementById('intensidade-val').textContent = '5';
+  document.getElementById('humor-val').textContent = '5';
+  document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('active'));
+  document.getElementById('diario-result').classList.remove('show');
+  emocaoAtual = 'neutro';
+}
+
+async function carregarHistorico(uid) {
+  uid = uid || document.getElementById('diario-userid').value || userId;
+  try {
+    const resp = await fetch(`/api/v1/diario-emocional/historico/${encodeURIComponent(uid)}?limite=10`);
+    const data = await resp.json();
+    const lista = document.getElementById('historico-lista');
+    if(!data.entradas || data.entradas.length === 0) {
+      lista.innerHTML = '<div style="text-align:center;color:var(--text2);padding:2rem">Nenhuma entrada ainda</div>';
+      return;
+    }
+    lista.innerHTML = data.entradas.slice(0,10).map(e => `
+      <div class="card" style="margin-bottom:0.75rem; padding:1rem">
+        <div style="display:flex; justify-content:space-between; align-items:center">
+          <div style="display:flex; align-items:center; gap:0.75rem">
+            <span style="font-size:1.5rem">${e.emocao_emoji || '😐'}</span>
+            <div>
+              <div style="font-weight:600">${e.emocao_principal || 'neutro'}</div>
+              <div style="color:var(--text2); font-size:0.8rem">${e.texto ? e.texto.substring(0,80)+'...' : ''}</div>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:0.75rem; color:var(--text2)">${e.data ? new Date(e.data).toLocaleDateString('pt-BR') : ''}</div>
+            <div style="font-weight:700; color:var(--primary)">${e.humor_geral || 5}/10</div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  } catch(err) {
+    console.log('Histórico offline');
+  }
+}
+
+carregarHistorico();
+</script>
+</body>
+</html>

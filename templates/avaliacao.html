@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Avaliação Emocional — EmotionAI</title>
+  <link rel="stylesheet" href="/static/css/emotion.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-brand">🧠 EmotionAI</a>
+  <ul class="nav-links">
+    <li><a href="/app/avaliacao" class="active">Avaliação</a></li>
+    <li><a href="/app/chat">Chat IA</a></li>
+    <li><a href="/app/diario">Diário</a></li>
+  </ul>
+</nav>
+
+<div class="container" style="padding-top:2rem; padding-bottom:4rem">
+
+  <div style="max-width:700px; margin:0 auto">
+
+    <!-- TABS -->
+    <div class="tabs">
+      <div class="tab active" onclick="showTab('phq9')">😔 PHQ-9 Depressão</div>
+      <div class="tab" onclick="showTab('gad7')">😰 GAD-7 Ansiedade</div>
+      <div class="tab" onclick="showTab('dass21')">📊 DASS-21 Completo</div>
+    </div>
+
+    <!-- PHQ-9 -->
+    <div id="tab-phq9" class="fade-in">
+      <div style="margin-bottom:2rem">
+        <h1 style="font-size:1.75rem; margin-bottom:0.5rem">PHQ-9</h1>
+        <p style="color:var(--text2)">Nas últimas 2 semanas, com que frequência você foi incomodado pelos problemas abaixo?</p>
+        <div class="alert alert-info" style="margin-top:1rem">
+          ℹ️ Esta avaliação é apenas para rastreio. Consulte um profissional para diagnóstico.
+        </div>
+      </div>
+
+      <form id="phq9-form">
+        <div id="phq9-questions"></div>
+        <input type="text" id="phq9-userid" class="form-control" placeholder="Seu nome ou ID (opcional)" style="margin-bottom:1rem">
+        <button type="submit" class="btn btn-primary" style="width:100%">
+          Calcular Resultado →
+        </button>
+      </form>
+
+      <div id="phq9-result" class="result-box">
+        <div style="font-size:3rem" id="phq9-emoji">😊</div>
+        <div class="result-score" id="phq9-score"></div>
+        <div class="result-level" id="phq9-level"></div>
+        <div style="color:var(--text2); margin-bottom:1rem" id="phq9-rec"></div>
+        <div class="progress" style="margin-bottom:1rem">
+          <div class="progress-bar" id="phq9-bar" style="width:0%"></div>
+        </div>
+        <div id="phq9-alert" style="display:none" class="alert alert-danger">
+          ⚠️ <strong>Atenção:</strong> Você indicou pensamentos sobre se machucar. Por favor, ligue para o CVV: <strong>188</strong> (24h)
+        </div>
+        <a href="/app/chat" class="btn btn-primary" style="margin-top:1rem">💬 Conversar com IA sobre resultado</a>
+      </div>
+    </div>
+
+    <!-- GAD-7 -->
+    <div id="tab-gad7" style="display:none" class="fade-in">
+      <div style="margin-bottom:2rem">
+        <h1 style="font-size:1.75rem; margin-bottom:0.5rem">GAD-7</h1>
+        <p style="color:var(--text2)">Nas últimas 2 semanas, com que frequência você foi incomodado pelos problemas abaixo?</p>
+      </div>
+      <form id="gad7-form">
+        <div id="gad7-questions"></div>
+        <input type="text" id="gad7-userid" class="form-control" placeholder="Seu nome ou ID (opcional)" style="margin-bottom:1rem">
+        <button type="submit" class="btn btn-primary" style="width:100%">Calcular Resultado →</button>
+      </form>
+      <div id="gad7-result" class="result-box">
+        <div style="font-size:3rem" id="gad7-emoji">😌</div>
+        <div class="result-score" id="gad7-score"></div>
+        <div class="result-level" id="gad7-level"></div>
+        <div style="color:var(--text2)" id="gad7-rec"></div>
+        <div class="progress" style="margin:1rem 0">
+          <div class="progress-bar" id="gad7-bar" style="width:0%"></div>
+        </div>
+        <a href="/app/chat" class="btn btn-primary">💬 Falar sobre minha ansiedade</a>
+      </div>
+    </div>
+
+    <!-- DASS-21 placeholder -->
+    <div id="tab-dass21" style="display:none" class="fade-in">
+      <div class="card" style="text-align:center; padding:3rem">
+        <span style="font-size:3rem">🔜</span>
+        <h3 style="margin:1rem 0">DASS-21 em breve</h3>
+        <p style="color:var(--text2)">Use PHQ-9 + GAD-7 juntos para avaliação completa de depressão e ansiedade</p>
+        <a href="#" onclick="showTab('phq9')" class="btn btn-primary" style="margin-top:1rem">Fazer PHQ-9 agora</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const PHQ9 = [
+  "Pouco interesse ou prazer em fazer as coisas",
+  "Sentir-se triste, deprimido ou sem esperança",
+  "Dificuldade para adormecer ou dormindo demais",
+  "Sentir-se cansado ou com pouca energia",
+  "Falta de apetite ou comer demais",
+  "Sentir-se mal consigo mesmo ou achar que é um fracasso",
+  "Dificuldade de concentrar-se nas coisas",
+  "Mover ou falar lentamente que outros notaram",
+  "Pensamentos de se machucar ou que seria melhor estar morto"
+];
+
+const GAD7 = [
+  "Sentir-se nervoso, ansioso ou no limite",
+  "Não ser capaz de parar ou controlar as preocupações",
+  "Preocupar-se muito com diferentes coisas",
+  "Dificuldade para relaxar",
+  "Estar tão agitado que é difícil ficar parado",
+  "Ficar facilmente contrariado ou irritável",
+  "Sentir medo como se algo terrível fosse acontecer"
+];
+
+const OPCOES = ["Nenhuma vez", "Menos de 1 semana", "Uma semana ou mais", "Quase todos os dias"];
+
+function renderQuestions(questions, prefix, containerId) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = questions.map((q, i) => `
+    <div style="margin-bottom:1.5rem">
+      <div style="font-weight:600; margin-bottom:0.75rem; color:var(--text)">
+        ${i+1}. ${q}
+      </div>
+      ${OPCOES.map((opt, j) => `
+        <label class="scale-item" onclick="selectAnswer('${prefix}', ${i}, ${j})">
+          <div class="scale-number" id="${prefix}-num-${i}-${j}">${j}</div>
+          <span style="color:var(--text2); font-size:0.9rem">${opt}</span>
+          <input type="radio" name="${prefix}-q${i}" value="${j}" style="display:none" required>
+        </label>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+function selectAnswer(prefix, q, val) {
+  for(let j=0; j<4; j++) {
+    const el = document.querySelector(`label[onclick="selectAnswer('${prefix}', ${q}, ${j})"]`);
+    if(el) el.classList.toggle('selected', j === val);
+  }
+}
+
+renderQuestions(PHQ9, 'phq9', 'phq9-questions');
+renderQuestions(GAD7, 'gad7', 'gad7-questions');
+
+function showTab(name) {
+  ['phq9','gad7','dass21'].forEach(t => {
+    document.getElementById('tab-'+t).style.display = t===name ? 'block' : 'none';
+  });
+  document.querySelectorAll('.tab').forEach((el,i) => {
+    el.classList.toggle('active', ['phq9','gad7','dass21'][i] === name);
+  });
+}
+
+document.getElementById('phq9-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const respostas = [];
+  for(let i=0; i<9; i++) {
+    const r = document.querySelector(`input[name="phq9-q${i}"]:checked`);
+    if(!r) { alert(`Por favor, responda a pergunta ${i+1}`); return; }
+    respostas.push(parseInt(r.value));
+  }
+  const userId = document.getElementById('phq9-userid').value || 'anonimo';
+  try {
+    const resp = await fetch(`/api/v1/phq9/aplicar?user_id=${encodeURIComponent(userId)}`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(respostas)
+    });
+    const data = await resp.json();
+    showPHQ9Result(data);
+  } catch(err) {
+    const score = respostas.reduce((a,b)=>a+b, 0);
+    showPHQ9Result({score, classificacao: getLocalClassif(score, 27), alerta_suicidio: respostas[8]>=1});
+  }
+});
+
+function getLocalClassif(score, max) {
+  if(score <= 4) return {nivel:'Mínimo', recomendacao:'Sem sintomas significativos', cor:'verde'};
+  if(score <= 9) return {nivel:'Leve', recomendacao:'Monitorar e reavaliar', cor:'amarelo'};
+  if(score <= 14) return {nivel:'Moderado', recomendacao:'Iniciar plano de tratamento', cor:'laranja'};
+  if(score <= 19) return {nivel:'Moderado-Grave', recomendacao:'Tratamento ativo recomendado', cor:'vermelho'};
+  return {nivel:'Grave', recomendacao:'Tratamento imediato necessário', cor:'vermelho_escuro'};
+}
+
+function showPHQ9Result(data) {
+  const score = data.score;
+  const classif = data.classificacao || getLocalClassif(score, 27);
+  const cores = {verde:'#43D787', amarelo:'#FFB547', laranja:'#FF9800', vermelho:'#FF5B5B', vermelho_escuro:'#C0392B'};
+  const emojis = {verde:'😊', amarelo:'😐', laranja:'😟', vermelho:'😢', vermelho_escuro:'😰'};
+  const cor = classif.cor || 'amarelo';
+
+  document.getElementById('phq9-score').textContent = score + '/27';
+  document.getElementById('phq9-score').style.color = cores[cor] || '#FFB547';
+  document.getElementById('phq9-level').textContent = classif.nivel;
+  document.getElementById('phq9-rec').textContent = classif.recomendacao;
+  document.getElementById('phq9-emoji').textContent = emojis[cor] || '😐';
+  document.getElementById('phq9-bar').style.width = (score/27*100) + '%';
+
+  if(data.alerta_suicidio) {
+    document.getElementById('phq9-alert').style.display = 'flex';
+  }
+
+  const result = document.getElementById('phq9-result');
+  result.classList.add('show');
+  result.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+document.getElementById('gad7-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const respostas = [];
+  for(let i=0; i<7; i++) {
+    const r = document.querySelector(`input[name="gad7-q${i}"]:checked`);
+    if(!r) { alert(`Por favor, responda a pergunta ${i+1}`); return; }
+    respostas.push(parseInt(r.value));
+  }
+  const userId = document.getElementById('gad7-userid').value || 'anonimo';
+  try {
+    const resp = await fetch(`/api/v1/gad7/aplicar?user_id=${encodeURIComponent(userId)}`, {
+      method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(respostas)
+    });
+    const data = await resp.json();
+    showGAD7Result(data);
+  } catch(err) {
+    const score = respostas.reduce((a,b)=>a+b,0);
+    showGAD7Result({score, nivel: score<=4?'Mínimo':score<=9?'Leve':score<=14?'Moderado':'Grave'});
+  }
+});
+
+function showGAD7Result(data) {
+  const score = data.score;
+  const nivel = data.nivel;
+  const cores = {'Mínimo':'#43D787','Leve':'#FFB547','Moderado':'#FF9800','Grave':'#FF5B5B'};
+  const emojis = {'Mínimo':'😌','Leve':'😐','Moderado':'😰','Grave':'😱'};
+
+  document.getElementById('gad7-score').textContent = score + '/21';
+  document.getElementById('gad7-score').style.color = cores[nivel] || '#FFB547';
+  document.getElementById('gad7-level').textContent = nivel;
+  document.getElementById('gad7-rec').textContent = score<=4?'Sem ansiedade significativa':score<=9?'Ansiedade leve — monitorar':score<=14?'Considere psicoterapia':'Intervenção imediata recomendada';
+  document.getElementById('gad7-emoji').textContent = emojis[nivel] || '😐';
+  document.getElementById('gad7-bar').style.width = (score/21*100) + '%';
+
+  const result = document.getElementById('gad7-result');
+  result.classList.add('show');
+  result.scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+</body>
+</html>
