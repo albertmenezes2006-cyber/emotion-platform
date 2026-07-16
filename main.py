@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Emotion Intelligence Platform v24.3"""
-import os, sys, logging
+import os
+import importlib
+import sys
+import logging
 from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -50,7 +53,6 @@ async def ping():
 SKIP = {"__init__.py","loader.py","plugin_base.py","db_manager.py"}
 
 log.info("Carregando plugins em lotes...")
-import importlib
 
 cats = sorted(Path("plugins").iterdir())
 for cat in cats:

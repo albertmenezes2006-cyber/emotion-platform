@@ -1,0 +1,7 @@
+.skip-nav{position:absolute;top:-40px;left:0;background:#7c3aed;color:#fff;padding:8px 16px;z-index:9999;text-decoration:none;font-weight:700;transition:top .2s;}
+.skip-nav:focus{top:0;outline:3px solid #fbbf24;}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;}
+*:focus-visible{outline:3px solid #7c3aed!important;outline-offset:2px!important;}
+button,[role=button]{min-height:44px;min-width:44px;}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
+@media(prefers-contrast:high){body{background:#000;color:#fff;}a{color:#ff0;}}

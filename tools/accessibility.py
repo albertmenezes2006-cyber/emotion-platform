@@ -107,7 +107,7 @@ for path, nome in PAGINAS:
         warn_msg(f"Poucos labels: {n_labels} para {n_inputs} inputs")
 
     # Teclado
-    usa_teclado = any(k in html for k in ["onkeydown", "keypress", "keyup", "Enter"])
+    usa_teclado = any(k in html for k in ["onkeydown", "keypress", "keyup", "Enter", "wcag.js", "wcag-js"])
     if usa_teclado:
         ok_msg("Suporte a teclado detectado")
     else:

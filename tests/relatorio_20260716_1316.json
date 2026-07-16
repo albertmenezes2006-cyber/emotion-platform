@@ -1,0 +1,42 @@
+{
+  "data": "2026-07-16 13:16:29.680421",
+  "score": "9/9",
+  "resultados": {
+    "1. Compilacao": {
+      "ok": true,
+      "tempo": 0.1
+    },
+    "2. Plugins": {
+      "ok": true,
+      "tempo": 5.6
+    },
+    "3. Testes API": {
+      "ok": true,
+      "tempo": 18.5
+    },
+    "4. Seguranca": {
+      "ok": true,
+      "tempo": 2.8
+    },
+    "5. Performance": {
+      "ok": true,
+      "tempo": 16.1
+    },
+    "6. Acessibilidade": {
+      "ok": true,
+      "tempo": 1.6
+    },
+    "7. SSL": {
+      "ok": true,
+      "tempo": 0.3
+    },
+    "8. SEO": {
+      "ok": true,
+      "tempo": 1.7
+    },
+    "9. Browser Real": {
+      "ok": true,
+      "tempo": 48.5
+    }
+  }
+}

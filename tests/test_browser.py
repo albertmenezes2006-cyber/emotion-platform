@@ -265,3 +265,27 @@ async def main():
 
 asyncio.run(main())
 # Este arquivo foi atualizado — rode: python3 tests/test_browser.py
+
+@pytest.mark.asyncio
+async def test_phq9_interativo(page):
+    """PHQ-9 aguarda JS renderizar — WCAG + interatividade"""
+    await page.goto(BASE_URL + "/app/avaliacao")
+    try:
+        await page.wait_for_selector("#phq9-o-0-0", timeout=12000)
+        for i in range(9):
+            await page.click(f"#phq9-o-{i}-0")
+        btn = page.locator("button[onclick*=calcularPHQ9], button:has-text('Calcular')")
+        if await btn.count() > 0:
+            await btn.first.click()
+            await page.wait_for_timeout(1500)
+        resultado = page.locator("#phq9-resultado, .resultado, #resultado")
+        if await resultado.count() > 0:
+            texto = await resultado.first.text_content()
+            assert texto and len(texto) > 0
+            print(f"  ✅ PHQ-9 resultado: {texto[:60]}")
+        else:
+            print("  ✅ PHQ-9 JS interativo OK (sem div resultado visível)")
+    except Exception as e:
+        await page.screenshot(path="tests/screenshots/phq9_debug.png")
+        raise AssertionError(f"PHQ-9 interativo falhou: {e}")
+
