@@ -1,24 +1,24 @@
-"""Plugin: cinco_ritmos_movimentos | danca_movimento | 5 Ritmos movimento meditativo de Gabrielle Roth"""
+"""Plugin: cronótipo_avaliacao | cronoterapia | Cronotipo: matutino vespertino"""
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
 import uuid, logging
 logger = logging.getLogger(__name__)
-router = APIRouter(prefix="/api/v1/cinco-ritmos-movimentos", tags=["danca_movimento"])
+router = APIRouter(prefix="/api/v1/cronótipo-avaliacao", tags=["cronoterapia"])
 _db = {}
 
-class CincoRitmosMovimentosPlugin(PluginBase):
-    name = "cinco_ritmos_movimentos"; version = "1.0.0"
-    description = "5 Ritmos movimento meditativo de Gabrielle Roth"; category = "danca_movimento"
+class CronótipoAvaliacaoPlugin(PluginBase):
+    name = "cronótipo_avaliacao"; version = "1.0.0"
+    description = "Cronotipo: matutino vespertino"; category = "cronoterapia"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[cinco_ritmos_movimentos] OK")
+        logger.info(f"[cronótipo_avaliacao] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 
 @router.get("/status")
 async def status():
-    return {"plugin":"cinco_ritmos_movimentos","cat":"danca_movimento","total":len(_db),"ts":datetime.utcnow().isoformat()}
+    return {"plugin":"cronótipo_avaliacao","cat":"cronoterapia","total":len(_db),"ts":datetime.utcnow().isoformat()}
 
 @router.post("/criar")
 async def criar(nome:str, valor:str="", user_id:str=""):
@@ -40,4 +40,4 @@ async def deletar(item_id:str):
     if item_id not in _db: raise HTTPException(404,"Nao encontrado")
     del _db[item_id]; return {"status":"deletado"}
 
-plugin = CincoRitmosMovimentosPlugin()
+plugin = CronótipoAvaliacaoPlugin()
