@@ -4,297 +4,567 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chat IA Terapêutico — EmotionAI</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="stylesheet" href="/static/css/emotion.css">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--primary:#7C3AED;--bg:#09090B;--bg2:#18181B;--bg3:#27272A;--card:#1C1C1F;--text:#FAFAFA;--text2:#A1A1AA;--text3:#71717A;--border:#3F3F46;--gradient:linear-gradient(135deg,#7C3AED,#EC4899)}
-body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden}
-.nav{flex-shrink:0;background:rgba(9,9,11,0.95);border-bottom:1px solid var(--border);padding:0 1.5rem;height:60px;display:flex;align-items:center;justify-content:space-between}
-.nav-brand{font-size:1.2rem;font-weight:800;text-decoration:none;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.nav-info{font-size:0.8rem;color:var(--text3);display:flex;align-items:center;gap:0.5rem}
-.status-dot{width:8px;height:8px;border-radius:50%;background:#10B981;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
-.chat-layout{display:flex;flex:1;overflow:hidden}
-.chat-sidebar{width:260px;background:var(--bg2);border-right:1px solid var(--border);padding:1rem;display:flex;flex-direction:column;gap:0.5rem;overflow-y:auto}
-.sidebar-title{font-size:0.75rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;padding:0.5rem 0;margin-bottom:0.25rem}
-.sidebar-btn{
-  display:flex;align-items:center;gap:0.75rem;
-  padding:0.75rem;border-radius:10px;border:none;cursor:pointer;
-  background:transparent;color:var(--text2);
-  font-size:0.875rem;text-align:left;width:100%;
-  transition:all 0.15s;
+html, body { height: 100%; overflow: hidden; }
+body { display: flex; flex-direction: column; }
+
+.chat-wrapper {
+  flex: 1; display: flex; overflow: hidden;
 }
-.sidebar-btn:hover{background:var(--bg3);color:var(--text)}
-.sidebar-btn span{font-size:1.1rem}
-.sidebar-divider{height:1px;background:var(--border);margin:0.5rem 0}
-.model-select{
-  width:100%;padding:0.6rem 0.75rem;
-  background:var(--bg3);border:1px solid var(--border);
-  color:var(--text);border-radius:8px;font-size:0.8rem;cursor:pointer;
+
+/* SIDEBAR */
+.sidebar {
+  width: 260px; flex-shrink: 0;
+  background: var(--bg2); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; padding: 1rem;
+  overflow-y: auto;
 }
-.emergency-sidebar{
-  background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);
-  border-radius:10px;padding:0.75rem;margin-top:auto;
+.sidebar-section { margin-bottom: 1.5rem; }
+.sidebar-label {
+  font-size: 0.7rem; font-weight: 700; color: var(--text3);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  margin-bottom: 0.5rem; padding: 0 0.25rem;
 }
-.emergency-sidebar-title{color:#F87171;font-size:0.75rem;font-weight:700;margin-bottom:0.25rem}
-.emergency-sidebar-text{color:var(--text3);font-size:0.75rem;line-height:1.4}
-.chat-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.chat-messages{flex:1;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:1rem}
-.chat-messages::-webkit-scrollbar{width:4px}
-.chat-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-.msg{display:flex;gap:0.75rem;max-width:80%;animation:fadeIn 0.3s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.msg.user{align-self:flex-end;flex-direction:row-reverse}
-.msg-avatar{
-  width:36px;height:36px;border-radius:50%;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;font-size:1.1rem;
+.sidebar-item {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.625rem 0.75rem; border-radius: 8px;
+  cursor: pointer; color: var(--text2);
+  font-size: 0.875rem; transition: all 0.15s;
+  border: none; background: none; width: 100%; text-align: left;
 }
-.msg.ai .msg-avatar{background:linear-gradient(135deg,#7C3AED,#EC4899)}
-.msg.user .msg-avatar{background:var(--bg3);border:1px solid var(--border)}
-.msg-bubble{
-  padding:0.875rem 1.1rem;border-radius:16px;
-  font-size:0.9rem;line-height:1.6;
+.sidebar-item:hover { background: var(--bg3); color: var(--text); }
+.sidebar-item .icon { font-size: 1rem; }
+
+.model-selector {
+  width: 100%; padding: 0.5rem 0.75rem;
+  background: var(--bg3); border: 1px solid var(--border);
+  color: var(--text); border-radius: 8px;
+  font-size: 0.8rem; cursor: pointer;
 }
-.msg.ai .msg-bubble{background:var(--card);border:1px solid var(--border);border-radius:4px 16px 16px 16px;color:var(--text)}
-.msg.user .msg-bubble{background:var(--gradient);color:white;border-radius:16px 4px 16px 16px}
-.msg-time{font-size:0.7rem;color:var(--text3);margin-top:0.25rem;padding:0 0.5rem}
-.msg.user .msg-time{text-align:right}
-.typing{display:flex;gap:4px;padding:0.5rem}
-.typing span{width:6px;height:6px;background:var(--text3);border-radius:50%;animation:typing 1s infinite}
-.typing span:nth-child(2){animation-delay:0.2s}
-.typing span:nth-child(3){animation-delay:0.4s}
-@keyframes typing{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-.chat-input-area{
-  flex-shrink:0;padding:1rem 1.5rem;
-  background:var(--bg2);border-top:1px solid var(--border);
+
+.emergency-box {
+  margin-top: auto;
+  background: rgba(239,68,68,0.08);
+  border: 1px solid rgba(239,68,68,0.25);
+  border-radius: 10px; padding: 0.875rem;
 }
-.quick-replies{display:flex;gap:0.5rem;margin-bottom:0.75rem;flex-wrap:wrap}
-.quick-reply{
-  padding:0.35rem 0.75rem;border-radius:50px;
-  background:var(--bg3);border:1px solid var(--border);
-  color:var(--text2);font-size:0.78rem;cursor:pointer;
-  transition:all 0.15s;white-space:nowrap;
+.emergency-box h4 { color: #F87171; font-size: 0.8rem; margin-bottom: 0.35rem; }
+.emergency-box p { color: var(--text3); font-size: 0.78rem; line-height: 1.4; }
+
+/* CHAT MAIN */
+.chat-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+.chat-header {
+  padding: 0.875rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: space-between;
 }
-.quick-reply:hover{border-color:#7C3AED;color:#A78BFA}
-.input-row{display:flex;gap:0.75rem;align-items:flex-end}
-.chat-input{
-  flex:1;padding:0.875rem 1rem;
-  background:var(--bg3);border:1px solid var(--border);
-  border-radius:12px;color:var(--text);font-size:0.9rem;
-  resize:none;max-height:120px;font-family:inherit;
-  transition:border-color 0.2s;
+.chat-header-info { display: flex; align-items: center; gap: 0.75rem; }
+.status-indicator {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 8px rgba(16,185,129,0.5);
+  animation: pulse-green 2s infinite;
 }
-.chat-input:focus{outline:none;border-color:#7C3AED}
-.chat-input::placeholder{color:var(--text3)}
-.send-btn{
-  width:44px;height:44px;border-radius:12px;border:none;cursor:pointer;
-  background:var(--gradient);color:white;font-size:1.1rem;
-  flex-shrink:0;transition:all 0.2s;
-  display:flex;align-items:center;justify-content:center;
+@keyframes pulse-green {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(0.9); }
 }
-.send-btn:hover:not(:disabled){transform:scale(1.05)}
-.send-btn:disabled{opacity:0.5;cursor:not-allowed}
-.crisis-banner{
-  background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);
-  border-radius:10px;padding:0.875rem 1rem;margin-bottom:0.75rem;
-  font-size:0.85rem;color:#F87171;display:none;
+.chat-header-title { font-weight: 700; font-size: 0.95rem; }
+.chat-header-sub { color: var(--text3); font-size: 0.78rem; }
+.model-badge {
+  background: rgba(124,58,237,0.15); color: #A78BFA;
+  border: 1px solid rgba(124,58,237,0.3);
+  padding: 0.25rem 0.75rem; border-radius: 50px;
+  font-size: 0.75rem; font-weight: 600;
 }
-.crisis-banner.show{display:block}
-@media(max-width:768px){.chat-sidebar{display:none}.msg{max-width:90%}}
+
+.messages {
+  flex: 1; overflow-y: auto;
+  padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;
+}
+.messages::-webkit-scrollbar { width: 4px; }
+.messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.msg { display: flex; gap: 0.75rem; max-width: 82%; }
+.msg.user { align-self: flex-end; flex-direction: row-reverse; }
+.msg.ai { align-self: flex-start; }
+
+.msg-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  flex-shrink: 0; font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.msg.ai .msg-avatar { background: var(--gradient); }
+.msg.user .msg-avatar {
+  background: var(--bg3); border: 1px solid var(--border);
+}
+
+.msg-content { display: flex; flex-direction: column; gap: 0.25rem; }
+.msg.user .msg-content { align-items: flex-end; }
+
+.msg-bubble {
+  padding: 0.875rem 1.1rem;
+  font-size: 0.9rem; line-height: 1.6;
+  border-radius: 16px;
+}
+.msg.ai .msg-bubble {
+  background: var(--card); border: 1px solid var(--border);
+  border-top-left-radius: 4px; color: var(--text);
+}
+.msg.user .msg-bubble {
+  background: var(--gradient); color: white;
+  border-top-right-radius: 4px;
+}
+.msg-meta { font-size: 0.7rem; color: var(--text3); padding: 0 0.25rem; }
+
+/* TYPING */
+.typing-dots { display: flex; gap: 4px; padding: 0.5rem 0.25rem; }
+.typing-dots span {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--text3); animation: bounce 1.2s infinite;
+}
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce {
+  0%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-8px); }
+}
+
+/* INPUT AREA */
+.input-area {
+  padding: 1rem 1.5rem 1.25rem;
+  background: var(--bg); border-top: 1px solid var(--border);
+}
+
+.crisis-alert {
+  background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.35);
+  border-radius: 10px; padding: 0.75rem 1rem;
+  margin-bottom: 0.875rem; font-size: 0.85rem; color: #F87171;
+  display: none;
+}
+.crisis-alert.show { display: flex; gap: 0.5rem; align-items: center; }
+
+.quick-chips {
+  display: flex; gap: 0.5rem; margin-bottom: 0.875rem;
+  flex-wrap: wrap;
+}
+.chip {
+  padding: 0.35rem 0.875rem; border-radius: 50px;
+  background: var(--bg3); border: 1px solid var(--border);
+  color: var(--text2); font-size: 0.8rem; cursor: pointer;
+  transition: all 0.15s; white-space: nowrap;
+}
+.chip:hover { border-color: var(--primary-light); color: #A78BFA; }
+
+.input-row { display: flex; gap: 0.75rem; align-items: flex-end; }
+
+.chat-textarea {
+  flex: 1;
+  padding: 0.875rem 1rem;
+  background: var(--bg2); border: 1.5px solid var(--border);
+  border-radius: 14px; color: var(--text);
+  font-size: 0.9rem; font-family: inherit;
+  resize: none; max-height: 140px; min-height: 50px;
+  line-height: 1.5; transition: border-color 0.15s;
+  overflow-y: auto;
+}
+.chat-textarea:focus { outline: none; border-color: var(--primary); }
+.chat-textarea::placeholder { color: var(--text3); }
+
+.send-btn {
+  width: 46px; height: 46px; flex-shrink: 0;
+  background: var(--gradient); border: none; border-radius: 12px;
+  color: white; cursor: pointer; font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.send-btn:hover:not(:disabled) { transform: scale(1.05); box-shadow: var(--glow); }
+.send-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* DISCLAIMER */
+.disclaimer {
+  text-align: center; margin-top: 0.5rem;
+  font-size: 0.72rem; color: var(--text3);
+}
+
+/* MSG ANIM */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.msg { animation: slideIn 0.25s ease; }
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .msg { max-width: 92%; }
+}
 </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav class="nav">
   <a href="/" class="nav-brand">🧠 EmotionAI</a>
-  <div class="nav-info">
-    <div class="status-dot"></div>
-    <span>IA Online · Groq + Gemini</span>
-  </div>
+  <ul class="nav-links">
+    <li><a href="/app/avaliacao">Avaliação</a></li>
+    <li><a href="/app/chat" class="active">Chat IA</a></li>
+    <li><a href="/app/diario">Diário</a></li>
+    <li><a href="/app/dashboard">Dashboard</a></li>
+  </ul>
+  <a href="/app/login" class="nav-btn">Entrar</a>
 </nav>
 
-<div class="chat-layout">
-  <aside class="chat-sidebar">
-    <div class="sidebar-title">Início rápido</div>
-    <button class="sidebar-btn" onclick="sendQuick('Estou me sentindo ansioso hoje e preciso de ajuda')">
-      <span>😰</span> Estou ansioso
-    </button>
-    <button class="sidebar-btn" onclick="sendQuick('Estou triste e sem energia, não consigo me motivar')">
-      <span>😔</span> Estou triste
-    </button>
-    <button class="sidebar-btn" onclick="sendQuick('Me ensina uma técnica de respiração para relaxar agora')">
-      <span>🌬️</span> Técnica respiração
-    </button>
-    <button class="sidebar-btn" onclick="sendQuick('Quero praticar mindfulness, como começo?')">
-      <span>🧘</span> Mindfulness
-    </button>
-    <button class="sidebar-btn" onclick="sendQuick('Preciso de motivação para continuar')">
-      <span>💪</span> Motivação
-    </button>
-    <button class="sidebar-btn" onclick="sendQuick('Não consigo dormir, o que posso fazer?')">
-      <span>😴</span> Problemas de sono
-    </button>
+<div class="chat-wrapper">
 
-    <div class="sidebar-divider"></div>
-    <div class="sidebar-title">Modelo de IA</div>
-    <select class="model-select" id="model-select">
-      <option value="auto">Auto (melhor disponível)</option>
-      <option value="groq">Groq LLaMA3 (rápido)</option>
-      <option value="gemini">Google Gemini</option>
-    </select>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Início rápido</div>
+      <button class="sidebar-item" onclick="sendMsg('Estou me sentindo muito ansioso agora e preciso de ajuda')">
+        <span class="icon">😰</span> Estou ansioso
+      </button>
+      <button class="sidebar-item" onclick="sendMsg('Estou triste e sem energia, não consigo me motivar')">
+        <span class="icon">😔</span> Estou triste
+      </button>
+      <button class="sidebar-item" onclick="sendMsg('Não consigo dormir, fica me passando muita coisa na cabeça')">
+        <span class="icon">😴</span> Problemas de sono
+      </button>
+      <button class="sidebar-item" onclick="sendMsg('Me ensina a técnica de respiração 4-7-8 passo a passo')">
+        <span class="icon">🌬️</span> Respiração 4-7-8
+      </button>
+      <button class="sidebar-item" onclick="sendMsg('Quero aprender mindfulness, como começo agora?')">
+        <span class="icon">🧘</span> Mindfulness
+      </button>
+      <button class="sidebar-item" onclick="sendMsg('Estou com muita raiva e não sei como lidar com isso')">
+        <span class="icon">😠</span> Raiva / Estresse
+      </button>
+      <button class="sidebar-item" onclick="sendMsg('Preciso de motivação para continuar meu dia')">
+        <span class="icon">💪</span> Motivação
+      </button>
+    </div>
 
-    <div class="sidebar-divider"></div>
-    <button class="sidebar-btn" onclick="clearChat()">🗑️ Limpar conversa</button>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Modelo de IA</div>
+      <select class="model-selector" id="model-select">
+        <option value="auto">🤖 Auto (melhor)</option>
+        <option value="groq">⚡ Groq LLaMA3</option>
+        <option value="gemini">✨ Google Gemini</option>
+      </select>
+    </div>
 
-    <div class="emergency-sidebar">
-      <div class="emergency-sidebar-title">🚨 Emergência</div>
-      <div class="emergency-sidebar-text">CVV: <strong>188</strong> (24h gratuito)<br>SAMU: <strong>192</strong></div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Ações</div>
+      <button class="sidebar-item" onclick="clearChat()">
+        <span class="icon">🗑️</span> Limpar conversa
+      </button>
+      <button class="sidebar-item" onclick="copyConversation()">
+        <span class="icon">📋</span> Copiar conversa
+      </button>
+    </div>
+
+    <div class="emergency-box">
+      <h4>🚨 Emergência</h4>
+      <p>
+        <strong>CVV: 188</strong> (24h gratuito)<br>
+        <strong>SAMU: 192</strong><br>
+        Você não está sozinho.
+      </p>
     </div>
   </aside>
 
+  <!-- CHAT PRINCIPAL -->
   <div class="chat-main">
-    <div class="chat-messages" id="messages">
+
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <div class="status-indicator"></div>
+        <div>
+          <div class="chat-header-title">Assistente de Saúde Mental</div>
+          <div class="chat-header-sub">Powered by Groq + Gemini · Baseado em TCC e Mindfulness</div>
+        </div>
+      </div>
+      <div class="model-badge" id="current-model">🤖 Auto</div>
+    </div>
+
+    <div class="messages" id="messages">
       <div class="msg ai">
         <div class="msg-avatar">🧠</div>
-        <div>
-          <div class="msg-bubble">Olá! 👋 Sou seu assistente de saúde mental com IA.<br><br>Estou aqui para oferecer suporte emocional, ensinar técnicas terapêuticas e ouvir você. <strong>Como você está se sentindo agora?</strong><br><br><em>Powered by Groq LLaMA3 + Google Gemini</em></div>
-          <div class="msg-time">agora</div>
+        <div class="msg-content">
+          <div class="msg-bubble">
+            Olá! 👋 Sou seu assistente de saúde mental com IA.<br><br>
+            Estou aqui para <strong>ouvir você</strong>, oferecer suporte emocional e ensinar técnicas baseadas em TCC, DBT e Mindfulness.<br><br>
+            <em>Como você está se sentindo agora?</em>
+          </div>
+          <div class="msg-meta">agora · EmotionAI</div>
         </div>
       </div>
     </div>
 
-    <div class="chat-input-area">
-      <div class="crisis-banner" id="crisis-banner">
-        🚨 <strong>Em situação de emergência:</strong> CVV 188 (24h, gratuito) · SAMU 192 · Você não está sozinho.
+    <div class="input-area">
+      <div class="crisis-alert" id="crisis-alert">
+        🚨 <strong>Em emergência:</strong> CVV 188 (24h) · SAMU 192 · Você não está sozinho.
       </div>
-      <div class="quick-replies">
-        <div class="quick-reply" onclick="sendQuick('Como você pode me ajudar?')">Como pode me ajudar?</div>
-        <div class="quick-reply" onclick="sendQuick('Estou ansioso agora')">Estou ansioso</div>
-        <div class="quick-reply" onclick="sendQuick('Me ensina respiração 4-7-8')">Respiração 4-7-8</div>
-        <div class="quick-reply" onclick="sendQuick('O que é TCC?')">O que é TCC?</div>
+
+      <div class="quick-chips">
+        <div class="chip" onclick="sendMsg('Como você pode me ajudar?')">Como pode me ajudar?</div>
+        <div class="chip" onclick="sendMsg('Estou ansioso agora')">Estou ansioso</div>
+        <div class="chip" onclick="sendMsg('Técnica de respiração')">Respiração</div>
+        <div class="chip" onclick="sendMsg('O que é TCC?')">O que é TCC?</div>
+        <div class="chip" onclick="sendMsg('Autocompaixão')">Autocompaixão</div>
       </div>
+
       <div class="input-row">
         <textarea
-          class="chat-input" id="chat-input" rows="1"
-          placeholder="Escreva como você está se sentindo..."
-          onkeydown="handleKey(event)"
-          oninput="autoResize(this)"
+          class="chat-textarea"
+          id="chat-input"
+          placeholder="Digite sua mensagem... (Enter para enviar, Shift+Enter para nova linha)"
+          rows="1"
         ></textarea>
-        <button class="send-btn" id="send-btn" onclick="sendMessage()">➤</button>
+        <button class="send-btn" id="send-btn" title="Enviar (Enter)">
+          ➤
+        </button>
+      </div>
+      <div class="disclaimer">
+        ⚠️ Este chat é de apoio emocional e não substitui atendimento psicológico profissional.
       </div>
     </div>
+
   </div>
 </div>
 
 <script>
+// ═══════════════════════════════════
+// CONFIGURAÇÃO
+// ═══════════════════════════════════
+const BASE = window.location.origin;
+const userId = localStorage.getItem('ep_uid') || 'u_' + Math.random().toString(36).substr(2,8);
+localStorage.setItem('ep_uid', userId);
+
 let historico = [];
-let isTyping = false;
-const userId = localStorage.getItem('ep_userid') || 'user_'+Math.random().toString(36).substr(2,8);
-localStorage.setItem('ep_userid', userId);
+let enviando = false;
 
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 120)+'px';
-}
+// ═══════════════════════════════════
+// ELEMENTOS DOM
+// ═══════════════════════════════════
+const input = document.getElementById('chat-input');
+const btn = document.getElementById('send-btn');
+const msgs = document.getElementById('messages');
+const modelSelect = document.getElementById('model-select');
+const modelBadge = document.getElementById('current-model');
+const crisisAlert = document.getElementById('crisis-alert');
 
-function handleKey(e) {
-  if(e.key==='Enter' && !e.shiftKey) {
+// ═══════════════════════════════════
+// EVENTOS
+// ═══════════════════════════════════
+input.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
-    sendMessage();
+    enviar();
   }
+});
+
+input.addEventListener('input', () => {
+  input.style.height = 'auto';
+  input.style.height = Math.min(input.scrollHeight, 140) + 'px';
+  btn.disabled = !input.value.trim() || enviando;
+});
+
+modelSelect.addEventListener('change', () => {
+  const names = {auto:'🤖 Auto', groq:'⚡ Groq', gemini:'✨ Gemini'};
+  modelBadge.textContent = names[modelSelect.value] || '🤖 Auto';
+});
+
+// Focus automático
+input.focus();
+
+// ═══════════════════════════════════
+// FUNÇÕES PRINCIPAIS
+// ═══════════════════════════════════
+function getTime() {
+  return new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
 }
 
-function addMsg(text, type, model='') {
-  const msgs = document.getElementById('messages');
-  const time = new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+function addMsg(texto, tipo, modelo) {
   const div = document.createElement('div');
-  div.className = `msg ${type}`;
-  const avatar = type==='ai' ? '🧠' : '👤';
+  div.className = `msg ${tipo}`;
+
+  const emoji = tipo === 'ai' ? '🧠' : '👤';
+  const meta = tipo === 'ai'
+    ? `${getTime()} · ${modelo || 'EmotionAI'}`
+    : getTime();
+
+  // Formatar texto (negrito, quebras de linha, links CVV)
+  let html = texto
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\n/g,'<br>');
+
   div.innerHTML = `
-    <div class="msg-avatar">${avatar}</div>
-    <div>
-      <div class="msg-bubble">${text.replace(/
-/g,'<br>')}</div>
-      <div class="msg-time">${time}${model?' · '+model:''}</div>
-    </div>
-  `;
+    <div class="msg-avatar">${emoji}</div>
+    <div class="msg-content">
+      <div class="msg-bubble">${html}</div>
+      <div class="msg-meta">${meta}</div>
+    </div>`;
+
   msgs.appendChild(div);
   msgs.scrollTop = msgs.scrollHeight;
 }
 
 function showTyping() {
-  const msgs = document.getElementById('messages');
   const div = document.createElement('div');
-  div.className = 'msg ai'; div.id = 'typing-indicator';
-  div.innerHTML = `<div class="msg-avatar">🧠</div><div><div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div></div>`;
+  div.className = 'msg ai'; div.id = 'typing';
+  div.innerHTML = `
+    <div class="msg-avatar">🧠</div>
+    <div class="msg-content">
+      <div class="msg-bubble">
+        <div class="typing-dots"><span></span><span></span><span></span></div>
+      </div>
+    </div>`;
   msgs.appendChild(div);
   msgs.scrollTop = msgs.scrollHeight;
 }
 
 function hideTyping() {
-  const el = document.getElementById('typing-indicator');
-  if(el) el.remove();
+  const el = document.getElementById('typing');
+  if (el) el.remove();
 }
 
-async function sendMessage(msg) {
-  const input = document.getElementById('chat-input');
-  const text = msg || input.value.trim();
-  if(!text || isTyping) return;
+function crisisWords(txt) {
+  const words = ['suicídio','suicidio','me matar','não quero viver','nao quero viver','acabar com tudo','me machucar'];
+  return words.some(w => txt.toLowerCase().includes(w));
+}
 
-  input.value = '';
-  input.style.height = 'auto';
-  isTyping = true;
-  document.getElementById('send-btn').disabled = true;
+async function enviar(msgOverride) {
+  const texto = msgOverride || input.value.trim();
+  if (!texto || enviando) return;
 
-  addMsg(text, 'user');
-  historico.push({role:'user', content:text});
-  showTyping();
+  // Limpar input
+  if (!msgOverride) {
+    input.value = '';
+    input.style.height = 'auto';
+  }
+  btn.disabled = true;
+  enviando = true;
 
-  const modelo = document.getElementById('model-select').value;
-  let resposta = null;
-  let modeloUsado = null;
+  // Mostrar mensagem do usuário
+  addMsg(texto, 'user');
+  historico.push({role: 'user', content: texto});
 
-  try {
-    const r = await fetch(`/api/v1/chat-ia/mensagem?user_id=${encodeURIComponent(userId)}&mensagem=${encodeURIComponent(text)}&modelo=${modelo}`, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({user_id:userId, mensagem:text, historico_conversa:historico.slice(-6), modelo})
-    });
-    if(r.ok) {
-      const d = await r.json();
-      resposta = d.resposta;
-      modeloUsado = d.modelo_usado;
-      if(d.alerta_crise) document.getElementById('crisis-banner').classList.add('show');
-    }
-  } catch(e) {}
-
-  if(!resposta) {
-    const fallbacks = [
-      'Estou aqui para te ouvir. 💙 Me conta mais sobre o que está sentindo?',
-      'Obrigado por compartilhar isso comigo. Como posso te ajudar melhor?',
-      'Entendo que você está passando por um momento difícil. Vamos trabalhar juntos nisso.'
-    ];
-    resposta = fallbacks[Math.floor(Math.random()*fallbacks.length)];
-    modeloUsado = 'fallback';
+  // Verificar crise
+  if (crisisWords(texto)) {
+    crisisAlert.classList.add('show');
   }
 
+  // Mostrar typing
+  showTyping();
+
+  const modelo = modelSelect.value;
+  let resposta = null;
+  let modeloUsado = 'EmotionAI';
+
+  try {
+    // Tentar endpoint principal
+    const url = `${BASE}/api/v1/chat-ia/mensagem?user_id=${encodeURIComponent(userId)}&mensagem=${encodeURIComponent(texto)}&modelo=${modelo}`;
+    const r = await fetch(url, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        user_id: userId,
+        mensagem: texto,
+        historico_conversa: historico.slice(-8),
+        modelo: modelo
+      }),
+      signal: AbortSignal.timeout(30000)
+    });
+
+    if (r.ok) {
+      const d = await r.json();
+      resposta = d.resposta;
+      modeloUsado = d.modelo_usado || 'IA';
+      if (d.alerta_crise) crisisAlert.classList.add('show');
+    }
+  } catch (err) {
+    console.warn('Endpoint principal:', err.message);
+  }
+
+  // Fallback: tentar multi-llm
+  if (!resposta) {
+    try {
+      const url2 = `${BASE}/api/v1/multi-llm/chat?mensagem=${encodeURIComponent(texto)}&user_id=${encodeURIComponent(userId)}`;
+      const r2 = await fetch(url2, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({}),
+        signal: AbortSignal.timeout(30000)
+      });
+      if (r2.ok) {
+        const d2 = await r2.json();
+        resposta = d2.resposta;
+        modeloUsado = d2.modelo_usado || 'IA';
+      }
+    } catch (err) {
+      console.warn('Fallback multi-llm:', err.message);
+    }
+  }
+
+  // Fallback final inteligente
+  if (!resposta) {
+    const baixo = texto.toLowerCase();
+    if (baixo.includes('ansio') || baixo.includes('nervos') || baixo.includes('pânico')) {
+      resposta = 'Entendo que você está sentindo ansiedade. Vamos tentar algo agora mesmo:\n\n**Respiração 4-7-8:**\n1. Expire completamente\n2. Inspire pelo nariz por **4 segundos**\n3. Segure o ar por **7 segundos**\n4. Expire pela boca por **8 segundos**\n\nRepita 4 vezes. Como você está se sentindo depois?';
+    } else if (baixo.includes('trist') || baixo.includes('deprim') || baixo.includes('choran')) {
+      resposta = 'Sinto muito que você está passando por esse momento difícil. 💙\n\nA tristeza é uma emoção válida e faz parte da experiência humana. Você não precisa enfrentá-la sozinho(a).\n\nMe conta mais: o que está acontecendo?';
+    } else if (baixo.includes('respiração') || baixo.includes('respiracao') || baixo.includes('4-7-8')) {
+      resposta = '**Técnica de Respiração 4-7-8** 🌬️\n\n1. Sente-se confortavelmente\n2. Coloque a língua atrás dos dentes superiores\n3. **Inspire** pelo nariz: conte até **4**\n4. **Segure**: conte até **7**\n5. **Expire** pela boca: conte até **8**\n6. Repita 4 vezes\n\nEssa técnica ativa o sistema nervoso parassimpático e reduz ansiedade em minutos. Quer tentar agora?';
+    } else if (baixo.includes('mindf') || baixo.includes('meditaç')) {
+      resposta = '**Mindfulness em 5 minutos** 🧘\n\n1. Sente-se confortavelmente e feche os olhos\n2. Respire naturalmente\n3. Foque na sensação do ar entrando e saindo\n4. Quando pensamentos vierem, apenas observe e volte à respiração\n5. Sem julgamentos\n\nComeçar com 5 minutos por dia já traz benefícios comprovados. Quer que eu te guie?';
+    } else if (baixo.includes('dormir') || baixo.includes('insônia') || baixo.includes('sono')) {
+      resposta = 'Problemas para dormir são muito comuns e estressantes. 😴\n\n**Dicas baseadas em evidências:**\n• Evite telas 1h antes de dormir\n• Mantenha horário fixo de deitar/acordar\n• Quarto escuro e fresco (18-20°C)\n• Técnica de relaxamento muscular progressivo\n• Evite cafeína após 14h\n\nO que está passando pela sua cabeça quando tenta dormir?';
+    } else {
+      resposta = 'Obrigado por compartilhar isso comigo. 💙\n\nEstou aqui para te ouvir e apoiar. Pode me contar mais sobre o que está sentindo? Quanto mais você compartilhar, melhor posso te ajudar.';
+    }
+    modeloUsado = 'EmotionAI';
+  }
+
+  historico.push({role: 'assistant', content: resposta});
   hideTyping();
   addMsg(resposta, 'ai', modeloUsado);
-  historico.push({role:'assistant', content:resposta});
-  isTyping = false;
-  document.getElementById('send-btn').disabled = false;
+
+  enviando = false;
+  btn.disabled = false;
+  input.focus();
 }
 
-function sendQuick(msg) { sendMessage(msg); }
+// Expor função global
+window.sendMsg = (msg) => enviar(msg);
 
 function clearChat() {
   historico = [];
-  document.getElementById('messages').innerHTML = `
+  msgs.innerHTML = `
     <div class="msg ai">
       <div class="msg-avatar">🧠</div>
-      <div><div class="msg-bubble">Conversa reiniciada. Como posso te ajudar? 💙</div></div>
+      <div class="msg-content">
+        <div class="msg-bubble">Conversa reiniciada. Como posso te ajudar? 💙</div>
+        <div class="msg-meta">${getTime()}</div>
+      </div>
     </div>`;
-  document.getElementById('crisis-banner').classList.remove('show');
+  crisisAlert.classList.remove('show');
 }
+
+function copyConversation() {
+  const text = [...msgs.querySelectorAll('.msg-bubble')]
+    .map(el => el.textContent.trim()).join('\n\n---\n\n');
+  navigator.clipboard.writeText(text).then(() => {
+    alert('Conversa copiada para a área de transferência!');
+  }).catch(() => alert('Não foi possível copiar automaticamente.'));
+}
+
+// Inicializar
+btn.disabled = true;
 </script>
 </body>
 </html>
