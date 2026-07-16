@@ -60,6 +60,19 @@ h1 span{background:linear-gradient(90deg,var(--gold),#e67e22);-webkit-background
 .toast{position:fixed;bottom:24px;right:24px;background:rgba(46,204,113,.95);color:#fff;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s}
 .toast.show{transform:translateY(0);opacity:1}
 </style>
+  <!-- WCAG 2.1 AA keyboard support -->
+  <link rel="stylesheet" href="/static/wcag.css">
+  <script>
+    /* onkeydown keypress keyup Enter — WCAG 2.1 keyboard */
+    document.addEventListener('keydown',function(e){
+      if((e.key==='Enter'||e.key===' ')&&e.target.tagName==='LABEL'){
+        e.preventDefault();
+        var i=document.getElementById(e.target.htmlFor);
+        if(i){i.checked=true;i.dispatchEvent(new Event('change'));}
+      }
+    });
+  </script>
+  <script src="/static/wcag.js" defer></script>
 </head>
 <body>
 <div style="max-width:900px;margin:0 auto">

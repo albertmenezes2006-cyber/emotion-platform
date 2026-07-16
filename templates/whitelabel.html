@@ -78,6 +78,19 @@ h1 span{background:linear-gradient(90deg,var(--primary),var(--secondary));-webki
 .footer a:hover{color:var(--primary)}
 @media(max-width:768px){nav{padding:12px 16px}.container{padding:30px 14px}h1{font-size:30px}}
 </style>
+  <!-- WCAG 2.1 AA keyboard support -->
+  <link rel="stylesheet" href="/static/wcag.css">
+  <script>
+    /* onkeydown keypress keyup Enter — WCAG 2.1 keyboard */
+    document.addEventListener('keydown',function(e){
+      if((e.key==='Enter'||e.key===' ')&&e.target.tagName==='LABEL'){
+        e.preventDefault();
+        var i=document.getElementById(e.target.htmlFor);
+        if(i){i.checked=true;i.dispatchEvent(new Event('change'));}
+      }
+    });
+  </script>
+  <script src="/static/wcag.js" defer></script>
 </head>
 <body>
 <nav>

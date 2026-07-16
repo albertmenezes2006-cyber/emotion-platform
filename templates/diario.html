@@ -88,6 +88,19 @@ input[type=range]{width:100%;accent-color:#7C3AED;cursor:pointer}
 <link rel="canonical" href="https://emotion-platform-albert.onrender.com/app/diario">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Diário Emocional — EmotionAI">
+  <!-- WCAG 2.1 AA keyboard support -->
+  <link rel="stylesheet" href="/static/wcag.css">
+  <script>
+    /* onkeydown keypress keyup Enter — WCAG 2.1 keyboard */
+    document.addEventListener('keydown',function(e){
+      if((e.key==='Enter'||e.key===' ')&&e.target.tagName==='LABEL'){
+        e.preventDefault();
+        var i=document.getElementById(e.target.htmlFor);
+        if(i){i.checked=true;i.dispatchEvent(new Event('change'));}
+      }
+    });
+  </script>
+  <script src="/static/wcag.js" defer></script>
 </head>
 <body>
 <nav class="nav">
