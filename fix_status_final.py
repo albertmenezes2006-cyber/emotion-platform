@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
+"""Corrige status_plugins.py definitivamente"""
+
+with open("status_plugins.py", "w") as f:
+    f.write('''#!/usr/bin/env python3
 """Status UNIVERSAL — detecta TODOS os plugins automaticamente"""
 import os, py_compile
 from datetime import datetime
 
-G="[92m"; R="[91m"; C="[96m"; B="[1m"; X="[0m"; Y="[93m"; M="[95m"
+G="\033[92m"; R="\033[91m"; C="\033[96m"; B="\033[1m"; X="\033[0m"; Y="\033[93m"; M="\033[95m"
 
 SKIP = {"__init__.py","loader.py","plugin_base.py"}
 
@@ -59,3 +63,6 @@ pct = total/1470*100
 bar = int(pct/2)
 print(f"  [{"█"*bar}{"░"*(50-bar)}] {round(pct,1)}%")
 print(f"{"="*65}")
+''')
+
+print("✅ status_plugins.py corrigido")
