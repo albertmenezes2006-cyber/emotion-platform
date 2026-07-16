@@ -12374,6 +12374,640 @@ async def pdf_config_ep():
 # ═══ FIM Q2+Q3 ═══════════════════════════════════════════════════════
 
 
+
+# ═══════════════════════════════════════════════════════════════════════
+# SISTEMA Q4 — AUTOMAÇÃO E INTEGRAÇÃO (11 implementações)
+# ═══════════════════════════════════════════════════════════════════════
+
+ZAPIER_WEBHOOK_URL = _os_s10.getenv("ZAPIER_WEBHOOK_URL", "")
+N8N_WEBHOOK_URL = _os_s10.getenv("N8N_WEBHOOK_URL", "")
+SLACK_BOT_TOKEN = _os_s10.getenv("SLACK_BOT_TOKEN", "")
+SLACK_CHANNEL = _os_s10.getenv("SLACK_CHANNEL", "#geral")
+NOTION_TOKEN = _os_s10.getenv("NOTION_TOKEN", "")
+NOTION_DATABASE_ID = _os_s10.getenv("NOTION_DATABASE_ID", "")
+GOOGLE_SHEETS_KEY = _os_s10.getenv("GOOGLE_SHEETS_KEY", "")
+HUBSPOT_API_KEY = _os_s10.getenv("HUBSPOT_API_KEY", "")
+AIRTABLE_API_KEY = _os_s10.getenv("AIRTABLE_API_KEY", "")
+AIRTABLE_BASE_ID = _os_s10.getenv("AIRTABLE_BASE_ID", "")
+
+# ── Q4.1 Zapier Webhook
+async def zapier_disparar(evento: str, dados: dict) -> bool:
+    if not ZAPIER_WEBHOOK_URL:
+        return False
+    try:
+        import httpx
+        async with httpx.AsyncClient(timeout=10) as client:
+            r = await client.post(ZAPIER_WEBHOOK_URL, json={"evento": evento, "dados": dados, "ts": _datetime_s7.now().isoformat()})
+            return r.status_code == 200
+    except Exception:
+        return False
+
+async def zapier_novo_usuario(usuario_id: int, email: str, plano: str):
+    return await zapier_disparar("novo_usuario", {"usuario_id": usuario_id, "email": email, "plano": plano})
+
+async def zapier_pagamento(usuario_id: int, valor: float, plano: str):
+    return await zapier_disparar("pagamento_aprovado", {"usuario_id": usuario_id, "valor": valor, "plano": plano})
+
+# ── Q4.2 n8n Workflow
+async def n8n_disparar(workflow: str, dados: dict) -> bool:
+    if not N8N_WEBHOOK_URL:
+        return False
+    try:
+        import httpx
+        async with httpx.AsyncClient(timeout=10) as client:
+            r = await client.post(f"{N8N_WEBHOOK_URL}/{workflow}", json=dados)
+            return r.status_code in (200, 201)
+    except Exception:
+        return False
+
+# ── Q4.3 Slack Bot
+async def slack_enviar_mensagem(mensagem: str, canal: str = None) -> bool:
+    if not SLACK_BOT_TOKEN:
+        return False
+    try:
+        import httpx
+        async with httpx.AsyncClient(timeout=10) as client:
+            r = await client.post(
+                "https://slack.com/api/chat.postMessage",
+                headers={"Authorization": f"Bearer {SLACK_BOT_TOKEN}", "Content-Type": "application/json"},
+                json={"channel": canal or SLACK_CHANNEL, "text": mensagem}
+            )
+            return r.json().get("ok", False)
+    except Exception:
+        return False
+
+async def slack_alerta_crise_usuario(usuario_id: int, resumo: str):
+    msg = f":rotating_light: *CRISE DETECTADA*\nUsuario ID: `{usuario_id}`\n_{resumo[:200]}_"
+    return await slack_enviar_mensagem(msg)
+
+async def slack_novo_pagamento(valor: float, plano: str):
+    msg = f":moneybag: *Novo pagamento!* R${valor:.2f} — Plano {plano}"
+    return await slack_enviar_mensagem(msg)
+
+# ── Q4.4 Notion API
+async def notion_criar_pagina(titulo: str, conteudo: dict) -> dict:
+    if not NOTION_TOKEN or not NOTION_DATABASE_ID:
+        return {}
+    try:
+        import httpx
+        async with httpx.AsyncClient(timeout=15) as client:
+            r = await client.post(
+                "https://api.notion.com/v1/pages",
+                headers={"Authorization": f"Bearer {NOTION_TOKEN}", "Notion-Version": "2022-06-28", "Content-Type": "application/json"},
+                json={
+                    "parent": {"database_id": NOTION_DATABASE_ID},
+                    "properties": {"Name": {"title": [{"text": {"content": titulo}}]}},
+                    "children": [{"object": "block", "type": "paragraph", "paragraph": {"rich_text": [{"text": {"content": str(conteudo)[:200]}}]}}]
+                }
+            )
+            return r.json()
+    except Exception as e:
+        return {"erro": str(e)}
+
+# ── Q4.5 Google Sheets
+async def sheets_adicionar_linha(spreadsheet_id: str, valores: list) -> bool:
+    if not GOOGLE_SHEETS_KEY:
+        return False
+    try:
+        import httpx
+        async with httpx.AsyncClient(timeout=15) as client:
+            r = await client.post(
+                f"https://sheets.googleapis.com/v4/spreadsheets/{spreadsheet_id}/values/A1:append",
+                params={"valueInputOption": "RAW", "key": GOOGLE_SHEETS_KEY},
+                json={"values": [valores]}
+            )
+            return r.status_code == 200
+    except Exception:
+        return False
+
+async def sheets_exportar_analises(usuario_id: int, analises: list) -> bool:
+    spreadsheet_id = _os_s10.getenv("GOOGLE_SHEETS_ID", "")
+    if not spreadsheet_id:
+        return False
+    linhas = [[str(a.get("emocao","")), str(a.get("intensidade","")), str(a.get("created_at",""))] for a in analises[:100]]
+    for linha in linhas:
+        await sheets_adicionar_linha(spreadsheet_id, linha)
+    return True
+
+# ── Q4.6 Airtable
+async def airtable_criar_registro(tabela: str, campos: dict) -> dict:
+    if not all([AIRTABLE_API_KEY, AIRTABLE_BASE_ID]):
+        return {}
+    try:
+        import httpx
+        async with httpx.AsyncClient(timeout=15) as client:
+            r = await client.post(
+                f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/{tabela}",
+                headers={"Authorization": f"Bearer {AIRTABLE_API_KEY}", "Content-Type": "application/json"},
+                json={"fields": campos}
+            )
+            return r.json()
+    except Exception as e:
+        return {"erro": str(e)}
+
+# ── Q4.7 HubSpot CRM
+async def hubspot_criar_contato(email: str, nome: str, plano: str) -> dict:
+    if not HUBSPOT_API_KEY:
+        return {}
+    try:
+        import httpx
+        async with httpx.AsyncClient(timeout=15) as client:
+            r = await client.post(
+                "https://api.hubapi.com/crm/v3/objects/contacts",
+                headers={"Authorization": f"Bearer {HUBSPOT_API_KEY}", "Content-Type": "application/json"},
+                json={"properties": {"email": email, "firstname": nome.split()[0], "lifecyclestage": "customer", "plan": plano}}
+            )
+            return r.json()
+    except Exception as e:
+        return {"erro": str(e)}
+
+async def hubspot_registrar_negocio(usuario_id: int, valor: float, plano: str) -> dict:
+    if not HUBSPOT_API_KEY:
+        return {}
+    try:
+        import httpx
+        async with httpx.AsyncClient(timeout=15) as client:
+            r = await client.post(
+                "https://api.hubapi.com/crm/v3/objects/deals",
+                headers={"Authorization": f"Bearer {HUBSPOT_API_KEY}", "Content-Type": "application/json"},
+                json={"properties": {"dealname": f"Plano {plano} - Usuario {usuario_id}", "amount": str(valor), "dealstage": "closedwon", "pipeline": "default"}}
+            )
+            return r.json()
+    except Exception as e:
+        return {"erro": str(e)}
+
+# ── Q4.8 GitHub Actions webhook
+async def github_disparar_workflow(workflow: str, inputs: dict = None) -> bool:
+    github_token = _os_s10.getenv("GITHUB_TOKEN", "")
+    repo = _os_s10.getenv("GITHUB_REPO", "albertmenezes2006-cyber/emotion-platform")
+    if not github_token:
+        return False
+    try:
+        import httpx
+        async with httpx.AsyncClient(timeout=15) as client:
+            r = await client.post(
+                f"https://api.github.com/repos/{repo}/actions/workflows/{workflow}/dispatches",
+                headers={"Authorization": f"Bearer {github_token}", "Accept": "application/vnd.github.v3+json"},
+                json={"ref": "main", "inputs": inputs or {}}
+            )
+            return r.status_code == 204
+    except Exception:
+        return False
+
+# ── Q4.9 Make (Integromat)
+async def make_disparar_cenario(webhook_url: str, dados: dict) -> bool:
+    if not webhook_url:
+        return False
+    try:
+        import httpx
+        async with httpx.AsyncClient(timeout=10) as client:
+            r = await client.post(webhook_url, json=dados)
+            return r.status_code in (200, 201)
+    except Exception:
+        return False
+
+# ── Q4.10 Automação interna
+_automacoes_ativas: dict = {}
+
+def registrar_automacao(nome: str, gatilho: str, acao: str, ativo: bool = True):
+    _automacoes_ativas[nome] = {
+        "gatilho": gatilho,
+        "acao": acao,
+        "ativo": ativo,
+        "execucoes": 0,
+        "criado_em": _datetime_s7.now().isoformat()
+    }
+
+def registrar_execucao_automacao(nome: str):
+    if nome in _automacoes_ativas:
+        _automacoes_ativas[nome]["execucoes"] += 1
+        _automacoes_ativas[nome]["ultima_execucao"] = _datetime_s7.now().isoformat()
+
+registrar_automacao("novo_usuario_zapier", "cadastro", "zapier_novo_usuario")
+registrar_automacao("pagamento_slack", "pagamento_aprovado", "slack_novo_pagamento")
+registrar_automacao("crise_slack", "crise_detectada", "slack_alerta_crise")
+registrar_automacao("usuario_hubspot", "cadastro", "hubspot_criar_contato")
+
+# ── Q4.11 Endpoints
+@app.get("/api/automacoes")
+async def automacoes_ep(request: Request, db=Depends(get_db)):
+    usuario = await verificar_token(request, db)
+    if not usuario or usuario.get("plano") != "admin":
+        return JSONResponse({"erro": "Nao autorizado"}, status_code=403)
+    return JSONResponse({
+        "automacoes": _automacoes_ativas,
+        "integracoes": {
+            "zapier": bool(ZAPIER_WEBHOOK_URL),
+            "n8n": bool(N8N_WEBHOOK_URL),
+            "slack": bool(SLACK_BOT_TOKEN),
+            "notion": bool(NOTION_TOKEN),
+            "hubspot": bool(HUBSPOT_API_KEY),
+            "airtable": bool(AIRTABLE_API_KEY),
+            "sheets": bool(GOOGLE_SHEETS_KEY),
+        },
+        "sistema": "Q4 Automacao"
+    })
+
+@app.post("/api/webhook/zapier")
+async def webhook_zapier_ep(request: Request):
+    try:
+        dados = await request.json()
+        registrar_evento_analytics(0, "zapier_webhook", dados)
+        return JSONResponse({"ok": True, "recebido": True})
+    except Exception:
+        return JSONResponse({"ok": False})
+
+# ═══════════════════════════════════════════════════════════════════════
+# SISTEMA Q5 — BUSINESS INTELLIGENCE (8 implementações)
+# ═══════════════════════════════════════════════════════════════════════
+
+_metricas_negocio: dict = {
+    "mrr": 0.0,
+    "arr": 0.0,
+    "churn_rate": 0.0,
+    "ltv": 0.0,
+    "cac": 0.0,
+    "nps": 0.0,
+    "dau": 0,
+    "mau": 0,
+}
+
+# ── Q5.1 MRR e ARR
+def calcular_mrr(usuarios_premium: int, preco_mensal: float = 49.0) -> float:
+    return round(usuarios_premium * preco_mensal, 2)
+
+def calcular_arr(mrr: float) -> float:
+    return round(mrr * 12, 2)
+
+# ── Q5.2 Churn Rate
+def calcular_churn_rate(cancelamentos_mes: int, total_inicio_mes: int) -> float:
+    if total_inicio_mes == 0:
+        return 0.0
+    return round((cancelamentos_mes / total_inicio_mes) * 100, 2)
+
+# ── Q5.3 LTV
+def calcular_ltv(mrr_por_usuario: float, churn_rate_mensal: float) -> float:
+    if churn_rate_mensal == 0:
+        return mrr_por_usuario * 24
+    return round(mrr_por_usuario / (churn_rate_mensal / 100), 2)
+
+# ── Q5.4 CAC
+def calcular_cac(custo_marketing_mes: float, novos_clientes_mes: int) -> float:
+    if novos_clientes_mes == 0:
+        return 0.0
+    return round(custo_marketing_mes / novos_clientes_mes, 2)
+
+# ── Q5.5 NPS Score
+_nps_respostas: list = []
+
+def registrar_nps(usuario_id: int, nota: int, comentario: str = ""):
+    _nps_respostas.append({
+        "usuario_id": usuario_id,
+        "nota": max(0, min(10, nota)),
+        "comentario": comentario[:200],
+        "ts": _datetime_s7.now().isoformat()
+    })
+
+def calcular_nps() -> dict:
+    if not _nps_respostas:
+        return {"nps": 0, "total": 0}
+    promotores = sum(1 for r in _nps_respostas if r["nota"] >= 9)
+    detratores = sum(1 for r in _nps_respostas if r["nota"] <= 6)
+    total = len(_nps_respostas)
+    nps = round(((promotores - detratores) / total) * 100)
+    return {
+        "nps": nps,
+        "promotores": promotores,
+        "neutros": total - promotores - detratores,
+        "detratores": detratores,
+        "total": total,
+        "classificacao": "Excelente" if nps >= 70 else "Bom" if nps >= 50 else "Regular" if nps >= 0 else "Ruim"
+    }
+
+# ── Q5.6 DAU/MAU
+_usuarios_ativos_dia: dict = {}
+_usuarios_ativos_mes: dict = {}
+
+def registrar_usuario_ativo(usuario_id: int):
+    hoje = _datetime_s7.now().strftime("%Y-%m-%d")
+    mes = _datetime_s7.now().strftime("%Y-%m")
+    if hoje not in _usuarios_ativos_dia:
+        _usuarios_ativos_dia[hoje] = set()
+    _usuarios_ativos_dia[hoje].add(usuario_id)
+    if mes not in _usuarios_ativos_mes:
+        _usuarios_ativos_mes[mes] = set()
+    _usuarios_ativos_mes[mes].add(usuario_id)
+
+def obter_dau() -> int:
+    hoje = _datetime_s7.now().strftime("%Y-%m-%d")
+    return len(_usuarios_ativos_dia.get(hoje, set()))
+
+def obter_mau() -> int:
+    mes = _datetime_s7.now().strftime("%Y-%m")
+    return len(_usuarios_ativos_mes.get(mes, set()))
+
+def calcular_stickiness() -> float:
+    dau = obter_dau()
+    mau = obter_mau()
+    if mau == 0:
+        return 0.0
+    return round((dau / mau) * 100, 1)
+
+# ── Q5.7 Revenue Analytics
+def gerar_relatorio_receita(pagamentos: list) -> dict:
+    if not pagamentos:
+        return {"total": 0, "por_plano": {}, "crescimento": 0}
+    total = sum(p.get("valor", 0) for p in pagamentos)
+    por_plano = {}
+    for p in pagamentos:
+        plano = p.get("plano", "unknown")
+        por_plano[plano] = por_plano.get(plano, 0) + p.get("valor", 0)
+    return {
+        "total": round(total, 2),
+        "por_plano": {k: round(v, 2) for k, v in por_plano.items()},
+        "ticket_medio": round(total/len(pagamentos), 2),
+        "total_transacoes": len(pagamentos)
+    }
+
+# ── Q5.8 Churn Prediction
+def predizer_churn(usuario: dict) -> dict:
+    score_churn = 0
+    fatores = []
+    dias_sem_login = usuario.get("dias_sem_login", 0)
+    if dias_sem_login > 7:
+        score_churn += 20
+        fatores.append(f"Sem login ha {dias_sem_login} dias")
+    total_analises = usuario.get("total_analises", 0)
+    if total_analises < 3:
+        score_churn += 15
+        fatores.append("Poucas analises realizadas")
+    if usuario.get("plano") == "free":
+        score_churn += 10
+        fatores.append("Plano gratuito")
+    if not usuario.get("email_verificado"):
+        score_churn += 25
+        fatores.append("Email nao verificado")
+    risco = "alto" if score_churn >= 40 else "medio" if score_churn >= 20 else "baixo"
+    return {
+        "score_churn": score_churn,
+        "risco": risco,
+        "fatores": fatores,
+        "acao_recomendada": "Enviar email de reativacao" if risco == "alto" else "Monitorar"
+    }
+
+@app.get("/api/admin/bi-dashboard")
+async def bi_dashboard_ep(request: Request, db=Depends(get_db)):
+    usuario = await verificar_token(request, db)
+    if not usuario or usuario.get("plano") != "admin":
+        return JSONResponse({"erro": "Nao autorizado"}, status_code=403)
+    try:
+        total_usuarios = db.query(Usuario).count()
+        usuarios_premium = db.query(Usuario).filter(Usuario.plano.in_(["premium","enterprise"])).count()
+    except Exception:
+        total_usuarios = 0
+        usuarios_premium = 0
+    mrr = calcular_mrr(usuarios_premium)
+    return JSONResponse({
+        "metricas": {
+            "mrr": mrr,
+            "arr": calcular_arr(mrr),
+            "total_usuarios": total_usuarios,
+            "usuarios_premium": usuarios_premium,
+            "dau": obter_dau(),
+            "mau": obter_mau(),
+            "stickiness_pct": calcular_stickiness(),
+            "nps": calcular_nps(),
+        },
+        "sistema": "Q5 Business Intelligence"
+    })
+
+@app.post("/api/nps")
+async def nps_ep(request: Request, db=Depends(get_db)):
+    usuario = await verificar_token(request, db)
+    if not usuario:
+        return JSONResponse({"erro": "Nao autorizado"}, status_code=401)
+    body = await request.json()
+    nota = body.get("nota", 0)
+    comentario = body.get("comentario", "")
+    registrar_nps(usuario.get("id"), nota, comentario)
+    return JSONResponse({"ok": True, "nps_atual": calcular_nps(), "sistema": "Q5 NPS"})
+
+# ═══════════════════════════════════════════════════════════════════════
+# SISTEMA Q6 — BANCO E STORAGE AVANÇADO (6 implementações)
+# ═══════════════════════════════════════════════════════════════════════
+
+CLOUDINARY_URL = _os_s10.getenv("CLOUDINARY_URL", "")
+CLOUDINARY_CLOUD_NAME = _os_s10.getenv("CLOUDINARY_CLOUD_NAME", "")
+CLOUDINARY_API_KEY_CL = _os_s10.getenv("CLOUDINARY_API_KEY", "")
+CLOUDINARY_API_SECRET = _os_s10.getenv("CLOUDINARY_API_SECRET", "")
+
+# ── Q6.1 Cloudinary imagens
+async def cloudinary_upload(imagem_bytes: bytes, pasta: str = "emotion_platform") -> dict:
+    if not all([CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY_CL, CLOUDINARY_API_SECRET]):
+        return {"erro": "Cloudinary nao configurado"}
+    try:
+        import httpx
+        import hashlib
+        import time as _t
+        from base64 import b64encode
+        timestamp = int(_t.time())
+        params = f"folder={pasta}&timestamp={timestamp}"
+        assinatura = hashlib.sha1(f"{params}{CLOUDINARY_API_SECRET}".encode()).hexdigest()
+        async with httpx.AsyncClient(timeout=30) as client:
+            r = await client.post(
+                f"https://api.cloudinary.com/v1_1/{CLOUDINARY_CLOUD_NAME}/image/upload",
+                data={
+                    "file": f"data:image/jpeg;base64,{b64encode(imagem_bytes).decode()}",
+                    "folder": pasta,
+                    "timestamp": timestamp,
+                    "api_key": CLOUDINARY_API_KEY_CL,
+                    "signature": assinatura
+                }
+            )
+            return r.json()
+    except Exception as e:
+        return {"erro": str(e)}
+
+async def cloudinary_otimizar_url(url: str, largura: int = 400, qualidade: int = 80) -> str:
+    if not CLOUDINARY_CLOUD_NAME or not url:
+        return url
+    if "cloudinary.com" not in url:
+        return url
+    partes = url.split("/upload/")
+    if len(partes) != 2:
+        return url
+    return f"{partes[0]}/upload/w_{largura},q_{qualidade},f_auto/{partes[1]}"
+
+# ── Q6.2 Pinecone Vetorial
+PINECONE_API_KEY = _os_s10.getenv("PINECONE_API_KEY", "")
+PINECONE_ENV = _os_s10.getenv("PINECONE_ENVIRONMENT", "us-east-1-aws")
+_pinecone_disponivel = False
+
+try:
+    import pinecone as _pinecone_lib
+    _pinecone_disponivel = True
+except ImportError:
+    pass
+
+async def pinecone_upsert(ids: list, embeddings: list, metadatas: list, namespace: str = "emocoes"):
+    if not _pinecone_disponivel or not PINECONE_API_KEY:
+        return False
+    try:
+        _pinecone_lib.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENV)
+        index = _pinecone_lib.Index("emotion-platform")
+        vectors = [(ids[i], embeddings[i], metadatas[i]) for i in range(len(ids))]
+        index.upsert(vectors=vectors, namespace=namespace)
+        return True
+    except Exception:
+        return False
+
+async def pinecone_query(embedding: list, top_k: int = 5, namespace: str = "emocoes") -> list:
+    if not _pinecone_disponivel or not PINECONE_API_KEY:
+        return []
+    try:
+        _pinecone_lib.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENV)
+        index = _pinecone_lib.Index("emotion-platform")
+        result = index.query(vector=embedding, top_k=top_k, namespace=namespace, include_metadata=True)
+        return result.get("matches", [])
+    except Exception:
+        return []
+
+# ── Q6.3 Elasticsearch
+ELASTICSEARCH_URL = _os_s10.getenv("ELASTICSEARCH_URL", "")
+
+async def elasticsearch_indexar(indice: str, documento_id: str, documento: dict) -> bool:
+    if not ELASTICSEARCH_URL:
+        return False
+    try:
+        import httpx
+        async with httpx.AsyncClient(timeout=10) as client:
+            r = await client.put(
+                f"{ELASTICSEARCH_URL}/{indice}/_doc/{documento_id}",
+                json=documento
+            )
+            return r.status_code in (200, 201)
+    except Exception:
+        return False
+
+async def elasticsearch_buscar(indice: str, query: str, campo: str = "texto") -> list:
+    if not ELASTICSEARCH_URL:
+        return []
+    try:
+        import httpx
+        async with httpx.AsyncClient(timeout=10) as client:
+            r = await client.post(
+                f"{ELASTICSEARCH_URL}/{indice}/_search",
+                json={"query": {"match": {campo: query}}, "size": 10}
+            )
+            hits = r.json().get("hits", {}).get("hits", [])
+            return [h.get("_source", {}) for h in hits]
+    except Exception:
+        return []
+
+# ── Q6.4 Weaviate
+WEAVIATE_URL = _os_s10.getenv("WEAVIATE_URL", "")
+
+async def weaviate_criar_objeto(classe: str, propriedades: dict, embedding: list = None) -> dict:
+    if not WEAVIATE_URL:
+        return {}
+    try:
+        import httpx
+        payload = {"class": classe, "properties": propriedades}
+        if embedding:
+            payload["vector"] = embedding
+        async with httpx.AsyncClient(timeout=10) as client:
+            r = await client.post(f"{WEAVIATE_URL}/v1/objects", json=payload)
+            return r.json()
+    except Exception as e:
+        return {"erro": str(e)}
+
+# ── Q6.5 MongoDB
+MONGODB_URI = _os_s10.getenv("MONGODB_URI", "")
+_mongo_client = None
+_mongo_disponivel = False
+
+try:
+    import pymongo as _pymongo
+    if MONGODB_URI:
+        _mongo_client = _pymongo.MongoClient(MONGODB_URI, serverSelectionTimeoutMS=2000)
+        _mongo_client.admin.command("ping")
+        _mongo_disponivel = True
+        print("✅ MongoDB conectado")
+except Exception:
+    pass
+
+def mongo_inserir(colecao: str, documento: dict) -> bool:
+    if not _mongo_disponivel or not _mongo_client:
+        return False
+    try:
+        db = _mongo_client["emotion_platform"]
+        db[colecao].insert_one(documento)
+        return True
+    except Exception:
+        return False
+
+def mongo_buscar(colecao: str, filtro: dict, limite: int = 10) -> list:
+    if not _mongo_disponivel or not _mongo_client:
+        return []
+    try:
+        db = _mongo_client["emotion_platform"]
+        return list(db[colecao].find(filtro, {"_id": 0}).limit(limite))
+    except Exception:
+        return []
+
+# ── Q6.6 Storage Stats
+def stats_storage() -> dict:
+    return {
+        "postgresql": {"status": "conectado", "tipo": "principal"},
+        "redis": {"status": "conectado" if _redis_disponivel else "indisponivel", "tipo": "cache"},
+        "chromadb": {"status": "ativo" if _chroma_disponivel else "indisponivel", "tipo": "vetorial_local"},
+        "pinecone": {"status": "configurado" if PINECONE_API_KEY else "nao_configurado", "tipo": "vetorial_cloud"},
+        "elasticsearch": {"status": "configurado" if ELASTICSEARCH_URL else "nao_configurado", "tipo": "busca"},
+        "weaviate": {"status": "configurado" if WEAVIATE_URL else "nao_configurado", "tipo": "vetorial_grafo"},
+        "mongodb": {"status": "conectado" if _mongo_disponivel else "nao_configurado", "tipo": "documentos"},
+        "cloudinary": {"status": "configurado" if CLOUDINARY_CLOUD_NAME else "nao_configurado", "tipo": "imagens"},
+    }
+
+@app.get("/api/storage/status")
+async def storage_status_ep(request: Request, db=Depends(get_db)):
+    usuario = await verificar_token(request, db)
+    if not usuario or usuario.get("plano") != "admin":
+        return JSONResponse({"erro": "Nao autorizado"}, status_code=403)
+    return JSONResponse({"storage": stats_storage(), "sistema": "Q6 Storage"})
+
+@app.post("/api/cloudinary/upload")
+async def cloudinary_upload_ep(request: Request, db=Depends(get_db)):
+    usuario = await verificar_token(request, db)
+    if not usuario:
+        return JSONResponse({"erro": "Nao autorizado"}, status_code=401)
+    try:
+        form = await request.form()
+        arquivo = form.get("file")
+        if not arquivo:
+            return JSONResponse({"erro": "Arquivo obrigatorio"}, status_code=400)
+        conteudo = await arquivo.read()
+        resultado = await cloudinary_upload(conteudo)
+        return JSONResponse({"ok": True, "resultado": resultado, "sistema": "Q6 Cloudinary"})
+    except Exception as e:
+        return JSONResponse({"erro": str(e)}, status_code=500)
+
+@app.get("/api/busca-semantica")
+async def busca_semantica_ep(q: str, request: Request, db=Depends(get_db)):
+    usuario = await verificar_token(request, db)
+    if not usuario:
+        return JSONResponse({"erro": "Nao autorizado"}, status_code=401)
+    resultados_es = await elasticsearch_buscar("analises", q)
+    similares = await encontrar_emocoes_similares(q)
+    return JSONResponse({
+        "query": q,
+        "resultados_elasticsearch": resultados_es,
+        "emocoes_similares": similares,
+        "sistema": "Q6 Busca Semantica"
+    })
+
+# ═══ FIM Q4+Q5+Q6 ════════════════════════════════════════════════════
+
+
 @app.get("/terapia", response_class=HTMLResponse)
 def terapia_page(request: Request, dia: int = 1, db: Session = Depends(get_db)):
     usuario = get_usuario_logado(request, db)
