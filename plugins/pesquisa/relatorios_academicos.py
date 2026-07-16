@@ -57,10 +57,8 @@ def gerar_abstract_portugues(dados_estudo: dict) -> str:
 def gerar_tabela_resultados(dados: list) -> str:
     if not dados:
         return "Tabela 1. Sem dados disponíveis."
-    cabecalho = "Tabela 1. Distribuicao de emocoes por frequencia
-"
-    cabecalho += "-" * 40 + "
-"
+    cabecalho = "Tabela 1. Distribuicao de emocoes por frequencia\n"
+    cabecalho += "-" * 40 + "\n"
     cabecalho += f"{'Emocao':<20} {'Frequencia':>10} {'%':>8}
 "
     cabecalho += "-" * 40 + "

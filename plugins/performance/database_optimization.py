@@ -51,8 +51,7 @@ INDICES_RECOMENDADOS = [
 ]
 
 def gerar_script_otimizacao() -> str:
-    return "
-".join(INDICES_RECOMENDADOS)
+    return "\n".join(INDICES_RECOMENDADOS)
 
 def configurar_pgbouncer() -> dict:
     return {

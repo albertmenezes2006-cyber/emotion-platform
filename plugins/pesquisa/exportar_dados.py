@@ -60,8 +60,7 @@ def exportar_csv(dados: list, nome_arquivo: str = "export") -> dict:
     return {
         "formato": "csv",
         "nome": f"{nome_arquivo}_{datetime.now().strftime('%Y%m%d')}.csv",
-        "conteudo": "
-".join(linhas),
+        "conteudo": "\n".join(linhas),
         "registros": len(anonimizado),
         "anonimizado": True
     }
