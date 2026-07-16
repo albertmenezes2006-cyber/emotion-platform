@@ -1,4 +1,4 @@
-"""Plugin: Chat IA Real — Groq + Gemini + fallback inteligente"""
+"""Plugin: Chat IA Real v4 — usa Multi-LLM como backend"""
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
@@ -7,172 +7,170 @@ import os, uuid, json, logging
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/chat-ia", tags=["ia"])
-_conversas = SimpleDB("chat_ia_v2")
+_conversas = SimpleDB("chat_ia_v3")
 
 SYSTEM = (
-    "Voce e um assistente de saude mental empatico. "
-    "Responda em portugues brasileiro. "
-    "Use tecnicas de TCC, DBT e Mindfulness. "
-    "Em crises: indique CVV 188 e SAMU 192. "
-    "Maximo 250 palavras por resposta. "
-    "NAO substitua profissionais de saude mental."
+    "Voce e um assistente de saude mental empatico da plataforma EmotionAI. "
+    "Responda SEMPRE em portugues brasileiro. "
+    "Use tecnicas de TCC, DBT e Mindfulness nas respostas. "
+    "Seja empático, acolhedor e nao julgamental. "
+    "Em situacoes de crise: indique CVV 188 e SAMU 192. "
+    "Maximo 250 palavras. NAO substitua profissionais de saude mental."
 )
 
-CRISIS_WORDS = [
-    "suicidio", "suicídio", "me matar", "não quero viver",
-    "nao quero viver", "acabar com tudo", "me machucar"
-]
+CRISIS_WORDS = ["suicidio","suicídio","me matar","nao quero viver",
+                "nao quero mais viver","acabar com tudo","me machucar"]
 
-FALLBACKS = {
-    "ansio": "Entendo que voce esta sentindo ansiedade. Tente a respiracao 4-7-8:\n\n1. Expire completamente\n2. Inspire pelo nariz por 4 segundos\n3. Segure por 7 segundos\n4. Expire pela boca por 8 segundos\n\nRepita 4 vezes. Isso ativa o sistema nervoso parassimpatico e reduz a ansiedade. Como esta se sentindo?",
-    "trist": "Sinto muito que voce esta passando por isso. A tristeza e uma emocao valida e temporaria. Voce nao precisa enfrentar isso sozinho. Me conta mais: o que esta acontecendo?",
-    "dormir": "Problemas de sono sao muito comuns. Dicas baseadas em evidencias:\n• Evite telas 1h antes de dormir\n• Mantenha horario fixo\n• Quarto escuro e fresco (18-20 graus)\n• Tecnica de relaxamento muscular progressivo\n\nO que passa pela sua cabeca quando tenta dormir?",
-    "respiracao": "Tecnica 4-7-8:\n1. Expire completamente\n2. Inspire pelo nariz: 4 segundos\n3. Segure: 7 segundos\n4. Expire pela boca: 8 segundos\nRepita 4 vezes. Quer tentar agora?",
-    "mindf": "Mindfulness em 5 minutos:\n1. Sente-se confortavelmente\n2. Feche os olhos\n3. Foque na respiracao\n4. Quando pensamentos vierem, observe e volte\n5. Sem julgamentos\n\nComecar com 5 min por dia ja traz beneficios. Quer que eu te guie?",
-    "default": "Estou aqui para te ouvir. Me conta mais sobre o que esta sentindo? Quanto mais compartilhar, melhor posso te ajudar."
+FALLBACK_INTELIGENTE = {
+    "ansio": "A ansiedade pode ser muito desconfortavel. Vamos tentar a respiracao 4-7-8 agora:\n\n1. Expire completamente\n2. Inspire pelo nariz: 4 segundos\n3. Segure o ar: 7 segundos\n4. Expire pela boca: 8 segundos\n\nRepita 4 vezes. Isso ativa o sistema nervoso parassimpatico. Como esta se sentindo?",
+    "nervos": "Entendo que voce esta nervoso. Isso e muito comum. Tente se concentrar no momento presente: o que voce ve, ouve e sente agora? Isso e uma tecnica de grounding que ajuda a reduzir a tensao.",
+    "trist": "Sinto muito que voce esta passando por isso. 💙 A tristeza e uma emocao valida. Voce nao precisa enfrentar isso sozinho. Me conta mais: o que esta acontecendo em sua vida ultimamente?",
+    "deprim": "Reconheco que voce esta passando por um momento muito dificil. Sentimentos de depressao merecem atencao e cuidado. Voce esta buscando ajuda profissional? Um psicologo ou psiquiatra pode fazer uma diferenca enorme.",
+    "dormir": "Problemas de sono afetam muito o bem-estar. Algumas dicas baseadas em evidencias:\n• Mantenha horario fixo para dormir/acordar\n• Evite telas 1h antes de dormir\n• Quarto escuro, fresco (18-20 graus) e silencioso\n• Tecnica 4-7-8 ajuda muito antes de dormir\n\nO que passa pela sua cabeca quando tenta dormir?",
+    "respiracao": "Tecnica de Respiracao 4-7-8:\n\n1. Expire todo o ar\n2. Inspire pelo nariz: 4 segundos\n3. Segure: 7 segundos\n4. Expire pela boca fazendo som: 8 segundos\n\nRepita 4 vezes. Quer tentar agora comigo?",
+    "mindf": "Mindfulness em 5 minutos:\n1. Sente-se confortavelmente\n2. Feche os olhos e respire normalmente\n3. Foque apenas na sensacao do ar entrando e saindo\n4. Quando pensamentos vierem, so observe - sem julgar - e volte a respiracao\n\nComecar com 5 min/dia ja traz beneficios comprovados!",
+    "raiva": "A raiva e uma emocao valida que precisa de expressao saudavel. Antes de agir: respire fundo 10 vezes, beba agua, afaste-se da situacao por alguns minutos. O que esta te deixando com raiva?",
+    "motivacao": "Entendo que voce esta precisando de motivacao. Uma tecnica util e comecar pelo menor passo possivel. Qual seria a menor acao que voce poderia fazer agora em direcao ao que precisa?",
+    "sozinho": "Sentir-se sozinho e muito doloroso. Voce nao esta sozinho neste momento - estou aqui. Mas conexoes humanas sao fundamentais. Ha alguem de confianca com quem voce poderia entrar em contato hoje?",
+    "default": "Estou aqui para te ouvir e apoiar. 💙 Me conta mais sobre o que esta sentindo ou passando. Quanto mais voce compartilhar, mais posso te ajudar de forma personalizada."
 }
 
 
 class ChatIaRealPlugin(PluginBase):
     name = "chat_ia_real"
-    version = "3.0.0"
-    description = "Chat IA com Groq, Gemini e fallback inteligente"
+    version = "4.0.0"
+    description = "Chat IA com Multi-LLM backend (Mistral + Groq + Gemini)"
     category = "ia"
 
     def setup(self, app):
         app.include_router(router)
-        groq_ok = bool(os.getenv("GROQ_API_KEY"))
-        gemini_ok = bool(os.getenv("GEMINI_API_KEY"))
-        mistral_ok = bool(os.getenv("MISTRAL_API_KEY"))
-        logger.info(f"[chat_ia_real] OK — Groq:{groq_ok} Gemini:{gemini_ok} Mistral:{mistral_ok}")
+        logger.info("[chat_ia_real v4] OK — usa Multi-LLM backend")
 
     def health_check(self):
         return {
             "status": "healthy",
-            "groq": bool(os.getenv("GROQ_API_KEY")),
-            "gemini": bool(os.getenv("GEMINI_API_KEY")),
-            "mistral": bool(os.getenv("MISTRAL_API_KEY")),
+            "versao": "4.0.0",
+            "backend": "multi-llm",
             "conversas": _conversas.count()
         }
+
+
+async def _chamar_multi_llm(mensagem: str, modelo: str = "auto") -> tuple:
+    """Usa o plugin multi-llm que ja funciona"""
+    import httpx
+    import os
+    
+    # Tentar diretamente os modelos que sabemos que funcionam
+    modelos_ordem = ["mistral", "groq", "gemini", "openrouter"]
+    if modelo != "auto" and modelo in modelos_ordem:
+        modelos_ordem = [modelo] + [m for m in modelos_ordem if m != modelo]
+    
+    msgs = [
+        {"role": "system", "content": SYSTEM},
+        {"role": "user", "content": mensagem}
+    ]
+    
+    # Mistral (sabemos que funciona)
+    if "mistral" in modelos_ordem:
+        key = os.getenv("MISTRAL_API_KEY","")
+        if key:
+            try:
+                async with httpx.AsyncClient(timeout=20) as c:
+                    r = await c.post(
+                        "https://api.mistral.ai/v1/chat/completions",
+                        headers={"Authorization": "Bearer " + key},
+                        json={"model":"mistral-small-latest","messages":msgs,"max_tokens":350,"temperature":0.7}
+                    )
+                    if r.status_code == 200:
+                        texto = r.json()["choices"][0]["message"]["content"]
+                        if texto and len(texto.strip()) > 5:
+                            return texto.strip(), "mistral-small"
+                    else:
+                        logger.warning(f"Mistral {r.status_code}: {r.text[:80]}")
+            except Exception as e:
+                logger.warning(f"Mistral error: {e}")
+    
+    # OpenRouter (fallback gratuito)
+    if "openrouter" in modelos_ordem:
+        key = os.getenv("OPENROUTER_API_KEY","")
+        if key:
+            try:
+                async with httpx.AsyncClient(timeout=25) as c:
+                    r = await c.post(
+                        "https://openrouter.ai/api/v1/chat/completions",
+                        headers={
+                            "Authorization": "Bearer " + key,
+                            "HTTP-Referer": "https://emotion-platform-albert.onrender.com"
+                        },
+                        json={"model":"meta-llama/llama-3.1-8b-instruct:free","messages":msgs,"max_tokens":350}
+                    )
+                    if r.status_code == 200:
+                        texto = r.json()["choices"][0]["message"]["content"]
+                        if texto and len(texto.strip()) > 5:
+                            return texto.strip(), "openrouter/llama3"
+            except Exception as e:
+                logger.warning(f"OpenRouter error: {e}")
+    
+    # Groq
+    if "groq" in modelos_ordem:
+        key = os.getenv("GROQ_API_KEY","")
+        if key:
+            try:
+                async with httpx.AsyncClient(timeout=20) as c:
+                    r = await c.post(
+                        "https://api.groq.com/openai/v1/chat/completions",
+                        headers={"Authorization": "Bearer " + key},
+                        json={"model":"llama3-8b-8192","messages":msgs,"max_tokens":350,"temperature":0.7}
+                    )
+                    if r.status_code == 200:
+                        texto = r.json()["choices"][0]["message"]["content"]
+                        if texto and len(texto.strip()) > 5:
+                            return texto.strip(), "groq/llama3-8b"
+                    else:
+                        logger.warning(f"Groq {r.status_code}: {r.text[:80]}")
+            except Exception as e:
+                logger.warning(f"Groq error: {e}")
+    
+    # Gemini
+    if "gemini" in modelos_ordem:
+        key = os.getenv("GEMINI_API_KEY","")
+        if key:
+            try:
+                prompt = SYSTEM + "\n\nUsuario: " + mensagem
+                url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + key
+                async with httpx.AsyncClient(timeout=20) as c:
+                    r = await c.post(url, json={
+                        "contents":[{"parts":[{"text":prompt}]}],
+                        "generationConfig":{"maxOutputTokens":350,"temperature":0.7}
+                    })
+                    if r.status_code == 200:
+                        texto = r.json()["candidates"][0]["content"]["parts"][0]["text"]
+                        if texto and len(texto.strip()) > 5:
+                            return texto.strip(), "gemini-1.5-flash"
+            except Exception as e:
+                logger.warning(f"Gemini error: {e}")
+    
+    return None, None
+
+
+def _fallback(mensagem: str) -> str:
+    baixo = mensagem.lower()
+    for chave, resp in FALLBACK_INTELIGENTE.items():
+        if chave != "default" and chave in baixo:
+            return resp
+    return FALLBACK_INTELIGENTE["default"]
 
 
 @router.get("/modelos/disponiveis")
 async def modelos_disponiveis():
     return {"modelos": [
+        {"id":"auto","nome":"Auto (melhor disponível)","disponivel":True,"velocidade":"variavel"},
+        {"id":"mistral","nome":"Mistral Small","disponivel":bool(os.getenv("MISTRAL_API_KEY")),"velocidade":"rapida"},
         {"id":"groq","nome":"Groq LLaMA3","disponivel":bool(os.getenv("GROQ_API_KEY")),"velocidade":"muito_rapida"},
         {"id":"gemini","nome":"Google Gemini","disponivel":bool(os.getenv("GEMINI_API_KEY")),"velocidade":"rapida"},
-        {"id":"mistral","nome":"Mistral","disponivel":bool(os.getenv("MISTRAL_API_KEY")),"velocidade":"rapida"},
         {"id":"openrouter","nome":"OpenRouter","disponivel":bool(os.getenv("OPENROUTER_API_KEY")),"velocidade":"variavel"},
         {"id":"fallback","nome":"Respostas base","disponivel":True,"velocidade":"instantanea"},
     ]}
-
-
-async def _chamar_groq(mensagem: str) -> str:
-    import httpx
-    key = os.getenv("GROQ_API_KEY","")
-    if not key:
-        return ""
-    msgs = [
-        {"role":"system","content":SYSTEM},
-        {"role":"user","content":mensagem}
-    ]
-    try:
-        async with httpx.AsyncClient(timeout=20) as c:
-            r = await c.post(
-                "https://api.groq.com/openai/v1/chat/completions",
-                headers={"Authorization": "Bearer " + key},
-                json={"model":"llama3-8b-8192","messages":msgs,"max_tokens":350,"temperature":0.7}
-            )
-            if r.status_code == 200:
-                return r.json()["choices"][0]["message"]["content"]
-            else:
-                logger.warning(f"Groq status {r.status_code}: {r.text[:100]}")
-    except Exception as e:
-        logger.warning(f"Groq error: {e}")
-    return ""
-
-
-async def _chamar_gemini(mensagem: str) -> str:
-    import httpx
-    key = os.getenv("GEMINI_API_KEY","")
-    if not key:
-        return ""
-    prompt = SYSTEM + "\n\nUsuario: " + mensagem
-    url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + key
-    try:
-        async with httpx.AsyncClient(timeout=20) as c:
-            r = await c.post(url, json={
-                "contents":[{"parts":[{"text":prompt}]}],
-                "generationConfig":{"maxOutputTokens":350,"temperature":0.7}
-            })
-            if r.status_code == 200:
-                return r.json()["candidates"][0]["content"]["parts"][0]["text"]
-            else:
-                logger.warning(f"Gemini status {r.status_code}: {r.text[:100]}")
-    except Exception as e:
-        logger.warning(f"Gemini error: {e}")
-    return ""
-
-
-async def _chamar_mistral(mensagem: str) -> str:
-    import httpx
-    key = os.getenv("MISTRAL_API_KEY","")
-    if not key:
-        return ""
-    msgs = [
-        {"role":"system","content":SYSTEM},
-        {"role":"user","content":mensagem}
-    ]
-    try:
-        async with httpx.AsyncClient(timeout=20) as c:
-            r = await c.post(
-                "https://api.mistral.ai/v1/chat/completions",
-                headers={"Authorization": "Bearer " + key},
-                json={"model":"mistral-small-latest","messages":msgs,"max_tokens":350}
-            )
-            if r.status_code == 200:
-                return r.json()["choices"][0]["message"]["content"]
-            else:
-                logger.warning(f"Mistral status {r.status_code}: {r.text[:100]}")
-    except Exception as e:
-        logger.warning(f"Mistral error: {e}")
-    return ""
-
-
-async def _chamar_openrouter(mensagem: str) -> str:
-    import httpx
-    key = os.getenv("OPENROUTER_API_KEY","")
-    if not key:
-        return ""
-    msgs = [
-        {"role":"system","content":SYSTEM},
-        {"role":"user","content":mensagem}
-    ]
-    try:
-        async with httpx.AsyncClient(timeout=25) as c:
-            r = await c.post(
-                "https://openrouter.ai/api/v1/chat/completions",
-                headers={
-                    "Authorization": "Bearer " + key,
-                    "HTTP-Referer": "https://emotion-platform-albert.onrender.com"
-                },
-                json={"model":"meta-llama/llama-3.1-8b-instruct:free","messages":msgs,"max_tokens":350}
-            )
-            if r.status_code == 200:
-                return r.json()["choices"][0]["message"]["content"]
-            else:
-                logger.warning(f"OpenRouter status {r.status_code}: {r.text[:100]}")
-    except Exception as e:
-        logger.warning(f"OpenRouter error: {e}")
-    return ""
-
-
-def _fallback(mensagem: str) -> str:
-    baixo = mensagem.lower()
-    for chave, resposta in FALLBACKS.items():
-        if chave != "default" and chave in baixo:
-            return resposta
-    return FALLBACKS["default"]
 
 
 @router.post("/mensagem")
@@ -186,67 +184,28 @@ async def enviar_mensagem(
         raise HTTPException(400, "Mensagem vazia")
 
     mensagem = mensagem.strip()
-    resposta = None
-    modelo_usado = None
 
-    # Ordem de tentativa
-    if modelo == "groq":
-        ordem = ["groq"]
-    elif modelo == "gemini":
-        ordem = ["gemini"]
-    elif modelo == "mistral":
-        ordem = ["mistral"]
-    elif modelo == "openrouter":
-        ordem = ["openrouter"]
-    else:
-        # Auto: tentar todos na ordem de velocidade
-        ordem = ["groq", "mistral", "gemini", "openrouter"]
-
-    chamadas = {
-        "groq": (_chamar_groq, "groq/llama3-8b"),
-        "gemini": (_chamar_gemini, "gemini-1.5-flash"),
-        "mistral": (_chamar_mistral, "mistral-small"),
-        "openrouter": (_chamar_openrouter, "openrouter/llama3"),
-    }
-
-    for mod_id in ordem:
-        if resposta:
-            break
-        fn, nome = chamadas[mod_id]
-        try:
-            texto = await fn(mensagem)
-            if texto and len(texto.strip()) > 5:
-                resposta = texto.strip()
-                modelo_usado = nome
-                logger.info(f"Chat respondido via {nome}")
-        except Exception as e:
-            logger.warning(f"Falha {mod_id}: {e}")
+    # Tentar IA real
+    resposta, modelo_usado = await _chamar_multi_llm(mensagem, modelo)
 
     # Fallback inteligente
     if not resposta:
         resposta = _fallback(mensagem)
         modelo_usado = "fallback"
-        logger.info("Chat usando fallback inteligente")
 
     # Detectar crise
     is_crisis = any(w in mensagem.lower() for w in CRISIS_WORDS)
     if is_crisis:
-        aviso = "🚨 EMERGENCIA: CVV 188 (24h gratuito) | SAMU 192\n\n"
+        aviso = "🚨 EMERGENCIA: CVV 188 (24h gratuito) | SAMU 192. Voce nao esta sozinho.\n\n"
         resposta = aviso + resposta
-        logger.warning(f"CRISE DETECTADA user={user_id}: {mensagem[:80]}")
+        logger.warning(f"CRISE: user={user_id}")
 
-    # Salvar conversa
+    # Salvar
     try:
         _conversas.create(
-            nome="Chat " + user_id,
-            user_id=user_id,
+            nome="Chat " + user_id, user_id=user_id,
             valor=modelo_usado or "?",
-            dados=json.dumps({
-                "msg": mensagem[:200],
-                "resp": resposta[:200],
-                "modelo": modelo_usado,
-                "crise": is_crisis
-            }),
+            dados=json.dumps({"msg":mensagem[:100],"resp":resposta[:100],"modelo":modelo_usado}),
             categoria="crise" if is_crisis else "normal"
         )
     except Exception:
@@ -260,7 +219,7 @@ async def enviar_mensagem(
         "modelo_usado": modelo_usado,
         "alerta_crise": is_crisis,
         "timestamp": datetime.utcnow().isoformat(),
-        "recursos_emergencia": {"cvv": "188", "samu": "192"} if is_crisis else None
+        "recursos_emergencia": {"cvv":"188","samu":"192"} if is_crisis else None
     }
 
 
