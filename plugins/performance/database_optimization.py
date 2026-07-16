@@ -60,12 +60,7 @@ def configurar_pgbouncer() -> dict:
         "default_pool_size": 20,
         "reserve_pool_size": 5,
         "pool_size": 10,
-        "config_exemplo": "[databases]
-emotion_db = host=localhost dbname=emotion_platform
-[pgbouncer]
-pool_mode = transaction
-max_client_conn = 100
-default_pool_size = 20"
+        "config_exemplo": "[databases]\nemotion_db = host=localhost dbname=emotion_platform\n[pgbouncer]\npool_mode = transaction\nmax_client_conn = 100\ndefault_pool_size = 20"
     }
 
 def stats_database_opt() -> dict:

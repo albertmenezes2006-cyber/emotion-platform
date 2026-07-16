@@ -59,8 +59,7 @@ def gerar_tabela_resultados(dados: list) -> str:
         return "Tabela 1. Sem dados disponíveis."
     cabecalho = "Tabela 1. Distribuicao de emocoes por frequencia\n"
     cabecalho += "-" * 40 + "\n"
-    cabecalho += f"{'Emocao':<20} {'Frequencia':>10} {'%':>8}
-"
+    cabecalho += f"{"Emocao":<20} {"Frequencia":>10} {"%":>8}\n"
     cabecalho += "-" * 40 + "
 "
     total = sum(d.get("count", 0) for d in dados)
