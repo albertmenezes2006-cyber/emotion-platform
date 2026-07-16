@@ -1,16 +1,15 @@
-"""Loader Universal — tolerante a todos os erros"""
+"""Loader Universal — carrega TODOS os plugins automaticamente"""
 import os, importlib, logging
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-SKIP_FILES = {"__init__.py", "loader.py", "plugin_base.py"}
+SKIP_FILES = {"__init__.py", "loader.py", "plugin_base.py", "db_manager.py"}
 SKIP_DIRS  = {"__pycache__"}
 
 def load_all_plugins(app):
     base = Path(__file__).parent
     ok = err = 0
-
     for cat in sorted(base.iterdir()):
         if not cat.is_dir() or cat.name in SKIP_DIRS or cat.name.startswith("_"):
             continue
@@ -29,6 +28,5 @@ def load_all_plugins(app):
             except Exception as e:
                 err += 1
                 logger.debug(f"skip {mod_path}: {e}")
-
     logger.info(f"Plugins: {ok} OK / {err} ignorados")
     return ok, err
