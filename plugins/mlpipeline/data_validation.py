@@ -1,169 +1,57 @@
 """
-Plugin: Data Validation
+Plugin: data_validation
 Categoria: mlpipeline
 Descrição: Validação de qualidade de dados para pipelines ML
 """
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid
-import statistics
-import logging
+import uuid, logging
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/data-validation", tags=["mlpipeline"])
-
-validacoes_db = {}
-schemas_db = {}
-
+_db = {}
 
 class DataValidationPlugin(PluginBase):
     name = "data_validation"
     version = "1.0.0"
-    description = "Validação de qualidade de dados para ML"
+    description = "Validação de qualidade de dados para pipelines ML"
     category = "mlpipeline"
 
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[{self.name}] Plugin carregado com sucesso")
+        logger.info(f"[{self.name}] Plugin carregado")
 
     def health_check(self):
-        return {
-            "status": "healthy",
-            "validacoes_realizadas": len(validacoes_db),
-            "schemas_definidos": len(schemas_db)
-        }
+        return {"status": "healthy", "total": len(_db)}
 
+@router.get("/status")
+async def status():
+    return {"plugin": "data_validation", "categoria": "mlpipeline", "total": len(_db), "ts": datetime.utcnow().isoformat()}
 
-@router.post("/schema/definir")
-async def definir_schema(
-    nome: str,
-    campos: dict
-):
-    """Define schema de validação para um dataset"""
-    schema_id = str(uuid.uuid4())[:8]
-    schemas_db[schema_id] = {
-        "id": schema_id,
-        "nome": nome,
-        "campos": campos,
-        "criado_em": datetime.utcnow().isoformat()
-    }
-    return {"schema_id": schema_id, "campos": len(campos), "status": "schema definido"}
+@router.post("/criar")
+async def criar(nome: str, valor: str = "", user_id: str = ""):
+    item_id = str(uuid.uuid4())[:8]
+    _db[item_id] = {"id": item_id, "nome": nome, "valor": valor, "user_id": user_id, "criado_em": datetime.utcnow().isoformat()}
+    return {"id": item_id, "status": "criado"}
 
+@router.get("/listar")
+async def listar(limite: int = 50):
+    items = list(_db.values())[-limite:]
+    return {"total": len(_db), "items": items}
 
-@router.post("/validar/dataset")
-async def validar_dataset(dados: list, schema_id: str = None):
-    """Valida qualidade de um dataset"""
-    if not dados:
-        raise HTTPException(status_code=400, detail="Dataset vazio")
+@router.get("/{item_id}")
+async def obter(item_id: str):
+    if item_id not in _db:
+        raise HTTPException(404, "Não encontrado")
+    return _db[item_id]
 
-    if len(dados) > 10000:
-        raise HTTPException(status_code=400, detail="Máximo 10.000 registros por validação")
-
-    problemas = []
-    metricas = {}
-
-    # Verificar campos
-    campos = set()
-    for registro in dados:
-        campos.update(registro.keys())
-
-    # Verificar valores nulos
-    for campo in campos:
-        valores = [r.get(campo) for r in dados]
-        nulos = sum(1 for v in valores if v is None or v == "")
-        if nulos > 0:
-            taxa_nulo = nulos / len(dados)
-            if taxa_nulo > 0.1:
-                problemas.append({
-                    "tipo": "valores_nulos",
-                    "campo": campo,
-                    "count": nulos,
-                    "taxa": round(taxa_nulo, 4),
-                    "severidade": "alta" if taxa_nulo > 0.3 else "media"
-                })
-
-        # Verificar outliers para campos numéricos
-        numericos = [v for v in valores if isinstance(v, (int, float)) and v is not None]
-        if len(numericos) > 5:
-            try:
-                media = statistics.mean(numericos)
-                desvio = statistics.stdev(numericos)
-                outliers = sum(1 for v in numericos if abs(v - media) > 3 * desvio)
-                if outliers > 0:
-                    problemas.append({
-                        "tipo": "outliers",
-                        "campo": campo,
-                        "count": outliers,
-                        "taxa": round(outliers / len(numericos), 4),
-                        "severidade": "baixa"
-                    })
-            except statistics.StatisticsError:
-                pass
-
-        metricas[campo] = {
-            "total": len(valores),
-            "nulos": nulos,
-            "taxa_preenchimento": round(1 - nulos / len(dados), 4)
-        }
-
-    # Verificar duplicatas
-    registros_str = [str(sorted(r.items())) for r in dados]
-    duplicatas = len(registros_str) - len(set(registros_str))
-    if duplicatas > 0:
-        problemas.append({
-            "tipo": "duplicatas",
-            "count": duplicatas,
-            "taxa": round(duplicatas / len(dados), 4),
-            "severidade": "media"
-        })
-
-    # Score de qualidade
-    score = 100
-    for p in problemas:
-        if p["severidade"] == "alta":
-            score -= 20
-        elif p["severidade"] == "media":
-            score -= 10
-        else:
-            score -= 5
-    score = max(0, score)
-
-    val_id = str(uuid.uuid4())[:8]
-    validacao = {
-        "id": val_id,
-        "total_registros": len(dados),
-        "campos": list(campos),
-        "score_qualidade": score,
-        "status": "aprovado" if score >= 70 else "reprovado",
-        "problemas": problemas,
-        "metricas_por_campo": metricas,
-        "validado_em": datetime.utcnow().isoformat()
-    }
-    validacoes_db[val_id] = validacao
-
-    return validacao
-
-
-@router.get("/validacao/{val_id}")
-async def obter_validacao(val_id: str):
-    """Obtém resultado de uma validação"""
-    if val_id not in validacoes_db:
-        raise HTTPException(status_code=404, detail="Validação não encontrada")
-    return validacoes_db[val_id]
-
-
-@router.get("/stats")
-async def stats_validacao():
-    """Estatísticas das validações"""
-    total = len(validacoes_db)
-    aprovados = sum(1 for v in validacoes_db.values() if v["status"] == "aprovado")
-    return {
-        "total_validacoes": total,
-        "aprovados": aprovados,
-        "reprovados": total - aprovados,
-        "taxa_aprovacao": round(aprovados / total, 4) if total > 0 else 0
-    }
+@router.delete("/{item_id}")
+async def deletar(item_id: str):
+    if item_id not in _db:
+        raise HTTPException(404, "Não encontrado")
+    del _db[item_id]
+    return {"status": "deletado"}
 
 
 plugin = DataValidationPlugin()
