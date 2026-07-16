@@ -354,5 +354,40 @@
   </div>
 </footer>
 
+
+<script>
+// Carregar stats dinâmicos
+fetch('/health')
+  .then(r => r.json())
+  .then(d => {
+    // Atualizar stats na home
+    const statNums = document.querySelectorAll('.stat-num');
+    if (statNums.length >= 1) {
+      // Já tem os valores estáticos, apenas animar
+      statNums.forEach(el => {
+        el.style.animation = 'fadeIn 0.5s ease';
+      });
+    }
+  })
+  .catch(() => {});
+
+// Animação ao scroll
+const observer = new IntersectionObserver(
+  entries => entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  }),
+  { threshold: 0.1 }
+);
+
+document.querySelectorAll('.feat-card, .step, .price-card, .testimonial').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+  observer.observe(el);
+});
+</script>
 </body>
 </html>
