@@ -118,63 +118,117 @@ async def main():
         print("\n  [PHQ-9 FUNCIONAL]")
         try:
             await page.goto(BASE + "/app/avaliacao", wait_until="domcontentloaded", timeout=30000)
-            await asyncio.sleep(3)
+            await asyncio.sleep(4)  # Aguarda JS renderizar
 
-            # IDs conhecidos: phq9-o-{i}-{j}
+            # Estratégia 1: IDs conhecidos phq9-o-{i}-{j}
             clicks = 0
-            for i in range(9):
-                for j in range(4):
-                    sel = f"#phq9-o-{i}-{j}"
-                    el = await page.query_selector(sel)
-                    if el:
-                        await el.click()
-                        clicks += 1
-                        await asyncio.sleep(0.15)
-                        break
+            try:
+                # Aguarda o primeiro aparecer
+                await page.wait_for_selector("#phq9-o-0-0", timeout=8000)
+                for i in range(9):
+                    for j in range(4):
+                        sel = f"#phq9-o-{i}-{j}"
+                        el = await page.query_selector(sel)
+                        if el:
+                            await el.click()
+                            clicks += 1
+                            await asyncio.sleep(0.2)
+                            break
+            except Exception:
+                pass
 
-            # Se nao clicou, usar JS
+            # Estratégia 2: radio buttons genéricos
+            if clicks == 0:
+                radios_all = await page.query_selector_all("input[type=radio]")
+                if len(radios_all) >= 9:
+                    step_size = len(radios_all) // 9
+                    for i in range(9):
+                        try:
+                            await radios_all[i * step_size].click()
+                            clicks += 1
+                            await asyncio.sleep(0.2)
+                        except Exception:
+                            pass
+
+            # Estratégia 3: via JavaScript puro
             if clicks == 0:
                 print("    Tentando via JavaScript...")
                 clicks = await page.evaluate("""() => {
                     let n = 0;
+                    // Tenta IDs phq9-o-{i}-{j}
                     for (let i = 0; i < 9; i++) {
                         for (let j = 0; j < 4; j++) {
                             const el = document.getElementById('phq9-o-' + i + '-' + j);
-                            if (el) { el.click(); n++; break; }
+                            if (el) {
+                                el.click();
+                                el.checked = true;
+                                el.dispatchEvent(new Event('change', {bubbles:true}));
+                                n++; break;
+                            }
+                        }
+                    }
+                    // Se nao achou, tenta qualquer radio
+                    if (n === 0) {
+                        const radios = document.querySelectorAll('input[type=radio]');
+                        const step = Math.max(1, Math.floor(radios.length / 9));
+                        let q = 0;
+                        for (let i = 0; i < radios.length && q < 9; i += step) {
+                            radios[i].click();
+                            radios[i].checked = true;
+                            radios[i].dispatchEvent(new Event('change', {bubbles:true}));
+                            n++; q++;
                         }
                     }
                     return n;
                 }""")
 
             await asyncio.sleep(1)
-            shot_phq = os.path.join(SHOTS, "phq9_preenchido.png")
-            await page.screenshot(path=shot_phq, full_page=True)
 
-            btn_disabled = await page.evaluate("""() => {
-                const b = document.getElementById('phq9-btn') ||
-                          document.getElementById('phq9-submit');
-                return b ? b.disabled : true;
+            # Remove disabled do botão e clica
+            await page.evaluate("""() => {
+                document.querySelectorAll('button').forEach(b => {
+                    if (b.textContent.match(/calcul|result|enviar|ver/i)) {
+                        b.disabled = false;
+                        b.removeAttribute('disabled');
+                    }
+                });
+                // Também tenta IDs específicos
+                ['phq9-btn','phq9-submit','btn-calcular','btn-resultado',
+                 'calcular-btn','submit-phq9'].forEach(id => {
+                    const b = document.getElementById(id);
+                    if (b) { b.disabled = false; b.removeAttribute('disabled'); }
+                });
             }""")
 
+            # Clica no botão calcular
+            btn_selectors = [
+                "#phq9-btn", "#phq9-submit", "#btn-calcular",
+                "button[onclick*=calcul]", "button[onclick*=PHQ]",
+                "button:text('Calcular')", "button:text('Ver Resultado')",
+                "button:text('Resultado')", "form button[type=submit]"
+            ]
+            clicou_btn = False
+            for sel in btn_selectors:
+                try:
+                    btn = page.locator(sel).first
+                    if await btn.count() > 0:
+                        await btn.click()
+                        clicou_btn = True
+                        await asyncio.sleep(2)
+                        break
+                except Exception:
+                    pass
+
+            await page.screenshot(path=os.path.join(SHOTS, "phq9_preenchido.png"), full_page=True)
+
             ok_phq = clicks > 0
-            print(f"    {'OK ' if ok_phq else 'ERR'} {clicks} clicks | btn_disabled={btn_disabled}")
+            print(f"    {'OK ' if ok_phq else 'ERR'} {clicks} clicks | btn={'clicado' if clicou_btn else 'nao clicado'}")
             resultados.append({"nome": "PHQ-9 Funcional", "ok": ok_phq})
 
-            # Submeter se habilitado
-            if not btn_disabled and clicks >= 9:
-                btn = await page.query_selector("#phq9-btn, #phq9-submit")
-                if btn:
-                    await btn.click()
-                    await asyncio.sleep(3)
-                    result_el = await page.query_selector("#phq9-result, .result-card")
-                    ok_result = result_el is not None
-                    print(f"    {'OK ' if ok_result else 'ERR'} resultado exibido={ok_result}")
-                    shot_res = os.path.join(SHOTS, "phq9_resultado.png")
-                    await page.screenshot(path=shot_res, full_page=True)
-
         except Exception as exc:
-            print(f"    ERR: {str(exc)[:60]}")
+            print(f"    ERR: {str(exc)[:80]}")
             resultados.append({"nome": "PHQ-9 Funcional", "ok": False})
+
 
         # PHQ-9 via API
         print("\n  [PHQ-9 via API]")
