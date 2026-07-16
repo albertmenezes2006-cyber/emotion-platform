@@ -264,3 +264,4 @@ async def main():
 
 
 asyncio.run(main())
+# Este arquivo foi atualizado — rode: python3 tests/test_browser.py
