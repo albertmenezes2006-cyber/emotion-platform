@@ -1,4 +1,7 @@
-"""
+#!/usr/bin/env python3
+"""Corrige f-string do multi_llm.py"""
+
+content = '''"""
 Plugin: Multi-LLM — Claude + GPT-4 + Mistral + Groq + Gemini
 Router inteligente que escolhe o melhor modelo disponível
 """
@@ -100,7 +103,7 @@ async def chat_multi_llm(
                         modelo_usado = "groq/llama-3.1-70b"
 
             elif modelo == "gemini" and os.getenv("GEMINI_API_KEY"):
-                prompt_gemini = system + "\n\nUsuario: " + mensagem
+                prompt_gemini = system + "\\n\\nUsuario: " + mensagem
                 payload_gemini = {
                     "contents": [{"parts": [{"text": prompt_gemini}]}],
                     "generationConfig": {"maxOutputTokens": 400, "temperature": 0.7}
@@ -207,7 +210,7 @@ async def chat_multi_llm(
     is_crisis = any(w in mensagem.lower() for w in crisis_words)
     if is_crisis:
         aviso = "ALERTA: Ligue agora para CVV 188 (24h gratuito) ou SAMU 192. Voce nao esta sozinho. 💙"
-        resposta = aviso + "\n\n" + resposta
+        resposta = aviso + "\\n\\n" + resposta
 
     log_id = str(uuid.uuid4())[:8]
     _logs.create(
@@ -236,12 +239,12 @@ async def analisar_emocao_llm(texto: str, user_id: str = "anonimo"):
     """Analise emocional profunda com LLM"""
     prompt = (
         "Analise o texto e responda SOMENTE em JSON valido: "
-        '{"emocao":"palavra","intensidade":0,"valencia":"positiva/negativa/neutra","insight":"frase","recomendacao":"frase"}'. "
-        "Texto: '" + texto[:300] + "'"
+        \'{"emocao":"palavra","intensidade":0,"valencia":"positiva/negativa/neutra","insight":"frase","recomendacao":"frase"}\'. "
+        "Texto: \'" + texto[:300] + "\'"
     )
     result = await chat_multi_llm(prompt, user_id, "auto", "analise")
     try:
-        json_match = re.search(r"\{[^}]+\}", result["resposta"])
+        json_match = re.search(r"\\{[^}]+\\}", result["resposta"])
         if json_match:
             analise = json.loads(json_match.group())
             return {"texto": texto[:100], "analise": analise, "modelo": result["modelo_usado"]}
@@ -287,3 +290,24 @@ async def benchmark_modelos():
 
 
 plugin = MultiLlmPlugin()
+'''
+
+# Fix the f-string issue with the analyze prompt
+content = content.replace(
+    "\'",
+    "'"
+)
+
+with open("plugins/ia_avancada/multi_llm.py", "w") as f:
+    f.write(content)
+
+print("✅ multi_llm.py reescrito")
+
+import subprocess, sys
+r = subprocess.run([sys.executable, "-m", "py_compile", "plugins/ia_avancada/multi_llm.py"],
+                   capture_output=True, text=True)
+if r.returncode == 0:
+    print("✅ Compila OK")
+else:
+    print("❌ Erro:")
+    print(r.stderr[:300])
