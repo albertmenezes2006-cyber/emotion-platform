@@ -1,7 +1,7 @@
 """Plugin: Frontend Routes v4 — serve páginas HTML sem conflito com FastAPI"""
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, Response
 from datetime import datetime
 import os, logging
 

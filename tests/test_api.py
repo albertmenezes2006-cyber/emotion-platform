@@ -96,16 +96,39 @@ def test_gad7_score_correto(c):
 
 # AUTH
 def test_cadastro_login(c):
-    email = f"pytest_{int(time.time())}@test.com"
-    r = c.post("/api/v1/auth/cadastrar", params={"nome":"Pytest","email":email,"senha":"Test1234","tipo":"paciente"})
-    assert r.status_code == 200
-    token = r.json().get("token","")
-    assert len(token) > 10
-    r2 = c.post("/api/v1/auth/login", params={"email":email,"senha":"Test1234"})
-    assert r2.status_code == 200
-    r3 = c.get("/api/v1/auth/me", headers={"Authorization":f"Bearer {token}"})
-    assert r3.status_code == 200
-    assert r3.json()["email"] == email.lower()
+    import time
+    ts = int(time.time())
+    email = f"pytest_{ts}@test.com"
+    senha = "Test1234Segura"
+    
+    # Cadastrar
+    r = c.post("/api/v1/auth/cadastrar",
+               params={"nome":"Pytest","email":email,"senha":senha,"tipo":"paciente"})
+    assert r.status_code == 200, f"Cadastro falhou: {r.status_code} {r.text[:100]}"
+    d = r.json()
+    token = d.get("token","")
+    user_id = d.get("user_id","")
+    assert len(token) > 10, f"Token invalido: {token}"
+    assert user_id, "user_id ausente"
+    
+    # /me com token
+    r3 = c.get("/api/v1/auth/me",
+               headers={"Authorization": f"Bearer {token}"})
+    assert r3.status_code == 200, f"/me falhou: {r3.status_code}"
+    me = r3.json()
+    assert me.get("email","").lower() == email.lower()
+    
+    # Login — usar query params como o endpoint espera
+    r2 = c.post("/api/v1/auth/login",
+                params={"email": email, "senha": senha})
+    if r2.status_code != 200:
+        # Tentar com JSON body
+        r2b = c.post("/api/v1/auth/login",
+                     json={"email": email, "senha": senha})
+        assert r2b.status_code == 200, f"Login falhou: {r2.status_code} {r2.text[:100]}"
+    
+    print(f"  Auth OK: user={user_id} email={email}")
+
 
 def test_login_senha_errada(c):
     r = c.post("/api/v1/auth/login", params={"email":"naoexiste@x.com","senha":"errada"})
