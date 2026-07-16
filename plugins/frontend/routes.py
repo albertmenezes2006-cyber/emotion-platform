@@ -232,4 +232,35 @@ async def site_status():
     }
 
 
+
+@router.get("/sitemap.xml")
+async def sitemap():
+    from fastapi.responses import Response
+    content = """<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://emotion-platform-albert.onrender.com/</loc><priority>1.0</priority><changefreq>daily</changefreq></url>
+  <url><loc>https://emotion-platform-albert.onrender.com/app/avaliacao</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://emotion-platform-albert.onrender.com/app/chat</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://emotion-platform-albert.onrender.com/app/diario</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://emotion-platform-albert.onrender.com/app/planos</loc><priority>0.9</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://emotion-platform-albert.onrender.com/app/login</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+</urlset>"""
+    return Response(content=content, media_type="application/xml")
+
+
+@router.get("/robots.txt")
+async def robots():
+    from fastapi.responses import Response
+    content = """User-agent: *
+Allow: /
+Allow: /app/avaliacao
+Allow: /app/chat
+Allow: /app/diario
+Allow: /app/planos
+Disallow: /api/
+Disallow: /docs
+Sitemap: https://emotion-platform-albert.onrender.com/sitemap.xml"""
+    return Response(content=content, media_type="text/plain")
+
+
 plugin = FrontendRoutesPlugin()
