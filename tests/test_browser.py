@@ -118,111 +118,134 @@ async def main():
         print("\n  [PHQ-9 FUNCIONAL]")
         try:
             await page.goto(BASE + "/app/avaliacao", wait_until="domcontentloaded", timeout=30000)
-            await asyncio.sleep(4)  # Aguarda JS renderizar
+            await asyncio.sleep(3)
 
-            # Estratégia 1: IDs conhecidos phq9-o-{i}-{j}
-            clicks = 0
-            try:
-                # Aguarda o primeiro aparecer
-                await page.wait_for_selector("#phq9-o-0-0", timeout=8000)
-                for i in range(9):
-                    for j in range(4):
-                        sel = f"#phq9-o-{i}-{j}"
-                        el = await page.query_selector(sel)
-                        if el:
-                            await el.click()
-                            clicks += 1
-                            await asyncio.sleep(0.2)
-                            break
-            except Exception:
-                pass
+            # Garante que renderQuestions() rodou
+            await page.evaluate("""() => {
+                if (typeof renderQuestions === 'function') {
+                    renderQuestions('phq9');
+                }
+            }""")
+            await asyncio.sleep(2)
 
-            # Estratégia 2: radio buttons genéricos
-            if clicks == 0:
-                radios_all = await page.query_selector_all("input[type=radio]")
-                if len(radios_all) >= 9:
-                    step_size = len(radios_all) // 9
-                    for i in range(9):
-                        try:
-                            await radios_all[i * step_size].click()
-                            clicks += 1
-                            await asyncio.sleep(0.2)
-                        except Exception:
-                            pass
+            # Usa selectOpt() — função real do JS da página
+            resultado_js = await page.evaluate("""() => {
+                let clicks = 0;
+                let erros  = [];
 
-            # Estratégia 3: via JavaScript puro
-            if clicks == 0:
-                print("    Tentando via JavaScript...")
-                clicks = await page.evaluate("""() => {
-                    let n = 0;
-                    // Tenta IDs phq9-o-{i}-{j}
+                // Estratégia 1: usa selectOpt() direto
+                if (typeof selectOpt === 'function') {
+                    for (let i = 0; i < 9; i++) {
+                        try {
+                            selectOpt('phq9', i, 0);
+                            clicks++;
+                        } catch(e) {
+                            erros.push('selectOpt phq9 ' + i + ': ' + e.message);
+                        }
+                    }
+                }
+
+                // Estratégia 2: clica nos inputs gerados
+                if (clicks === 0) {
                     for (let i = 0; i < 9; i++) {
                         for (let j = 0; j < 4; j++) {
                             const el = document.getElementById('phq9-o-' + i + '-' + j);
                             if (el) {
-                                el.click();
                                 el.checked = true;
-                                el.dispatchEvent(new Event('change', {bubbles:true}));
-                                n++; break;
+                                el.click();
+                                el.dispatchEvent(new Event('change', {bubbles: true}));
+                                clicks++;
+                                break;
                             }
                         }
                     }
-                    // Se nao achou, tenta qualquer radio
-                    if (n === 0) {
-                        const radios = document.querySelectorAll('input[type=radio]');
-                        const step = Math.max(1, Math.floor(radios.length / 9));
-                        let q = 0;
-                        for (let i = 0; i < radios.length && q < 9; i += step) {
-                            radios[i].click();
-                            radios[i].checked = true;
-                            radios[i].dispatchEvent(new Event('change', {bubbles:true}));
-                            n++; q++;
-                        }
+                }
+
+                // Estratégia 3: qualquer radio dentro do form phq9
+                if (clicks === 0) {
+                    const form = document.getElementById('phq9-form') ||
+                                 document.getElementById('phq9-questions') ||
+                                 document.querySelector('[id*=phq9]');
+                    if (form) {
+                        const radios = form.querySelectorAll('input[type=radio]');
+                        let lastQ = -1;
+                        radios.forEach(r => {
+                            const q = parseInt(r.dataset.q || r.name.replace(/\D/g,'') || '-1');
+                            if (q !== lastQ) {
+                                r.checked = true;
+                                r.click();
+                                r.dispatchEvent(new Event('change', {bubbles: true}));
+                                clicks++;
+                                lastQ = q;
+                            }
+                        });
                     }
-                    return n;
-                }""")
+                }
 
-            await asyncio.sleep(1)
+                // Estratégia 4: todos os radios da página agrupados por name
+                if (clicks === 0) {
+                    const radios = document.querySelectorAll('input[type=radio]');
+                    const grupos = {};
+                    radios.forEach(r => {
+                        const n = r.name || r.id;
+                        if (!grupos[n]) grupos[n] = r;
+                    });
+                    Object.values(grupos).forEach(r => {
+                        r.checked = true;
+                        r.click();
+                        r.dispatchEvent(new Event('change', {bubbles: true}));
+                        clicks++;
+                    });
+                }
 
-            # Remove disabled do botão e clica
-            await page.evaluate("""() => {
-                document.querySelectorAll('button').forEach(b => {
-                    if (b.textContent.match(/calcul|result|enviar|ver/i)) {
+                // Habilita botão de submit
+                ['phq9-btn','phq9-submit','btn-calcular'].forEach(id => {
+                    const b = document.getElementById(id);
+                    if (b) { b.disabled = false; b.removeAttribute('disabled'); }
+                });
+                document.querySelectorAll('button[type=submit], button.btn-submit').forEach(b => {
+                    if (b.id && b.id.includes('phq9')) {
                         b.disabled = false;
                         b.removeAttribute('disabled');
                     }
                 });
-                // Também tenta IDs específicos
-                ['phq9-btn','phq9-submit','btn-calcular','btn-resultado',
-                 'calcular-btn','submit-phq9'].forEach(id => {
-                    const b = document.getElementById(id);
-                    if (b) { b.disabled = false; b.removeAttribute('disabled'); }
-                });
+
+                return {clicks: clicks, erros: erros, selectOpt: typeof selectOpt};
             }""")
 
-            # Clica no botão calcular
-            btn_selectors = [
-                "#phq9-btn", "#phq9-submit", "#btn-calcular",
-                "button[onclick*=calcul]", "button[onclick*=PHQ]",
-                "button:text('Calcular')", "button:text('Ver Resultado')",
-                "button:text('Resultado')", "form button[type=submit]"
-            ]
-            clicou_btn = False
-            for sel in btn_selectors:
-                try:
-                    btn = page.locator(sel).first
-                    if await btn.count() > 0:
-                        await btn.click()
-                        clicou_btn = True
-                        await asyncio.sleep(2)
-                        break
-                except Exception:
-                    pass
+            clicks = resultado_js.get('clicks', 0)
+            selectopt_tipo = resultado_js.get('selectOpt', 'undefined')
+            print(f"    selectOpt: {selectopt_tipo} | clicks: {clicks}")
+            if resultado_js.get('erros'):
+                for e in resultado_js['erros'][:3]:
+                    print(f"    erro: {e}")
+
+            await asyncio.sleep(1)
+
+            # Clica no botão phq9-btn
+            btn = await page.query_selector("#phq9-btn")
+            if btn:
+                await btn.click()
+                await asyncio.sleep(2)
+                print("    Botão #phq9-btn clicado!")
+            else:
+                # Tenta submit do form
+                form = await page.query_selector("#phq9-form")
+                if form:
+                    await page.evaluate("document.getElementById('phq9-form').dispatchEvent(new Event('submit', {bubbles:true, cancelable:true}))")
+                    await asyncio.sleep(2)
+                    print("    Form submit disparado!")
 
             await page.screenshot(path=os.path.join(SHOTS, "phq9_preenchido.png"), full_page=True)
 
+            # Verifica resultado
+            result_el = await page.query_selector("#phq9-result, #phq9-resultado, .result-card, [id*=result]")
+            score_el  = await page.query_selector("#phq9-score")
+            score_val = await score_el.inner_text() if score_el else None
+
             ok_phq = clicks > 0
-            print(f"    {'OK ' if ok_phq else 'ERR'} {clicks} clicks | btn={'clicado' if clicou_btn else 'nao clicado'}")
+            detalhe = f"{clicks} clicks | score={score_val}" if score_val else f"{clicks} clicks"
+            print(f"    {'OK ' if ok_phq else 'ERR'} {detalhe}")
             resultados.append({"nome": "PHQ-9 Funcional", "ok": ok_phq})
 
         except Exception as exc:
