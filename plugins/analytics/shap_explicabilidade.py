@@ -30,7 +30,7 @@ def explicar_predicao(modelo, features: dict, feature_names: list = None) -> dic
         }
     except ImportError:
         return _explicar_simples(features)
-    except Exception as e:
+    except Exception:
         return _explicar_simples(features)
 
 def _explicar_simples(features: dict) -> dict:

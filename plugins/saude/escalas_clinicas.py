@@ -7,7 +7,6 @@ NOME = "escalas_clinicas"
 DESCRICAO = "Beck, Hamilton, Likert, Columbia, DSM-5, CID-10"
 CATEGORIA = "saude"
 
-from datetime import datetime
 from collections import defaultdict
 
 _resultados_escalas = defaultdict(list)

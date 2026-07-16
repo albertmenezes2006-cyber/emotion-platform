@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/programas-eap-avancado", tags=["psicologia_trabalho"])
 _db = {}
@@ -12,7 +13,7 @@ class ProgramasEapAvancadoPlugin(PluginBase):
     description = "Programas EAP avançados"; category = "psicologia_trabalho"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[programas_eap_avancado] OK")
+        logger.info("[programas_eap_avancado] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

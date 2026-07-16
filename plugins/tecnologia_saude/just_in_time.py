@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/just-in-time", tags=["tecnologia_saude"])
 _db = {}
@@ -12,7 +13,7 @@ class JustInTimePlugin(PluginBase):
     description = "Just-in-time adaptive interventions"; category = "tecnologia_saude"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[just_in_time] OK")
+        logger.info("[just_in_time] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

@@ -7,7 +7,7 @@ import urllib.request
 import urllib.parse
 from datetime import datetime
 from collections import deque
-from typing import List, Dict
+from typing import Dict
 
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "8909749074:AAGNoB-JPZVC0Vl1dYeiN__1ktxza6GZ0s4")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "7757404855")

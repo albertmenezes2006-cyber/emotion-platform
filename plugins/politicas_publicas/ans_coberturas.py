@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/ans-coberturas", tags=["politicas_publicas"])
 _db = {}
@@ -12,7 +13,7 @@ class AnsCoberturasPlugin(PluginBase):
     description = "ANS: coberturas em saúde mental"; category = "politicas_publicas"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[ans_coberturas] OK")
+        logger.info("[ans_coberturas] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

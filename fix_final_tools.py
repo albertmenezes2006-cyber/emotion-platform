@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Corrige todos os arquivos de ferramentas de uma vez"""
-import os, subprocess, time
+import os
+import subprocess
 
 def w(path, content):
     os.makedirs(os.path.dirname(path) if os.path.dirname(path) else ".", exist_ok=True)

@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/gatilhos-emocionais", tags=["automacao2"])
 _db = {}
@@ -12,7 +13,7 @@ class GatilhosEmocionaisPlugin(PluginBase):
     description = "Gatilhos automáticos por estado emocional"; category = "automacao2"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[gatilhos_emocionais] carregado")
+        logger.info("[gatilhos_emocionais] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

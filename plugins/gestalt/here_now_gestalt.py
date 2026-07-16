@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/here-now-gestalt", tags=["gestalt"])
 _db = {}
@@ -12,7 +13,7 @@ class HereNowGestaltPlugin(PluginBase):
     description = "Aqui e agora na terapia"; category = "gestalt"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[here_now_gestalt] OK")
+        logger.info("[here_now_gestalt] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

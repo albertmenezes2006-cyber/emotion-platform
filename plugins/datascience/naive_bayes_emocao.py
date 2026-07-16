@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/naive-bayes-emocao", tags=["datascience"])
 _db = {}
@@ -12,7 +13,7 @@ class NaiveBayesEmocaoPlugin(PluginBase):
     description = "Naive Bayes para triagem emocional rápida"; category = "datascience"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[naive_bayes_emocao] carregado")
+        logger.info("[naive_bayes_emocao] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

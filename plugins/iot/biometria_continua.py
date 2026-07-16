@@ -6,7 +6,8 @@ Descrição: Monitoramento biométrico contínuo e alertas em tempo real
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/biometria-continua", tags=["iot"])

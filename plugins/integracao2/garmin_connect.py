@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/garmin-connect", tags=["integracao2"])
 _db = {}
@@ -12,7 +13,7 @@ class GarminConnectPlugin(PluginBase):
     description = "Garmin Connect para wearables"; category = "integracao2"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[garmin_connect] carregado")
+        logger.info("[garmin_connect] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

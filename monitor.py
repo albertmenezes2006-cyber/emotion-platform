@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Monitor de saúde do deploy — Emotion Platform"""
-import urllib.request, json, sys, time, os
+import urllib.request
+import json
+import sys
+import time
+import os
 from datetime import datetime
 
 URL   = "https://emotion-platform-albert.onrender.com/health"
@@ -39,7 +43,7 @@ if "--watch" in sys.argv:
         if not ok:
             falhas += 1
             if falhas >= 2:
-                notify(f"🚨 *Deploy com problema!*\nVerifique o Render!")
+                notify("🚨 *Deploy com problema!*\nVerifique o Render!")
                 falhas = 0
         else:
             falhas = 0

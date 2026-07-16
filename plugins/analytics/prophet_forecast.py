@@ -44,7 +44,7 @@ def prever_humor_prophet(usuario_id: int, dias_futuro: int = 7) -> dict:
         return {"previsoes": previsoes, "tendencia": "melhora" if previsoes[-1]["yhat"] > previsoes[0]["yhat"] else "piora", "confianca": "alta"}
     except ImportError:
         return _prever_linear_simples(dados, dias_futuro)
-    except Exception as e:
+    except Exception:
         return _prever_linear_simples(dados, dias_futuro)
 
 def _prever_linear_simples(dados: list, dias: int) -> dict:

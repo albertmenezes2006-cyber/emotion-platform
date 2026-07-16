@@ -2,7 +2,9 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, re, logging
+import uuid
+import re
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/sentimento-avancado", tags=["datascience"])
 _analises, _historico = {}, {}

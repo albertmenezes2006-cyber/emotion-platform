@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/rotina-autocuidado", tags=["autocuidado"])
 _db = {}
@@ -12,7 +13,7 @@ class RotinaAutocuidadoPlugin(PluginBase):
     description = "Rotina de autocuidado diário"; category = "autocuidado"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[rotina_autocuidado] OK")
+        logger.info("[rotina_autocuidado] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Instala e configura tudo pelo terminal"""
-import os, sys, subprocess, time, urllib.request, json
+import os
+import subprocess
 
 API_KEY = "rnd_MgylgwI58qn8mY5ReSDpa8hfCFQK"
 SERVICE_ID = "srv-d97vrmcs728c73ci1mig"
@@ -633,7 +634,7 @@ score = round(OK/(OK+WARN+ERR)*100) if (OK+WARN+ERR) > 0 else 0
 print(f"Acessibilidade: {{score}}%")
 ''')
 
-w("tools/ssl_check.py", f'''#!/usr/bin/env python3
+w("tools/ssl_check.py", '''#!/usr/bin/env python3
 """SSL/HTTPS — python3 tools/ssl_check.py"""
 import ssl, socket
 from datetime import datetime
@@ -650,32 +651,32 @@ try:
             cipher = ssock.cipher()
             
             print(f"✅ Certificado SSL válido")
-            print(f"✅ TLS versão: {{version}}")
-            print(f"✅ Cipher: {{cipher[0] if cipher else 'N/A'}}")
+            print(f"✅ TLS versão: {version}")
+            print(f"✅ Cipher: {cipher[0] if cipher else 'N/A'}")
             
             # Validade
             expiry = cert.get("notAfter","")
             if expiry:
                 exp_date = datetime.strptime(expiry, "%b %d %H:%M:%S %Y %Z")
                 dias = (exp_date - datetime.utcnow()).days
-                if dias > 30: print(f"✅ Certificado válido por {{dias}} dias")
-                elif dias > 0: print(f"⚠️  Certificado expira em {{dias}} dias!")
+                if dias > 30: print(f"✅ Certificado válido por {dias} dias")
+                elif dias > 0: print(f"⚠️  Certificado expira em {dias} dias!")
                 else: print(f"❌ Certificado EXPIRADO!")
             
             # Emissor
-            issuer = dict(x[0] for x in cert.get("issuer",())) if cert.get("issuer") else {{}}
-            print(f"✅ Emissor: {{issuer.get('organizationName','?')}}")
+            issuer = dict(x[0] for x in cert.get("issuer",())) if cert.get("issuer") else {}
+            print(f"✅ Emissor: {issuer.get('organizationName','?')}")
             
             if "TLSv1.3" in version: print("🚀 TLS 1.3 (máxima segurança)")
             elif "TLSv1.2" in version: print("✅ TLS 1.2 (seguro)")
-            else: print(f"⚠️  {{version}} (considere atualizar)")
+            else: print(f"⚠️  {version} (considere atualizar)")
 
 except ssl.SSLCertVerificationError as e:
-    print(f"❌ Erro de certificado: {{e}}")
+    print(f"❌ Erro de certificado: {e}")
 except Exception as e:
-    print(f"❌ Erro SSL: {{e}}")
+    print(f"❌ Erro SSL: {e}")
 
-print(f"\\nAnálise detalhada: https://www.ssllabs.com/ssltest/analyze.html?d={{HOST}}")
+print(f"\\nAnálise detalhada: https://www.ssllabs.com/ssltest/analyze.html?d={HOST}")
 ''')
 
 w("tools/seo_check.py", f'''#!/usr/bin/env python3

@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-import py_compile, os, sys, subprocess
+import py_compile
+import os
+import sys
+import subprocess
 from datetime import datetime
 
 MAIN = "main.py"

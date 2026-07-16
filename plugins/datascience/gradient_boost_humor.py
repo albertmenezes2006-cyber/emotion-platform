@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/gradient-boost-humor", tags=["datascience"])
 _db = {}
@@ -12,7 +13,7 @@ class GradientBoostHumorPlugin(PluginBase):
     description = "Gradient Boosting para modelagem de humor"; category = "datascience"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[gradient_boost_humor] carregado")
+        logger.info("[gradient_boost_humor] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/hiv-mental", tags=["saude3"])
 _db = {}
@@ -12,7 +13,7 @@ class HivMentalPlugin(PluginBase):
     description = "HIV/AIDS e saúde mental"; category = "saude3"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[hiv_mental] OK")
+        logger.info("[hiv_mental] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

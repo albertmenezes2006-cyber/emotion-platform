@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/comparativo-evolucao", tags=["prontuario"])
 _db = {}
@@ -12,7 +13,7 @@ class ComparativoEvolucaoPlugin(PluginBase):
     description = "Comparativo de evolução por período"; category = "prontuario"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[comparativo_evolucao] carregado")
+        logger.info("[comparativo_evolucao] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

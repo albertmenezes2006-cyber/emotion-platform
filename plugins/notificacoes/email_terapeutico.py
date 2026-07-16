@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/email-terapeutico", tags=["notificacoes"])
 _db = {}
@@ -12,7 +13,7 @@ class EmailTerapeuticoPlugin(PluginBase):
     description = "E-mails terapêuticos personalizados"; category = "notificacoes"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[email_terapeutico] carregado")
+        logger.info("[email_terapeutico] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

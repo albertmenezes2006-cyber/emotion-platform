@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/emocoes-positivas-broaden", tags=["psicologia_positiva"])
 _db = {}
@@ -12,7 +13,7 @@ class EmocoesPositivasBroadenPlugin(PluginBase):
     description = "Ampliar e construir emoções positivas"; category = "psicologia_positiva"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[emocoes_positivas_broaden] OK")
+        logger.info("[emocoes_positivas_broaden] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

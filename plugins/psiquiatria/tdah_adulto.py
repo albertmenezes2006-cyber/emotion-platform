@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/tdah-adulto", tags=["psiquiatria"])
 _db = {}
@@ -12,7 +13,7 @@ class TdahAdultoPlugin(PluginBase):
     description = "TDAH no adulto: avaliação e manejo"; category = "psiquiatria"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[tdah_adulto] OK")
+        logger.info("[tdah_adulto] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

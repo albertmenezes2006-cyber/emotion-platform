@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/oms-global-mental", tags=["politicas_publicas"])
 _db = {}
@@ -12,7 +13,7 @@ class OmsGlobalMentalPlugin(PluginBase):
     description = "OMS: plano global de saúde mental"; category = "politicas_publicas"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[oms_global_mental] OK")
+        logger.info("[oms_global_mental] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

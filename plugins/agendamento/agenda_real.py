@@ -1,9 +1,11 @@
 """Plugin: Agenda Real — Sistema completo de agendamento com DB"""
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
-from datetime import datetime, timedelta
+from datetime import datetime
 from plugins.db_manager import SimpleDB
-import uuid, json, logging
+import uuid
+import json
+import logging
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/agenda-real", tags=["agendamento"])

@@ -2,8 +2,6 @@
 Sofia IA — Módulo especializado
 Blocos: 4,5,16,17,18,19
 """
-from datetime import datetime
-from typing import Optional
 
 # Bloco 4 — Especialidades (trauma, luto, LGBTQIA+, crise)
 # Bloco 5 — Plano terapêutico personalizado

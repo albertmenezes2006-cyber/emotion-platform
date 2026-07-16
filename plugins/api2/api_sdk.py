@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/api-sdk", tags=["api2"])
 _db = {}
@@ -12,7 +13,7 @@ class ApiSdkPlugin(PluginBase):
     description = "SDK Python/JS gerado automaticamente"; category = "api2"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[api_sdk] carregado")
+        logger.info("[api_sdk] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

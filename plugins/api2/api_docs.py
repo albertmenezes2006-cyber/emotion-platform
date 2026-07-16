@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/api-docs", tags=["api2"])
 _db = {}
@@ -12,7 +13,7 @@ class ApiDocsPlugin(PluginBase):
     description = "Documentação automática OpenAPI 3.0"; category = "api2"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[api_docs] carregado")
+        logger.info("[api_docs] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

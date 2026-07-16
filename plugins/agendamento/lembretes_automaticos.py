@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/lembretes-automaticos", tags=["agendamento"])
 _db = {}
@@ -12,7 +13,7 @@ class LembretesAutomaticosPlugin(PluginBase):
     description = "Lembretes automáticos multicanal"; category = "agendamento"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[lembretes_automaticos] carregado")
+        logger.info("[lembretes_automaticos] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

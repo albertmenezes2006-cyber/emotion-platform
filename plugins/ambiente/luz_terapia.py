@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/luz-terapia", tags=["ambiente"])
 _db = {}
@@ -12,7 +13,7 @@ class LuzTerapiaPlugin(PluginBase):
     description = "Fototerapia e ritmo circadiano"; category = "ambiente"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[luz_terapia] OK")
+        logger.info("[luz_terapia] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

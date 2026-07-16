@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/cinco-ritmos-movimentos", tags=["danca_movimento"])
 _db = {}
@@ -12,7 +13,7 @@ class CincoRitmosMovimentosPlugin(PluginBase):
     description = "5 Ritmos movimento meditativo de Gabrielle Roth"; category = "danca_movimento"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[cinco_ritmos_movimentos] OK")
+        logger.info("[cinco_ritmos_movimentos] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

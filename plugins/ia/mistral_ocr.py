@@ -7,7 +7,8 @@ NOME = "mistral_ocr"
 DESCRICAO = "Mistral para OCR, analise de documentos e textos longos"
 CATEGORIA = "ia"
 
-import os, httpx, base64
+import os
+import httpx
 
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY", "")
 
@@ -32,7 +33,8 @@ Responda em JSON: {{"topicos": [], "emocoes_detectadas": [], "urgencia": "baixa/
 Documento: {texto_documento[:2000]}"""
     resultado = await mistral_completar(prompt, "mistral-large-latest")
     try:
-        import json, re
+        import json
+        import re
         m = re.search(r'\{.*\}', resultado, re.DOTALL)
         if m:
             return json.loads(m.group())

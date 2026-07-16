@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/linha-do-tempo", tags=["prontuario"])
 _db = {}
@@ -12,7 +13,7 @@ class LinhaDoTempoPlugin(PluginBase):
     description = "Linha do tempo clínica do paciente"; category = "prontuario"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[linha_do_tempo] carregado")
+        logger.info("[linha_do_tempo] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

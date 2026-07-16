@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/mbct-avancado", tags=["mindfulness_avancado"])
 _db = {}
@@ -12,7 +13,7 @@ class MbctAvancadoPlugin(PluginBase):
     description = "MBCT avançado para depressão"; category = "mindfulness_avancado"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[mbct_avancado] OK")
+        logger.info("[mbct_avancado] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

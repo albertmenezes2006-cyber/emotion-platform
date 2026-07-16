@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/sincronizacao-zeitgeber", tags=["cronoterapia"])
 _db = {}
@@ -12,7 +13,7 @@ class SincronizacaoZeitgeberPlugin(PluginBase):
     description = "Zeitgebers e sincronização circadiana"; category = "cronoterapia"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[sincronizacao_zeitgeber] OK")
+        logger.info("[sincronizacao_zeitgeber] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

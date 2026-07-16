@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/wcag-compliance", tags=["acessibilidade"])
 _db = {}
@@ -12,7 +13,7 @@ class WcagCompliancePlugin(PluginBase):
     description = "WCAG 2.1 AA compliance total"; category = "acessibilidade"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[wcag_compliance] carregado")
+        logger.info("[wcag_compliance] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/adocao-saude-mental", tags=["psiquiatria_infantojuvenil"])
 _db = {}
@@ -12,7 +13,7 @@ class AdocaoSaudeMentalPlugin(PluginBase):
     description = "Adoção e saúde mental"; category = "psiquiatria_infantojuvenil"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[adocao_saude_mental] OK")
+        logger.info("[adocao_saude_mental] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

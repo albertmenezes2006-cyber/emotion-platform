@@ -1,5 +1,6 @@
 """Loader Universal — registra APIRouters sem sub-apps (evita RecursionError)"""
-import os, importlib, logging
+import importlib
+import logging
 from pathlib import Path
 
 logger = logging.getLogger(__name__)

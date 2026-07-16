@@ -1,5 +1,7 @@
 """Testes completos da API EmotionAI — pytest tests/test_api.py -v"""
-import pytest, httpx, json, time
+import pytest
+import httpx
+import time
 
 BASE = "https://emotion-platform-albert.onrender.com"
 
@@ -96,7 +98,6 @@ def test_gad7_score_correto(c):
 
 # AUTH
 def test_cadastro_login(c):
-    import time
     ts = int(time.time())
     email = f"pytest_{ts}@test.com"
     senha = "Test1234Segura"

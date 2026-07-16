@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/random-forest-emocao", tags=["datascience"])
 _db = {}
@@ -12,7 +13,7 @@ class RandomForestEmocaoPlugin(PluginBase):
     description = "Random Forest para predição de estados emocionais"; category = "datascience"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[random_forest_emocao] carregado")
+        logger.info("[random_forest_emocao] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

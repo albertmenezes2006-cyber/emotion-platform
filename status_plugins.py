@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Status UNIVERSAL — detecta TODOS os plugins automaticamente"""
-import os, py_compile
+import os
+import py_compile
 from datetime import datetime
 
 G="[92m"; R="[91m"; C="[96m"; B="[1m"; X="[0m"; Y="[93m"; M="[95m"

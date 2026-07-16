@@ -8,8 +8,7 @@ DESCRICAO = "IOCs, feeds de ameacas e correlacao de eventos de seguranca"
 CATEGORIA = "seguranca"
 
 import os
-import hashlib
-from datetime import datetime, timedelta
+from datetime import datetime
 from collections import defaultdict
 
 _iocs_database = {"ips": set(), "dominios": set(), "hashes": set(), "urls": set()}

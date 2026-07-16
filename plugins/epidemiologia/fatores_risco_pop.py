@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/fatores-risco-pop", tags=["epidemiologia"])
 _db = {}
@@ -12,7 +13,7 @@ class FatoresRiscoPopPlugin(PluginBase):
     description = "Fatores de risco populacionais"; category = "epidemiologia"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[fatores_risco_pop] OK")
+        logger.info("[fatores_risco_pop] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

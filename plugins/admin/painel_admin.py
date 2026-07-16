@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/painel-admin", tags=["admin"])
 _db = {}
@@ -12,7 +13,7 @@ class PainelAdminPlugin(PluginBase):
     description = "Painel administrativo completo"; category = "admin"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[painel_admin] carregado")
+        logger.info("[painel_admin] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

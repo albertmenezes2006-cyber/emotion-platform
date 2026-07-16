@@ -17,7 +17,7 @@ try:
             versao = ssock.version()
             cipher = ssock.cipher()
 
-            print(f"  OK  Certificado SSL valido")
+            print("  OK  Certificado SSL valido")
             print(f"  OK  Versao TLS: {versao}")
 
             if cipher:
@@ -33,7 +33,7 @@ try:
                 elif dias > 0:
                     print(f"  WARN Certificado expira em {dias} dias!")
                 else:
-                    print(f"  ERR  Certificado EXPIRADO!")
+                    print("  ERR  Certificado EXPIRADO!")
 
             # Emissor
             issuer_raw = cert.get("issuer", ())

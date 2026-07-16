@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/load-balancing", tags=["devops"])
 _db = {}
@@ -12,7 +13,7 @@ class LoadBalancingPlugin(PluginBase):
     description = "Load balancing inteligente"; category = "devops"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[load_balancing] carregado")
+        logger.info("[load_balancing] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

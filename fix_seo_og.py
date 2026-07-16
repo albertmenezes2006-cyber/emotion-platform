@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Adiciona Open Graph, Canonical, Sitemap e Robots"""
-import os, subprocess, re
+import os
+import subprocess
 
 API_KEY = "rnd_MgylgwI58qn8mY5ReSDpa8hfCFQK"
 SERVICE_ID = "srv-d97vrmcs728c73ci1mig"
@@ -152,7 +153,9 @@ for f in ["plugins/frontend/routes.py", "main.py"]:
 
 # Push
 print("\n=== PUSH ===")
-import time, urllib.request, json
+import time
+import urllib.request
+import json
 
 for cmd in [
     "git add -A",

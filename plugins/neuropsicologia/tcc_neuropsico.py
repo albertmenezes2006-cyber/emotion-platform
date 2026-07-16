@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/tcc-neuropsico", tags=["neuropsicologia"])
 _db = {}
@@ -12,7 +13,7 @@ class TccNeuropsicoPlugin(PluginBase):
     description = "TCC adaptada para dificuldades cognitivas"; category = "neuropsicologia"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[tcc_neuropsico] OK")
+        logger.info("[tcc_neuropsico] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/modelo-bar-on", tags=["inteligencia_emocional"])
 _db = {}
@@ -12,7 +13,7 @@ class ModeloBarOnPlugin(PluginBase):
     description = "IE: modelo de Bar-On"; category = "inteligencia_emocional"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[modelo_bar_on] OK")
+        logger.info("[modelo_bar_on] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

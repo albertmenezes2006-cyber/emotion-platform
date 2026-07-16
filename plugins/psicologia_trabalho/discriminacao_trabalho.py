@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/discriminacao-trabalho", tags=["psicologia_trabalho"])
 _db = {}
@@ -12,7 +13,7 @@ class DiscriminacaoTrabalhoPlugin(PluginBase):
     description = "Discriminação e saúde mental"; category = "psicologia_trabalho"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[discriminacao_trabalho] OK")
+        logger.info("[discriminacao_trabalho] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

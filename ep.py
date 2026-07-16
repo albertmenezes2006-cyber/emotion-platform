@@ -19,7 +19,10 @@ Emotion Platform CLI v2.0 — Central de Comando
   python3 ep.py clean      → limpa cache
   python3 ep.py full       → tudo de uma vez
 """
-import sys, os, subprocess, json, time
+import sys
+import os
+import subprocess
+import json
 from datetime import datetime
 from pathlib import Path
 

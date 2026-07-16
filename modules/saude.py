@@ -6,9 +6,8 @@ import os
 import psutil
 import urllib.request
 import urllib.parse
-import json
 from datetime import datetime
-from typing import List, Dict
+from typing import Dict
 
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "8909749074:AAGNoB-JPZVC0Vl1dYeiN__1ktxza6GZ0s4")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "7757404855")

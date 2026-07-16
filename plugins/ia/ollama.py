@@ -7,7 +7,8 @@ NOME = "ollama"
 DESCRICAO = "Llama, Mistral, Gemma rodando localmente via Ollama"
 CATEGORIA = "ia"
 
-import os, httpx
+import os
+import httpx
 
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
 OLLAMA_MODELS = {
@@ -62,7 +63,8 @@ async def ollama_analisar_emocao(texto: str) -> dict:
 Texto: {texto[:300]}"""
     resultado = await ollama_completar(prompt, "chat")
     try:
-        import json, re
+        import json
+        import re
         m = re.search(r'\{.*\}', resultado, re.DOTALL)
         if m:
             return json.loads(m.group())

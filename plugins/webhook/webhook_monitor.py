@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/webhook-monitor", tags=["webhook"])
 _db = {}
@@ -12,7 +13,7 @@ class WebhookMonitorPlugin(PluginBase):
     description = "Monitor de saúde de webhooks"; category = "webhook"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[webhook_monitor] carregado")
+        logger.info("[webhook_monitor] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

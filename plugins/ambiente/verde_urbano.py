@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/verde-urbano", tags=["ambiente"])
 _db = {}
@@ -12,7 +13,7 @@ class VerdeUrbanoPlugin(PluginBase):
     description = "Áreas verdes e bem-estar mental"; category = "ambiente"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[verde_urbano] OK")
+        logger.info("[verde_urbano] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

@@ -7,7 +7,6 @@ NOME = "database_optimization"
 DESCRICAO = "Indices, query optimization, connection pooling e cache de queries"
 CATEGORIA = "performance"
 
-import time
 from collections import defaultdict
 from datetime import datetime
 

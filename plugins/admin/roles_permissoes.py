@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/roles-permissoes", tags=["admin"])
 _db = {}
@@ -12,7 +13,7 @@ class RolesPermissoesPlugin(PluginBase):
     description = "Sistema de roles e permissões granulares"; category = "admin"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[roles_permissoes] carregado")
+        logger.info("[roles_permissoes] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

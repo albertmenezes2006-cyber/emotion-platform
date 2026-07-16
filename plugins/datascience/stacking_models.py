@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/stacking-models", tags=["datascience"])
 _db = {}
@@ -12,7 +13,7 @@ class StackingModelsPlugin(PluginBase):
     description = "Stacking de modelos para máxima precisão"; category = "datascience"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[stacking_models] carregado")
+        logger.info("[stacking_models] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

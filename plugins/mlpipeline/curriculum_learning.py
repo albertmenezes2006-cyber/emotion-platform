@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/curriculum-learning", tags=["mlpipeline"])
 _db = {}
@@ -12,7 +13,7 @@ class CurriculumLearningPlugin(PluginBase):
     description = "Curriculum learning para treino progressivo"; category = "mlpipeline"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[curriculum_learning] carregado")
+        logger.info("[curriculum_learning] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

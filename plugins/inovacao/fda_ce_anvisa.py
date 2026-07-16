@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/fda-ce-anvisa", tags=["inovacao"])
 _db = {}
@@ -12,7 +13,7 @@ class FdaCeAnvisaPlugin(PluginBase):
     description = "FDA, CE e ANVISA para software médico"; category = "inovacao"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[fda_ce_anvisa] OK")
+        logger.info("[fda_ce_anvisa] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

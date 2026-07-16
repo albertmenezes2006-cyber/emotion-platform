@@ -7,7 +7,9 @@ NOME = "gemini_vision"
 DESCRICAO = "Google Gemini Pro Vision — analise multimodal"
 CATEGORIA = "ia"
 
-import os, httpx, base64
+import os
+import httpx
+import base64
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 GEMINI_VISION_MODEL = "gemini-1.5-flash"
@@ -35,7 +37,8 @@ async def gemini_emocao_facial(imagem_bytes: bytes) -> dict:
     prompt = """Analise a emocao facial. JSON: {"emocao": "string", "intensidade": 1-5, "confianca": 0.0-1.0}"""
     resultado = await gemini_analisar_imagem(imagem_bytes, prompt)
     try:
-        import json, re
+        import json
+        import re
         m = re.search(r'\{.*\}', resultado, re.DOTALL)
         if m:
             return json.loads(m.group())

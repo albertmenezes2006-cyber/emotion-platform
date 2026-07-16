@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/sem-teto-mental", tags=["grupos_especificos"])
 _db = {}
@@ -12,7 +13,7 @@ class SemTetoMentalPlugin(PluginBase):
     description = "Saúde mental em situação de rua"; category = "grupos_especificos"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[sem_teto_mental] OK")
+        logger.info("[sem_teto_mental] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

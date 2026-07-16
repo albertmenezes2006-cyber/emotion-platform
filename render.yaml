@@ -1,14 +1,17 @@
 services:
   - type: web
-    name: emotion-platform
-    runtime: python
+    name: emotion-platform-albert
+    env: python
+    region: oregon
     plan: free
     buildCommand: pip install --upgrade pip && pip install -r requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1 --timeout-keep-alive 120
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.11.0
       - key: PORT
-        value: 10000
-    healthCheckPath: /health
-    autoDeploy: true
+        value: "10000"
+      - key: PYTHONPATH
+        value: "."
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: PYTHON_VERSION
+        value: "3.11.9"

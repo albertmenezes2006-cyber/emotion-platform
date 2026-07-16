@@ -7,7 +7,6 @@ NOME = "telemedicina"
 DESCRICAO = "Video chamada, agenda e gestao de profissionais de saude mental"
 CATEGORIA = "saude"
 
-import os
 from datetime import datetime, timedelta
 from collections import defaultdict
 

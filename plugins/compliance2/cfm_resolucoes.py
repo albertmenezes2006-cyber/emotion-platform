@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/cfm-resolucoes", tags=["compliance2"])
 _db = {}
@@ -12,7 +13,7 @@ class CfmResolucoesPlugin(PluginBase):
     description = "Resoluções CFM para telemedicina"; category = "compliance2"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[cfm_resolucoes] carregado")
+        logger.info("[cfm_resolucoes] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/cep-comite", tags=["etica"])
 _db = {}
@@ -12,7 +13,7 @@ class CepComitePlugin(PluginBase):
     description = "CEP: comitê de ética em pesquisa"; category = "etica"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[cep_comite] OK")
+        logger.info("[cep_comite] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

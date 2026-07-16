@@ -3,9 +3,7 @@ Logger estruturado — Emotion Platform v21.0
 Uso: from modules.logger import log
 """
 import sys
-import os
 from loguru import logger
-from datetime import datetime
 from pathlib import Path
 
 LOG_DIR = Path(__file__).parent.parent / "logs"

@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/tensao-muscular", tags=["postura"])
 _db = {}
@@ -12,7 +13,7 @@ class TensaoMuscularPlugin(PluginBase):
     description = "Mapeamento de tensão muscular emocional"; category = "postura"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[tensao_muscular] carregado")
+        logger.info("[tensao_muscular] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

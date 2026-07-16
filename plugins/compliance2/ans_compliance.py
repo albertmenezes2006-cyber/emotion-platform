@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/ans-compliance", tags=["compliance2"])
 _db = {}
@@ -12,7 +13,7 @@ class AnsCompliancePlugin(PluginBase):
     description = "ANS compliance para planos de saúde"; category = "compliance2"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[ans_compliance] carregado")
+        logger.info("[ans_compliance] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

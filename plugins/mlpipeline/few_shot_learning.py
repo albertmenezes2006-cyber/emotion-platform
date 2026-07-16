@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/few-shot-learning", tags=["mlpipeline"])
 _db = {}
@@ -12,7 +13,7 @@ class FewShotLearningPlugin(PluginBase):
     description = "Few-shot learning para novos diagnósticos"; category = "mlpipeline"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[few_shot_learning] carregado")
+        logger.info("[few_shot_learning] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

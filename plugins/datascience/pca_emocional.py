@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/pca-emocional", tags=["datascience"])
 _db = {}
@@ -12,7 +13,7 @@ class PcaEmocionalPlugin(PluginBase):
     description = "PCA para redução dimensional de dados emocionais"; category = "datascience"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[pca_emocional] carregado")
+        logger.info("[pca_emocional] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/telepsicologia-cfp", tags=["telepsicologia"])
 _db = {}
@@ -12,7 +13,7 @@ class TelepsicologiaCfpPlugin(PluginBase):
     description = "Telepsicologia: resolução CFP 04/2020"; category = "telepsicologia"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[telepsicologia_cfp] OK")
+        logger.info("[telepsicologia_cfp] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

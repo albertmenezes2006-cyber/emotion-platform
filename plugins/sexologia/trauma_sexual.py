@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/trauma-sexual", tags=["sexologia"])
 _db = {}
@@ -12,7 +13,7 @@ class TraumaSexualPlugin(PluginBase):
     description = "Trauma sexual: abordagem clínica"; category = "sexologia"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[trauma_sexual] OK")
+        logger.info("[trauma_sexual] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

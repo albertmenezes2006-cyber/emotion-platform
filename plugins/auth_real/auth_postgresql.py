@@ -5,9 +5,13 @@ Padrão: PluginBase + plugin = AuthPostgresqlPlugin()
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from datetime import datetime, timedelta
+from datetime import datetime
 from plugins.db_manager import SimpleDB
-import hashlib, logging, os, json, uuid
+import hashlib
+import logging
+import os
+import json
+import uuid
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/auth-pg", tags=["auth_postgresql"])
@@ -21,7 +25,9 @@ def _hash(senha: str) -> str:
     return hashlib.sha256(f"{JWT_SECRET}{senha}".encode()).hexdigest()
 
 def _token(uid: str, email: str, plano: str) -> str:
-    import base64, hmac, time
+    import base64
+    import hmac
+    import time
     header  = base64.b64encode(b'{"alg":"HS256"}').decode().rstrip("=")
     payload = base64.b64encode(json.dumps({
         "sub": uid, "email": email, "plano": plano,

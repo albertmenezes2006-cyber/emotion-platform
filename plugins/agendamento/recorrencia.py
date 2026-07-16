@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/recorrencia", tags=["agendamento"])
 _db = {}
@@ -12,7 +13,7 @@ class RecorrenciaPlugin(PluginBase):
     description = "Sessões recorrentes com regras flexíveis"; category = "agendamento"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[recorrencia] carregado")
+        logger.info("[recorrencia] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

@@ -8,7 +8,6 @@ DESCRICAO = "CDN multi-regiao, otimizacao de assets e cache de navegador"
 CATEGORIA = "performance"
 
 import os
-from datetime import datetime
 
 CDN_URL = os.getenv("CDN_URL", "")
 CLOUDFLARE_ZONE_ID = os.getenv("CLOUDFLARE_ZONE_ID", "")

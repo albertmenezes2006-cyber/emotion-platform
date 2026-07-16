@@ -1,8 +1,9 @@
 """Plugin: Tracker de Sono — monitoramento completo do sono"""
 from plugins.plugin_base import PluginBase
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger=logging.getLogger(__name__)
 router=APIRouter(prefix="/api/v1/sono",tags=["sono"])
 _registros={}

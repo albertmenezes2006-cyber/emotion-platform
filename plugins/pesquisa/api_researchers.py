@@ -7,7 +7,6 @@ NOME = "api_researchers"
 DESCRICAO = "API especializada para pesquisadores de saude mental e IA"
 CATEGORIA = "pesquisa"
 
-import os
 from datetime import datetime
 from collections import defaultdict
 

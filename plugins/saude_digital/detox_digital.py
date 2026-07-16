@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/detox-digital", tags=["saude_digital"])
 _db = {}
@@ -12,7 +13,7 @@ class DetoxDigitalPlugin(PluginBase):
     description = "Detox digital: estratégias"; category = "saude_digital"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[detox_digital] OK")
+        logger.info("[detox_digital] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/partner-program", tags=["plataforma_final"])
 _db = {}
@@ -12,7 +13,7 @@ class PartnerProgramPlugin(PluginBase):
     description = "Programa de parceiros"; category = "plataforma_final"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[partner_program] OK")
+        logger.info("[partner_program] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

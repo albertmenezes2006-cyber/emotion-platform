@@ -7,7 +7,9 @@ NOME = "gpt4_vision"
 DESCRICAO = "OpenAI GPT-4o com visao — analisa imagens e expressoes faciais"
 CATEGORIA = "ia"
 
-import os, httpx, base64
+import os
+import httpx
+import base64
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 
@@ -56,7 +58,8 @@ Emocoes possiveis: alegria, tristeza, raiva, medo, surpresa, nojo, neutro, ansie
     resultado = await gpt4_analisar_imagem(imagem_bytes, prompt)
     if resultado.get("sucesso"):
         try:
-            import json, re
+            import json
+            import re
             m = re.search(r'\{.*\}', resultado["analise"], re.DOTALL)
             if m:
                 return json.loads(m.group())

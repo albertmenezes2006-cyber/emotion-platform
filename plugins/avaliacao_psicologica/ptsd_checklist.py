@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/ptsd-checklist", tags=["avaliacao_psicologica"])
 _db = {}
@@ -12,7 +13,7 @@ class PtsdChecklistPlugin(PluginBase):
     description = "PCL-5: checklist de PTSD"; category = "avaliacao_psicologica"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[ptsd_checklist] OK")
+        logger.info("[ptsd_checklist] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

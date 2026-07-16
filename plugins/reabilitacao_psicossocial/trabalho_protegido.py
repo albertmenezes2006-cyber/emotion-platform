@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/trabalho-protegido", tags=["reabilitacao_psicossocial"])
 _db = {}
@@ -12,7 +13,7 @@ class TrabalhoProtegidoPlugin(PluginBase):
     description = "Trabalho protegido e inclusão"; category = "reabilitacao_psicossocial"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[trabalho_protegido] OK")
+        logger.info("[trabalho_protegido] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

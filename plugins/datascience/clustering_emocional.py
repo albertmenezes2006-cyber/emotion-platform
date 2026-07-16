@@ -2,7 +2,10 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, math, random, logging
+import uuid
+import math
+import random
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/clustering", tags=["datascience"])
 _perfis, _modelos, _clusters = {}, {}, {}

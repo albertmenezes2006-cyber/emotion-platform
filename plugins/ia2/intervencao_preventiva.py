@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/intervencao-preventiva", tags=["ia2"])
 _db = {}
@@ -12,7 +13,7 @@ class IntervencaoPreventivaPlugin(PluginBase):
     description = "Intervenção preventiva por IA proativa"; category = "ia2"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[intervencao_preventiva] carregado")
+        logger.info("[intervencao_preventiva] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

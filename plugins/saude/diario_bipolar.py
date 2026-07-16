@@ -7,7 +7,7 @@ NOME = "diario_bipolar"
 DESCRICAO = "Rastreamento de humor para bipolaridade — escala de mania e depressao"
 CATEGORIA = "saude"
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from collections import defaultdict
 
 _registros_bipolar = defaultdict(list)

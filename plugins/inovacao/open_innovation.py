@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/open-innovation", tags=["inovacao"])
 _db = {}
@@ -12,7 +13,7 @@ class OpenInnovationPlugin(PluginBase):
     description = "Open innovation em saúde mental"; category = "inovacao"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[open_innovation] OK")
+        logger.info("[open_innovation] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

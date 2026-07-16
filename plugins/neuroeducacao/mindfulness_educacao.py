@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/mindfulness-educacao", tags=["neuroeducacao"])
 _db = {}
@@ -12,7 +13,7 @@ class MindfulnessEducacaoPlugin(PluginBase):
     description = "Mindfulness na educação"; category = "neuroeducacao"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[mindfulness_educacao] OK")
+        logger.info("[mindfulness_educacao] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

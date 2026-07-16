@@ -10,9 +10,9 @@ RESULTADOS = {}
 
 
 def rodar(nome, cmd, timeout=120):
-    print(f"\n=======================================================")
+    print("\n=======================================================")
     print(f"  {nome}")
-    print(f"=======================================================")
+    print("=======================================================")
     inicio = time.time()
     r = subprocess.run(cmd, shell=True, timeout=timeout)
     tempo = round(time.time() - inicio, 1)

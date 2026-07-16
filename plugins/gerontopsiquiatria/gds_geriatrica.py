@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/gds-geriatrica", tags=["gerontopsiquiatria"])
 _db = {}
@@ -12,7 +13,7 @@ class GdsGeriatricaPlugin(PluginBase):
     description = "GDS: escala de depressão geriátrica"; category = "gerontopsiquiatria"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[gds_geriatrica] OK")
+        logger.info("[gds_geriatrica] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

@@ -46,8 +46,8 @@ async def linkedin_publicar_post(texto: str, visibilidade: str = "PUBLIC") -> di
 
 def gerar_conteudo_linkedin(topico: str, emocao: str) -> str:
     templates = {
-        "inteligencia_emocional": f"A inteligencia emocional e uma das competencias mais valorizadas no mercado atual. Nossa plataforma Emotion Intelligence usa IA para ajudar profissionais a desenvolver autoconsciencia emocional. #InteligenciaEmocional #IA #Lideranca",
-        "bem_estar": f"Bem-estar mental no trabalho nao e luxo, e necessidade. Com a Emotion Intelligence, monitore e desenvolva sua saude emocional. #BemEstar #SaudeMental #RH",
+        "inteligencia_emocional": "A inteligencia emocional e uma das competencias mais valorizadas no mercado atual. Nossa plataforma Emotion Intelligence usa IA para ajudar profissionais a desenvolver autoconsciencia emocional. #InteligenciaEmocional #IA #Lideranca",
+        "bem_estar": "Bem-estar mental no trabalho nao e luxo, e necessidade. Com a Emotion Intelligence, monitore e desenvolva sua saude emocional. #BemEstar #SaudeMental #RH",
     }
     return templates.get(topico, f"Explorando {topico} com inteligencia artificial. #EmotionAI")
 

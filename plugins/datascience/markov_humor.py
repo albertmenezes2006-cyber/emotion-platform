@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/markov-humor", tags=["datascience"])
 _db = {}
@@ -12,7 +13,7 @@ class MarkovHumorPlugin(PluginBase):
     description = "Cadeias de Markov para transições de humor"; category = "datascience"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[markov_humor] carregado")
+        logger.info("[markov_humor] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

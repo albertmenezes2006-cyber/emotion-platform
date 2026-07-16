@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/binaural-beats", tags=["multimidia"])
 _db = {}
@@ -12,7 +13,7 @@ class BinauralBeatsPlugin(PluginBase):
     description = "Beats binaurais por estado mental"; category = "multimidia"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[binaural_beats] carregado")
+        logger.info("[binaural_beats] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

@@ -2,10 +2,12 @@
 Plugin: Mobile API — Endpoints otimizados para React Native / Flutter
 """
 from plugins.plugin_base import PluginBase
-from fastapi import APIRouter, HTTPException, Header
+from fastapi import APIRouter, HTTPException
 from datetime import datetime
 from plugins.db_manager import SimpleDB
-import uuid, json, logging, os
+import json
+import logging
+import os
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/mobile/v1", tags=["mobile_api"])

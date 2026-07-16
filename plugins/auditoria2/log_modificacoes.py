@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/log-modificacoes", tags=["auditoria2"])
 _db = {}
@@ -12,7 +13,7 @@ class LogModificacoesPlugin(PluginBase):
     description = "Log de modificações em dados clínicos"; category = "auditoria2"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[log_modificacoes] carregado")
+        logger.info("[log_modificacoes] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/modo-dislexia", tags=["acessibilidade"])
 _db = {}
@@ -12,7 +13,7 @@ class ModoDislexiaPlugin(PluginBase):
     description = "Modo dislexia com fontes adaptadas"; category = "acessibilidade"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[modo_dislexia] carregado")
+        logger.info("[modo_dislexia] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

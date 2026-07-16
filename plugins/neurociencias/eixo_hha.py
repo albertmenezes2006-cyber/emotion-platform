@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/eixo-hha", tags=["neurociencias"])
 _db = {}
@@ -12,7 +13,7 @@ class EixoHhaPlugin(PluginBase):
     description = "Eixo HHA: cortisol e estresse"; category = "neurociencias"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[eixo_hha] OK")
+        logger.info("[eixo_hha] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

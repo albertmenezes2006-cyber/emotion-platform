@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/mudanca-climatica-ansiedade", tags=["psicologia_ambiental"])
 _db = {}
@@ -12,7 +13,7 @@ class MudancaClimaticaAnsiedadePlugin(PluginBase):
     description = "Mudança climática e eco-ansiedade"; category = "psicologia_ambiental"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[mudanca_climatica_ansiedade] OK")
+        logger.info("[mudanca_climatica_ansiedade] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

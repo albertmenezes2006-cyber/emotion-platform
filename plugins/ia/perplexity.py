@@ -7,7 +7,8 @@ NOME = "perplexity"
 DESCRICAO = "Perplexity — busca e respostas com fontes em tempo real"
 CATEGORIA = "ia"
 
-import os, httpx
+import os
+import httpx
 
 PERPLEXITY_API_KEY = os.getenv("PERPLEXITY_API_KEY", "")
 PERPLEXITY_MODELS = {

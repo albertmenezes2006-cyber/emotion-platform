@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/crise-online-manejo", tags=["telepsicologia"])
 _db = {}
@@ -12,7 +13,7 @@ class CriseOnlineManejoPlugin(PluginBase):
     description = "Manejo de crise em sessão online"; category = "telepsicologia"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[crise_online_manejo] OK")
+        logger.info("[crise_online_manejo] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

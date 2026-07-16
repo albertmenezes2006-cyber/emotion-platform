@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/ids-ips", tags=["seguranca2"])
 _db = {}
@@ -12,7 +13,7 @@ class IdsIpsPlugin(PluginBase):
     description = "IDS/IPS — Detecção e prevenção de intrusão"; category = "seguranca2"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[ids_ips] carregado")
+        logger.info("[ids_ips] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

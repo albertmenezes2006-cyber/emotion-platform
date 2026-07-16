@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/escala-global", tags=["inovacao"])
 _db = {}
@@ -12,7 +13,7 @@ class EscalaGlobalPlugin(PluginBase):
     description = "Escalabilidade global em SM"; category = "inovacao"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[escala_global] OK")
+        logger.info("[escala_global] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

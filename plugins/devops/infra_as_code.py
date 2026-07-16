@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/infra-as-code", tags=["devops"])
 _db = {}
@@ -12,7 +13,7 @@ class InfraAsCodePlugin(PluginBase):
     description = "Infraestrutura como código (Terraform)"; category = "devops"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[infra_as_code] carregado")
+        logger.info("[infra_as_code] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

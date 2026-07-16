@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/formacao-telepsicologia", tags=["telepsicologia"])
 _db = {}
@@ -12,7 +13,7 @@ class FormacaoTelepsicologiaPlugin(PluginBase):
     description = "Formação em telepsicologia"; category = "telepsicologia"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[formacao_telepsicologia] OK")
+        logger.info("[formacao_telepsicologia] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

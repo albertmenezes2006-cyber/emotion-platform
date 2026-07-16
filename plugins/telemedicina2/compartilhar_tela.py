@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/compartilhar-tela", tags=["telemedicina2"])
 _db = {}
@@ -12,7 +13,7 @@ class CompartilharTelaPlugin(PluginBase):
     description = "Compartilhamento de tela em sessões"; category = "telemedicina2"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[compartilhar_tela] carregado")
+        logger.info("[compartilhar_tela] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

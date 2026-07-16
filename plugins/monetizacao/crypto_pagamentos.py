@@ -8,7 +8,6 @@ DESCRICAO = "Pagamentos em criptomoedas — Bitcoin, Ethereum e stablecoins"
 CATEGORIA = "monetizacao"
 
 import os
-import hashlib
 from datetime import datetime, timedelta
 from collections import defaultdict
 
@@ -53,7 +52,7 @@ async def criar_cobranca_coinbase(valor_brl: float, plano: str, usuario_id: int)
                 }
             )
             return r.json().get("data", {})
-    except Exception as e:
+    except Exception:
         return _criar_cobranca_simulada(valor_brl, plano, usuario_id)
 
 def _criar_cobranca_simulada(valor_brl: float, plano: str, usuario_id: int) -> dict:

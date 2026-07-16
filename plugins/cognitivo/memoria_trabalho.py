@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/memoria-trabalho", tags=["cognitivo"])
 _db = {}
@@ -12,7 +13,7 @@ class MemoriaTrabalhoPlugin(PluginBase):
     description = "Exercícios de memória de trabalho"; category = "cognitivo"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[memoria_trabalho] carregado")
+        logger.info("[memoria_trabalho] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

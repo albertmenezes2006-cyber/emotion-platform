@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/mhealth-apps", tags=["tecnologia_saude"])
 _db = {}
@@ -12,7 +13,7 @@ class MhealthAppsPlugin(PluginBase):
     description = "mHealth: integração com apps de saúde"; category = "tecnologia_saude"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[mhealth_apps] OK")
+        logger.info("[mhealth_apps] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

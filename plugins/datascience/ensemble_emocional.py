@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/ensemble-emocional", tags=["datascience"])
 _db = {}
@@ -12,7 +13,7 @@ class EnsembleEmocionalPlugin(PluginBase):
     description = "Ensemble de modelos emocionais com votação"; category = "datascience"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[ensemble_emocional] carregado")
+        logger.info("[ensemble_emocional] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

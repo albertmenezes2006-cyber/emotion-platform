@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/ranking-comunidade", tags=["social2"])
 _db = {}
@@ -12,7 +13,7 @@ class RankingComunidadePlugin(PluginBase):
     description = "Ranking de bem-estar da comunidade"; category = "social2"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[ranking_comunidade] carregado")
+        logger.info("[ranking_comunidade] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

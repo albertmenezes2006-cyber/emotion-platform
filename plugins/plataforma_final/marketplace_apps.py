@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/marketplace-apps", tags=["plataforma_final"])
 _db = {}
@@ -12,7 +13,7 @@ class MarketplaceAppsPlugin(PluginBase):
     description = "Marketplace de apps integrados"; category = "plataforma_final"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[marketplace_apps] OK")
+        logger.info("[marketplace_apps] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

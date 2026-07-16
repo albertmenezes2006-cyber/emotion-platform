@@ -7,8 +7,6 @@ NOME = "image_optimization"
 DESCRICAO = "WebP, AVIF, lazy loading, responsive images e compressao"
 CATEGORIA = "performance"
 
-import os
-from pathlib import Path
 
 FORMATOS_MODERNOS = ["webp", "avif"]
 QUALIDADE_PADRAO = {"webp": 85, "avif": 80, "jpeg": 90, "png": 95}
@@ -73,7 +71,7 @@ def gerar_img_tag_otimizada(url: str, alt: str, largura: int = 800, lazy: bool =
             f'alt="{alt}" width="{largura}" {loading} decoding="async">')
 
 def gerar_placeholder_blur(largura: int = 40, altura: int = 30) -> str:
-    return f"data:image/svg+xml;base64,PHN2ZyB3aWR0aD0ie2xhcmd1cmF9IiBoZWlnaHQ9IntffSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWExYTJlIi8+PC9zdmc+"
+    return "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0ie2xhcmd1cmF9IiBoZWlnaHQ9IntffSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWExYTJlIi8+PC9zdmc+"
 
 def analisar_imagem(imagem_bytes: bytes) -> dict:
     try:

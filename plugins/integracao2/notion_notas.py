@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/notion-notas", tags=["integracao2"])
 _db = {}
@@ -12,7 +13,7 @@ class NotionNotasPlugin(PluginBase):
     description = "Notas terapêuticas no Notion"; category = "integracao2"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[notion_notas] carregado")
+        logger.info("[notion_notas] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

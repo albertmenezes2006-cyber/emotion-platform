@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Corrige Playwright para Chat e PHQ-9 + força deploy SEO"""
-import os, subprocess, time, urllib.request, json
+import os
+import subprocess
+import time
+import urllib.request
+import json
 
 API_KEY = "rnd_MgylgwI58qn8mY5ReSDpa8hfCFQK"
 SERVICE_ID = "srv-d97vrmcs728c73ci1mig"
@@ -388,7 +392,6 @@ for cmd in [
     print(f"  {'✅' if ok else '❌'} {cmd[:40]}")
 
 # Deploy Render
-import urllib.request, json, time
 try:
     req = urllib.request.Request(
         f"https://api.render.com/v1/services/{SERVICE_ID}/deploys",

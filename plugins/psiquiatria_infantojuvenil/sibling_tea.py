@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/sibling-tea", tags=["psiquiatria_infantojuvenil"])
 _db = {}
@@ -12,7 +13,7 @@ class SiblingTeaPlugin(PluginBase):
     description = "Irmãos de crianças com TEA"; category = "psiquiatria_infantojuvenil"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[sibling_tea] OK")
+        logger.info("[sibling_tea] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

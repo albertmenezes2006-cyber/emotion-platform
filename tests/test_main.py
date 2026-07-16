@@ -1,5 +1,6 @@
 """Testes automáticos — Emotion Platform v21.0"""
-import py_compile, os, json
+import py_compile
+import json
 from pathlib import Path
 
 BASE = Path(__file__).parent.parent

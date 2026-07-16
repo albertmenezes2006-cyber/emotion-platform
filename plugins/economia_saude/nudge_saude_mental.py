@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/nudge-saude-mental", tags=["economia_saude"])
 _db = {}
@@ -12,7 +13,7 @@ class NudgeSaudeMentalPlugin(PluginBase):
     description = "Nudge para comportamentos saudáveis"; category = "economia_saude"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[nudge_saude_mental] OK")
+        logger.info("[nudge_saude_mental] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

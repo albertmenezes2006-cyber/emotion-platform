@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/anima-animus", tags=["psicanalise"])
 _db = {}
@@ -12,7 +13,7 @@ class AnimaAnimusPlugin(PluginBase):
     description = "Anima, animus e integração"; category = "psicanalise"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[anima_animus] OK")
+        logger.info("[anima_animus] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

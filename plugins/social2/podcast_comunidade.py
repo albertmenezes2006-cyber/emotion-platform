@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/podcast-comunidade", tags=["social2"])
 _db = {}
@@ -12,7 +13,7 @@ class PodcastComunidadePlugin(PluginBase):
     description = "Podcast feito pela comunidade"; category = "social2"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[podcast_comunidade] carregado")
+        logger.info("[podcast_comunidade] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

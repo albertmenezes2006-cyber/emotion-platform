@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/mini-international", tags=["avaliacao_psicologica"])
 _db = {}
@@ -12,7 +13,7 @@ class MiniInternationalPlugin(PluginBase):
     description = "MINI International Neuropsychiatric"; category = "avaliacao_psicologica"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[mini_international] OK")
+        logger.info("[mini_international] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

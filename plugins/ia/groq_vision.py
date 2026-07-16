@@ -7,7 +7,9 @@ NOME = "groq_vision"
 DESCRICAO = "Groq com LLaVA para analise de imagens e expressoes"
 CATEGORIA = "ia"
 
-import os, httpx, base64
+import os
+import httpx
+import base64
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 LLAVA_MODEL = "llava-v1.5-7b-4096-preview"
@@ -40,7 +42,8 @@ async def groq_emocao_facial(imagem_bytes: bytes) -> dict:
     prompt = "Analise a expressao facial. Responda em JSON: {emocao, intensidade 1-5, confianca 0-1}"
     resultado = await groq_analisar_imagem(imagem_bytes, prompt)
     try:
-        import json, re
+        import json
+        import re
         m = re.search(r'\{.*\}', resultado, re.DOTALL)
         if m:
             return json.loads(m.group())

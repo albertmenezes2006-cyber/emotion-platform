@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/export-xml", tags=["exportacao"])
 _db = {}
@@ -12,7 +13,7 @@ class ExportXmlPlugin(PluginBase):
     description = "Exportação em XML para sistemas legados"; category = "exportacao"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[export_xml] carregado")
+        logger.info("[export_xml] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

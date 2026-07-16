@@ -7,7 +7,7 @@ NOME = "http3_edge"
 DESCRICAO = "HTTP/3 QUIC, edge computing, brotli e otimizacoes extremas"
 CATEGORIA = "performance"
 
-import os, time
+import time
 from collections import defaultdict
 from datetime import datetime
 

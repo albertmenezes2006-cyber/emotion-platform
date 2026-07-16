@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/ritmo-ultradiano", tags=["cronoterapia"])
 _db = {}
@@ -12,7 +13,7 @@ class RitmoUltradianoPlugin(PluginBase):
     description = "Ritmos ultradianos e performance"; category = "cronoterapia"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[ritmo_ultradiano] OK")
+        logger.info("[ritmo_ultradiano] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

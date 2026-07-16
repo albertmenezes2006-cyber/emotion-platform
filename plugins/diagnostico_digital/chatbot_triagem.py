@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/chatbot-triagem", tags=["diagnostico_digital"])
 _db = {}
@@ -12,7 +13,7 @@ class ChatbotTriagemPlugin(PluginBase):
     description = "Chatbot de triagem inicial"; category = "diagnostico_digital"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[chatbot_triagem] OK")
+        logger.info("[chatbot_triagem] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/limites-eticos", tags=["etica"])
 _db = {}
@@ -12,7 +13,7 @@ class LimitesEticosPlugin(PluginBase):
     description = "Limites éticos na relação terapêutica"; category = "etica"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[limites_eticos] OK")
+        logger.info("[limites_eticos] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

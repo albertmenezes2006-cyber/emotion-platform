@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/laban-movimento", tags=["danca_movimento"])
 _db = {}
@@ -12,7 +13,7 @@ class LabanMovimentoPlugin(PluginBase):
     description = "Sistema Laban de análise do movimento"; category = "danca_movimento"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[laban_movimento] OK")
+        logger.info("[laban_movimento] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

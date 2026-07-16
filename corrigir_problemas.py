@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Corrige: SEO syntax error, Login 401, Home lenta, H1 ausente"""
-import os, sys, subprocess, time
+import os
+import subprocess
+import time
 
 def w(path, content):
     os.makedirs(os.path.dirname(path) if os.path.dirname(path) else ".", exist_ok=True)
@@ -241,7 +243,8 @@ else:
 # Verificar o problema de login — o endpoint atual aceita query params
 # mas pode estar tendo problema. Vamos ver o plugin de auth
 print("\n  Diagnosticando login...")
-import urllib.request, json
+import urllib.request
+import json
 try:
     ts2 = int(time.time())
     email_t = f"diag_{ts2}@test.com"
@@ -382,7 +385,8 @@ for cmd in [
     print(f"  {'✅' if ok else '❌'} {cmd[:50]}")
 
 # Deploy
-import urllib.request, json
+import urllib.request
+import json
 try:
     req = urllib.request.Request(
         f"https://api.render.com/v1/services/{SERVICE_ID}/deploys",

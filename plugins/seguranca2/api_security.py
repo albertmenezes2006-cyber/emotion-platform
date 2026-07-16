@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/api-security", tags=["seguranca2"])
 _db = {}
@@ -12,7 +13,7 @@ class ApiSecurityPlugin(PluginBase):
     description = "Segurança de APIs com OAuth2 e PKCE"; category = "seguranca2"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[api_security] carregado")
+        logger.info("[api_security] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

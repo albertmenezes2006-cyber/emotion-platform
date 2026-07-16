@@ -7,8 +7,8 @@ NOME = "claude"
 DESCRICAO = "Anthropic Claude — claude-3-5-sonnet, haiku, opus"
 CATEGORIA = "ia"
 
-import os, httpx
-from typing import AsyncGenerator
+import os
+import httpx
 
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 CLAUDE_MODELS = {
@@ -46,7 +46,8 @@ Responda APENAS em JSON valido: {{"emocao": "string", "intensidade": 1-5, "confi
 Texto: {texto[:500]}"""
     resultado = await claude_completar(prompt, modelo="haiku", max_tokens=150)
     try:
-        import json, re
+        import json
+        import re
         m = re.search(r'\{.*\}', resultado, re.DOTALL)
         if m:
             return json.loads(m.group())

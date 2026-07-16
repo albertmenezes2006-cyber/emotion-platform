@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/mediacao-familiar", tags=["psicologia_juridica"])
 _db = {}
@@ -12,7 +13,7 @@ class MediacaoFamiliarPlugin(PluginBase):
     description = "Mediação familiar e psicologia"; category = "psicologia_juridica"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[mediacao_familiar] OK")
+        logger.info("[mediacao_familiar] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

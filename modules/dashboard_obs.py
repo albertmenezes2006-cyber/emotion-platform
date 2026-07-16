@@ -2,8 +2,6 @@
 Dashboard de Observabilidade — Emotion Platform v21.0
 Relatório completo do sistema
 """
-import os
-import psutil
 from datetime import datetime
 from modules.metricas import metricas
 from modules.saude import verificar_saude_sistema

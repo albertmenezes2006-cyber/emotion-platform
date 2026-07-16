@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/pilates-mental", tags=["exercicio"])
 _db = {}
@@ -12,7 +13,7 @@ class PilatesMentalPlugin(PluginBase):
     description = "Pilates focado em saúde mental"; category = "exercicio"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[pilates_mental] carregado")
+        logger.info("[pilates_mental] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

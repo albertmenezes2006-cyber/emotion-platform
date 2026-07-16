@@ -5,7 +5,6 @@ Roda: python3 tests/test_browser.py
 import asyncio
 import json
 import os
-import re
 from datetime import datetime
 
 BASE = "https://emotion-platform-albert.onrender.com"
@@ -259,7 +258,7 @@ async def main():
             "resultados": resultados
         }, f, indent=2, ensure_ascii=False)
 
-    print(f"\nRelatorio: tests/relatorio_playwright.json")
+    print("\nRelatorio: tests/relatorio_playwright.json")
     print(f"Score: {score}%")
 
 

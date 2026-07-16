@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/tat-tematico", tags=["avaliacao_psicologica"])
 _db = {}
@@ -12,7 +13,7 @@ class TatTematicoPlugin(PluginBase):
     description = "TAT: teste de apercepção temática"; category = "avaliacao_psicologica"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[tat_tematico] OK")
+        logger.info("[tat_tematico] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

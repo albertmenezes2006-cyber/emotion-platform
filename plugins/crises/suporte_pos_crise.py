@@ -6,7 +6,8 @@ Descrição: Suporte e acompanhamento pós-crise emocional
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/suporte-pos-crise", tags=["crises"])

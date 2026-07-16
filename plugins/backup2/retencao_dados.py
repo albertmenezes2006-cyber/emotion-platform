@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/retencao-dados", tags=["backup2"])
 _db = {}
@@ -12,7 +13,7 @@ class RetencaoDadosPlugin(PluginBase):
     description = "Política de retenção de dados"; category = "backup2"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[retencao_dados] carregado")
+        logger.info("[retencao_dados] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

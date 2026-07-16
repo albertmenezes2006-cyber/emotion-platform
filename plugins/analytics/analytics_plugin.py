@@ -4,7 +4,8 @@ Padrão: PluginBase + plugin = AnalyticsPlugin()
 """
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter
-import os, logging
+import os
+import logging
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/analytics", tags=["analytics"])

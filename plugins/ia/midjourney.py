@@ -7,7 +7,8 @@ NOME = "midjourney"
 DESCRICAO = "Geracao de imagens terapeuticas com DALL-E 3 e Midjourney"
 CATEGORIA = "ia"
 
-import os, httpx
+import os
+import httpx
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 REPLICATE_API_KEY = os.getenv("REPLICATE_API_KEY", "")

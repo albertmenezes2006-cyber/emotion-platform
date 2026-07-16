@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/reminder-medicamento", tags=["farmacia"])
 _db = {}
@@ -12,7 +13,7 @@ class ReminderMedicamentoPlugin(PluginBase):
     description = "Lembretes inteligentes de medicamentos"; category = "farmacia"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[reminder_medicamento] carregado")
+        logger.info("[reminder_medicamento] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

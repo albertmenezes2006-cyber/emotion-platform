@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/cor-ambiente", tags=["ambiente"])
 _db = {}
@@ -12,7 +13,7 @@ class CorAmbientePlugin(PluginBase):
     description = "Cromoterapia e psicologia das cores"; category = "ambiente"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[cor_ambiente] OK")
+        logger.info("[cor_ambiente] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

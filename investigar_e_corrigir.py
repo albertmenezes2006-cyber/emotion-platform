@@ -3,7 +3,11 @@ Investigar build_failed + corrigir timeout do Render
 O problema: 1481 plugins importam lento → build timeout
 Albert Menezes — Emotion Intelligence Platform
 """
-import pathlib, subprocess, json, urllib.request, time, sys
+import pathlib
+import subprocess
+import json
+import urllib.request
+import time
 
 API_KEY    = "rnd_MgylgwI58qn8mY5ReSDpa8hfCFQK"
 SERVICE_ID = "srv-d97vrmcs728c73ci1mig"

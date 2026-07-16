@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/imagem-corporal-cancer2", tags=["psico_oncologia"])
 _db = {}
@@ -12,7 +13,7 @@ class ImagemCorporalCancer2Plugin(PluginBase):
     description = "Imagem corporal e câncer"; category = "psico_oncologia"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[imagem_corporal_cancer2] OK")
+        logger.info("[imagem_corporal_cancer2] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

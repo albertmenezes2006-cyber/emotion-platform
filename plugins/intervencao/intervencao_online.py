@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/intervencao-online", tags=["intervencao"])
 _db = {}
@@ -12,7 +13,7 @@ class IntervencaoOnlinePlugin(PluginBase):
     description = "Intervenção em crise online"; category = "intervencao"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[intervencao_online] OK")
+        logger.info("[intervencao_online] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

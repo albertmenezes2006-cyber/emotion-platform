@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/resumo-automatico", tags=["nlp"])
 _db = {}
@@ -12,7 +13,7 @@ class ResumoAutomaticoPlugin(PluginBase):
     description = "Resumo automático de sessões e notas"; category = "nlp"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[resumo_automatico] carregado")
+        logger.info("[resumo_automatico] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

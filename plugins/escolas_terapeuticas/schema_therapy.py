@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/schema-therapy", tags=["escolas_terapeuticas"])
 _db = {}
@@ -12,7 +13,7 @@ class SchemaTherapyPlugin(PluginBase):
     description = "Schema Therapy completo"; category = "escolas_terapeuticas"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[schema_therapy] OK")
+        logger.info("[schema_therapy] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

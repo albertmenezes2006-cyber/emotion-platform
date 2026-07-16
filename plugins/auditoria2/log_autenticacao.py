@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/log-autenticacao", tags=["auditoria2"])
 _db = {}
@@ -12,7 +13,7 @@ class LogAutenticacaoPlugin(PluginBase):
     description = "Log de autenticações e falhas"; category = "auditoria2"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[log_autenticacao] carregado")
+        logger.info("[log_autenticacao] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

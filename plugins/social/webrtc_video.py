@@ -22,7 +22,8 @@ async def criar_sala_daily(nome_sala: str = None, duracao_minutos: int = 60) -> 
     if not DAILY_API_KEY:
         return _criar_sala_jitsi(nome_sala)
     try:
-        import httpx, secrets
+        import httpx
+        import secrets
         sala = nome_sala or f"terapia-{secrets.token_hex(6)}"
         expira = int((datetime.now() + timedelta(minutes=duracao_minutos)).timestamp())
         async with httpx.AsyncClient(timeout=15) as client:
@@ -34,7 +35,7 @@ async def criar_sala_daily(nome_sala: str = None, duracao_minutos: int = 60) -> 
             data = r.json()
             _salas_ativas[sala] = {"url": data.get("url",""), "criado_em": datetime.now().isoformat(), "expira_em": expira}
             return {"sala": sala, "url": data.get("url",""), "provider": "daily.co"}
-    except Exception as e:
+    except Exception:
         return _criar_sala_jitsi(nome_sala)
 
 def _criar_sala_jitsi(nome_sala: str = None) -> dict:

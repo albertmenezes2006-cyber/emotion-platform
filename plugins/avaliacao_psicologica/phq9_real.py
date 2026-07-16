@@ -3,7 +3,9 @@ from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException, Body
 from datetime import datetime
 from plugins.db_manager import SimpleDB
-import uuid, json, logging
+import uuid
+import json
+import logging
 from typing import List
 
 logger = logging.getLogger(__name__)

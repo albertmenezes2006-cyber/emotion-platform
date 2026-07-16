@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/sla-monitoring", tags=["devops"])
 _db = {}
@@ -12,7 +13,7 @@ class SlaMonitoringPlugin(PluginBase):
     description = "Monitoramento de SLA e uptime"; category = "devops"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[sla_monitoring] carregado")
+        logger.info("[sla_monitoring] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

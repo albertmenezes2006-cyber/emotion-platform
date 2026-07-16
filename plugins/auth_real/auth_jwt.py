@@ -2,11 +2,17 @@
 Plugin: Auth JWT Real — Sistema completo de autenticação
 """
 from plugins.plugin_base import PluginBase
-from fastapi import APIRouter, HTTPException, Depends, Header
+from fastapi import APIRouter, HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from datetime import datetime, timedelta
 from plugins.db_manager import SimpleDB
-import uuid, json, hashlib, hmac, base64, logging, os
+import uuid
+import json
+import hashlib
+import hmac
+import base64
+import logging
+import os
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/auth", tags=["auth"])

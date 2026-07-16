@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/cdr-demencia", tags=["gerontopsiquiatria"])
 _db = {}
@@ -12,7 +13,7 @@ class CdrDemenciaPlugin(PluginBase):
     description = "CDR: escala de classificação de demência"; category = "gerontopsiquiatria"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[cdr_demencia] OK")
+        logger.info("[cdr_demencia] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

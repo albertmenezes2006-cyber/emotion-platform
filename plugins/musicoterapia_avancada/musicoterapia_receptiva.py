@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/musicoterapia-receptiva", tags=["musicoterapia_avancada"])
 _db = {}
@@ -12,7 +13,7 @@ class MusicoterapiaReceptivaPlugin(PluginBase):
     description = "Musicoterapia receptiva: audição"; category = "musicoterapia_avancada"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[musicoterapia_receptiva] OK")
+        logger.info("[musicoterapia_receptiva] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

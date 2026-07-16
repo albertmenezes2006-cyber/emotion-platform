@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/realidade-virtual", tags=["multimidia"])
 _db = {}
@@ -12,7 +13,7 @@ class RealidadeVirtualPlugin(PluginBase):
     description = "VR para exposição gradual"; category = "multimidia"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[realidade_virtual] carregado")
+        logger.info("[realidade_virtual] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

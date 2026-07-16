@@ -3,7 +3,8 @@ from plugins.plugin_base import PluginBase
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse, RedirectResponse, Response
 from datetime import datetime
-import os, logging
+import os
+import logging
 
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["frontend"])
@@ -235,7 +236,6 @@ async def site_status():
 
 @router.get("/sitemap.xml")
 async def sitemap():
-    from fastapi.responses import Response
     content = """<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://emotion-platform-albert.onrender.com/</loc><priority>1.0</priority><changefreq>daily</changefreq></url>
@@ -250,7 +250,6 @@ async def sitemap():
 
 @router.get("/robots.txt")
 async def robots():
-    from fastapi.responses import Response
     content = """User-agent: *
 Allow: /
 Allow: /app/avaliacao

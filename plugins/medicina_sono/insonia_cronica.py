@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/insonia-cronica", tags=["medicina_sono"])
 _db = {}
@@ -12,7 +13,7 @@ class InsoniaCronicaPlugin(PluginBase):
     description = "Insônia crônica: TCC-I completa"; category = "medicina_sono"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[insonia_cronica] OK")
+        logger.info("[insonia_cronica] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

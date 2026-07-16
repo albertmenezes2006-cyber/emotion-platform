@@ -7,7 +7,8 @@ NOME = "openai_assistants"
 DESCRICAO = "OpenAI Assistants — agentes com memoria e ferramentas"
 CATEGORIA = "ia"
 
-import os, httpx
+import os
+import httpx
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 SOFIA_ASSISTANT_ID = os.getenv("SOFIA_ASSISTANT_ID", "")

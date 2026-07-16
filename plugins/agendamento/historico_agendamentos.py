@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/historico-agendamentos", tags=["agendamento"])
 _db = {}
@@ -12,7 +13,7 @@ class HistoricoAgendamentosPlugin(PluginBase):
     description = "Histórico completo de agendamentos"; category = "agendamento"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[historico_agendamentos] carregado")
+        logger.info("[historico_agendamentos] carregado")
     def health_check(self):
         return {"status": "healthy", "total": len(_db)}
 

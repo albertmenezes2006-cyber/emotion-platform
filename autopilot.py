@@ -5,7 +5,6 @@ Aplica blocos automaticamente e notifica no Telegram.
 Uso: python3 autopilot.py
 """
 import os
-import sys
 import json
 import time
 import subprocess
@@ -98,7 +97,7 @@ def aplicar_bloco(bloco: dict) -> bool:
     linhas_antes = contar_linhas()
 
     if MARKER not in content:
-        log(f"❌ Marker não encontrado")
+        log("❌ Marker não encontrado")
         telegram(f"❌ *Bloco {numero} falhou*\nMarker não encontrado")
         return False
 

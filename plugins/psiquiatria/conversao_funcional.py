@@ -2,7 +2,8 @@
 from plugins.plugin_base import PluginBase
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid, logging
+import uuid
+import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/conversao-funcional", tags=["psiquiatria"])
 _db = {}
@@ -12,7 +13,7 @@ class ConversaoFuncionalPlugin(PluginBase):
     description = "Transtornos funcionais e conversão"; category = "psiquiatria"
     def setup(self, app):
         app.include_router(router)
-        logger.info(f"[conversao_funcional] OK")
+        logger.info("[conversao_funcional] OK")
     def health_check(self):
         return {"status":"healthy","total":len(_db)}
 

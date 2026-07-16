@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Corrige SEO e Login de forma definitiva"""
-import os, subprocess, time, urllib.request, json
+import os
+import subprocess
+import time
+import urllib.request
+import json
 
 API_KEY = "rnd_MgylgwI58qn8mY5ReSDpa8hfCFQK"
 SERVICE_ID = "srv-d97vrmcs728c73ci1mig"

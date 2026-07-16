@@ -2,12 +2,11 @@
 Métricas — Emotion Platform v21.0
 Coleta dados de performance e uso em tempo real
 """
-import time
 import psutil
 import os
 from datetime import datetime
 from collections import defaultdict, deque
-from typing import Dict, List
+from typing import Dict
 
 class MetricasPlataforma:
     def __init__(self):
