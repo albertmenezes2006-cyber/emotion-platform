@@ -1,54 +1,54 @@
 {
-  "data": "2026-07-16 14:42:32.278257",
+  "data": "2026-07-17 03:09:39.474814",
   "score": "12/12 (100%)",
   "resultados": [
     {
       "nome": "Home",
       "ok": true,
       "titulo": "Emotion Intelligence Platform",
-      "size": 19903,
+      "size": 20516,
       "screenshot": "tests/screenshots/home.png"
     },
     {
       "nome": "Avaliacao",
       "ok": true,
       "titulo": "Avaliação Psicológica — PHQ-9 e GAD-7",
-      "size": 37907,
+      "size": 38520,
       "screenshot": "tests/screenshots/avaliacao.png"
     },
     {
       "nome": "Chat",
       "ok": true,
       "titulo": "Chat com IA",
-      "size": 21309,
+      "size": 21922,
       "screenshot": "tests/screenshots/chat.png"
     },
     {
       "nome": "Diario",
       "ok": true,
       "titulo": "Diário Emocional",
-      "size": 13046,
+      "size": 13659,
       "screenshot": "tests/screenshots/diario.png"
     },
     {
       "nome": "Dashboard",
       "ok": true,
       "titulo": "Dashboard",
-      "size": 7709,
+      "size": 8322,
       "screenshot": "tests/screenshots/dashboard.png"
     },
     {
       "nome": "Login",
       "ok": true,
       "titulo": "Login e Cadastro",
-      "size": 6951,
+      "size": 7564,
       "screenshot": "tests/screenshots/login.png"
     },
     {
       "nome": "Planos",
       "ok": true,
       "titulo": "Planos e Preços",
-      "size": 7079,
+      "size": 7692,
       "screenshot": "tests/screenshots/planos.png"
     },
     {
