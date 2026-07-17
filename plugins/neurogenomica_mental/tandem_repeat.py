@@ -1,0 +1,12 @@
+from fastapi import APIRouter
+from fastapi.responses import JSONResponse
+from plugins.plugin_base import PluginBase
+from datetime import datetime
+router = APIRouter(prefix="/api/v1/neurogenom/tandem_repeat", tags=["neurogenomica_mental"])
+@router.get("")
+async def i():
+    return JSONResponse({"p":"neurogenomica_m_tandem_repeat","s":"ativo","d":"Tandem Repeat","t":datetime.utcnow().isoformat()})
+class Plugin(PluginBase):
+    name = "neurogenomica_m_tandem_repeat"
+    def setup(self, app): app.include_router(router)
+plugin = Plugin()
