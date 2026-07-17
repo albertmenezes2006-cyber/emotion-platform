@@ -40,13 +40,13 @@ _start = datetime.utcnow()
 _ok = 0
 _err = 0
 
-@app.get("/health")
+@app.api_route("/health", methods=["GET","HEAD"])
 async def health():
     return {"status":"ok","version":"24.3.0","plugins":_ok,
             "erros":_err,"rotas":len(app.routes),
             "uptime":str(datetime.utcnow()-_start)}
 
-@app.get("/ping")
+@app.api_route("/ping", methods=["GET","HEAD"])
 async def ping():
     return {"pong":True,"ts":datetime.utcnow().isoformat()}
 
