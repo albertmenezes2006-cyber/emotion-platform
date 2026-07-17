@@ -50,6 +50,17 @@ async def status():
     bs = list(BDIR.glob("backup_*.json"))
     return {"status":"online","total":len(bs),"retencao":"7 dias","dir":str(BDIR)}
 
+
+
+@router.get('/recente')
+async def recente():
+    bs = sorted(BDIR.glob('backup_*.json'), reverse=True)
+    if not bs:
+        return {'msg': 'Nenhum backup ainda', 'total': 0, 'status': 'vazio'}
+    d = __import__('json').loads(bs[0].read_text())
+    return {'arquivo': bs[0].name, 'timestamp': d.get('timestamp'),
+            'versao': d.get('versao'), 'plugins': d.get('stats',{}).get('plugins',0),
+            'total': len(bs)}
 class BackupPlugin(PluginBase):
     name="backup_plugin"; version="1.0.0"
     description="Backup automatico diario"; category="utilidades"
