@@ -28,7 +28,12 @@ class FrontendRoutesPlugin(PluginBase):
     description = "Serve páginas HTML — sem conflito com FastAPI /docs"
     category = "frontend"
 
-    def setup(self, app):
+    
+@router.get('/psicologos', response_class=HTMLResponse)
+async def pagina_psicologos(request: Request):
+    return templates.TemplateResponse('psicologos.html', {'request': request})
+
+def setup(self, app):
         # Static files
         try:
             from fastapi.staticfiles import StaticFiles
