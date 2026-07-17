@@ -61,6 +61,24 @@ async def recente():
     return {'arquivo': bs[0].name, 'timestamp': d.get('timestamp'),
             'versao': d.get('versao'), 'plugins': d.get('stats',{}).get('plugins',0),
             'total': len(bs)}
+
+@router.get('/ultimo')
+async def ultimo():
+    import json as _json
+    bs = sorted(BDIR.glob('backup_*.json'), reverse=True)
+    if not bs:
+        return {'msg': 'Nenhum backup ainda', 'total': 0,
+                'status': 'vazio', 'dica': 'POST /api/v1/backup/criar'}
+    try:
+        d = _json.loads(bs[0].read_text())
+        return {'arquivo': bs[0].name,
+                'timestamp': d.get('timestamp'),
+                'versao': d.get('versao'),
+                'plugins': d.get('stats',{}).get('plugins',0),
+                'total': len(bs)}
+    except Exception as e:
+        return {'msg': f'Erro ao ler backup: {e}', 'total': len(bs)}
+
 class BackupPlugin(PluginBase):
     name="backup_plugin"; version="1.0.0"
     description="Backup automatico diario"; category="utilidades"
