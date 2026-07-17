@@ -4,7 +4,7 @@ from fastapi import APIRouter, BackgroundTasks
 import json, subprocess, pathlib, logging
 from datetime import datetime
 logger = logging.getLogger(__name__)
-router = APIRouter(prefix="/api/v1/backup", tags=["Backup"])
+router = APIRouter(prefix="/api/v1/sistema/backup", tags=["Backup"])
 BDIR = pathlib.Path("backups")
 BDIR.mkdir(exist_ok=True)
 
