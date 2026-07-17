@@ -1,44 +1,30 @@
-"""Plugin: memoria_avaliacao | neuropsicologia | Avaliação de memória e aprendizagem"""
+#!/usr/bin/env python3
+"""Memória avaliação digital"""
+from fastapi import APIRouter
+from fastapi.responses import JSONResponse
 from plugins.plugin_base import PluginBase
-from fastapi import APIRouter, HTTPException
 from datetime import datetime
-import uuid
-import logging
-logger = logging.getLogger(__name__)
-router = APIRouter(prefix="/api/v1/memoria-avaliacao", tags=["neuropsicologia"])
-_db = {}
 
-class MemoriaAvaliacaoPlugin(PluginBase):
-    name = "memoria_avaliacao"; version = "1.0.0"
-    description = "Avaliação de memória e aprendizagem"; category = "neuropsicologia"
-    def setup(self, app):
-        app.include_router(router)
-        logger.info("[memoria_avaliacao] OK")
-    def health_check(self):
-        return {"status":"healthy","total":len(_db)}
+router = APIRouter(prefix="/api/v1/memoria-aval", tags=["Neuropsicologia"])
 
-@router.get("/status")
-async def status():
-    return {"plugin":"memoria_avaliacao","cat":"neuropsicologia","total":len(_db),"ts":datetime.utcnow().isoformat()}
+@router.get("")
+async def info():
+    return JSONResponse({"plugin": "memoria_avaliacao", "status": "ativo",
+                          "descricao": "Memória avaliação digital",
+                          "categoria": "neuropsicologia",
+                          "versao": "1.0.0",
+                          "timestamp": datetime.utcnow().isoformat()})
 
-@router.post("/criar")
-async def criar(nome:str, valor:str="", user_id:str=""):
-    i=str(uuid.uuid4())[:8]
-    _db[i]={"id":i,"nome":nome,"valor":valor,"user_id":user_id,"ts":datetime.utcnow().isoformat()}
-    return {"id":i,"status":"criado"}
+@router.get("/info")
+async def info_detalhada():
+    return JSONResponse({"nome": "memoria_avaliacao",
+                          "descricao": "Memória avaliação digital",
+                          "categoria": "neuropsicologia",
+                          "recursos": [],
+                          "referencias": [],
+                          "timestamp": datetime.utcnow().isoformat()})
 
-@router.get("/listar")
-async def listar(limite:int=50):
-    return {"total":len(_db),"items":list(_db.values())[-limite:]}
-
-@router.get("/{item_id}")
-async def obter(item_id:str):
-    if item_id not in _db: raise HTTPException(404,"Nao encontrado")
-    return _db[item_id]
-
-@router.delete("/{item_id}")
-async def deletar(item_id:str):
-    if item_id not in _db: raise HTTPException(404,"Nao encontrado")
-    del _db[item_id]; return {"status":"deletado"}
-
-plugin = MemoriaAvaliacaoPlugin()
+class Plugin(PluginBase):
+    name = "memoria_avaliacao"
+    def setup(self, app): app.include_router(router)
+plugin = Plugin()
