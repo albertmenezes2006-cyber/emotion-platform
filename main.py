@@ -18,10 +18,11 @@ log = logging.getLogger("ep")
 
 app = FastAPI(
     title="Emotion Intelligence Platform",
-    description="1481 plugins de saude mental",
-    version="24.3.0",
-    docs_url="/docs",
-    redoc_url="/redoc",
+    description="Plataforma de saude mental com IA",
+    version="24.4.0",
+    docs_url=None,
+    redoc_url=None,
+    openapi_url=None,
     lifespan=None
 )
 
