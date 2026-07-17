@@ -1,43 +1,29 @@
 {
   "name": "Emotion Intelligence Platform",
-  "short_name": "Emotion IA",
-  "description": "Plataforma de análise emocional com IA — detecte emoções, converse com Sofia e evolua emocionalmente",
+  "short_name": "EmotionAI",
+  "description": "Plataforma de saude mental com IA para psicologos brasileiros",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f0c29",
-  "theme_color": "#00d2ff",
-  "lang": "pt-BR",
+  "background_color": "#667eea",
+  "theme_color": "#667eea",
   "orientation": "portrait-primary",
-  "categories": ["health", "lifestyle", "productivity"],
+  "lang": "pt-BR",
+  "categories": ["health", "medical", "productivity"],
   "icons": [
-    {
-      "src": "https://cdn-icons-png.flaticon.com/512/1693/1693055.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "https://cdn-icons-png.flaticon.com/512/1693/1693055.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    {"src": "/static/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"},
+    {"src": "/static/icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "/static/icon-512.png", "sizes": "512x512", "type": "image/png"}
   ],
   "shortcuts": [
-    {
-      "name": "Analisar Emoção",
-      "url": "/dashboard",
-      "description": "Faça uma análise emocional agora"
-    },
-    {
-      "name": "Falar com Sofia",
-      "url": "/chat",
-      "description": "Converse com sua psicóloga IA"
-    },
-    {
-      "name": "Diário Emocional",
-      "url": "/diario",
-      "description": "Registre como você está se sentindo"
-    }
-  ]
+    {"name": "Avaliacao PHQ-9", "url": "/app/avaliacao", "description": "Aplicar avaliacao"},
+    {"name": "Chat IA", "url": "/app/chat", "description": "Chat com IA"},
+    {"name": "Diario", "url": "/app/diario", "description": "Diario emocional"},
+    {"name": "Dashboard", "url": "/app/dashboard", "description": "Ver dashboard"}
+  ],
+  "screenshots": [
+    {"src": "/static/screenshot-home.png", "sizes": "1280x720", "type": "image/png", "label": "Home"},
+    {"src": "/static/screenshot-avaliacao.png", "sizes": "1280x720", "type": "image/png", "label": "Avaliacao"}
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
 }
