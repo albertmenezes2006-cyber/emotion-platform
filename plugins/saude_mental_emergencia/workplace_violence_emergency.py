@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+"""Workplace Violence Emergency"""
+from fastapi import APIRouter
+from fastapi.responses import JSONResponse
+from plugins.plugin_base import PluginBase
+from datetime import datetime
+router = APIRouter(prefix="/api/v1/saude_mental/workplace_violence_emergency", tags=["saude_mental_emergencia"])
+@router.get("")
+async def info():
+    return JSONResponse({"p":"saude_mental_emerg_workplace_violence_emerge","s":"ativo","d":"Workplace Violence Emergency","t":datetime.utcnow().isoformat()})
+class Plugin(PluginBase):
+    name = "saude_mental_emerg_workplace_violence_emerge"
+    def setup(self, app): app.include_router(router)
+plugin = Plugin()
