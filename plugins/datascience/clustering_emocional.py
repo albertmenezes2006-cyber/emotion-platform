@@ -59,3 +59,5 @@ async def ver_perfil(user_id:str):
     return _perfis[user_id]
 
 plugin=ClusteringEmocionalPlugin()
+
+plugin = ClusteringEmocionalPlugin()

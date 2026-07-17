@@ -42,3 +42,5 @@ async def por_usuario(user_id:str):
     return {"total":len(series),"series":[{"id":s["id"],"tipo":s["tipo"],"pontos":len(s["pontos"])} for s in series]}
 
 plugin=SeriesTemporaisPlugin()
+
+plugin = SeriesTemporaisPlugin()

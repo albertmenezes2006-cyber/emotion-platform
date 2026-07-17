@@ -58,3 +58,5 @@ async def historico(user_id:str):
     return {"user_id":user_id,"total":len(h),"media":round(sum(scores)/len(scores),4),"tendencia":"melhora" if len(scores)>1 and scores[-1]>scores[0] else "piora" if len(scores)>1 and scores[-1]<scores[0] else "estavel","historico":h[-30:]}
 
 plugin=SentimentoAvancadoPlugin()
+
+plugin = SentimentoAvancadoPlugin()

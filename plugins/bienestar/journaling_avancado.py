@@ -102,7 +102,7 @@ input[type=range]{{accent-color:#f59e0b;width:100%}}
 </div><script>
 function contar(){{
   var t=document.getElementById("texto").value;
-  var p=t.trim()?t.trim().split(/\s+/).length:0;
+  var p=t.trim()?t.trim().split(/\\s+/).length:0;
   document.getElementById("palavras").textContent=p+" palavras";
   document.getElementById("tempo").textContent="~"+Math.ceil(p/200)+" min leitura";
 }}
