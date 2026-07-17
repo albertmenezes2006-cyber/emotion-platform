@@ -1,25 +1,17 @@
 User-agent: *
 Allow: /
-Allow: /blog
-Allow: /blog/
-Allow: /terapia
-Allow: /planos
-Allow: /premium
-Allow: /sobre
-Allow: /faq
-Allow: /contato
-Allow: /privacidade
-Allow: /termos
-Allow: /afiliado
-Allow: /cadastro
-Allow: /login
-Allow: /ranking
-Disallow: /admin
-Disallow: /dashboard
-Disallow: /perfil
-Disallow: /api/
-Disallow: /webhook/
-Disallow: /exportar/
-Disallow: /configuracoes
+Allow: /psicologos
+Allow: /app/avaliacao
+Allow: /app/planos
+Allow: /api/v1/pix/
+Allow: /widget/
+
+Disallow: /admin/
+Disallow: /api/v1/sistema/backup/
+Disallow: /api/v1/stripe-checkout/
+Disallow: /*.json$
 
 Sitemap: https://emotion-platform-albert.onrender.com/sitemap.xml
+
+# Crawl-delay para ser respeitoso
+Crawl-delay: 1

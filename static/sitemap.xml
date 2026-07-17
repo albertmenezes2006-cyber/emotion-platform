@@ -1,31 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://emotion-platform-albert.onrender.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/blog</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/terapia</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/planos</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/cadastro</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/sobre</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/faq</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/contato</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/blog/o-que-e-inteligencia-emocional</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/blog/tecnicas-para-controlar-ansiedade</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/blog/como-lidar-com-tristeza</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/blog/diario-emocional-beneficios</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/blog/mindfulness-para-iniciantes</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/blog/como-aumentar-autoestima</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/blog/sono-e-emocoes</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/blog/relacionamentos-e-inteligencia-emocional</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/blog/produtividade-e-bem-estar-emocional</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/blog/superar-trauma-emocional</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/blog/como-parar-de-se-preocupar</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/blog/sindrome-do-impostor</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/blog/burnout-o-que-e-como-recuperar</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/blog/como-melhorar-relacionamento-amoroso</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/blog/meditacao-guiada-para-iniciantes</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/blog/como-lidar-com-criticas</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/blog/inteligencia-emocional-no-trabalho</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/blog/como-controlar-raiva</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/blog/depressao-sinais-e-ajuda</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://emotion-platform-albert.onrender.com/blog/habitos-para-saude-mental</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <url>
+    <loc>https://emotion-platform-albert.onrender.com/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://emotion-platform-albert.onrender.com/psicologos</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://emotion-platform-albert.onrender.com/app/avaliacao</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://emotion-platform-albert.onrender.com/app/chat</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://emotion-platform-albert.onrender.com/app/planos</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://emotion-platform-albert.onrender.com/widget/demo</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://emotion-platform-albert.onrender.com/api/v1/crise/ajuda</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
