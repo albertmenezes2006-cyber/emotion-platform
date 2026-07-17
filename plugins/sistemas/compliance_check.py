@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
-"""Digital Therapeutics DTx"""
+"""Verificação de compliance"""
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from plugins.plugin_base import PluginBase
 from datetime import datetime
 
-router = APIRouter(prefix="/api/v1/dtx", tags=["Tecnologia Saude"])
+router = APIRouter(prefix="/api/v1/compliance", tags=["Sistemas"])
 
 @router.get("")
 async def info():
-    return JSONResponse({"plugin": "digital_therapeutics_info", "status": "ativo",
-                          "descricao": "Digital Therapeutics DTx",
+    return JSONResponse({"plugin": "compliance_check", "status": "ativo",
+                          "descricao": "Verificação de compliance",
                           "versao": "1.0.0",
-                          "categoria": "tecnologia_saude",
+                          "categoria": "sistemas",
                           "timestamp": datetime.utcnow().isoformat()})
 
 class Plugin(PluginBase):
-    name = "digital_therapeutics_info"
+    name = "compliance_check"
     def setup(self, app): app.include_router(router)
 plugin = Plugin()

@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
-"""Digital Therapeutics DTx"""
+"""Saúde mental na escola"""
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from plugins.plugin_base import PluginBase
 from datetime import datetime
 
-router = APIRouter(prefix="/api/v1/dtx", tags=["Tecnologia Saude"])
+router = APIRouter(prefix="/api/v1/escola", tags=["Escola"])
 
 @router.get("")
 async def info():
-    return JSONResponse({"plugin": "digital_therapeutics_info", "status": "ativo",
-                          "descricao": "Digital Therapeutics DTx",
+    return JSONResponse({"plugin": "saude_escolar", "status": "ativo",
+                          "descricao": "Saúde mental na escola",
                           "versao": "1.0.0",
-                          "categoria": "tecnologia_saude",
+                          "categoria": "escola",
                           "timestamp": datetime.utcnow().isoformat()})
 
 class Plugin(PluginBase):
-    name = "digital_therapeutics_info"
+    name = "saude_escolar"
     def setup(self, app): app.include_router(router)
 plugin = Plugin()
