@@ -30,8 +30,11 @@ class FrontendRoutesPlugin(PluginBase):
 
     
 @router.get('/psicologos', response_class=HTMLResponse)
-async def pagina_psicologos(request: Request):
-    return templates.TemplateResponse('psicologos.html', {'request': request})
+async def psicologos():
+    html = ler_html('psicologos.html')
+    if html:
+        return HTMLResponse(html)
+    return HTMLResponse('<h1>Pagina nao encontrada</h1>', status_code=404)
 
 def setup(self, app):
         # Static files
