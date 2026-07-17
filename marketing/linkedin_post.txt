@@ -1,0 +1,26 @@
+🧠 Acabei de lançar a Emotion Intelligence Platform!
+
+Uma plataforma completa de saúde mental com Inteligência Artificial — feita no Brasil!
+
+✅ Avaliação PHQ-9 e GAD-7 clínica (validadas cientificamente)
+✅ Chat com IA terapêutica em PT-BR (Mistral, Groq, Gemini)
+✅ Diário emocional com análise de padrões
+✅ Dashboard de progresso pessoal
+✅ API completa para desenvolvedores
+✅ 1.485 recursos de saúde mental
+✅ LGPD compliant | WCAG 2.1 AA
+
+🎯 Para quem é:
+→ Psicólogos que querem digitalizar a clínica
+→ Pessoas que querem cuidar da saúde mental
+→ Startups de healthtech
+→ Hospitais e clínicas
+
+🆓 Comece GRÁTIS agora!
+
+👉 https://emotion-platform-albert.onrender.com
+
+Construído com Python, FastAPI, IA e muito café ☕
+Feedback é muito bem-vindo!
+
+#SaudeMental #IA #Python #FastAPI #HealthTech #BrazilTech #Inovacao #Psicologia #TechForGood #OpenToWork

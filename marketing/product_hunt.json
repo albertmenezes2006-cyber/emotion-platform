@@ -1,0 +1,25 @@
+{
+  "nome": "Emotion Intelligence Platform",
+  "tagline": "Plataforma de saude mental com IA — PHQ-9, GAD-7 e chat terapeutico em PT-BR",
+  "url": "https://emotion-platform-albert.onrender.com",
+  "categorias": [
+    "Health & Fitness",
+    "Artificial Intelligence",
+    "Mental Health"
+  ],
+  "descricao": "Plataforma completa de saude mental com IA. PHQ-9, GAD-7, chat terapeutico, diario emocional e dashboard. API para desenvolvedores. LGPD compliant. Plano gratuito disponivel.",
+  "dicas_lancamento": [
+    "Lance na terca ou quarta (mais trafego)",
+    "Avise amigos e familia para votar",
+    "Poste no LinkedIn no dia do lancamento",
+    "Entre em grupos de psicologia e healthtech",
+    "Responda todos os comentarios rapidamente"
+  ],
+  "screenshots": [
+    "https://emotion-platform-albert.onrender.com",
+    "https://emotion-platform-albert.onrender.com/app/avaliacao",
+    "https://emotion-platform-albert.onrender.com/app/chat",
+    "https://emotion-platform-albert.onrender.com/app/dashboard",
+    "https://emotion-platform-albert.onrender.com/app/planos"
+  ]
+}

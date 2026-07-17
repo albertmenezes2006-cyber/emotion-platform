@@ -1,0 +1,52 @@
+
+PLANO DE ACAO HOJE — GRATIS
+=============================
+
+1. GOOGLE ANALYTICS 4 (15 min)
+   Link: https://analytics.google.com
+   Passos:
+   - Criar conta -> "Emotion Platform"
+   - Web stream -> emotion-platform-albert.onrender.com
+   - Copiar G-XXXXXXXXXX
+   - Render -> Environment -> GA4_ID = G-XXXXXXXXXX
+
+2. UPTIMEROBOT (5 min)
+   Link: https://uptimerobot.com
+   Passos:
+   - Criar conta gratis
+   - Add Monitor -> HTTP(s)
+   - URL: https://emotion-platform-albert.onrender.com/health
+   - Interval: 5 minutes
+   - Salvar
+
+3. STRIPE (10 min)
+   Link: https://stripe.com/br
+   Passos:
+   - Criar conta gratis
+   - Developers -> API Keys -> copiar sk_test_xxx
+   - Products -> Add Product:
+     * Emotion Pro: R$29,90/mes -> copiar price_xxx
+     * Emotion Clinica: R$99,90/mes -> copiar price_xxx
+     * Emotion Enterprise: R$299,90/mes -> copiar price_xxx
+   - Render -> Environment:
+     STRIPE_SECRET_KEY = sk_test_xxx
+     STRIPE_PRICE_PRO = price_xxx
+     STRIPE_PRICE_CLINICA = price_xxx
+     STRIPE_PRICE_ENTERPRISE = price_xxx
+   - Webhooks -> Add Endpoint:
+     URL: https://emotion-platform-albert.onrender.com/api/v1/stripe-checkout/webhook
+     Events: checkout.session.completed
+     STRIPE_WEBHOOK_SECRET = whsec_xxx
+   - Cartao de teste: 4242 4242 4242 4242 | 12/34 | 123
+
+4. LINKEDIN (5 min)
+   Post pronto em: marketing/linkedin_post.txt
+   - Copiar e colar no LinkedIn
+   - Adicionar 1-2 screenshots do site
+
+5. PRODUCT HUNT (amanha - terca ou quarta)
+   Info em: marketing/product_hunt.json
+   Link: https://producthunt.com/posts/new
+
+CUSTO TOTAL: R$ 0,00
+POTENCIAL:   R$ 5.000/mes em 6 meses
