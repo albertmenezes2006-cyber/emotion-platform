@@ -15,7 +15,7 @@ _requests = defaultdict(list)
 _blocked = {}
 
 LIMITE_POR_MINUTO = 60
-LIMITE_BURST = 100
+LIMITE_BURST = 500
 
 class RateLimitMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
