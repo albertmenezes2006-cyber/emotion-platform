@@ -25,6 +25,10 @@ INDICE = [
 
 @router.get("")
 async def buscar(q: str = ""):
+    # Sanitizar XSS
+    import re as _re
+    q = _re.sub(r'<[^>]*>', '', q)
+    q = q.replace('"', '').replace("'", "").replace(";", "")[:100]
     if not q or len(q) < 2:
         return JSONResponse({"resultados": [], "total": 0})
     q_lower = q.lower()
