@@ -1,3 +1,4 @@
+from fastapi import Request
 """
 Plugin: Auth JWT Real — Sistema completo de autenticação
 """
@@ -74,13 +75,13 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
     return payload
 
 @router.post("/cadastrar")
-async def cadastrar(
-    nome: str,
-    email: str,
-    senha: str,
-    tipo: str = "paciente",
-    telefone: str = ""
-):
+async def cadastrar(request: Request):
+    body = await request.json()
+    nome = body.get("nome", "")
+    email = body.get("email", "")
+    senha = body.get("senha", "")
+    tipo = body.get("tipo", "paciente")
+    telefone = body.get("telefone", "")
     if len(senha) < 6:
         raise HTTPException(400, "Senha mínima: 6 caracteres")
     if "@" not in email:
@@ -133,7 +134,10 @@ async def cadastrar(
     }
 
 @router.post("/login")
-async def login(email: str, senha: str):
+async def login(request: Request):
+    body = await request.json()
+    email = body.get("email", "")
+    senha = body.get("senha", "")
     usuarios = _users.list(limite=5000)
     user_data = None
     user_db = None
