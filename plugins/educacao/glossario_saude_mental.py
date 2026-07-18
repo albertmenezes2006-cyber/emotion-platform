@@ -7,6 +7,7 @@ from plugins.plugin_base import PluginBase
 router = APIRouter(prefix="/glossario", tags=["Educação"])
 
 TERMOS = {
+    "depressao_key": "Estado de tristeza persistente. Ver PHQ-9.",
     "Ansiedade": "Estado de apreensão, tensão e preocupação excessiva. Pode ser adaptativa (normal) ou patológica (GAD, fobia, pânico).",
     "Depressão": "Transtorno do humor caracterizado por tristeza persistente, perda de interesse e alterações no sono, apetite e energia.",
     "PHQ-9": "Patient Health Questionnaire-9. Instrumento de 9 itens para rastrear e medir a gravidade da depressão.",
