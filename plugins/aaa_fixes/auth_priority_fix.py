@@ -78,8 +78,8 @@ async def cadastrar(request: Request):
         body = {}
 
     nome = (body.get("nome") or body.get("name") or body.get("username") or "").strip()
-    if not nome and email:
-        nome = email.split("@")[0]
+    if not nome:
+        nome = email.split("@")[0] if email else "Usuario Anonimo"
     email = (body.get("email") or "").strip().lower()
     senha = body.get("senha") or ""
     tipo = body.get("tipo") or "paciente"
