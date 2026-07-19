@@ -77,14 +77,16 @@ async def cadastrar(request: Request):
     except Exception:
         body = {}
 
-    nome = (body.get("nome") or "").strip()
+    nome = (body.get("nome") or body.get("name") or body.get("username") or "").strip()
+    if not nome and email:
+        nome = email.split("@")[0]
     email = (body.get("email") or "").strip().lower()
     senha = body.get("senha") or ""
     tipo = body.get("tipo") or "paciente"
     telefone = body.get("telefone") or ""
 
-    if len(nome) < 2:
-        raise HTTPException(status_code=400, detail="Nome muito curto")
+    if len(nome) < 1:
+        raise HTTPException(status_code=400, detail="Por favor, informe seu nome")
     if "@" not in email:
         raise HTTPException(status_code=400, detail="E-mail inválido")
     if len(senha) < 6:
