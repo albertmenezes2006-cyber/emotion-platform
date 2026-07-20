@@ -53,7 +53,7 @@ async def completar_dia(dia: int, request: Request):
                          "total_dias": len(dados[user]["dias_completos"]),
                          "concluido": len(dados[user]["dias_completos"]) >= 21})
 
-@router.get("", response_class=HTMLResponse)
+@router.get("/", response_class=HTMLResponse)
 async def pagina_desafio():
     dados = carregar()
     completos = dados.get("default", {}).get("dias_completos", [])

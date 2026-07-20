@@ -46,6 +46,7 @@ button{background:linear-gradient(135deg,#667eea,#764ba2);color:white;border:non
 <div class="resultado" id="res"></div>
 </div>
 <script>
+function salvarPlanos(){ window.location.href="/app/planos"; }
 function calcular(){
   var pac=parseInt(document.getElementById("pacientes").value)||0;
   var tempo=parseInt(document.getElementById("tempo").value)||0;
@@ -64,7 +65,7 @@ function calcular(){
     "<div class='destaque'><div style='font-size:13px;opacity:0.9'>Você economiza</div>"+
     "<div style='font-size:36px;font-weight:800'>R$ "+Math.max(0,economia).toFixed(2)+"</div>"+
     "<div style='font-size:13px;opacity:0.9'>ROI de "+Math.max(0,roi).toFixed(0)+"%</div></div>"+
-    res+='<button onclick="window.location.href=/app/planos">Assinar agora</button>';
+    res+='<button onclick=salvarPlanos()>Assinar agora</button>';
 }
 calcular();
 </script></body></html>""")
