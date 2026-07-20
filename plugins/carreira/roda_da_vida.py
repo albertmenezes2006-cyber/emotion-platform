@@ -45,7 +45,7 @@ var g=document.getElementById("grid");
 areas.forEach(function(a,i){
   var div=document.createElement("div");div.className="area";
   div.innerHTML="<label>"+a.n+"</label>"+
-  "<input type='range' min='0' max='10' value='5' id='r"+i+"' oninput='document.getElementById(\"n"+i+"\").textContent=this.value' style='accent-color:"+a.c+"'>"+
+  "<input type='range' min='0' max='10' value='5' id='r"+i+"' oninput='document.getElementById(\'n"+i+"\'  ).textContent=this.value' style='accent-color:"+a.c+"'>"+
   "<div class='num' id='n"+i+"'>5</div>";
   g.appendChild(div);vals[i]=5;
 });

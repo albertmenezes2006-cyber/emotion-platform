@@ -101,11 +101,8 @@ function registrar(){{
   fetch("/api/v1/atividade/registrar",{{method:"POST",
     headers:{{"Content-Type":"application/json"}},body:JSON.stringify(d)}})
   .then(r=>r.json()).then(function(r){{
-    var msg="✅ "+r.msg+"
-+"+r.xp_ganho+" XP ganhos!";
-    if(r.melhora_humor>0) msg+="
-😊 Humor melhorou "+r.melhora_humor+" pontos!";
-    alert(msg);
+    var msg="OK "+r.msg+" "+r.xp_ganho+" XP ganhos!";
+    if(r.melhora_humor>0) msg+=" Humor melhorou "+r.melhora_humor+" pontos!";
   }});
 }}
 </script></body></html>""")

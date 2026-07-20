@@ -96,7 +96,7 @@ async def pagina_desafio():
 {cards}
 </div><script>
 function completar(dia){{
-  fetch("/desafio-21/completar/"+dia,{{method:"POST",headers:{{"Content-Type":"application/json"}},body:"{{}}"}})
+  fetch("/desafio-21/completar/"+dia,{method:"POST",headers:{"Content-Type":"application/json"},body:"{}"})
   .then(r=>r.json()).then(function(d){{
     var msg="✅ Dia "+dia+" concluído! +"+d.xp_ganho+" XP";
     if(d.concluido) msg+="\n🎉 PARABÉNS! Você completou o desafio de 21 dias!";

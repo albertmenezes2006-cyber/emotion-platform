@@ -64,7 +64,7 @@ function calcular(){
     "<div class='destaque'><div style='font-size:13px;opacity:0.9'>Você economiza</div>"+
     "<div style='font-size:36px;font-weight:800'>R$ "+Math.max(0,economia).toFixed(2)+"</div>"+
     "<div style='font-size:13px;opacity:0.9'>ROI de "+Math.max(0,roi).toFixed(0)+"%</div></div>"+
-    res+="<button onclick='window.location="/app/planos"'">Assinar agora</button>";
+    res+='<button onclick="window.location=\"/app/planos\"">Assinar agora</button>';
 }
 calcular();
 </script></body></html>""")
