@@ -271,7 +271,7 @@ async function salvar() {
   const tags = document.getElementById('tags').value;
 
   try {
-    await fetch(`/api/v1/diario-emocional/entrada?user_id=${encodeURIComponent(uid)}&texto=${encodeURIComponent(texto)}&emocao_principal=${emocaoAtual}&intensidade=${intensidade}&humor_geral=${humor}&tags=${encodeURIComponent(tags)}`, {method:'POST'});
+    await fetch("/api/v1/diario-emocional/entrada", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({user_id:uid, texto:texto, emocao_principal:emocaoAtual, intensidade:intensidade, humor_geral:humor, tags:tags})});
   } catch(e) {}
 
   // Salvar localmente também

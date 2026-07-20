@@ -213,7 +213,7 @@ async function fazer_cadastro() {
 async function recuperar() {
   const email = prompt('Seu e-mail:');
   if (!email) return;
-  const r = await fetch(`/api/v1/auth/recuperar-senha?email=${encodeURIComponent(email)}`, {method:'POST'});
+  const r = await fetch('/api/v1/auth/recuperar-senha', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email:email})});
   showMsg('E-mail de recuperação enviado (se cadastrado)', 'success');
 }
 
