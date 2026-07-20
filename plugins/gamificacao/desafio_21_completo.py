@@ -74,7 +74,7 @@ async def pagina_desafio():
             <div style="color:#666;font-size:13px;margin-top:2px">{d['tarefa']}</div>
           </div>
           {'<div style="color:#38a169;font-size:20px;font-weight:700">✓</div>' if feito else
-           f'<button onclick="completar({d["dia"]})" style="background:#667eea;color:white;border:none;border-radius:8px;padding:8px 14px;cursor:pointer;font-weight:700;font-size:13px" {"" if disponivel else "disabled"}>Completar</button>'}
+           f'<button onclick="completar({d[\"dia\"]})" style="background:#667eea;color:white;border:none;border-radius:8px;padding:8px 14px;cursor:pointer;font-weight:700;font-size:13px" {"" if disponivel else "disabled"}>Completar</button>'}
         </div>"""
     pct = int(progresso/21*100)
     return HTMLResponse(f"""<!DOCTYPE html>
