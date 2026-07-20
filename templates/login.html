@@ -176,7 +176,7 @@ async function fazer_login() {
   const senha = document.getElementById('login-senha').value;
   if (!email || !senha) return showMsg('Preencha todos os campos', 'warning');
   try {
-    const r = await fetch(`/api/v1/auth/login?email=${encodeURIComponent(email)}&senha=${encodeURIComponent(senha)}`, {method:'POST'});
+    const r = await fetch('/api/v1/auth/login', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email:email, senha:senha})});
     const data = await r.json();
     if (r.ok) {
       localStorage.setItem('emotion_token', data.token);
@@ -197,7 +197,7 @@ async function fazer_cadastro() {
   const tipo = document.getElementById('cad-tipo').value;
   if (!nome||!email||!senha) return showMsg('Preencha todos os campos', 'warning');
   try {
-    const r = await fetch(`/api/v1/auth/cadastrar?nome=${encodeURIComponent(nome)}&email=${encodeURIComponent(email)}&senha=${encodeURIComponent(senha)}&tipo=${tipo}`, {method:'POST'});
+    const r = await fetch('/api/v1/auth/cadastrar', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({nome:nome, email:email, senha:senha, tipo:tipo})});
     const data = await r.json();
     if (r.ok) {
       localStorage.setItem('emotion_token', data.token);
