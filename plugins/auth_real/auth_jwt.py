@@ -16,7 +16,7 @@ import logging
 import os
 
 logger = logging.getLogger(__name__)
-router = APIRouter(prefix="/api/v1/auth", tags=["auth"])
+router = APIRouter(prefix="/api/v1/auth-jwt", tags=["auth"])
 security = HTTPBearer(auto_error=False)
 
 _users = SimpleDB("usuarios")

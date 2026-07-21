@@ -3,6 +3,10 @@
 <head>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
 <script>
+  // Verificar autenticação
+  const _token = localStorage.getItem('emotion_token');
+  const _userid = localStorage.getItem('emotion_userid');
+
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());

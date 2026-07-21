@@ -91,6 +91,10 @@ input[type=range]{width:100%;accent-color:#7C3AED;cursor:pointer}
   <!-- WCAG 2.1 AA keyboard support -->
   <link rel="stylesheet" href="/static/wcag.css">
   <script>
+  // Verificar autenticação
+  const _token = localStorage.getItem('emotion_token');
+  const _userid = localStorage.getItem('emotion_userid');
+
     /* onkeydown keypress keyup Enter — WCAG 2.1 keyboard */
     document.addEventListener('keydown',function(e){
       if((e.key==='Enter'||e.key===' ')&&e.target.tagName==='LABEL'){

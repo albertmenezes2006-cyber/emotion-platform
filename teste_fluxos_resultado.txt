@@ -1,0 +1,69 @@
+Score: 35%
+
+OK: Health OK — plugins=847 rotas=3156
+OK: Uptime: 0:31:35.946088
+OK: Erros: 0
+ERRO: 404 NÃO ENCONTRADA: /login
+ERRO: 404 NÃO ENCONTRADA: /cadastro
+ERRO: 404 NÃO ENCONTRADA: /planos
+ERRO: 404 NÃO ENCONTRADA: /premium
+ERRO: 404 NÃO ENCONTRADA: /privacidade
+ERRO: 404 NÃO ENCONTRADA: /termos
+ERRO: 404 NÃO ENCONTRADA: /app/gamificacao
+ERRO: 404 NÃO ENCONTRADA: /app/ranking
+ERRO: 404 NÃO ENCONTRADA: /app/perfil
+ERRO: 404 NÃO ENCONTRADA: /app/configuracoes
+ERRO: 404 NÃO ENCONTRADA: /app/agenda
+ERRO: 404 NÃO ENCONTRADA: /app/analises
+ERRO: 404 NÃO ENCONTRADA: /app/carteira
+ERRO: 404 NÃO ENCONTRADA: /app/score-ie
+ERRO: 404 NÃO ENCONTRADA: /checkout
+ERRO: 404 NÃO ENCONTRADA: /checkout/anual
+ERRO: 404 NÃO ENCONTRADA: /checkout/api
+ERRO: 404 NÃO ENCONTRADA: /checkout/creditos
+ERRO: 404 NÃO ENCONTRADA: /checkout/relatorio
+ERRO: 404 NÃO ENCONTRADA: /checkout/sofia
+ERRO: 404 NÃO ENCONTRADA: /nova-senha
+ERRO: 404 NÃO ENCONTRADA: /recuperar-senha
+ERRO: 404 NÃO ENCONTRADA: /sucesso
+ERRO: 404 NÃO ENCONTRADA: /obrigado
+ERRO: 404 NÃO ENCONTRADA: /presente
+ERRO: 404 NÃO ENCONTRADA: /presente/sucesso
+ERRO: 404 NÃO ENCONTRADA: /afiliado
+ERRO: 404 NÃO ENCONTRADA: /terapia
+ERRO: 404 NÃO ENCONTRADA: /whitelabel
+ERRO: 404 NÃO ENCONTRADA: /api-docs
+ERRO: 404 NÃO ENCONTRADA: /compartilhar
+ERRO: 404 NÃO ENCONTRADA: /404
+OK: Páginas OK: 11/43
+ERRO: Páginas com erro: 32
+OK: Cadastro OK — user_id=11b0c391
+OK: Token gerado: Sim
+OK: Email: teste_tvzznv@teste.com
+OK: Plano: free
+OK: Tipo: paciente
+OK: Login OK — status=logado
+OK: Token: Gerado ✅
+OK: Nome: Teste Albert
+OK: Tipo: paciente
+OK: Plano: free
+OK: Token válido — usuário=Teste Albert
+OK: Email: teste_tvzznv@teste.com
+OK: Tipo: paciente
+ERRO: Chat falhou: 404 — {'detail': 'Not Found'}
+WARN: Diário: 404 — {'detail': 'Not Found'}
+WARN: Listar diário: 404 — {'detail': 'Not Found'}
+WARN: PHQ-9: 404 — {'detail': 'Not Found'}
+WARN: GAD-7: 404 — {'detail': 'Not Found'}
+WARN: XP: 404 — {'detail': 'Not Found'}
+WARN: Ranking: 404 — {'detail': 'Not Found'}
+WARN: PIX: 404 — {'detail': 'Not Found'}
+OK: Stripe planos OK — {'planos': {'free': {'nome': 'Gratuito', 'preco_brl': 0, 'preco_brl_formatted': 'Gratuito', 'preco_usd': 0, 'features': ['5 avaliações/mês', '20 msgs chat IA/mês', 'Diário emocional', 'Dashboard básico'], 'popular': False}, 'pro': {'nome': 'Pro', 'preco_brl': 4990, 'preco_brl_formatted': 'R$ 49.90', 'preco_usd': 999, 'features': ['Avaliações ilimitadas', 'Chat IA ilimitado', 'Prontuário completo', 'Agenda de sessões', 'Relatórios PDF', 'Suporte prioritário'], 'popular': True}, 'clinica': {'nome': 'Clínica', 'preco_brl': 19990, 'preco_brl_formatted': 'R$ 199.90', 'preco_usd': 3999, 'features': ['Tudo do Pro', 'Até 50 terapeutas', 'Multi-clínica', 'API completa', 'White label', 'Suporte 24/7', 'Onboarding dedicado'], 'popular': False}, 'enterprise': {'nome': 'Enterprise', 'preco_brl': 0, 'preco_brl_formatted': 'Gratuito', 'preco_usd': 0, 'features': ['Tudo do Clínica', 'Terapeutas ilimitados', 'Infraestrutura dedicada', 'SLA 99.99%', 'Compliance HIPAA', 'Contrato personalizado'], 'popular': False}}}
+OK: GET /api/v1/auth/stats/usuarios → 200
+OK: GET /sitemap.xml → 200
+OK: GET /robots.txt → 200
+WARN: GET /manifest.json → 404
+WARN: GET /sw.js → 404
+OK: Token inválido rejeitado corretamente (401)
+OK: Senha errada rejeitada corretamente (401)
+OK: Swagger bloqueado corretamente (404)

@@ -1,0 +1,42 @@
+Score: 55%
+
+OK: Online! plugins=847 rotas=3156 erros=0
+ERRO: 404: Premium (/premium)
+ERRO: 404: Whitelabel (/whitelabel)
+ERRO: 404: Afiliado (/afiliado)
+ERRO: 404: Análises (/app/analises)
+ERRO: 404: Carteira (/app/carteira)
+ERRO: 404: Score IE (/app/score-ie)
+ERRO: 404: Checkout Anual (/checkout/anual)
+ERRO: 404: Checkout API (/checkout/api)
+ERRO: 404: Checkout Créditos (/checkout/creditos)
+ERRO: 404: Checkout Relatório (/checkout/relatorio)
+ERRO: 404: Checkout Sofia (/checkout/sofia)
+ERRO: 404: Nova Senha (/nova-senha)
+ERRO: 404: Presente Sucesso (/presente/sucesso)
+OK: Páginas OK: 27/40
+ERRO: Páginas com erro: 13
+OK: Cadastro OK — user_id=57ca5703
+OK: Token: ✅
+OK: Plano: free | Tipo: paciente
+OK: Login OK — logado
+OK: Token: ✅
+OK: Nome: Teste Albert | Tipo: paciente
+OK: Token válido — Teste Albert / teste_dhsesb@teste.com
+OK: Chat IA OK!
+OK: Resposta: Olá! 🌟 Que bom que você está buscando maneiras de cuidar da sua saúde mental. Isso já é um grande pa...
+OK: Diário salvo!
+OK: PHQ-9 OK — score=4
+OK: Nível: Sem depressao significativa
+WARN: PSS: 422
+WARN: XP ganhar: 422
+OK: Ranking OK!
+OK: PIX/QR OK!
+OK: Stripe OK — planos: ['free', 'pro', 'clinica', 'enterprise']
+WARN: PWA /manifest.json: 404
+WARN: PWA /sw.js: 404
+OK: PWA /offline OK!
+OK: Token inválido rejeitado (401) ✅
+OK: Senha errada rejeitada (401) ✅
+OK: Swagger bloqueado (404) ✅
+OK: Telegram configurado!

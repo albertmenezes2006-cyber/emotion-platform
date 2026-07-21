@@ -67,7 +67,7 @@ async def widget_demo():
     <script>
         function copiar() {
             navigator.clipboard.writeText(
-                '<script src="https://emotion-platform-albert.onrender.com/widget/embed.js"><\/script>'
+                '<script src="https://emotion-platform-albert.onrender.com/widget/embed.js"></script>'
             );
             alert("Copiado!");
         }

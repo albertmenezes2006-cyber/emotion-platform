@@ -6,7 +6,7 @@ from datetime import datetime
 import json
 
 router_l = APIRouter(prefix="/api/v1/lembretes", tags=["Lembretes"])
-router_x = APIRouter(prefix="/api/v1/xp", tags=["XP"])
+router_x = APIRouter(prefix="/api/v1/xp-lembretes", tags=["XP"])
 AL = Path("lembretes_fix.json")
 AX = Path("xp_fix.json")
 

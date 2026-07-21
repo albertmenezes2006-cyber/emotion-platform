@@ -201,3 +201,99 @@ class FrontendRoutesPlugin(PluginBase):
 
 
 plugin = FrontendRoutesPlugin()
+
+
+# ══════════════════════════════════════
+# ROTAS PARA TEMPLATES ORFAOS
+# ══════════════════════════════════════
+
+@router.get("/app/analises", response_class=HTMLResponse)
+async def page_analises():
+    html = ler_html("analises.html")
+    if html:
+        return HTMLResponse(html)
+    return HTMLResponse("<h1>analises</h1><p>Página em construção</p>", status_code=200)
+
+@router.get("/api-docs", response_class=HTMLResponse)
+async def page_api_docs():
+    html = ler_html("api_docs.html")
+    if html:
+        return HTMLResponse(html)
+    return HTMLResponse("<h1>api_docs</h1><p>Página em construção</p>", status_code=200)
+
+@router.get("/app/carteira", response_class=HTMLResponse)
+async def page_carteira():
+    html = ler_html("carteira.html")
+    if html:
+        return HTMLResponse(html)
+    return HTMLResponse("<h1>carteira</h1><p>Página em construção</p>", status_code=200)
+
+@router.get("/checkout/anual", response_class=HTMLResponse)
+async def page_checkout_anual():
+    html = ler_html("checkout_anual.html")
+    if html:
+        return HTMLResponse(html)
+    return HTMLResponse("<h1>checkout_anual</h1><p>Página em construção</p>", status_code=200)
+
+@router.get("/checkout/api", response_class=HTMLResponse)
+async def page_checkout_api():
+    html = ler_html("checkout_api.html")
+    if html:
+        return HTMLResponse(html)
+    return HTMLResponse("<h1>checkout_api</h1><p>Página em construção</p>", status_code=200)
+
+@router.get("/checkout/creditos", response_class=HTMLResponse)
+async def page_checkout_creditos():
+    html = ler_html("checkout_creditos.html")
+    if html:
+        return HTMLResponse(html)
+    return HTMLResponse("<h1>checkout_creditos</h1><p>Página em construção</p>", status_code=200)
+
+@router.get("/checkout/relatorio", response_class=HTMLResponse)
+async def page_checkout_relatorio():
+    html = ler_html("checkout_relatorio.html")
+    if html:
+        return HTMLResponse(html)
+    return HTMLResponse("<h1>checkout_relatorio</h1><p>Página em construção</p>", status_code=200)
+
+@router.get("/checkout/sofia", response_class=HTMLResponse)
+async def page_checkout_sofia():
+    html = ler_html("checkout_sofia.html")
+    if html:
+        return HTMLResponse(html)
+    return HTMLResponse("<h1>checkout_sofia</h1><p>Página em construção</p>", status_code=200)
+
+@router.get("/nova-senha", response_class=HTMLResponse)
+async def page_nova_senha():
+    html = ler_html("nova_senha.html")
+    if html:
+        return HTMLResponse(html)
+    return HTMLResponse("<h1>nova_senha</h1><p>Página em construção</p>", status_code=200)
+
+@router.get("/premium", response_class=HTMLResponse)
+async def page_premium():
+    html = ler_html("premium.html")
+    if html:
+        return HTMLResponse(html)
+    return HTMLResponse("<h1>premium</h1><p>Página em construção</p>", status_code=200)
+
+@router.get("/presente/sucesso", response_class=HTMLResponse)
+async def page_presente_sucesso():
+    html = ler_html("presente_sucesso.html")
+    if html:
+        return HTMLResponse(html)
+    return HTMLResponse("<h1>presente_sucesso</h1><p>Página em construção</p>", status_code=200)
+
+@router.get("/app/score-ie", response_class=HTMLResponse)
+async def page_score_ie():
+    html = ler_html("score_ie.html")
+    if html:
+        return HTMLResponse(html)
+    return HTMLResponse("<h1>score_ie</h1><p>Página em construção</p>", status_code=200)
+
+@router.get("/whitelabel", response_class=HTMLResponse)
+async def page_whitelabel():
+    html = ler_html("whitelabel.html")
+    if html:
+        return HTMLResponse(html)
+    return HTMLResponse("<h1>whitelabel</h1><p>Página em construção</p>", status_code=200)

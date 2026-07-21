@@ -4,7 +4,7 @@ from plugins.plugin_base import PluginBase
 from pathlib import Path
 import json
 from datetime import datetime
-router = APIRouter(prefix="/api/v1/xp", tags=["XP"])
+router = APIRouter(prefix="/api/v1/xp-ranking", tags=["XP"])
 ARQ = Path("xp_v2.json")
 NIVEIS = [{"nivel":1,"nome":"Iniciante","xp_min":0,"icone":"🌱"},{"nivel":2,"nome":"Explorador","xp_min":100,"icone":"🔍"},{"nivel":3,"nome":"Expert","xp_min":300,"icone":"⭐"},{"nivel":4,"nome":"Mestre","xp_min":600,"icone":"🏆"}]
 ACOES = {"avaliacao_phq9":50,"avaliacao_gad7":50,"entrada_diario":20,"chat_ia":10,"login_diario":5,"indicar_amigo":200}

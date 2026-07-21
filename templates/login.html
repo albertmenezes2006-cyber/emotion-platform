@@ -172,42 +172,64 @@ function showMsg(msg, tipo='info') {
 }
 
 async function fazer_login() {
-  const email = document.getElementById('login-email').value;
+  const email = document.getElementById('login-email').value.trim();
   const senha = document.getElementById('login-senha').value;
-  if (!email || !senha) return showMsg('Preencha todos os campos', 'warning');
+  if (!email || !senha) return showMsg('Preencha e-mail e senha', 'warning');
   try {
-    const r = await fetch('/api/v1/auth/login', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email:email, senha:senha})});
+    showMsg('Entrando...', 'info');
+    const r = await fetch('/api/v1/auth/login', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email: email, senha: senha})
+    });
     const data = await r.json();
     if (r.ok) {
-      localStorage.setItem('emotion_token', data.token);
-      localStorage.setItem('emotion_user', JSON.stringify(data.user));
-      localStorage.setItem('emotion_userid', data.user.id);
+      localStorage.setItem('emotion_token', data.token || data.access_token);
+      localStorage.setItem('emotion_userid', data.user_id);
+      localStorage.setItem('emotion_user_email', data.email);
+      localStorage.setItem('emotion_user_nome', data.nome);
+      localStorage.setItem('emotion_user_tipo', data.tipo || 'paciente');
+      localStorage.setItem('emotion_user_plano', data.plano || 'free');
       showMsg('Login realizado! Redirecionando...', 'success');
-      setTimeout(()=>window.location.href='/app/dashboard', 1000);
+      setTimeout(() => window.location.href = '/app/dashboard', 1000);
     } else {
-      showMsg(data.detail || 'Erro no login', 'danger');
+      showMsg(data.detail || 'E-mail ou senha incorretos', 'danger');
     }
-  } catch(e) { showMsg('Erro de conexão', 'danger'); }
+  } catch(e) {
+    showMsg('Erro de conexão. Tente novamente.', 'danger');
+  }
 }
 
 async function fazer_cadastro() {
-  const nome = document.getElementById('cad-nome').value;
-  const email = document.getElementById('cad-email').value;
+  const nome  = document.getElementById('cad-nome').value.trim();
+  const email = document.getElementById('cad-email').value.trim();
   const senha = document.getElementById('cad-senha').value;
-  const tipo = document.getElementById('cad-tipo').value;
-  if (!nome||!email||!senha) return showMsg('Preencha todos os campos', 'warning');
+  const tipo  = document.getElementById('cad-tipo').value;
+  if (!nome || !email || !senha) return showMsg('Preencha todos os campos', 'warning');
+  if (senha.length < 6) return showMsg('Senha mínima: 6 caracteres', 'warning');
   try {
-    const r = await fetch('/api/v1/auth/cadastrar', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({nome:nome, email:email, senha:senha, tipo:tipo})});
+    showMsg('Criando conta...', 'info');
+    const r = await fetch('/api/v1/auth/cadastrar', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({nome: nome, email: email, senha: senha, tipo: tipo})
+    });
     const data = await r.json();
     if (r.ok) {
-      localStorage.setItem('emotion_token', data.token);
+      localStorage.setItem('emotion_token', data.token || data.access_token);
       localStorage.setItem('emotion_userid', data.user_id);
+      localStorage.setItem('emotion_user_email', data.email);
+      localStorage.setItem('emotion_user_nome', data.nome);
+      localStorage.setItem('emotion_user_tipo', data.tipo || tipo);
+      localStorage.setItem('emotion_user_plano', data.plano || 'free');
       showMsg('Conta criada! Redirecionando...', 'success');
-      setTimeout(()=>window.location.href='/app/dashboard', 1000);
+      setTimeout(() => window.location.href = '/app/dashboard', 1000);
     } else {
       showMsg(data.detail || 'Erro no cadastro', 'danger');
     }
-  } catch(e) { showMsg('Erro de conexão', 'danger'); }
+  } catch(e) {
+    showMsg('Erro de conexão. Tente novamente.', 'danger');
+  }
 }
 
 async function recuperar() {
