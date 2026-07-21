@@ -1,20 +1,20 @@
-Score: 86%
+Score: 91%
 
 OK: Diario entrada OK — entrada registrada
 OK: Diario historico OK — 1 entradas
 OK: Emocoes disponiveis OK
-OK: Sessao agendada OK — {'status': 'agendada', 'sessao': {'id': 'a672bb84', 'paciente_id': 'pac001', 'terapeuta_id': 'psi001', 'data_hora': '2026-08-01T14:00:00', 'duracao_minutos': 50, 'modalidade': 'online', 'status': 'agendada', 'observacoes': '', 'criado_em': '2026-07-21T03:22:57.757022', 'lembrete_enviado': False}}
+OK: Sessao agendada OK — {'status': 'agendada', 'sessao': {'id': 'eba3cedc', 'paciente_id': 'pac001', 'terapeuta_id': 'psi001', 'data_hora': '2026-08-01T14:00:00', 'duracao_minutos': 50, 'modalidade': 'online', 'status': 'agendada', 'observacoes': '', 'criado_em': '2026-07-21T03:29:53.098882', 'lembrete_enviado': False}}
 OK: Disponibilidade terapeuta OK
 OK: Dashboard terapeuta OK
-OK: Prontuario cadastro OK — {'paciente_id': 'ff2c2f1c', 'status': 'cadastrado', 'paciente': {'id': 'ff2c2f1c', 'nome': 'Paciente Teste', 'data_nascimento': '1990-01-01', 'terapeuta_id': 'psi001', 'queixa_principal': '', 'historico_familiar': '', 'medicamentos': '', 'cid10': '', 'status': 'ativo', 'criado_em': '2026-07-21T03:22:58.800638'}}
+OK: Prontuario cadastro OK — {'paciente_id': 'f16d563a', 'status': 'cadastrado', 'paciente': {'id': 'f16d563a', 'nome': 'Paciente Teste', 'data_nascimento': '1990-01-01', 'terapeuta_id': 'psi001', 'queixa_principal': '', 'historico_familiar': '', 'medicamentos': '', 'cid10': '', 'status': 'ativo', 'criado_em': '2026-07-21T03:29:54.095265'}}
 OK: Evolucao registrada OK
 OK: Listar pacientes OK
-OK: Recuperar senha OK — {'status': 'e-mail enviado', 'mensagem': 'Se fase3c_fdzddc@teste.com existe, enviaremos instruções de recuperação', 'nota': 'Integre com SendGrid para envio real'}
+OK: Recuperar senha OK — {'status': 'e-mail enviado', 'mensagem': 'Se fase3c_skoyef@teste.com existe, enviaremos instruções de recuperação', 'nota': 'Integre com SendGrid para envio real'}
 OK: XP ganho OK — {'xp_ganho': 25, 'xp_total': 25, 'nivel': 'Iniciante'}
-OK: XP status OK — {'user_id': '44feb220', 'xp': 25, 'nivel': 'Iniciante', 'historico': [{'acao': 'teste', 'xp': 25, 'ts': '2026-07-21T03:23:00.146734'}], 'streak': 0}
-OK: PDF gerado OK — {'checkout_url': 'https://checkout.stripe.com/c/pay/cs_live_a1duOCgQpgfG1tJ8Viy4yjIUQt4LQV2574B7dZ6GJozk6XZmUzWqQdGvTM#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSdicGRmZGhqaWBTZHdsZGtxJz8nZmprcXdqaScpJ2R1bE5gfCc%2FJ3VuWmlsc2BaMDRRcDZfcldXb2NsSUs9b2F2Y0tnaVxJUjFoNGtOS0h8fDZuN3I8PDBjalxgMjJpPVFQYk9RPDNqQGR0RERpTkdCf2B3Q2JwRzxfbGRRSmZIfWlDNGgxMV01NVBmbU4xYlI0JyknY3dqaFZgd3Ngdyc%2FcXdwYCknZ2RmbmJ3anBrYUZqaWp3Jz8nJmNjY2NjYycpJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl', 'preco': 'R$ 19,90'}
+OK: XP status OK — {'user_id': '0101d23e', 'xp': 25, 'nivel': 'Iniciante', 'historico': [{'acao': 'teste', 'xp': 25, 'ts': '2026-07-21T03:29:55.417781'}], 'streak': 0}
+OK: PDF gerado OK — {'checkout_url': 'https://checkout.stripe.com/c/pay/cs_live_a1GaKYSflhPIn4tBeteyrVNBi0AXNlUXfGiiTaZ6KzeHErJzZqPJgV3m6j#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSdicGRmZGhqaWBTZHdsZGtxJz8nZmprcXdqaScpJ2R1bE5gfCc%2FJ3VuWmlsc2BaMDRRcDZfcldXb2NsSUs9b2F2Y0tnaVxJUjFoNGtOS0h8fDZuN3I8PDBjalxgMjJpPVFQYk9RPDNqQGR0RERpTkdCf2B3Q2JwRzxfbGRRSmZIfWlDNGgxMV01NVBmbU4xYlI0JyknY3dqaFZgd3Ngdyc%2FcXdwYCknZ2RmbmJ3anBrYUZqaWp3Jz8nJmNjY2NjYycpJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl', 'preco': 'R$ 19,90'}
 OK: PDF preview OK
-WARN: Afiliado 500: 500 — {}
+OK: Afiliado OK — {'codigo': 'AF0A5B60AD', 'link_afiliado': 'https://emotion-platform-albert.onrender.com?ref=AF0A5B60AD', 'comissao': '30% de cada venda', 'ganhos_exemplo': {'1_pro': 'R$ 8.97/mes', '1_clinica': 'R$ 29.97/mes', '10_pro': 'R$ 89.70/mes'}, 'material': 'https://emotion-platform-albert.onrender.com/api/v1/afiliados/material/AF0A5B60AD', 'dashboard': 'https://emotion-platform-albert.onrender.com/api/v1/afiliados/dashboard/AF0A5B60AD'}
 OK: Afiliados status OK — {'status': 'online', 'comissao': '30%', 'pagamento': 'mensal', 'minimo_saque': 'R$ 50,00', 'cadastro': 'https://emotion-platform-albert.onrender.com/api/v1/afiliados/cadastrar'}
 OK: Ko-fi: redirect para ko-fi.com (comportamento esperado)
 OK: BMC: redirect para buymeacoffee.com (comportamento esperado)

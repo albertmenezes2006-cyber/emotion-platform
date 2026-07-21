@@ -321,3 +321,90 @@ async def service_worker():
         return Response(sw, media_type="application/javascript")
     except Exception:
         return Response("// sw", media_type="application/javascript")
+
+# Rotas templates orfaos
+
+@router.get("/faq", response_class=HTMLResponse)
+async def page_faq():
+    html = ler_html("faq.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>faq</h1>")
+
+@router.get("/recuperar-senha", response_class=HTMLResponse)
+async def page_recuperar_senha():
+    html = ler_html("recuperar_senha.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>recuperar_senha</h1>")
+
+@router.get("/blog/artigo", response_class=HTMLResponse)
+async def page_artigo():
+    html = ler_html("artigo.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>artigo</h1>")
+
+@router.get("/compartilhar", response_class=HTMLResponse)
+async def page_compartilhar():
+    html = ler_html("compartilhar.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>compartilhar</h1>")
+
+@router.get("/sobre", response_class=HTMLResponse)
+async def page_sobre():
+    html = ler_html("sobre.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>sobre</h1>")
+
+@router.get("/app/gamificacao", response_class=HTMLResponse)
+async def page_gamificacao():
+    html = ler_html("gamificacao.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>gamificacao</h1>")
+
+@router.get("/privacidade", response_class=HTMLResponse)
+async def page_privacidade():
+    html = ler_html("privacidade.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>privacidade</h1>")
+
+@router.get("/erro-500", response_class=HTMLResponse)
+async def page_500():
+    html = ler_html("500.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>500</h1>")
+
+@router.get("/offline", response_class=HTMLResponse)
+async def page_offline():
+    html = ler_html("offline.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>offline</h1>")
+
+@router.get("/app/perfil", response_class=HTMLResponse)
+async def page_perfil():
+    html = ler_html("perfil.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>perfil</h1>")
+
+@router.get("/obrigado", response_class=HTMLResponse)
+async def page_obrigado():
+    html = ler_html("obrigado.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>obrigado</h1>")
+
+@router.get("/blog", response_class=HTMLResponse)
+async def page_blog():
+    html = ler_html("blog.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>blog</h1>")
+
+@router.get("/app/configuracoes", response_class=HTMLResponse)
+async def page_configuracoes():
+    html = ler_html("configuracoes.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>configuracoes</h1>")
+
+@router.get("/app/ranking", response_class=HTMLResponse)
+async def page_ranking():
+    html = ler_html("ranking.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>ranking</h1>")
+
+@router.get("/contato", response_class=HTMLResponse)
+async def page_contato():
+    html = ler_html("contato.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>contato</h1>")
+
+@router.get("/terapia", response_class=HTMLResponse)
+async def page_terapia():
+    html = ler_html("terapia.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>terapia</h1>")
+
+@router.get("/termos", response_class=HTMLResponse)
+async def page_termos():
+    html = ler_html("termos.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>termos</h1>")
