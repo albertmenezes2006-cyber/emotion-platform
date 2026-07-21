@@ -16,8 +16,13 @@ NEGATIVAS = ["triste","ansioso","deprimido","medo","raiva","dor","sofrimento",
 
 @router.post("/analisar")
 async def analisar_sentimento(request: Request):
-    d = await request.json()
+    try:
+        d = await request.json()
+    except Exception:
+        d = {}
     texto = d.get("texto", "").lower()
+    if not texto:
+        return JSONResponse({"sentimento": "neutro", "emoji": "😐", "score": 0, "palavras_positivas": 0, "palavras_negativas": 0, "total_analisado": 0, "alertar_profissional": False, "recursos_crise": None})
     palavras = re.findall(r"\w+", texto)
     pos = sum(1 for p in palavras if p in POSITIVAS)
     neg = sum(1 for p in palavras if p in NEGATIVAS)

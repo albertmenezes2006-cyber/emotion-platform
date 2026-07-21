@@ -11,10 +11,9 @@ router = APIRouter(prefix="/api/v1/nps", tags=["NPS"])
 
 ARQUIVO = Path("nps_dados.json")
 
+_nps_mem = []
 def carregar():
-    if ARQUIVO.exists():
-        return json.loads(ARQUIVO.read_text())
-    return []
+    return _nps_mem
 
 @router.post("/responder")
 async def responder_nps(request: Request):
@@ -28,7 +27,8 @@ async def responder_nps(request: Request):
         "timestamp": datetime.utcnow().isoformat(),
         "categoria": "promotor" if nota >= 9 else "neutro" if nota >= 7 else "detrator"
     })
-    ARQUIVO.write_text(json.dumps(todos, ensure_ascii=False, indent=2))
+    global _nps_mem
+    _nps_mem = todos
     return JSONResponse({"ok": True})
 
 @router.get("/calcular")

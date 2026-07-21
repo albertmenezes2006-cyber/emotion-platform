@@ -138,7 +138,10 @@ async def login(request: Request):
     body = await request.json()
     email = body.get("email", "")
     senha = body.get("senha", "")
-    usuarios = _users.list(limite=5000)
+    try:
+        usuarios = _users.list(limite=5000)
+    except Exception:
+        usuarios = []
     user_data = None
     user_db = None
     for u in usuarios:

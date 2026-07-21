@@ -1,0 +1,69 @@
+Score: 85%
+
+OK: Login OK — Albert Menezes | plano=free
+OK: Rotas OK (200/201): 1570
+OK: Rotas protegidas (401/403/422): 538
+WARN: Rotas com problema (404/500): 519
+ERRO: 500: POST /api/v1/lembretes/criar
+ERRO: 500: POST /api/v1/nps/responder
+ERRO: 500: POST /api/v1/sentimento/analisar
+ERRO: 500: POST /api/v1/wordcloud/gerar
+ERRO: 500: POST /api/v1/auth-jwt/cadastrar
+OK: PHQ-9 'Sem depressão': score=0 ✅ cálculo correto!
+OK: PHQ-9 'Depressão leve': score=5 ✅ cálculo correto!
+OK: PHQ-9 'Depressão moderada': score=10 ✅ cálculo correto!
+OK: PHQ-9 'Depressão mod-severa': score=15 ✅ cálculo correto!
+OK: PHQ-9 'Depressão severa': score=27 ✅ cálculo correto!
+OK: GAD-7 'Mínima': score=0 ✅
+OK: GAD-7 'Leve': score=4 ✅
+OK: GAD-7 'Moderada': score=10 ✅
+OK: GAD-7 'Grave': score=21 ✅
+OK: PSS-10 inversão correta: score=40 ✅
+OK: PostgreSQL conectado! Tabelas: 24
+OK:   Tabela 'afiliados': 0 registros
+OK:   Tabela 'agenda_disponibilidade': 0 registros
+OK:   Tabela 'agenda_sessoes': 0 registros
+OK:   Tabela 'api_credits': 0 registros
+OK:   Tabela 'auditoria_teste': 1 registros
+OK:   Tabela 'chat_ia_conversas': 1 registros
+OK:   Tabela 'chat_ia_v2': 0 registros
+OK:   Tabela 'chat_ia_v5': 5 registros
+OK:   Tabela 'diario_emocional': 0 registros
+OK:   Tabela 'gad7_avaliacoes': 0 registros
+OK: PostgreSQL CREATE OK — id={'id': 'cc86dfd8', 'nome': 'Auditoria Absoluta', 'valor': 'teste_crud', 'user_id': 'albert_audit', 'dados': '{"teste": true}', 'categoria': 'auditoria', 'criado_em': '2026-07-21T05:05:25.203192'}
+WARN: PostgreSQL local: unhashable type: 'dict' (normal — usar variável DATABASE_URL)
+OK: PostgreSQL via API: 5 usuários cadastrados
+OK: 50 usuários simultâneos em 0.81s
+OK: OK: 50/50
+OK: Tempo médio: 630ms | Min: 334ms | Max: 798ms
+OK: Sistema aguentou 50 usuários sem erro! ✅
+OK: Performance excelente sob carga! (630ms médio)
+WARN: PaymentMethod: 402 — Sending credit card numbers directly to the Stripe API is generally unsafe. To continue processing use Stripe.js, the Stripe mobile bindings, or Stripe Elements. For more information, see https://dashboard.stripe.com/account/integration/settings. If you are qualified to handle card data directly, see https://support.stripe.com/questions/enabling-access-to-raw-card-data-apis.
+OK: Checkout URL gerada! ✅
+OK: Para pagar com cartão teste: 4242 4242 4242 4242
+OK: Plugins verificados: 837
+OK: Nenhum problema de segurança nos plugins!
+OK: Total screenshots: 24
+OK: Altura média das páginas: 1514px
+OK: Todas as páginas têm conteúdo adequado!
+OK: Tamanho médio screenshots: 207KB
+OK: SMTP smtp.gmail.com:587 acessível!
+OK: SMTP smtp.sendgrid.net:587 acessível!
+OK: SMTP smtp-relay.brevo.com:587 acessível!
+WARN: Email: SendGrid não configurado — adicionar SENDGRID_API_KEY no Render
+OK: Alternativa: Telegram funcionando como canal principal ✅
+OK: CSRF: servidor responde corretamente
+OK: Headers segurança ativos: 6
+OK:   → X-Content-Type-Options
+OK:   → X-Frame-Options
+OK:   → X-XSS-Protection
+OK:   → Referrer-Policy
+OK:   → Permissions-Policy
+OK:   → Strict-Transport-Security
+WARN: Rate limit não ativou em 20 tentativas (configurar limite menor)
+OK: Psicólogo cadastrado: psicologo_cewn@clinica.com
+OK: Paciente cadastrado: cafb765b
+OK: Sessão agendada: f03a29da
+OK: Evolução registrada!
+OK: PHQ-9 paciente: score=8 nivel=Depressao leve
+OK: PDF gerado!

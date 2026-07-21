@@ -13,7 +13,9 @@ AX = Path("xp_fix.json")
 def jload(p, d):
     try: return json.loads(p.read_text()) if p.exists() else d
     except: return d
-def jsave(p, d): p.write_text(json.dumps(d, ensure_ascii=False, indent=2))
+def jsave(p, d):
+    global _lembretes_mem
+    _lembretes_mem = d
 
 @router_l.post("/criar")
 async def criar_l(request: Request):
