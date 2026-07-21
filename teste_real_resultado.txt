@@ -1,0 +1,46 @@
+Score: 95%
+
+OK: Conta criada e logada!
+OK: Telegram REAL enviado! Verifique seu celular agora!
+OK: Message ID: 67
+OK: Stripe OK (rota alternativa)!
+OK: URL: https://checkout.stripe.com/c/pay/cs_live_a1SlJHbYu6jNBtHLUWaqOJj2crM7pvIJcBWTEE...
+OK: Plano pro: R$ 49.90
+OK: Plano clinica: R$ 199.90
+OK: Plano enterprise: Gratuito
+OK: UX Landing page: 6/7 checks — 21KB
+OK: UX Login: 7/7 checks — 10KB
+OK: UX Dashboard: 6/7 checks — 8KB
+OK: UX Chat IA: 6/7 checks — 23KB
+OK: UX Diário: 7/7 checks — 15KB
+OK: UX Avaliação: 7/7 checks — 22KB
+OK: UX Planos: 6/7 checks — 9KB
+OK: UX Sobre: 6/7 checks — 16KB
+OK: iPhone 14: ✅ viewport + responsive (21KB)
+OK: Samsung S22: ✅ viewport + responsive (21KB)
+OK: Motorola G: ✅ viewport + responsive (21KB)
+OK: iPad: ✅ viewport + responsive (21KB)
+OK: Chrome Desktop: ✅ viewport + responsive (21KB)
+OK: Recuperar senha disparado — e-mail enviado
+WARN: Email real: configure SENDGRID_API_KEY no Render para envio real
+OK: Alternativa: Telegram está funcionando como canal principal!
+OK: Chat: 'Estou me sentindo ansioso hoje...'
+OK:   IA: Meu caro, sinto muito saber que você está passando por essa ansiedade hoje. 💙 É ...
+OK: Chat: 'Como posso melhorar meu humor?...'
+OK:   IA: Querida pessoa, é tão humano se preocupar com o próprio humor e buscar formas de...
+OK: Chat: 'Quais técnicas de respiração v...'
+OK:   IA: Olá! Fico feliz que você esteja buscando técnicas de respiração para cuidar do s...
+OK: PIX QR Code disponível!
+OK: Chave PIX: albertmenezes2006@gmail.com
+OK: Cupom BEMVINDO: 50% de desconto
+OK: Cupom PSICOLOGO: 30% de desconto
+OK: Cupom LAUNCH: 100% de desconto
+OK: Cupom ALBERT10: 10% de desconto
+OK: Diário Albert salvo no banco!
+OK: Histórico Albert: 4 entradas no banco
+OK: Sessão agendada no banco! ID=d7a9367e
+WARN: Rate limit não ativou em 5 tentativas (pode ser normal)
+OK: SQL Injection bloqueado: ' OR '1'='1 (401)
+OK: SQL Injection bloqueado: '; DROP TABLE users; -- (403)
+OK: SQL Injection bloqueado: 1' UNION SELECT * FROM users-- (401)
+OK: Relatório final enviado no Telegram! ✅
