@@ -1,28 +1,26 @@
-Score: 82%
+Score: 96%
 
-OK: Online! plugins=835 rotas=3138 erros=0
-ERRO: 404: Afiliado (/afiliado)
-OK: Páginas OK: 39/40
-ERRO: Páginas com erro: 1
-OK: Cadastro OK — user_id=e546d085
+OK: Online! plugins=834 rotas=3139 erros=1
+OK: Páginas OK: 40/40
+OK: Cadastro OK — user_id=c253aed6
 OK: Token: ✅
 OK: Plano: free | Tipo: paciente
 OK: Login OK — logado
 OK: Token: ✅
 OK: Nome: Teste Albert | Tipo: paciente
-OK: Token válido — Teste Albert / teste_beergz@teste.com
+OK: Token válido — Teste Albert / teste_swactd@teste.com
 OK: Chat IA OK!
-OK: Resposta: Olá! 💙 Que bom que você está buscando maneiras de cuidar da sua saúde mental. É um passo muito impor...
+OK: Resposta: Olá! 🌟 Fico feliz que você esteja buscando maneiras de cuidar da sua saúde mental. Saiba que é um pa...
 OK: Diário salvo!
 OK: PHQ-9 OK — score=4
 OK: Nível: Sem depressao significativa
-WARN: PSS: 422
+WARN: PSS: 404
 OK: XP ganho! — {'xp_ganho': 10, 'xp_total': 10, 'nivel': 'Iniciante'}
 OK: Ranking OK!
 OK: PIX/QR OK!
 OK: Stripe OK — planos: ['free', 'pro', 'clinica', 'enterprise']
-WARN: PWA /manifest.json: 404
-WARN: PWA /sw.js: 404
+OK: PWA /manifest.json OK!
+OK: PWA /sw.js OK!
 OK: PWA /offline OK!
 OK: Token inválido rejeitado (401) ✅
 OK: Senha errada rejeitada (401) ✅

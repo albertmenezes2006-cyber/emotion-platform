@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Escala de Estresse Percebido PSS-10"""
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from plugins.plugin_base import PluginBase
 
