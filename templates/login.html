@@ -1,188 +1,356 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login — EmotionAI</title>
-  <link rel="stylesheet" href="/static/css/emotion.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- WCAG 2.1 AA keyboard support -->
-  <link rel="stylesheet" href="/static/wcag.css">
-  <script>
-    /* onkeydown keypress keyup Enter — WCAG 2.1 keyboard */
-    document.addEventListener('keydown',function(e){
-      if((e.key==='Enter'||e.key===' ')&&e.target.tagName==='LABEL'){
-        e.preventDefault();
-        var i=document.getElementById(e.target.htmlFor);
-        if(i){i.checked=true;i.dispatchEvent(new Event('change'));}
-      }
-    });
-  </script>
-  <script src="/static/wcag.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EmotionAI — Entrar</title>
+<meta name="description" content="Entre na sua conta EmotionAI">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<style>
 
-  <- Hospitais e Google Analytics 4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
-  <script>
-    window.dataLayer=window.dataLayer||[];
-    function gtag(){dataLayer.push(arguments);}
-    gtag("js",new Date());
-    gtag("config","G-JGLER9XVGY");
-    window.trackAvaliacao = (tipo,score) => gtag("event","avaliacao",{tipo,score});
-    window.trackChat      = ()          => gtag("event","chat_ia");
-    window.trackPlano     = (plano)     => gtag("event","ver_plano",{plano});
-    window.trackCadastro  = ()          => gtag("event","sign_up");
-  </script>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #667eea;
+  --primary-dark: #764ba2;
+  --accent: #38a169;
+  --danger: #e53e3e;
+  --warning: #d69e2e;
+  --bg: #f8fafc;
+  --bg2: #ffffff;
+  --text: #1a202c;
+  --text2: #4a5568;
+  --text3: #718096;
+  --border: #e2e8f0;
+  --shadow: 0 4px 24px rgba(102,126,234,0.10);
+  --shadow-lg: 0 8px 48px rgba(102,126,234,0.15);
+  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --radius: 16px;
+}
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.6;
+}
+.btn {
+  padding: 0.7rem 1.5rem; border-radius: 50px;
+  font-weight: 600; font-size: 0.9rem;
+  cursor: pointer; border: none;
+  text-decoration: none; display: inline-flex;
+  align-items: center; gap: 0.5rem;
+  transition: all 0.2s;
+}
+.btn-primary {
+  background: var(--gradient); color: white;
+  box-shadow: 0 4px 16px rgba(102,126,234,0.35);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(102,126,234,0.45); }
+.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text2); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-lg { padding: 0.9rem 2.5rem; font-size: 1rem; }
+.btn-danger { background: var(--danger); color: white; }
+.card {
+  background: white; border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+input, textarea, select {
+  width: 100%; padding: 0.75rem 1rem;
+  border: 1.5px solid var(--border); border-radius: 12px;
+  font-size: 0.95rem; font-family: inherit;
+  transition: border-color 0.2s;
+  background: white; color: var(--text);
+}
+input:focus, textarea:focus, select:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+}
+label { font-size: 0.85rem; font-weight: 600; color: var(--text2); display: block; margin-bottom: 0.4rem; }
+.form-group { margin-bottom: 1.25rem; }
+.alert { padding: 0.75rem 1rem; border-radius: 12px; font-size: 0.9rem; }
+.alert-success { background: #f0fff4; border: 1px solid #9ae6b4; color: #276749; }
+.alert-danger { background: #fff5f5; border: 1px solid #feb2b2; color: #c53030; }
+.alert-warning { background: #fffff0; border: 1px solid #faf089; color: #744210; }
+.alert-info { background: #ebf8ff; border: 1px solid #90cdf4; color: #2c5282; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.5s ease forwards; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner {
+  width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white; border-radius: 50%;
+  animation: spin 0.8s linear infinite; display: inline-block;
+}
 
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Open Graph -->
-    <meta property="og:site_name" content="Emotion Intelligence Platform">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/og-image.png">
-    <meta property="og:locale" content="pt_BR">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@emotionai">
-    <!-- /Open Graph -->
-
-    <!-- Schema.org -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "MedicalWebPage",
-        "name": "Emotion Intelligence Platform",
-        "description": "Plataforma de saude mental com IA para psicologos brasileiros",
-        "url": "https://emotion-platform-albert.onrender.com",
-        "inLanguage": "pt-BR",
-        "about": {
-            "@type": "MedicalCondition",
-            "name": "Saude Mental"
-        },
-        "audience": {
-            "@type": "MedicalAudience",
-            "audienceType": "Psicologo"
-        }
-    }
-    </script>
-    <!-- /Schema.org -->
-
-    <!-- Preconnect para performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.clarity.ms">
-    <link rel="dns-prefetch" href="https://api.stripe.com">
-    <link rel="dns-prefetch" href="https://www.google-analytics.com">
-    <!-- /Preconnect -->
-<meta http-equiv="Cache-Control" content="max-age=3600">
+body {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.left-panel {
+  background: var(--gradient);
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  padding: 3rem; color: white; text-align: center;
+}
+.left-panel h2 {
+  font-size: 2rem; font-weight: 800;
+  margin-bottom: 1rem; line-height: 1.2;
+}
+.left-panel p {
+  font-size: 1rem; opacity: 0.85;
+  line-height: 1.7; margin-bottom: 2rem;
+}
+.benefits { list-style: none; text-align: left; }
+.benefits li {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.6rem 0; font-size: 0.95rem;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+.benefits li:last-child { border: none; }
+.benefit-icon {
+  width: 32px; height: 32px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%; display: flex;
+  align-items: center; justify-content: center;
+  font-size: 1rem; flex-shrink: 0;
+}
+.right-panel {
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  padding: 3rem; background: var(--bg);
+}
+.login-box {
+  width: 100%; max-width: 420px;
+}
+.brand {
+  text-align: center; margin-bottom: 2rem;
+}
+.brand a {
+  font-size: 1.5rem; font-weight: 800;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-decoration: none;
+}
+.brand p {
+  color: var(--text3); font-size: 0.9rem; margin-top: 0.25rem;
+}
+.tabs {
+  display: flex; background: var(--border);
+  border-radius: 12px; padding: 4px;
+  margin-bottom: 2rem;
+}
+.tab {
+  flex: 1; padding: 0.6rem;
+  text-align: center; border-radius: 10px;
+  font-size: 0.9rem; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+  color: var(--text3);
+}
+.tab.active {
+  background: white;
+  color: var(--primary);
+  box-shadow: var(--shadow);
+}
+.divider {
+  display: flex; align-items: center; gap: 1rem;
+  margin: 1.5rem 0; color: var(--text3); font-size: 0.85rem;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1;
+  height: 1px; background: var(--border);
+}
+.tipo-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5rem; margin-bottom: 1rem;
+}
+.tipo-btn {
+  padding: 0.6rem; border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: white; cursor: pointer;
+  text-align: center; font-size: 0.8rem;
+  font-weight: 600; color: var(--text2);
+  transition: all 0.2s;
+}
+.tipo-btn.selected {
+  border-color: var(--primary);
+  background: rgba(102,126,234,0.05);
+  color: var(--primary);
+}
+.tipo-btn div:first-child { font-size: 1.5rem; margin-bottom: 0.25rem; }
+@media (max-width: 768px) {
+  body { grid-template-columns: 1fr; }
+  .left-panel { display: none; }
+  .right-panel { padding: 2rem 1.5rem; }
+}
+</style>
 </head>
-<body style="display:flex;align-items:center;justify-content:center;min-height:100vh">
-<a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#667eea;color:white;padding:8px;z-index:9999;text-decoration:none" onfocus="this.style.top='0'">Pular para conteudo</a>
-<div style="width:100%;max-width:420px;padding:2rem">
-  <div style="text-align:center;margin-bottom:2rem">
-    <a href="/" class="nav-brand" style="font-size:2rem;text-decoration:none">🧠 EmotionAI</a>
-    <p style="color:var(--text2);margin-top:0.5rem">Bem-vindo de volta</p>
+<body>
+<!-- PAINEL ESQUERDO -->
+<div class="left-panel">
+  <div>
+    <div style="font-size:3rem;margin-bottom:1rem">🧠</div>
+    <h2>Transforme sua prática clínica</h2>
+    <p>Psicólogos que usam EmotionAI atendem<br>mais pacientes com menos esforço.</p>
+    <ul class="benefits">
+      <li>
+        <div class="benefit-icon">📋</div>
+        <span>Prontuário digital completo e seguro</span>
+      </li>
+      <li>
+        <div class="benefit-icon">📅</div>
+        <span>Agendamento automático sem WhatsApp</span>
+      </li>
+      <li>
+        <div class="benefit-icon">📊</div>
+        <span>Escalas PHQ-9, GAD-7 e PSS validadas</span>
+      </li>
+      <li>
+        <div class="benefit-icon">🤖</div>
+        <span>IA de suporte disponível 24/7</span>
+      </li>
+      <li>
+        <div class="benefit-icon">🔒</div>
+        <span>100% seguro e em conformidade com LGPD</span>
+      </li>
+    </ul>
   </div>
+</div>
 
-  <div class="card">
-    <div class="tabs" style="margin-bottom:1.5rem">
-      <div class="tab active" onclick="showForm('login')">Entrar</div>
-      <div class="tab" onclick="showForm('cadastro')">Criar conta</div>
+<!-- PAINEL DIREITO -->
+<div class="right-panel">
+  <div class="login-box fade-up">
+    <div class="brand">
+      <a href="/">🧠 EmotionAI</a>
+      <p>Plataforma para psicólogos brasileiros</p>
     </div>
 
-    <!-- LOGIN -->
+    <!-- TABS -->
+    <div class="tabs">
+      <div class="tab active" onclick="showForm('login')" id="tab-login">
+        Entrar
+      </div>
+      <div class="tab" onclick="showForm('cadastro')" id="tab-cadastro">
+        Criar conta
+      </div>
+    </div>
+
+    <!-- FORM LOGIN -->
     <div id="form-login">
       <div class="form-group">
-        <label class="form-label">E-mail</label>
-        <input type="email" aria-label="Email" id="login-email" class="form-control" placeholder="seu@email.com">
+        <label>E-mail profissional</label>
+        <input type="email" id="login-email" placeholder="seu@email.com" autocomplete="email">
       </div>
       <div class="form-group">
-        <label class="form-label">Senha</label>
-        <input type="password" aria-label="Senha" id="login-senha" class="form-control" placeholder="••••••">
+        <label>Senha</label>
+        <input type="password" id="login-senha" placeholder="••••••••" autocomplete="current-password">
       </div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:1rem" onclick="fazer_login()">
-        Entrar →
+      <div style="text-align:right;margin-top:-0.75rem;margin-bottom:1.25rem">
+        <a href="/recuperar-senha" style="font-size:0.85rem;color:var(--primary);text-decoration:none">
+          Esqueci minha senha
+        </a>
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:1rem" onclick="fazer_login()" id="btn-login">
+        Entrar na plataforma →
       </button>
-      <div style="text-align:center">
-        <a href="#" style="color:var(--primary);font-size:0.85rem" onclick="recuperar()">Esqueci minha senha</a>
-      </div>
+      <p style="text-align:center;font-size:0.85rem;color:var(--text3)">
+        Não tem conta?
+        <a href="#" onclick="showForm('cadastro')" style="color:var(--primary);font-weight:600">
+          Cadastre-se grátis
+        </a>
+      </p>
     </div>
 
-    <!-- CADASTRO -->
+    <!-- FORM CADASTRO -->
     <div id="form-cadastro" style="display:none">
       <div class="form-group">
-        <label class="form-label">Nome completo</label>
-        <input type="text" id="cad-nome" class="form-control" placeholder="Seu nome">
+        <label>Você é...</label>
+        <div class="tipo-grid">
+          <div class="tipo-btn selected" onclick="selectTipo('paciente', this)">
+            <div>🧘</div>Paciente
+          </div>
+          <div class="tipo-btn" onclick="selectTipo('psicologo', this)">
+            <div>🩺</div>Psicólogo
+          </div>
+          <div class="tipo-btn" onclick="selectTipo('clinica', this)">
+            <div>🏥</div>Clínica
+          </div>
+        </div>
+        <input type="hidden" id="cad-tipo" value="paciente">
       </div>
       <div class="form-group">
-        <label class="form-label">E-mail</label>
-        <input type="email" id="cad-email" class="form-control" placeholder="seu@email.com">
+        <label>Nome completo</label>
+        <input type="text" id="cad-nome" placeholder="Seu nome completo" autocomplete="name">
       </div>
       <div class="form-group">
-        <label class="form-label">Senha (mín. 6 caracteres)</label>
-        <input type="password" id="cad-senha" class="form-control" placeholder="••••••">
+        <label>E-mail</label>
+        <input type="email" id="cad-email" placeholder="seu@email.com" autocomplete="email">
       </div>
       <div class="form-group">
-        <label class="form-label">Tipo de conta</label>
-        <select id="cad-tipo" class="form-control">
-          <option value="paciente">Paciente / Usuário</option>
-          <option value="terapeuta">Terapeuta / Psicólogo</option>
-          <option value="clinica">Clínica / Empresa</option>
-        </select>
+        <label>Senha (mín. 6 caracteres)</label>
+        <input type="password" id="cad-senha" placeholder="••••••••" autocomplete="new-password">
       </div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="fazer_cadastro()">
+      <button class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:1rem" onclick="fazer_cadastro()" id="btn-cadastro">
         Criar conta grátis →
       </button>
+      <p style="text-align:center;font-size:0.8rem;color:var(--text3)">
+        Ao criar conta você concorda com os
+        <a href="/termos" style="color:var(--primary)">Termos de Uso</a> e
+        <a href="/privacidade" style="color:var(--primary)">Política de Privacidade</a>
+      </p>
     </div>
 
-    <div id="auth-msg" class="alert" style="display:none;margin-top:1rem"></div>
+    <div id="auth-msg" style="margin-top:1rem;display:none"></div>
   </div>
-
-  <p style="text-align:center;color:var(--text2);font-size:0.8rem;margin-top:1rem">
-    Ao continuar, você aceita nossos <a href="/termos" style="color:var(--primary)">Termos</a>
-    e <a href="/privacidade" style="color:var(--primary)">Privacidade</a>
-  </p>
 </div>
 
 <script>
+let tipoSelecionado = 'paciente';
+
 function showForm(tipo) {
-  document.getElementById('form-login').style.display = tipo==='login'?'block':'none';
-  document.getElementById('form-cadastro').style.display = tipo==='cadastro'?'block':'none';
-  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['login','cadastro'][i]===tipo));
-  document.getElementById('auth-msg').style.display = 'none';
+  document.getElementById('form-login').style.display = tipo === 'login' ? 'block' : 'none';
+  document.getElementById('form-cadastro').style.display = tipo === 'cadastro' ? 'block' : 'none';
+  document.getElementById('tab-login').classList.toggle('active', tipo === 'login');
+  document.getElementById('tab-cadastro').classList.toggle('active', tipo === 'cadastro');
 }
 
-function showMsg(msg, tipo='info') {
+function selectTipo(tipo, el) {
+  tipoSelecionado = tipo;
+  document.getElementById('cad-tipo').value = tipo;
+  document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function showMsg(msg, tipo) {
   const el = document.getElementById('auth-msg');
-  el.className = `alert alert-${tipo}`;
+  const classes = {success:'alert-success', danger:'alert-danger', warning:'alert-warning', info:'alert-info'};
+  el.className = 'alert ' + (classes[tipo] || 'alert-info');
   el.textContent = msg;
-  el.style.display = 'flex';
+  el.style.display = 'block';
+}
+
+function setLoading(btnId, loading) {
+  const btn = document.getElementById(btnId);
+  if (loading) {
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Aguarde...';
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = btnId === 'btn-login' ? 'Entrar na plataforma →' : 'Criar conta grátis →';
+  }
 }
 
 async function fazer_login() {
   const email = document.getElementById('login-email').value.trim();
   const senha = document.getElementById('login-senha').value;
   if (!email || !senha) return showMsg('Preencha e-mail e senha', 'warning');
+  setLoading('btn-login', true);
   try {
-    showMsg('Entrando...', 'info');
     const r = await fetch('/api/v1/auth/login', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({email: email, senha: senha})
+      body: JSON.stringify({email, senha})
     });
     const data = await r.json();
     if (r.ok) {
@@ -192,29 +360,31 @@ async function fazer_login() {
       localStorage.setItem('emotion_user_nome', data.nome);
       localStorage.setItem('emotion_user_tipo', data.tipo || 'paciente');
       localStorage.setItem('emotion_user_plano', data.plano || 'free');
-      showMsg('Login realizado! Redirecionando...', 'success');
+      showMsg('✅ Login realizado! Redirecionando...', 'success');
       setTimeout(() => window.location.href = '/app/dashboard', 1000);
     } else {
       showMsg(data.detail || 'E-mail ou senha incorretos', 'danger');
+      setLoading('btn-login', false);
     }
   } catch(e) {
     showMsg('Erro de conexão. Tente novamente.', 'danger');
+    setLoading('btn-login', false);
   }
 }
 
 async function fazer_cadastro() {
-  const nome  = document.getElementById('cad-nome').value.trim();
+  const nome = document.getElementById('cad-nome').value.trim();
   const email = document.getElementById('cad-email').value.trim();
   const senha = document.getElementById('cad-senha').value;
-  const tipo  = document.getElementById('cad-tipo').value;
+  const tipo = tipoSelecionado;
   if (!nome || !email || !senha) return showMsg('Preencha todos os campos', 'warning');
   if (senha.length < 6) return showMsg('Senha mínima: 6 caracteres', 'warning');
+  setLoading('btn-cadastro', true);
   try {
-    showMsg('Criando conta...', 'info');
     const r = await fetch('/api/v1/auth/cadastrar', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({nome: nome, email: email, senha: senha, tipo: tipo})
+      body: JSON.stringify({nome, email, senha, tipo})
     });
     const data = await r.json();
     if (r.ok) {
@@ -224,24 +394,19 @@ async function fazer_cadastro() {
       localStorage.setItem('emotion_user_nome', data.nome);
       localStorage.setItem('emotion_user_tipo', data.tipo || tipo);
       localStorage.setItem('emotion_user_plano', data.plano || 'free');
-      showMsg('Conta criada! Redirecionando...', 'success');
+      showMsg('✅ Conta criada! Redirecionando...', 'success');
       setTimeout(() => window.location.href = '/app/dashboard', 1000);
     } else {
       showMsg(data.detail || 'Erro no cadastro', 'danger');
+      setLoading('btn-cadastro', false);
     }
   } catch(e) {
     showMsg('Erro de conexão. Tente novamente.', 'danger');
+    setLoading('btn-cadastro', false);
   }
 }
 
-async function recuperar() {
-  const email = prompt('Seu e-mail:');
-  if (!email) return;
-  const r = await fetch('/api/v1/auth/recuperar-senha', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email:email})});
-  showMsg('E-mail de recuperação enviado (se cadastrado)', 'success');
-}
-
-document.addEventListener('keypress', e => {
+document.addEventListener('keydown', e => {
   if (e.key === 'Enter') {
     const loginVisible = document.getElementById('form-login').style.display !== 'none';
     if (loginVisible) fazer_login(); else fazer_cadastro();

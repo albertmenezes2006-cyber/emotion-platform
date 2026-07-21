@@ -1,209 +1,410 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Planos — EmotionAI</title>
-  <link rel="stylesheet" href="/static/css/emotion.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <!-- WCAG 2.1 AA keyboard support -->
-  <link rel="stylesheet" href="/static/wcag.css">
-  <script>
-    /* onkeydown keypress keyup Enter — WCAG 2.1 keyboard */
-    document.addEventListener('keydown',function(e){
-      if((e.key==='Enter'||e.key===' ')&&e.target.tagName==='LABEL'){
-        e.preventDefault();
-        var i=document.getElementById(e.target.htmlFor);
-        if(i){i.checked=true;i.dispatchEvent(new Event('change'));}
-      }
-    });
-  </script>
-  <script src="/static/wcag.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EmotionAI — Planos e Preços</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<style>
 
-  <- Hospitais e Google Analytics 4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
-  <script>
-    window.dataLayer=window.dataLayer||[];
-    function gtag(){dataLayer.push(arguments);}
-    gtag("js",new Date());
-    gtag("config","G-JGLER9XVGY");
-    window.trackAvaliacao = (tipo,score) => gtag("event","avaliacao",{tipo,score});
-    window.trackChat      = ()          => gtag("event","chat_ia");
-    window.trackPlano     = (plano)     => gtag("event","ver_plano",{plano});
-    window.trackCadastro  = ()          => gtag("event","sign_up");
-  </script>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #667eea;
+  --primary-dark: #764ba2;
+  --accent: #38a169;
+  --danger: #e53e3e;
+  --warning: #d69e2e;
+  --bg: #f8fafc;
+  --bg2: #ffffff;
+  --text: #1a202c;
+  --text2: #4a5568;
+  --text3: #718096;
+  --border: #e2e8f0;
+  --shadow: 0 4px 24px rgba(102,126,234,0.10);
+  --shadow-lg: 0 8px 48px rgba(102,126,234,0.15);
+  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --radius: 16px;
+}
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.6;
+}
+.btn {
+  padding: 0.7rem 1.5rem; border-radius: 50px;
+  font-weight: 600; font-size: 0.9rem;
+  cursor: pointer; border: none;
+  text-decoration: none; display: inline-flex;
+  align-items: center; gap: 0.5rem;
+  transition: all 0.2s;
+}
+.btn-primary {
+  background: var(--gradient); color: white;
+  box-shadow: 0 4px 16px rgba(102,126,234,0.35);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(102,126,234,0.45); }
+.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text2); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-lg { padding: 0.9rem 2.5rem; font-size: 1rem; }
+.btn-danger { background: var(--danger); color: white; }
+.card {
+  background: white; border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+input, textarea, select {
+  width: 100%; padding: 0.75rem 1rem;
+  border: 1.5px solid var(--border); border-radius: 12px;
+  font-size: 0.95rem; font-family: inherit;
+  transition: border-color 0.2s;
+  background: white; color: var(--text);
+}
+input:focus, textarea:focus, select:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+}
+label { font-size: 0.85rem; font-weight: 600; color: var(--text2); display: block; margin-bottom: 0.4rem; }
+.form-group { margin-bottom: 1.25rem; }
+.alert { padding: 0.75rem 1rem; border-radius: 12px; font-size: 0.9rem; }
+.alert-success { background: #f0fff4; border: 1px solid #9ae6b4; color: #276749; }
+.alert-danger { background: #fff5f5; border: 1px solid #feb2b2; color: #c53030; }
+.alert-warning { background: #fffff0; border: 1px solid #faf089; color: #744210; }
+.alert-info { background: #ebf8ff; border: 1px solid #90cdf4; color: #2c5282; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.5s ease forwards; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner {
+  width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white; border-radius: 50%;
+  animation: spin 0.8s linear infinite; display: inline-block;
+}
 
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Open Graph -->
-    <meta property="og:site_name" content="Emotion Intelligence Platform">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/og-image.png">
-    <meta property="og:locale" content="pt_BR">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@emotionai">
-    <!-- /Open Graph -->
-
-    <!-- Schema.org -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "MedicalWebPage",
-        "name": "Emotion Intelligence Platform",
-        "description": "Plataforma de saude mental com IA para psicologos brasileiros",
-        "url": "https://emotion-platform-albert.onrender.com",
-        "inLanguage": "pt-BR",
-        "about": {
-            "@type": "MedicalCondition",
-            "name": "Saude Mental"
-        },
-        "audience": {
-            "@type": "MedicalAudience",
-            "audienceType": "Psicologo"
-        }
-    }
-    </script>
-    <!-- /Schema.org -->
-
-    <!-- Preconnect para performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.clarity.ms">
-    <link rel="dns-prefetch" href="https://api.stripe.com">
-    <link rel="dns-prefetch" href="https://www.google-analytics.com">
-    <!-- /Preconnect -->
+body { min-height: 100vh; }
+.topbar {
+  background: white; border-bottom: 1px solid var(--border);
+  padding: 1rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.topbar a { text-decoration: none; }
+.content { max-width: 1000px; margin: 0 auto; padding: 3rem 2rem; }
+.hero {
+  text-align: center; margin-bottom: 3rem;
+}
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 900; line-height: 1.2;
+  margin-bottom: 1rem;
+}
+.hero p {
+  font-size: 1.1rem; color: var(--text2);
+  max-width: 500px; margin: 0 auto;
+}
+.toggle-container {
+  display: flex; align-items: center; gap: 1rem;
+  justify-content: center; margin-bottom: 3rem;
+}
+.toggle {
+  position: relative; width: 52px; height: 28px;
+  background: var(--border); border-radius: 50px;
+  cursor: pointer; transition: background 0.3s;
+}
+.toggle.on { background: var(--gradient); }
+.toggle-knob {
+  position: absolute; top: 3px; left: 3px;
+  width: 22px; height: 22px; background: white;
+  border-radius: 50%; transition: left 0.3s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.toggle.on .toggle-knob { left: 27px; }
+.toggle-label { font-size: 0.9rem; font-weight: 600; }
+.desconto-badge {
+  background: rgba(56,161,105,0.1); color: var(--accent);
+  padding: 0.2rem 0.6rem; border-radius: 50px;
+  font-size: 0.75rem; font-weight: 700;
+}
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem; align-items: start;
+}
+.plan-card {
+  background: white; border: 2px solid var(--border);
+  border-radius: 24px; padding: 2rem;
+  position: relative; transition: all 0.2s;
+}
+.plan-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+.plan-card.popular {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-lg);
+}
+.popular-tag {
+  position: absolute; top: -14px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--gradient); color: white;
+  padding: 0.3rem 1.5rem; border-radius: 50px;
+  font-size: 0.75rem; font-weight: 700;
+}
+.plan-name {
+  font-size: 1rem; font-weight: 700;
+  color: var(--text2); margin-bottom: 0.5rem;
+}
+.plan-price {
+  font-size: 3rem; font-weight: 900;
+  line-height: 1; letter-spacing: -0.02em;
+}
+.plan-price.gradient {
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.plan-period { font-size: 1rem; font-weight: 400; color: var(--text3); }
+.plan-desc {
+  font-size: 0.85rem; color: var(--text3);
+  margin: 0.5rem 0 1.5rem;
+}
+.plan-features { list-style: none; margin-bottom: 2rem; }
+.plan-features li {
+  display: flex; align-items: flex-start; gap: 0.6rem;
+  padding: 0.5rem 0; font-size: 0.9rem;
+  color: var(--text2); border-bottom: 1px solid var(--bg);
+}
+.plan-features li:last-child { border: none; }
+.check-green { color: var(--accent); font-weight: 700; flex-shrink: 0; }
+.check-gray { color: var(--text3); flex-shrink: 0; }
+.guarantee {
+  text-align: center; margin-top: 3rem;
+  padding: 2rem; background: white;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+.guarantee h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+.guarantee p { color: var(--text2); font-size: 0.9rem; }
+.cupom-area {
+  text-align: center; margin-top: 2rem;
+  padding: 1.5rem; background: rgba(102,126,234,0.05);
+  border-radius: var(--radius);
+  border: 1px dashed rgba(102,126,234,0.3);
+}
+.cupom-input {
+  display: flex; gap: 0.5rem; max-width: 350px; margin: 0.75rem auto 0;
+}
+.faq-mini { margin-top: 3rem; }
+.faq-mini h2 {
+  font-size: 1.5rem; font-weight: 800;
+  text-align: center; margin-bottom: 1.5rem;
+}
+.faq-mini-item {
+  background: white; border: 1px solid var(--border);
+  border-radius: 12px; margin-bottom: 0.75rem; overflow: hidden;
+}
+.faq-mini-q {
+  padding: 1rem 1.25rem; font-weight: 600;
+  cursor: pointer; display: flex;
+  justify-content: space-between; align-items: center;
+  font-size: 0.95rem;
+}
+.faq-mini-a {
+  padding: 0 1.25rem 1rem;
+  font-size: 0.9rem; color: var(--text2);
+  display: none; line-height: 1.6;
+}
+.faq-mini-item.open .faq-mini-a { display: block; }
+</style>
 </head>
 <body>
-<a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#667eea;color:white;padding:8px;z-index:9999;text-decoration:none" onfocus="this.style.top='0'">Pular para conteudo</a>
-<nav class="nav">
-  <a href="/" class="nav-brand">🧠 EmotionAI</a>
-  <ul class="nav-links">
-    <li><a href="/app/avaliacao">Avaliação</a></li>
-    <li><a href="/app/chat">Chat IA</a></li>
-    <li><a href="/app/planos">Planos</a></li>
-  </ul>
-  <a href="/app/login" class="btn btn-primary">Entrar</a>
-</nav>
-
-<section class="hero" style="padding:3rem 2rem">
-  <div class="container">
-    <div class="badge badge-green" style="margin-bottom:1rem">💰 Comece grátis hoje</div>
-    <h1>Planos simples e transparentes</h1>
-    <p style="color:var(--text2)">Sem surpresas. Cancele quando quiser.</p>
+<div class="topbar">
+  <a href="/" style="font-size:1.2rem;font-weight:800;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent">
+    🧠 EmotionAI
+  </a>
+  <div style="display:flex;gap:0.75rem">
+    <a href="/app/login" class="btn btn-outline">Entrar</a>
+    <a href="/app/login" class="btn btn-primary">Começar grátis</a>
   </div>
-</section>
+</div>
 
-<section class="section">
-  <div class="container">
-    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.5rem; max-width:1100px; margin:0 auto">
+<div class="content" id="main-content">
+  <div class="hero">
+    <span style="display:inline-block;background:rgba(102,126,234,0.1);color:var(--primary);padding:0.3rem 1rem;border-radius:50px;font-size:0.8rem;font-weight:700;margin-bottom:1rem">
+      💰 Preços simples e transparentes
+    </span>
+    <h1>Invista na sua<br><span style="background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent">prática clínica</span></h1>
+    <p>Comece grátis. Faça upgrade quando precisar. Sem surpresas.</p>
+  </div>
 
-      <div class="card">
-        <div class="badge badge-purple" style="margin-bottom:1rem">Gratuito</div>
-        <div style="font-size:2.5rem;font-weight:900;margin:1rem 0">R$ 0</div>
-        <div style="color:var(--text2);margin-bottom:1.5rem">Para sempre</div>
-        <ul style="list-style:none;margin-bottom:2rem">
-          <li style="padding:0.4rem 0;color:var(--text2)">✅ 5 avaliações/mês</li>
-          <li style="padding:0.4rem 0;color:var(--text2)">✅ 20 msgs chat IA/mês</li>
-          <li style="padding:0.4rem 0;color:var(--text2)">✅ Diário emocional</li>
-          <li style="padding:0.4rem 0;color:var(--text2)">✅ Dashboard básico</li>
-        </ul>
-        <a href="/app/cadastro" class="btn btn-secondary" style="width:100%;justify-content:center">Começar Grátis</a>
-      </div>
+  <!-- TOGGLE MENSAL/ANUAL -->
+  <div class="toggle-container">
+    <span class="toggle-label">Mensal</span>
+    <div class="toggle" id="toggle" onclick="togglePeriodo()">
+      <div class="toggle-knob"></div>
+    </div>
+    <span class="toggle-label">
+      Anual <span class="desconto-badge">-30% OFF</span>
+    </span>
+  </div>
 
-      <div class="card" style="border-color:var(--primary);position:relative">
-        <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gradient);color:white;padding:0.25rem 1rem;border-radius:50px;font-size:0.8rem;font-weight:700">⭐ MAIS POPULAR</div>
-        <div class="badge badge-purple" style="margin-bottom:1rem">Pro</div>
-        <div style="font-size:2.5rem;font-weight:900;margin:1rem 0">R$ 49<span style="font-size:1rem;color:var(--text2)">,90/mês</span></div>
-        <div style="color:var(--text2);margin-bottom:1.5rem">Cobrança mensal</div>
-        <ul style="list-style:none;margin-bottom:2rem">
-          <li style="padding:0.4rem 0">✅ Avaliações ilimitadas</li>
-          <li style="padding:0.4rem 0">✅ Chat IA ilimitado</li>
-          <li style="padding:0.4rem 0">✅ Prontuário completo</li>
-          <li style="padding:0.4rem 0">✅ Agenda de sessões</li>
-          <li style="padding:0.4rem 0">✅ Relatórios PDF</li>
-          <li style="padding:0.4rem 0">✅ Suporte prioritário</li>
-        </ul>
-        <button onclick="assinar('pro')" class="btn btn-primary" style="width:100%;justify-content:center">Assinar Pro →</button>
-      </div>
-
-      <div class="card">
-        <div class="badge badge-green" style="margin-bottom:1rem">Clínica</div>
-        <div style="font-size:2.5rem;font-weight:900;margin:1rem 0">R$ 199<span style="font-size:1rem;color:var(--text2)">,90/mês</span></div>
-        <div style="color:var(--text2);margin-bottom:1.5rem">Até 50 terapeutas</div>
-        <ul style="list-style:none;margin-bottom:2rem">
-          <li style="padding:0.4rem 0">✅ Tudo do Pro</li>
-          <li style="padding:0.4rem 0">✅ 50 terapeutas</li>
-          <li style="padding:0.4rem 0">✅ Multi-clínica</li>
-          <li style="padding:0.4rem 0">✅ API completa</li>
-          <li style="padding:0.4rem 0">✅ White label</li>
-          <li style="padding:0.4rem 0">✅ Suporte 24/7</li>
-        </ul>
-        <button onclick="assinar('clinica')" class="btn btn-secondary" style="width:100%;justify-content:center">Assinar Clínica</button>
-      </div>
-
-      <div class="card" style="background:var(--bg2)">
-        <div class="badge badge-yellow" style="margin-bottom:1rem">Enterprise</div>
-        <div style="font-size:2.5rem;font-weight:900;margin:1rem 0">Custom</div>
-        <div style="color:var(--text2);margin-bottom:1.5rem">Preço sob consulta</div>
-        <ul style="list-style:none;margin-bottom:2rem">
-          <li style="padding:0.4rem 0">✅ Tudo do Clínica</li>
-          <li style="padding:0.4rem 0">✅ Terapeutas ilimitados</li>
-          <li style="padding:0.4rem 0">✅ Infra dedicada</li>
-          <li style="padding:0.4rem 0">✅ SLA 99.99%</li>
-          <li style="padding:0.4rem 0">✅ HIPAA Compliance</li>
-        </ul>
-        <a href="mailto:albertmenezes2006@gmail.com" class="btn btn-secondary" style="width:100%;justify-content:center">Falar com vendas</a>
-      </div>
+  <!-- PLANOS -->
+  <div class="plans-grid">
+    <!-- FREE -->
+    <div class="plan-card">
+      <div class="plan-name">Gratuito</div>
+      <div class="plan-price">R$ 0</div>
+      <div class="plan-desc">Para experimentar a plataforma</div>
+      <ul class="plan-features">
+        <li><span class="check-green">✓</span> 5 avaliações por mês</li>
+        <li><span class="check-green">✓</span> 20 mensagens de IA por mês</li>
+        <li><span class="check-green">✓</span> Diário emocional</li>
+        <li><span class="check-green">✓</span> Dashboard básico</li>
+        <li><span class="check-green">✓</span> 1 paciente ativo</li>
+        <li><span class="check-gray">–</span> Prontuário completo</li>
+        <li><span class="check-gray">–</span> Agendamento online</li>
+        <li><span class="check-gray">–</span> Relatórios PDF</li>
+      </ul>
+      <a href="/app/login" class="btn btn-outline" style="width:100%;justify-content:center">
+        Começar grátis
+      </a>
     </div>
 
-    <div style="text-align:center;margin-top:3rem">
-      <div id="checkout-msg" class="alert alert-info" style="display:none;max-width:500px;margin:0 auto"></div>
-      <p style="color:var(--text2);margin-top:1rem">🔒 Pagamento seguro via Stripe · Cancele quando quiser</p>
-      <p style="color:var(--text2);font-size:0.85rem">Em caso de dúvidas: albertmenezes2006@gmail.com</p>
+    <!-- PRO -->
+    <div class="plan-card popular">
+      <div class="popular-tag">⭐ Mais popular</div>
+      <div class="plan-name">Pro</div>
+      <div class="plan-price gradient" id="price-pro">R$ 29,90</div>
+      <div class="plan-period">/mês <span id="period-pro" style="font-size:0.8rem;color:var(--text3)"></span></div>
+      <div class="plan-desc">Para psicólogos ativos e produtivos</div>
+      <ul class="plan-features">
+        <li><span class="check-green">✓</span> <strong>Avaliações ilimitadas</strong></li>
+        <li><span class="check-green">✓</span> <strong>Chat IA ilimitado</strong></li>
+        <li><span class="check-green">✓</span> Prontuário digital completo</li>
+        <li><span class="check-green">✓</span> Agendamento online</li>
+        <li><span class="check-green">✓</span> Relatórios PDF</li>
+        <li><span class="check-green">✓</span> Pacientes ilimitados</li>
+        <li><span class="check-green">✓</span> Suporte prioritário</li>
+        <li><span class="check-green">✓</span> Exportação de dados</li>
+      </ul>
+      <a href="/checkout" class="btn btn-primary" style="width:100%;justify-content:center">
+        Assinar Pro →
+      </a>
+    </div>
+
+    <!-- CLINICA -->
+    <div class="plan-card">
+      <div class="plan-name">Clínica</div>
+      <div class="plan-price" id="price-clinica">R$ 99,90</div>
+      <div class="plan-period">/mês <span id="period-clinica"></span></div>
+      <div class="plan-desc">Para clínicas e equipes de saúde</div>
+      <ul class="plan-features">
+        <li><span class="check-green">✓</span> Tudo do Pro</li>
+        <li><span class="check-green">✓</span> <strong>Até 10 terapeutas</strong></li>
+        <li><span class="check-green">✓</span> Gestão multi-clínica</li>
+        <li><span class="check-green">✓</span> API completa</li>
+        <li><span class="check-green">✓</span> White label</li>
+        <li><span class="check-green">✓</span> Suporte 24/7</li>
+        <li><span class="check-green">✓</span> Onboarding dedicado</li>
+        <li><span class="check-green">✓</span> SLA garantido</li>
+      </ul>
+      <a href="/contato" class="btn btn-outline" style="width:100%;justify-content:center">
+        Falar com vendas
+      </a>
     </div>
   </div>
-</section>
+
+  <!-- CUPOM -->
+  <div class="cupom-area">
+    <div style="font-size:0.9rem;font-weight:600">🎟️ Tem um cupom de desconto?</div>
+    <div class="cupom-input">
+      <input type="text" id="cupom-input" placeholder="BEMVINDO" style="border-radius:12px">
+      <button class="btn btn-primary" onclick="aplicarCupom()">Aplicar</button>
+    </div>
+    <div id="cupom-msg" style="margin-top:0.5rem;font-size:0.85rem"></div>
+    <div style="margin-top:0.75rem;font-size:0.8rem;color:var(--text3)">
+      Cupons: BEMVINDO (50% off) · PSICOLOGO (30% off) · ALBERT10 (R$10 off)
+    </div>
+  </div>
+
+  <!-- GARANTIA -->
+  <div class="guarantee">
+    <div style="font-size:2rem;margin-bottom:0.5rem">🛡️</div>
+    <h3>Garantia de 30 dias</h3>
+    <p>Se não ficar satisfeito nos primeiros 30 dias, devolvemos 100% do valor pago. Sem perguntas, sem burocracia.</p>
+  </div>
+
+  <!-- FAQ MINI -->
+  <div class="faq-mini">
+    <h2>Dúvidas sobre os planos</h2>
+    <div class="faq-mini-item">
+      <div class="faq-mini-q" onclick="this.parentElement.classList.toggle('open')">
+        Posso mudar de plano a qualquer momento? <span>+</span>
+      </div>
+      <div class="faq-mini-a">
+        Sim! Faça upgrade ou downgrade quando quiser pelo painel de configurações.
+        A diferença de valor é calculada proporcionalmente.
+      </div>
+    </div>
+    <div class="faq-mini-item">
+      <div class="faq-mini-q" onclick="this.parentElement.classList.toggle('open')">
+        Quais formas de pagamento são aceitas? <span>+</span>
+      </div>
+      <div class="faq-mini-a">
+        Cartão de crédito (Visa, Mastercard, Elo), PIX e boleto bancário.
+        Todos os pagamentos são processados com segurança via Stripe.
+      </div>
+    </div>
+    <div class="faq-mini-item">
+      <div class="faq-mini-q" onclick="this.parentElement.classList.toggle('open')">
+        O plano gratuito tem limite de tempo? <span>+</span>
+      </div>
+      <div class="faq-mini-a">
+        Não! O plano gratuito é para sempre. Sem trials, sem pegadinhas.
+        Você só faz upgrade quando precisar de mais recursos.
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
-async function assinar(plano) {
-  const email = prompt('Seu e-mail para continuar:');
-  if (!email || !email.includes('@')) return;
-  const userId = localStorage.getItem('emotion_userid') || 'user_' + Math.random().toString(36).substr(2,6);
+let isAnual = false;
 
+function togglePeriodo() {
+  isAnual = !isAnual;
+  const toggle = document.getElementById('toggle');
+  toggle.classList.toggle('on', isAnual);
+
+  if (isAnual) {
+    document.getElementById('price-pro').textContent = 'R$ 20,90';
+    document.getElementById('period-pro').textContent = '· cobrado anualmente';
+    document.getElementById('price-clinica').textContent = 'R$ 69,90';
+    document.getElementById('period-clinica').textContent = '· cobrado anualmente';
+  } else {
+    document.getElementById('price-pro').textContent = 'R$ 29,90';
+    document.getElementById('period-pro').textContent = '';
+    document.getElementById('price-clinica').textContent = 'R$ 99,90';
+    document.getElementById('period-clinica').textContent = '';
+  }
+}
+
+async function aplicarCupom() {
+  const codigo = document.getElementById('cupom-input').value.trim().toUpperCase();
+  if (!codigo) return;
+  const msg = document.getElementById('cupom-msg');
+  const TOKEN = localStorage.getItem('emotion_token');
   try {
-    const resp = await fetch('/ep/api/v1/stripe/checkout/criar', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({user_id:userId, plano, email})
+    const r = await fetch('/api/v1/cupons/usar/' + codigo, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','Authorization':'Bearer '+TOKEN}
     });
-    const data = await resp.json();
-    if (data.checkout_url) {
-      const msg = document.getElementById('checkout-msg');
-      msg.style.display = 'flex';
-      if (data.stripe_configurado) {
-        window.location.href = data.checkout_url;
-      } else {
-        msg.innerHTML = '⚠️ Stripe em modo teste. Configure STRIPE_SECRET_KEY no Render para pagamentos reais.';
-      }
+    const d = await r.json();
+    if (r.ok && d.ok) {
+      msg.style.color = 'var(--accent)';
+      msg.textContent = '✅ Cupom aplicado! ' + d.desconto_aplicado + (d.tipo==='percentual'?'% de desconto':' reais de desconto');
+    } else {
+      msg.style.color = 'var(--danger)';
+      msg.textContent = '❌ Cupom inválido ou expirado';
     }
   } catch(e) {
-    alert('Erro ao criar checkout. Tente novamente.');
+    msg.style.color = 'var(--danger)';
+    msg.textContent = 'Erro ao aplicar cupom';
   }
 }
 </script>

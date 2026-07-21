@@ -1,255 +1,556 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard — EmotionAI</title>
-  <link rel="stylesheet" href="/static/css/emotion.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- WCAG 2.1 AA keyboard support -->
-  <link rel="stylesheet" href="/static/wcag.css">
-  <script>
-    /* onkeydown keypress keyup Enter — WCAG 2.1 keyboard */
-    document.addEventListener('keydown',function(e){
-      if((e.key==='Enter'||e.key===' ')&&e.target.tagName==='LABEL'){
-        e.preventDefault();
-        var i=document.getElementById(e.target.htmlFor);
-        if(i){i.checked=true;i.dispatchEvent(new Event('change'));}
-      }
-    });
-  </script>
-  <script src="/static/wcag.js" defer></script>
-
-  <- Hospitais e Google Analytics 4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
-  <script>
-    window.dataLayer=window.dataLayer||[];
-    function gtag(){dataLayer.push(arguments);}
-    gtag("js",new Date());
-    gtag("config","G-JGLER9XVGY");
-    window.trackAvaliacao = (tipo,score) => gtag("event","avaliacao",{tipo,score});
-    window.trackChat      = ()          => gtag("event","chat_ia");
-    window.trackPlano     = (plano)     => gtag("event","ver_plano",{plano});
-    window.trackCadastro  = ()          => gtag("event","sign_up");
-  </script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Open Graph -->
-    <meta property="og:site_name" content="Emotion Intelligence Platform">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/og-image.png">
-    <meta property="og:locale" content="pt_BR">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@emotionai">
-    <!-- /Open Graph -->
-
-    <!-- Schema.org -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "MedicalWebPage",
-        "name": "Emotion Intelligence Platform",
-        "description": "Plataforma de saude mental com IA para psicologos brasileiros",
-        "url": "https://emotion-platform-albert.onrender.com",
-        "inLanguage": "pt-BR",
-        "about": {
-            "@type": "MedicalCondition",
-            "name": "Saude Mental"
-        },
-        "audience": {
-            "@type": "MedicalAudience",
-            "audienceType": "Psicologo"
-        }
-    }
-    </script>
-    <!-- /Schema.org -->
-
-    <!-- Preconnect para performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.clarity.ms">
-    <link rel="dns-prefetch" href="https://api.stripe.com">
-    <link rel="dns-prefetch" href="https://www.google-analytics.com">
-    <!-- /Preconnect -->
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EmotionAI — Dashboard</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 <style>
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #667eea;
+  --primary-dark: #764ba2;
+  --accent: #38a169;
+  --danger: #e53e3e;
+  --warning: #d69e2e;
+  --bg: #f8fafc;
+  --bg2: #ffffff;
+  --text: #1a202c;
+  --text2: #4a5568;
+  --text3: #718096;
+  --border: #e2e8f0;
+  --shadow: 0 4px 24px rgba(102,126,234,0.10);
+  --shadow-lg: 0 8px 48px rgba(102,126,234,0.15);
+  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --radius: 16px;
+}
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.6;
+}
+.btn {
+  padding: 0.7rem 1.5rem; border-radius: 50px;
+  font-weight: 600; font-size: 0.9rem;
+  cursor: pointer; border: none;
+  text-decoration: none; display: inline-flex;
+  align-items: center; gap: 0.5rem;
+  transition: all 0.2s;
+}
+.btn-primary {
+  background: var(--gradient); color: white;
+  box-shadow: 0 4px 16px rgba(102,126,234,0.35);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(102,126,234,0.45); }
+.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text2); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-lg { padding: 0.9rem 2.5rem; font-size: 1rem; }
+.btn-danger { background: var(--danger); color: white; }
+.card {
+  background: white; border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+input, textarea, select {
+  width: 100%; padding: 0.75rem 1rem;
+  border: 1.5px solid var(--border); border-radius: 12px;
+  font-size: 0.95rem; font-family: inherit;
+  transition: border-color 0.2s;
+  background: white; color: var(--text);
+}
+input:focus, textarea:focus, select:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+}
+label { font-size: 0.85rem; font-weight: 600; color: var(--text2); display: block; margin-bottom: 0.4rem; }
+.form-group { margin-bottom: 1.25rem; }
+.alert { padding: 0.75rem 1rem; border-radius: 12px; font-size: 0.9rem; }
+.alert-success { background: #f0fff4; border: 1px solid #9ae6b4; color: #276749; }
+.alert-danger { background: #fff5f5; border: 1px solid #feb2b2; color: #c53030; }
+.alert-warning { background: #fffff0; border: 1px solid #faf089; color: #744210; }
+.alert-info { background: #ebf8ff; border: 1px solid #90cdf4; color: #2c5282; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.5s ease forwards; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner {
+  width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white; border-radius: 50%;
+  animation: spin 0.8s linear infinite; display: inline-block;
+}
+
+body { display: flex; min-height: 100vh; }
+.sidebar {
+  width: 260px; background: white;
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  position: fixed; top: 0; left: 0;
+  height: 100vh; z-index: 50;
+  padding: 1.5rem 0;
+}
+.sidebar-brand {
+  padding: 0 1.5rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1rem;
+}
+.sidebar-brand a {
+  font-size: 1.25rem; font-weight: 800;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-decoration: none;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  color: var(--text2); text-decoration: none;
+  font-size: 0.9rem; font-weight: 500;
+  border-radius: 0 50px 50px 0;
+  margin-right: 1rem;
+  transition: all 0.2s;
+}
+.nav-item:hover { background: var(--bg); color: var(--primary); }
+.nav-item.active {
+  background: rgba(102,126,234,0.1);
+  color: var(--primary); font-weight: 600;
+}
+.nav-icon { font-size: 1.1rem; width: 20px; text-align: center; }
+.nav-section {
+  padding: 0.5rem 1.5rem;
+  font-size: 0.7rem; font-weight: 700;
+  color: var(--text3); text-transform: uppercase;
+  letter-spacing: 0.08em; margin-top: 1rem;
+}
+.sidebar-footer {
+  margin-top: auto; padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border);
+}
+.user-info {
+  display: flex; align-items: center; gap: 0.75rem;
+}
+.user-avatar {
+  width: 38px; height: 38px;
+  background: var(--gradient); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-weight: 700; font-size: 1rem;
+}
+.user-name { font-size: 0.85rem; font-weight: 600; }
+.user-plan {
+  font-size: 0.75rem; color: var(--text3);
+}
+.main {
+  margin-left: 260px; flex: 1;
+  background: var(--bg); min-height: 100vh;
+}
+.topbar {
+  background: white; border-bottom: 1px solid var(--border);
+  padding: 1rem 2rem;
+  display: flex; justify-content: space-between; align-items: center;
+  position: sticky; top: 0; z-index: 40;
+}
+.topbar-greeting { font-size: 1.1rem; font-weight: 700; }
+.topbar-sub { font-size: 0.85rem; color: var(--text3); }
+.topbar-actions { display: flex; gap: 0.75rem; align-items: center; }
+.content { padding: 2rem; }
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem; margin-bottom: 2rem;
+}
+.stat-card {
+  background: white; border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.5rem;
+  transition: all 0.2s;
+}
+.stat-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+.stat-card-icon {
+  font-size: 1.75rem; margin-bottom: 0.75rem;
+}
+.stat-card-value {
+  font-size: 2rem; font-weight: 800;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.stat-card-label {
+  font-size: 0.85rem; color: var(--text3);
+  margin-top: 0.25rem;
+}
+.stat-card-change {
+  font-size: 0.8rem; color: var(--accent);
+  margin-top: 0.5rem; font-weight: 600;
+}
+.grid-2 {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1.5rem; margin-bottom: 1.5rem;
+}
+.section-title {
+  font-size: 1rem; font-weight: 700;
+  margin-bottom: 1rem; color: var(--text);
+}
+.quick-actions {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+.quick-btn {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 0.5rem; padding: 1.25rem;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--radius); cursor: pointer;
+  text-decoration: none; color: var(--text);
+  font-size: 0.85rem; font-weight: 600;
+  transition: all 0.2s; text-align: center;
+}
+.quick-btn:hover {
+  background: rgba(102,126,234,0.05);
+  border-color: var(--primary); color: var(--primary);
+  transform: translateY(-2px);
+}
+.quick-btn-icon { font-size: 1.75rem; }
+.humor-grid {
+  display: flex; gap: 0.75rem; flex-wrap: wrap;
+}
+.humor-btn {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 0.25rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border); border-radius: 12px;
+  cursor: pointer; font-size: 0.8rem;
+  color: var(--text2); background: white;
+  transition: all 0.2s; flex: 1; min-width: 70px;
+}
+.humor-btn:hover, .humor-btn.selected {
+  border-color: var(--primary);
+  background: rgba(102,126,234,0.05);
+  color: var(--primary);
+}
+.humor-btn span:first-child { font-size: 1.75rem; }
+.xp-bar-container {
+  background: var(--border); border-radius: 50px;
+  height: 8px; overflow: hidden; margin: 0.5rem 0;
+}
+.xp-bar {
+  height: 100%; background: var(--gradient);
+  border-radius: 50px; transition: width 1s ease;
+}
+.streak-display {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 1rem; background: rgba(246,173,85,0.1);
+  border: 1px solid rgba(246,173,85,0.3);
+  border-radius: 12px; margin-bottom: 1rem;
+}
+.streak-fire { font-size: 2rem; }
+.streak-num { font-size: 1.5rem; font-weight: 800; color: #d69e2e; }
+.streak-label { font-size: 0.8rem; color: var(--text3); }
+.session-card {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1rem; background: rgba(102,126,234,0.05);
+  border: 1px solid rgba(102,126,234,0.2);
+  border-radius: 12px; margin-bottom: 0.75rem;
+}
+.session-time {
+  font-weight: 700; font-size: 0.9rem;
+  color: var(--primary);
+}
+.session-name { font-size: 0.85rem; color: var(--text2); }
+.badge {
+  display: inline-block; padding: 0.2rem 0.6rem;
+  border-radius: 50px; font-size: 0.7rem; font-weight: 700;
+}
+.badge-green { background: rgba(56,161,105,0.1); color: var(--accent); }
+.badge-purple { background: rgba(102,126,234,0.1); color: var(--primary); }
 @media (max-width: 768px) {
-    .container, .card, .grid, .row { 
-        width: 100% !important; 
-        max-width: 100% !important;
-        padding: 10px !important;
-        margin: 5px 0 !important;
-        flex-direction: column !important;
-    }
-    .col, .column { width: 100% !important; }
-    table { font-size: 12px !important; }
-    .sidebar { display: none !important; }
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
 }
 </style>
 </head>
 <body>
-<a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#667eea;color:white;padding:8px;z-index:9999;text-decoration:none" onfocus="this.style.top='0'">Pular para conteudo</a>
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <a href="/">🧠 EmotionAI</a>
+  </div>
+  <a href="/app/dashboard" class="nav-item active">
+    <span class="nav-icon">🏠</span> Dashboard
+  </a>
+  <a href="/app/chat" class="nav-item">
+    <span class="nav-icon">💬</span> Chat IA
+  </a>
+  <a href="/app/diario" class="nav-item">
+    <span class="nav-icon">📓</span> Diário Emocional
+  </a>
+  <a href="/app/avaliacao" class="nav-item">
+    <span class="nav-icon">📊</span> Avaliações
+  </a>
+  <span class="nav-section">Clínica</span>
+  <a href="/app/agenda" class="nav-item">
+    <span class="nav-icon">📅</span> Agenda
+  </a>
+  <a href="/app/perfil" class="nav-item">
+    <span class="nav-icon">👥</span> Pacientes
+  </a>
+  <a href="/app/analises" class="nav-item">
+    <span class="nav-icon">📈</span> Análises
+  </a>
+  <span class="nav-section">Conta</span>
+  <a href="/app/configuracoes" class="nav-item">
+    <span class="nav-icon">⚙️</span> Configurações
+  </a>
+  <a href="/app/planos" class="nav-item">
+    <span class="nav-icon">⭐</span> Planos
+  </a>
+  <div class="sidebar-footer">
+    <div class="user-info">
+      <div class="user-avatar" id="avatar-inicial">A</div>
+      <div>
+        <div class="user-name" id="user-nome">Carregando...</div>
+        <div class="user-plan" id="user-plano">Plano Free</div>
+      </div>
+    </div>
+  </div>
+</aside>
 
-<nav role="navigation" aria-label="Menu" class="nav">
-  <a href="/" class="nav-brand">🧠 EmotionAI</a>
-  <ul class="nav-links">
-    <li><a href="/app/avaliacao">Avaliação</a></li>
-    <li><a href="/app/chat">Chat IA</a></li>
-    <li><a href="/app/diario">Diário</a></li>
-    <li><a href="/app/dashboard">Dashboard</a></li>
-  </ul>
-</nav>
-
-<div class="container" style="padding-top:2rem; padding-bottom:4rem">
-
-  <div style="margin-bottom:2rem">
-    <h1 style="font-size:1.75rem; margin-bottom:0.5rem">📊 Dashboard Emocional</h1>
-    <p style="color:var(--text2)">Visão geral do seu bem-estar</p>
+<!-- MAIN -->
+<main class="main" id="main-content">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div class="topbar-greeting" id="greeting">Bom dia! 👋</div>
+      <div class="topbar-sub" id="greeting-sub">Como você está hoje?</div>
+    </div>
+    <div class="topbar-actions">
+      <a href="/app/chat" class="btn btn-primary">
+        💬 Falar com IA
+      </a>
+      <button onclick="sair()" class="btn btn-outline">Sair</button>
+    </div>
   </div>
 
-  <!-- STATS -->
-  <div class="grid grid-4" style="margin-bottom:2rem" id="stats-grid">
-    <div class="stat-box">
-      <div class="stat-number" id="stat-plugins">1.470</div>
-      <div class="stat-label">Módulos Ativos</div>
+  <!-- CONTENT -->
+  <div class="content">
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-card-icon">🧠</div>
+        <div class="stat-card-value" id="stat-xp">0</div>
+        <div class="stat-card-label">Pontos XP</div>
+        <div class="stat-card-change" id="stat-nivel">Iniciante</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon">📓</div>
+        <div class="stat-card-value" id="stat-diario">0</div>
+        <div class="stat-card-label">Entradas no diário</div>
+        <div class="stat-card-change">↑ Esta semana</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon">📊</div>
+        <div class="stat-card-value" id="stat-avaliacoes">0</div>
+        <div class="stat-card-label">Avaliações feitas</div>
+        <div class="stat-card-change">PHQ-9, GAD-7, PSS</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon">🔥</div>
+        <div class="stat-card-value" id="stat-streak">0</div>
+        <div class="stat-card-label">Dias consecutivos</div>
+        <div class="stat-card-change">Continue assim!</div>
+      </div>
     </div>
-    <div class="stat-box">
-      <div class="stat-number" id="stat-rotas">7.142</div>
-      <div class="stat-label">Endpoints API</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-number" id="stat-score">100%</div>
-      <div class="stat-label">Score Sistema</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-number" id="stat-cats">108</div>
-      <div class="stat-label">Categorias</div>
-    </div>
-  </div>
 
-  <div class="grid grid-2" style="margin-bottom:2rem">
-    <!-- GRAFICO HUMOR -->
+    <div class="grid-2">
+      <!-- AÇÕES RÁPIDAS -->
+      <div class="card">
+        <div class="section-title">⚡ Ações rápidas</div>
+        <div class="quick-actions">
+          <a href="/app/chat" class="quick-btn">
+            <span class="quick-btn-icon">💬</span>
+            Chat com IA
+          </a>
+          <a href="/app/diario" class="quick-btn">
+            <span class="quick-btn-icon">📓</span>
+            Diário
+          </a>
+          <a href="/app/avaliacao" class="quick-btn">
+            <span class="quick-btn-icon">📊</span>
+            PHQ-9
+          </a>
+          <a href="/app/agenda" class="quick-btn">
+            <span class="quick-btn-icon">📅</span>
+            Agenda
+          </a>
+        </div>
+      </div>
+
+      <!-- HUMOR DO DIA -->
+      <div class="card">
+        <div class="section-title">😊 Como você está agora?</div>
+        <div class="humor-grid" id="humor-grid">
+          <div class="humor-btn" onclick="registrarHumor('otimo', this)">
+            <span>😄</span><span>Ótimo</span>
+          </div>
+          <div class="humor-btn" onclick="registrarHumor('bem', this)">
+            <span>🙂</span><span>Bem</span>
+          </div>
+          <div class="humor-btn" onclick="registrarHumor('neutro', this)">
+            <span>😐</span><span>Neutro</span>
+          </div>
+          <div class="humor-btn" onclick="registrarHumor('mal', this)">
+            <span>😔</span><span>Mal</span>
+          </div>
+          <div class="humor-btn" onclick="registrarHumor('pessimo', this)">
+            <span>😞</span><span>Péssimo</span>
+          </div>
+        </div>
+        <div id="humor-msg" style="display:none;margin-top:0.75rem"></div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <!-- PROGRESSO XP -->
+      <div class="card">
+        <div class="section-title">🎮 Seu progresso</div>
+        <div class="streak-display">
+          <span class="streak-fire">🔥</span>
+          <div>
+            <div class="streak-num" id="streak-num">0</div>
+            <div class="streak-label">dias consecutivos</div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem">
+          <span style="font-size:0.85rem;font-weight:600" id="xp-atual">0 XP</span>
+          <span style="font-size:0.85rem;color:var(--text3)" id="xp-proximo">500 XP para próximo nível</span>
+        </div>
+        <div class="xp-bar-container">
+          <div class="xp-bar" id="xp-bar" style="width:0%"></div>
+        </div>
+        <div style="font-size:0.8rem;color:var(--text3);margin-top:0.5rem" id="nivel-label">
+          Nível: Iniciante
+        </div>
+      </div>
+
+      <!-- PRÓXIMAS SESSÕES -->
+      <div class="card">
+        <div class="section-title">📅 Próximas sessões</div>
+        <div id="proximas-sessoes">
+          <div style="text-align:center;padding:2rem;color:var(--text3)">
+            <div style="font-size:2rem;margin-bottom:0.5rem">📅</div>
+            <div style="font-size:0.9rem">Nenhuma sessão agendada</div>
+            <a href="/app/agenda" class="btn btn-outline" style="margin-top:1rem;font-size:0.8rem">
+              Agendar sessão
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AVALIAÇÕES RECENTES -->
     <div class="card">
-      <h3 style="margin-bottom:1.5rem">📈 Humor ao Longo do Tempo</h3>
-      <canvas id="chart-humor" height="200"></canvas>
-    </div>
-
-    <!-- EMOCOES PIE -->
-    <div class="card">
-      <h3 style="margin-bottom:1.5rem">🎭 Distribuição de Emoções</h3>
-      <canvas id="chart-emocoes" height="200"></canvas>
+      <div class="section-title">📊 Suas avaliações</div>
+      <div id="avaliacoes-recentes" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:0.5rem">
+        <div style="background:var(--bg);border-radius:12px;padding:1.25rem;text-align:center;cursor:pointer" onclick="window.location='/app/avaliacao'">
+          <div style="font-size:1.5rem;margin-bottom:0.5rem">😔</div>
+          <div style="font-weight:700;font-size:1rem">PHQ-9</div>
+          <div style="font-size:0.8rem;color:var(--text3)">Depressão</div>
+          <a href="/app/avaliacao" class="btn btn-outline" style="margin-top:1rem;font-size:0.75rem;padding:0.4rem 1rem">
+            Fazer agora
+          </a>
+        </div>
+        <div style="background:var(--bg);border-radius:12px;padding:1.25rem;text-align:center;cursor:pointer">
+          <div style="font-size:1.5rem;margin-bottom:0.5rem">😰</div>
+          <div style="font-weight:700;font-size:1rem">GAD-7</div>
+          <div style="font-size:0.8rem;color:var(--text3)">Ansiedade</div>
+          <a href="/app/avaliacao" class="btn btn-outline" style="margin-top:1rem;font-size:0.75rem;padding:0.4rem 1rem">
+            Fazer agora
+          </a>
+        </div>
+        <div style="background:var(--bg);border-radius:12px;padding:1.25rem;text-align:center;cursor:pointer">
+          <div style="font-size:1.5rem;margin-bottom:0.5rem">😤</div>
+          <div style="font-weight:700;font-size:1rem">PSS-10</div>
+          <div style="font-size:0.8rem;color:var(--text3)">Estresse</div>
+          <a href="/app/avaliacao" class="btn btn-outline" style="margin-top:1rem;font-size:0.75rem;padding:0.4rem 1rem">
+            Fazer agora
+          </a>
+        </div>
+        <div style="background:var(--bg);border-radius:12px;padding:1.25rem;text-align:center;cursor:pointer">
+          <div style="font-size:1.5rem;margin-bottom:0.5rem">🌟</div>
+          <div style="font-weight:700;font-size:1rem">Big Five</div>
+          <div style="font-size:0.8rem;color:var(--text3)">Personalidade</div>
+          <a href="/app/avaliacao" class="btn btn-outline" style="margin-top:1rem;font-size:0.75rem;padding:0.4rem 1rem">
+            Fazer agora
+          </a>
+        </div>
+      </div>
     </div>
   </div>
-
-  <!-- CATEGORIAS DE PLUGINS -->
-  <div class="card" style="margin-bottom:2rem">
-    <h3 style="margin-bottom:1.5rem">🗂️ Módulos por Categoria</h3>
-    <div id="categorias-grid" class="grid grid-4"></div>
-  </div>
-
-  <!-- ACOES RAPIDAS -->
-  <div class="card">
-    <h3 style="margin-bottom:1.5rem">⚡ Ações Rápidas</h3>
-    <div class="grid grid-3">
-      <a href="/app/avaliacao" class="btn btn-primary">🧪 Nova Avaliação</a>
-      <a href="/app/chat" class="btn btn-secondary">💬 Chat com IA</a>
-      <a href="/app/diario" class="btn btn-secondary">📔 Diário</a>
-      <a href="/docs" class="btn btn-secondary">📚 API Docs</a>
-      <a href="/api/v1/phq9/perguntas" class="btn btn-secondary">📋 PHQ-9 JSON</a>
-      <a href="/api/v1/chat-ia/modelos/disponiveis" class="btn btn-secondary">🤖 Modelos IA</a>
-    </div>
-  </div>
-
-</div>
+</main>
 
 <script>
-// CHART HUMOR
-const ctxHumor = document.getElementById('chart-humor').getContext('2d');
-new Chart(ctxHumor, {
-  type: 'line',
-  data: {
-    labels: ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],
-    datasets: [{
-      label: 'Humor',
-      data: [6,5,7,6,8,7,8],
-      borderColor: '#6C63FF',
-      backgroundColor: 'rgba(108,99,255,0.1)',
-      tension: 0.4,
-      fill: true,
-      pointBackgroundColor: '#6C63FF',
-      pointRadius: 5
-    }]
-  },
-  options: {
-    responsive: true,
-    plugins: { legend: { labels: { color: '#FFFFFE' } } },
-    scales: {
-      y: { min: 0, max: 10, ticks: { color: '#A7A9BE' }, grid: { color: '#2D2D5E' } },
-      x: { ticks: { color: '#A7A9BE' }, grid: { color: '#2D2D5E' } }
+const TOKEN = localStorage.getItem('emotion_token');
+const NOME = localStorage.getItem('emotion_user_nome') || 'Usuário';
+const PLANO = localStorage.getItem('emotion_user_plano') || 'free';
+const USER_ID = localStorage.getItem('emotion_userid') || 'user';
+
+if (!TOKEN) window.location.href = '/app/login';
+
+// Saudação
+const hora = new Date().getHours();
+const saudacao = hora < 12 ? 'Bom dia' : hora < 18 ? 'Boa tarde' : 'Boa noite';
+document.getElementById('greeting').textContent = saudacao + ', ' + NOME.split(' ')[0] + '! 👋';
+document.getElementById('greeting-sub').textContent = new Date().toLocaleDateString('pt-BR', {weekday:'long', day:'numeric', month:'long'});
+
+// Avatar
+document.getElementById('avatar-inicial').textContent = NOME[0].toUpperCase();
+document.getElementById('user-nome').textContent = NOME;
+document.getElementById('user-plano').textContent = 'Plano ' + PLANO.charAt(0).toUpperCase() + PLANO.slice(1);
+
+// Carregar XP
+async function carregarXP() {
+  try {
+    const r = await fetch('/api/v1/xp/' + USER_ID, {headers: {'Authorization': 'Bearer ' + TOKEN}});
+    if (r.ok) {
+      const d = await r.json();
+      const xp = d.xp || 0;
+      const nivel = d.nivel || 'Iniciante';
+      const streak = d.streak || 0;
+      document.getElementById('stat-xp').textContent = xp;
+      document.getElementById('stat-nivel').textContent = nivel;
+      document.getElementById('stat-streak').textContent = streak;
+      document.getElementById('streak-num').textContent = streak;
+      document.getElementById('xp-atual').textContent = xp + ' XP';
+      document.getElementById('nivel-label').textContent = 'Nível: ' + nivel;
+      const pct = Math.min((xp % 500) / 500 * 100, 100);
+      document.getElementById('xp-bar').style.width = pct + '%';
     }
-  }
-});
+  } catch(e) {}
+}
 
-// CHART EMOCOES
-const ctxEmo = document.getElementById('chart-emocoes').getContext('2d');
-new Chart(ctxEmo, {
-  type: 'doughnut',
-  data: {
-    labels: ['Alegria','Serenidade','Neutro','Ansiedade','Tristeza'],
-    datasets: [{
-      data: [30, 20, 25, 15, 10],
-      backgroundColor: ['#43D787','#6C63FF','#A7A9BE','#FFB547','#FF6584'],
-      borderWidth: 0
-    }]
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      legend: { labels: { color: '#FFFFFE', padding: 15 } }
-    }
-  }
-});
+carregarXP();
 
-// CATEGORIAS
-const cats = [
-  {nome:'datascience', n:41, emoji:'📊'},{nome:'mlpipeline', n:35, emoji:'🤖'},
-  {nome:'avaliacao', n:25, emoji:'🧪'},{nome:'psiquiatria', n:25, emoji:'🏥'},
-  {nome:'saude3', n:25, emoji:'💊'},{nome:'ia2', n:20, emoji:'🧠'},
-  {nome:'neurociencias', n:20, emoji:'🔬'},{nome:'cognitivo', n:15, emoji:'💡'},
-];
+async function registrarHumor(humor, el) {
+  document.querySelectorAll('.humor-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  const msg = document.getElementById('humor-msg');
+  msg.className = 'alert alert-success';
+  msg.textContent = '✅ Humor registrado! Continue assim.';
+  msg.style.display = 'block';
+  try {
+    await fetch('/api/v1/xp/ganhar?user_id=' + USER_ID + '&acao=registro_humor&xp=5', {
+      method: 'POST', headers: {'Authorization': 'Bearer ' + TOKEN}
+    });
+  } catch(e) {}
+  setTimeout(() => { msg.style.display = 'none'; }, 3000);
+}
 
-const grid = document.getElementById('categorias-grid');
-grid.innerHTML = cats.map(c => `
-  <div class="stat-box" style="padding:1rem">
-    <div style="font-size:1.5rem">${c.emoji}</div>
-    <div class="stat-number" style="font-size:1.5rem">${c.n}</div>
-    <div class="stat-label">${c.nome}</div>
-  </div>
-`).join('');
-
-// Carregar stats reais
-fetch('/api/v1/chat-ia/modelos/disponiveis').then(r=>r.json()).then(data=>{
-  const disponiveis = data.modelos.filter(m=>m.disponivel).length;
-  document.getElementById('stat-score').textContent = disponiveis + ' IAs';
-}).catch(()=>{});
+function sair() {
+  localStorage.clear();
+  window.location.href = '/app/login';
+}
 </script>
 </body>
 </html>
