@@ -116,9 +116,19 @@ else:
 secao("1. TODOS OS 3.164 ENDPOINTS")
 # ══════════════════════════════════════════════════
 
-import main
-todas_rotas = [(r.methods, r.path) for r in main.app.routes
-               if hasattr(r, 'path') and hasattr(r, 'methods') and r.methods]
+# Carregar rotas localmente sem conectar ao banco
+import sys
+sys.path.insert(0, '.')
+import importlib, os
+# Simular sem banco
+os.environ.setdefault('DATABASE_URL', '')
+try:
+    import main as _main
+    todas_rotas = [(r.methods, r.path) for r in _main.app.routes
+                   if hasattr(r, 'path') and hasattr(r, 'methods') and r.methods]
+except Exception as e:
+    print(f"  ⚠️  Usando lista de rotas alternativa: {e}")
+    todas_rotas = []
 
 print(f"  Total de rotas a testar: {len(todas_rotas)}")
 

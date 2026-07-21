@@ -1,14 +1,14 @@
 Score: 83%
 
 ERRO: Login falhou: 401
-OK: Rotas OK (200/201): 1569
-OK: Rotas protegidas (401/403/422): 542
-WARN: Rotas com problema (404/500): 517
+OK: Rotas OK (200/201): 1568
+OK: Rotas protegidas (401/403/422): 543
+WARN: Rotas com problema (404/500): 518
 ERRO: 500: POST /api/v1/lembretes/criar
 ERRO: 500: POST /api/v1/nps/responder
 ERRO: 500: POST /api/v1/auth-jwt/cadastrar
 ERRO: 500: POST /api/v1/auth-jwt/login
-ERRO: 500: POST /ikigai/salvar
+ERRO: 500: POST /api/v1/wordcloud/gerar
 OK: PHQ-9 'Sem depressão': score=0 ✅ cálculo correto!
 OK: PHQ-9 'Depressão leve': score=5 ✅ cálculo correto!
 OK: PHQ-9 'Depressão moderada': score=10 ✅ cálculo correto!
@@ -19,25 +19,25 @@ OK: GAD-7 'Leve': score=4 ✅
 OK: GAD-7 'Moderada': score=10 ✅
 OK: GAD-7 'Grave': score=21 ✅
 OK: PSS-10 inversão correta: score=40 ✅
-OK: PostgreSQL conectado! Tabelas: 24
+OK: PostgreSQL conectado! Tabelas: 25
 OK:   Tabela 'afiliados': 0 registros
 OK:   Tabela 'agenda_disponibilidade': 0 registros
 OK:   Tabela 'agenda_sessoes': 0 registros
 OK:   Tabela 'api_credits': 0 registros
-OK:   Tabela 'auditoria_teste': 2 registros
+OK:   Tabela 'auditoria_teste': 3 registros
+OK:   Tabela 'auth_jwt_usuarios': 0 registros
 OK:   Tabela 'chat_ia_conversas': 1 registros
 OK:   Tabela 'chat_ia_v2': 0 registros
 OK:   Tabela 'chat_ia_v5': 5 registros
 OK:   Tabela 'diario_emocional': 0 registros
-OK:   Tabela 'gad7_avaliacoes': 0 registros
-OK: PostgreSQL CREATE OK — id={'id': '4cc8a278', 'nome': 'Auditoria Absoluta', 'valor': 'teste_crud', 'user_id': 'albert_audit', 'dados': '{"teste": true}', 'categoria': 'auditoria', 'criado_em': '2026-07-21T05:11:38.425088'}
+OK: PostgreSQL CREATE OK — id={'id': 'e6b552cf', 'nome': 'Auditoria Absoluta', 'valor': 'teste_crud', 'user_id': 'albert_audit', 'dados': '{"teste": true}', 'categoria': 'auditoria', 'criado_em': '2026-07-21T05:31:15.969358'}
 WARN: PostgreSQL local: unhashable type: 'dict' (normal — usar variável DATABASE_URL)
 OK: PostgreSQL via API: 0 usuários cadastrados
-OK: 50 usuários simultâneos em 0.85s
+OK: 50 usuários simultâneos em 0.98s
 OK: OK: 50/50
-OK: Tempo médio: 528ms | Min: 303ms | Max: 827ms
+OK: Tempo médio: 657ms | Min: 495ms | Max: 949ms
 OK: Sistema aguentou 50 usuários sem erro! ✅
-OK: Performance excelente sob carga! (528ms médio)
+OK: Performance excelente sob carga! (657ms médio)
 WARN: PaymentMethod: 401 — You did not provide an API key. You need to provide your API key in the Authorization header, using Bearer auth (e.g. 'Authorization: Bearer YOUR_SECRET_KEY'). See https://stripe.com/docs/api#authentication for details, or we can help at https://support.stripe.com/.
 OK: Checkout URL gerada! ✅
 OK: Para pagar com cartão teste: 4242 4242 4242 4242
@@ -61,9 +61,9 @@ OK:   → Referrer-Policy
 OK:   → Permissions-Policy
 OK:   → Strict-Transport-Security
 WARN: Rate limit não ativou em 20 tentativas (configurar limite menor)
-OK: Psicólogo cadastrado: psicologo_wntc@clinica.com
-OK: Paciente cadastrado: b013769a
-OK: Sessão agendada: b5608150
+OK: Psicólogo cadastrado: psicologo_tsxx@clinica.com
+OK: Paciente cadastrado: fc2bac69
+OK: Sessão agendada: 2b65d1c9
 OK: Evolução registrada!
 OK: PHQ-9 paciente: score=8 nivel=Depressao leve
 OK: PDF gerado!
