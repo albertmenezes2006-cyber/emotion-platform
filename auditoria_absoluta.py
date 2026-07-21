@@ -375,7 +375,7 @@ else:
 secao("5. STRIPE — Pagamento com cartão de teste")
 # ══════════════════════════════════════════════════
 
-# Criar PaymentMethod com cartão de teste Stripe
+# REMOVIDO: teste direto de cartão (viola PCI)
 s, pm = req_stripe("payment_methods", {
     "type": "card",
     "card[number]": "4242424242424242",
