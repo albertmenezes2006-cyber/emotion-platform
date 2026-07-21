@@ -1,12 +1,12 @@
-Score Final: 95%
+Score Final: 97%
 
-OK: /health → 302ms
-OK: / → 373ms
-OK: /app/login → 310ms
-OK: /app/dashboard → 396ms
-OK: /api/v1/stripe/planos → 315ms
-OK: /sitemap.xml → 332ms
-OK: Tempo médio: 338ms ✅
+OK: /health → 340ms
+OK: / → 316ms
+OK: /app/login → 334ms
+OK: /app/dashboard → 319ms
+OK: /api/v1/stripe/planos → 368ms
+OK: /sitemap.xml → 305ms
+OK: Tempo médio: 330ms ✅
 OK: Mobile / — viewport ✅ responsive ✅
 OK: Mobile /app/login — viewport ✅ responsive ✅
 OK: Mobile /app/dashboard — viewport ✅ responsive ✅
@@ -16,10 +16,10 @@ OK: JS /app/dashboard — 1 fetches, sem erros
 OK: JS /app/chat — 0 fetches, sem erros
 OK: JS /app/diario — 1 fetches, sem erros
 OK: JS /app/avaliacao — 2 fetches, sem erros
-OK: Banco CREATE OK (320ms)
-OK: Banco READ OK — 1 registros (321ms)
-OK: Banco prontuario OK — id=63299a7d (333ms)
-OK: Banco agenda OK (310ms)
+OK: Banco CREATE OK (366ms)
+OK: Banco READ OK — 1 registros (414ms)
+OK: Banco prontuario OK — id=1459b6b0 (341ms)
+OK: Banco agenda OK (315ms)
 WARN: Email: configurado mas sem SendGrid real — Integre com SendGrid para envio real
 OK: Telegram configurado ✅
 OK: Stripe planos: ['free', 'pro', 'clinica', 'enterprise']
@@ -27,20 +27,20 @@ OK: Stripe setup OK — {'stripe_ok': True, 'status': 'ativo', 'planos': {'pro':
 OK: Stripe checkout config OK
 OK: Acessibilidade: lang attribute ✅
 WARN: Acessibilidade: image alt ausente
-WARN: Acessibilidade: ARIA labels ausente
+OK: Acessibilidade: ARIA labels ✅
 OK: Acessibilidade: ARIA roles ✅
 OK: Acessibilidade: page title ✅
 OK: Acessibilidade: meta description ✅
-OK: Sitemap OK (335ms)
-OK: Robots.txt OK (305ms)
-OK: SEO check OK — {'nome': 'seo_avancado', 'status': 'ativo', 'descricao': 'SEO check avançado', 'timestamp': '2026-07-21T03:53:05.103310'}
+OK: Sitemap OK (382ms)
+OK: Robots.txt OK (340ms)
+OK: SEO check OK — {'nome': 'seo_avancado', 'status': 'ativo', 'descricao': 'SEO check avançado', 'timestamp': '2026-07-21T03:57:52.427957'}
 OK: SEO: og:title ✅
 OK: SEO: og:description ✅
 OK: SEO: og:image ✅
 OK: SEO: twitter:card ✅
 OK: SQL Injection bloqueado (401) ✅
 OK: XSS bloqueado (401) ✅
-OK: Rate limit ativo — {'plugin': 'rate_limit', 'categoria': 'seguranca', 'ts': '2026-07-21T03:53:06.566597'}
+OK: Rate limit ativo — {'plugin': 'rate_limit', 'categoria': 'seguranca', 'ts': '2026-07-21T03:57:53.671727'}
 OK: Security headers: 6 ativos
 OK: PHQ-9 OK — score=9 nivel=Depressao leve
 OK: GAD-7 OK — score=8 nivel=Leve
@@ -60,13 +60,13 @@ OK: Cupom PSICOLOGO: 30% desconto
 OK: Cupom LAUNCH: 100% desconto
 OK: Cupom ALBERT10: 10% desconto
 OK: PIX/QR OK
-OK: Afiliados OK — codigo=AFEFF93A7C
+OK: Afiliados OK — codigo=AFAF5DBF72
 OK: Admin /admin OK (200)
 OK: Admin /api/v1/auth/stats/usuarios OK (200)
 OK: Admin /api/v1/metricas-sistema/status OK (200)
 OK: Admin /api/v1/logs-sistema/status OK (200)
 OK: Admin /api/v1/sistema/backup/status OK (200)
 OK: Admin /api/v1/feature-flags/status OK (200)
-OK: PWA /manifest.json OK (312ms)
+OK: PWA /manifest.json OK (306ms)
 OK: PWA /sw.js OK (312ms)
-OK: PWA /offline OK (379ms)
+OK: PWA /offline OK (314ms)

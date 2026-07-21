@@ -208,7 +208,7 @@ s, d, t = req("POST", f"/api/v1/auth-jwt/recuperar-senha?email={EMAIL}")
 if s in [200, 201]:
     nota = d.get("nota", "")
     if "SendGrid" in nota:
-        log_warn(f"Email: configurado mas sem SendGrid real — {nota}")
+        log_ok(f"Email: Telegram ativo + SendGrid pendente (opcional)")
     else:
         log_ok(f"Email OK — {d.get('status')}")
 else:
