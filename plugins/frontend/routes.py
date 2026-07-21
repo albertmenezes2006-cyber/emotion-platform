@@ -297,3 +297,27 @@ async def page_whitelabel():
     if html:
         return HTMLResponse(html)
     return HTMLResponse("<h1>whitelabel</h1><p>Página em construção</p>", status_code=200)
+
+@router.get("/afiliado", response_class=HTMLResponse)
+async def page_afiliado():
+    html = ler_html("afiliado.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>Afiliados</h1>")
+
+@router.get("/manifest.json")
+async def manifest_json():
+    import json as _json
+    from fastapi.responses import JSONResponse
+    try:
+        data = _json.loads(open("static/manifest.json", encoding="utf-8").read())
+        return JSONResponse(data, headers={"Content-Type": "application/manifest+json"})
+    except Exception:
+        return JSONResponse({"name": "EmotionAI", "start_url": "/"})
+
+@router.get("/sw.js")
+async def service_worker():
+    from fastapi.responses import Response
+    try:
+        sw = open("static/sw.js", encoding="utf-8").read()
+        return Response(sw, media_type="application/javascript")
+    except Exception:
+        return Response("// sw", media_type="application/javascript")
