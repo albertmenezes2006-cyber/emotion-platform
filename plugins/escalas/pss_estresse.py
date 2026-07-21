@@ -57,7 +57,15 @@ total<=26?"Nível moderado de estresse. Pratique técnicas de manejo e converse 
 </script></body></html>""")
 
 @router.post("/calcular")
-async def calcular_pss(respostas: list):
+async def calcular_pss(request: Request):
+    try:
+        body = await request.json()
+        if isinstance(body, list):
+            respostas = body
+        else:
+            respostas = body.get("respostas", [])
+    except:
+        respostas = []
     total = 0
     reversos = {3, 4, 6, 7}
     for i, v in enumerate(respostas[:10]):
