@@ -1,0 +1,45 @@
+Score: 69%
+
+WARN: Diario entrada: 422
+OK: Diario historico OK
+OK: Emocoes disponiveis OK — ['emocoes']
+WARN: GAD-7 /api/v1/gad7: 404 — escala pode não existir
+OK: Streak habitos OK — {'plugin': 'streak_habitos', 'categoria': 'gamificacao', 'total': 0, 'ts': '2026-07-21T03:19:01.135116'}
+OK: Streak meditacao OK
+OK: Streak mental OK
+OK: LGPD avancado OK — {'plugin': 'lgpd_avancado', 'categoria': 'juridico', 'total': 0, 'ts': '2026-07-21T03:19:02.159365'}
+WARN: LGPD consentimento: 422
+WARN: Recuperar senha JWT: 422 — {'detail': [{'type': 'missing', 'loc': ['query', 'email'], 'msg': 'Field required', 'input': None}]}
+WARN: Afiliado cadastrar: 500 — {}
+WARN: Dashboard afiliado: 404
+OK: Agenda grupo OK
+WARN: Agendar sessao: 422 — {'detail': [{'type': 'missing', 'loc': ['query', 'paciente_id'], 'msg': 'Field required', 'input': None}, {'type': 'missing', 'loc': ['query', 'terapeuta_id'], 'msg': 'Field required', 'input': None}, {'type': 'missing', 'loc': ['query', 'data_hora'], 'msg': 'Field required', 'input': None}]}
+OK: Agendamento online OK
+OK: Prontuario eletronico OK
+WARN: Prontuario paciente: 422 — {'detail': [{'type': 'missing', 'loc': ['query', 'nome'], 'msg': 'Field required', 'input': None}, {'type': 'missing', 'loc': ['query', 'data_nascimento'], 'msg': 'Field required', 'input': None}, {'type': 'missing', 'loc': ['query', 'terapeuta_id'], 'msg': 'Field required', 'input': None}]}
+OK: Export PDF status OK — {'plugin': 'export_pdf', 'categoria': 'exportacao', 'total': 0, 'ts': '2026-07-21T03:19:05.617108'}
+WARN: PDF gerar: 422 — {'detail': [{'type': 'missing', 'loc': ['body', 'email'], 'msg': 'Field required', 'input': {'user_id': '9fa35992', 'tipo': 'progresso', 'periodo': 'mensal'}}]}
+WARN: Ko-fi 403 — pode precisar de auth
+WARN: Ko-fi com token: 403
+WARN: BMC: 403
+OK: Patreon OK
+OK: PSS lista OK — score=19 nivel=Moderado
+OK: WHOQOL pagina OK
+OK: Rosenberg OK
+OK: PHQ-9 calcular OK — score=9
+OK: Cupom BEMVINDO — desconto=50
+OK: Cupom PSICOLOGO — desconto=30
+OK: Cupom LAUNCH — desconto=100
+OK: Cupom ALBERT10 — desconto=10
+WARN: XP ganhar: 422
+OK: Ranking top OK
+OK: Conquistas OK
+OK: Desafios diarios OK
+OK: Missoes semanais OK
+OK: Telegram setup OK
+OK: Alertas humor OK
+OK: Lembretes sessao OK
+OK: Admin panel OK
+OK: Stats OK — usuarios=2
+OK: Feature flags OK
+OK: Backup sistema OK

@@ -20,11 +20,13 @@ class AfiliadoReq(BaseModel):
 @router.post("/cadastrar")
 async def cadastrar(req: AfiliadoReq):
     codigo = "AF" + secrets.token_hex(4).upper()
-    _afiliados.set(codigo, {
-        "codigo": codigo, "nome": req.nome, "email": req.email,
-        "profissao": req.profissao, "cliques": 0, "vendas": 0,
-        "comissao_total": 0, "criado": datetime.now().isoformat()
-    })
+    _afiliados.create(
+        nome=req.nome,
+        user_id=req.email,
+        valor=codigo,
+        dados=f'{{"codigo":"{codigo}","nome":"{req.nome}","email":"{req.email}","profissao":"{req.profissao}","cliques":0,"vendas":0,"comissao_total":0,"criado":"{datetime.now().isoformat()}"}}',
+        categoria="afiliado"
+    )
     link = f"{BASE}?ref={codigo}"
     return {
         "codigo": codigo,

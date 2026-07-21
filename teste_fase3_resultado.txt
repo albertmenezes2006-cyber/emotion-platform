@@ -1,0 +1,46 @@
+Score Fase 3: 68%
+
+OK: PSS OK — score=17 nivel=Moderado
+WARN: GAD-7 GET: 404
+WARN: GAD-7 calcular: 404
+OK: WHOQOL pagina OK
+OK: PHQ-9 avaliacao OK — {'score': 4, 'max': 27, 'nivel': 'Sem depressao significativa', 'cor': 'verde', 'percentual': 14.8, 'recomendacao': 'Continue monitorando', 'alerta': False, 'timestamp': '2026-07-21T03:13:08.381426'}
+OK: Rosenberg OK
+OK: Admin acessivel (200)
+OK: Stats usuarios OK — total=1
+OK: Metricas sistema OK
+OK: Logs sistema OK
+WARN: Agendar sessao: 422
+OK: Listar agenda OK
+OK: Agendamento online OK
+WARN: Prontuario: 422
+WARN: Evolucao: 422
+OK: Prontuario completo OK
+OK: Cupom BEMVINDO OK — {'ok': True, 'desconto_aplicado': 50, 'tipo': 'percentual'}
+OK: Cupom PSICOLOGO OK — {'ok': True, 'desconto_aplicado': 30, 'tipo': 'percentual'}
+OK: Cupom ALBERT10 OK — {'ok': True, 'desconto_aplicado': 10, 'tipo': 'reais'}
+WARN: Afiliados: 500
+OK: Pagina afiliado OK
+WARN: PDF: 422
+WARN: Recuperar senha: 404
+WARN: Recuperar senha JWT: 422
+WARN: Diario listar: 404
+WARN: Diario emocional listar: 404
+OK: Ranking top OK
+WARN: Streak: 404
+OK: Conquistas OK
+OK: Desafios diarios OK
+OK: Telegram OK — {'instrucoes': ['1. Abra @userinfobot no Telegram', '2. Envie qualquer mensagem', '3. Copie seu chat_id', '4. Adicione TELEGRAM_CHAT_ID no Render'], 'token_configurado': True, 'chat_id_configurado': True}
+OK: Notificacao conquista OK
+OK: /sitemap.xml OK
+OK: /robots.txt OK
+OK: /api/v1/seo OK
+OK: /api/v1/seo-check OK
+OK: Stripe planos OK
+OK: Stripe checkout config OK
+OK: Tip/doacao OK — {'buymeacoffee': {'configurado': True, 'url': 'https://buymeacoffee.com/albertmenem', 'taxa': '5%', 'aprovacao': 'Instantanea', 'como': 'buymeacoffee.com -> criar conta -> Render: BMC_USERNAME=seuuser'}, 'kofi': {'configurado': True, 'url': 'https://ko-fi.com/emotionai', 'taxa': '0% gratis', 'aprovacao': 'Instantanea', 'como': 'ko-fi.com -> criar conta -> Render: KOFI_USERNAME=seuuser'}, 'patreon': {'configurado': True, 'url': 'https://patreon.com/emotionai', 'taxa': '8-12%', 'aprovacao': 'Instantanea', 'como': 'patreon.com/create -> Render: PATREON_USERNAME=seuuser'}}
+WARN: Ko-fi: 403
+OK: Security headers OK — {'headers_ativos': ['X-Content-Type-Options', 'X-Frame-Options', 'X-XSS-Protection', 'Referrer-Policy', 'Permissions-Policy', 'Strict-Transport-Security'], 'status': 'protegido'}
+OK: XSS check OK
+OK: Rate limit OK
+WARN: LGPD: 404
