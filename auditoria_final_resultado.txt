@@ -1,12 +1,12 @@
-Score Final: 86%
+Score Final: 87%
 
-OK: /health → 331ms
-OK: / → 344ms
-OK: /app/login → 367ms
-OK: /app/dashboard → 320ms
-OK: /api/v1/stripe/planos → 357ms
-OK: /sitemap.xml → 332ms
-OK: Tempo médio: 342ms ✅
+OK: /health → 654ms
+OK: / → 330ms
+OK: /app/login → 307ms
+OK: /app/dashboard → 304ms
+OK: /api/v1/stripe/planos → 779ms
+OK: /sitemap.xml → 309ms
+OK: Tempo médio: 447ms ✅
 OK: Mobile / — viewport ✅ responsive ✅
 OK: Mobile /app/login — viewport ✅ responsive ✅
 WARN: Mobile /app/dashboard — viewport ✅ responsive ⚠️
@@ -16,10 +16,10 @@ OK: JS /app/dashboard — 1 fetches, sem erros
 OK: JS /app/chat — 0 fetches, sem erros
 OK: JS /app/diario — 1 fetches, sem erros
 OK: JS /app/avaliacao — 2 fetches, sem erros
-OK: Banco CREATE OK (374ms)
-OK: Banco READ OK — 1 registros (344ms)
-OK: Banco prontuario OK — id=e3f8e467 (373ms)
-OK: Banco agenda OK (327ms)
+OK: Banco CREATE OK (349ms)
+OK: Banco READ OK — 1 registros (320ms)
+OK: Banco prontuario OK — id=e628e72a (350ms)
+OK: Banco agenda OK (353ms)
 WARN: Email: configurado mas sem SendGrid real — Integre com SendGrid para envio real
 OK: Telegram configurado ✅
 OK: Stripe planos: ['free', 'pro', 'clinica', 'enterprise']
@@ -31,16 +31,16 @@ WARN: Acessibilidade: ARIA labels ausente
 WARN: Acessibilidade: ARIA roles ausente
 OK: Acessibilidade: page title ✅
 OK: Acessibilidade: meta description ✅
-OK: Sitemap OK (362ms)
-OK: Robots.txt OK (344ms)
-OK: SEO check OK — {'nome': 'seo_avancado', 'status': 'ativo', 'descricao': 'SEO check avançado', 'timestamp': '2026-07-21T03:44:16.642848'}
+OK: Sitemap OK (320ms)
+OK: Robots.txt OK (347ms)
+OK: SEO check OK — {'nome': 'seo_avancado', 'status': 'ativo', 'descricao': 'SEO check avançado', 'timestamp': '2026-07-21T03:47:08.064291'}
 OK: SEO: og:title ✅
 OK: SEO: og:description ✅
 OK: SEO: og:image ✅
 OK: SEO: twitter:card ✅
 OK: SQL Injection bloqueado (401) ✅
 OK: XSS bloqueado (401) ✅
-OK: Rate limit ativo — {'plugin': 'rate_limit', 'categoria': 'seguranca', 'ts': '2026-07-21T03:44:17.903520'}
+OK: Rate limit ativo — {'plugin': 'rate_limit', 'categoria': 'seguranca', 'ts': '2026-07-21T03:47:09.463626'}
 OK: Security headers: 6 ativos
 OK: PHQ-9 OK — score=9 nivel=Depressao leve
 OK: GAD-7 OK — score=8 nivel=Leve
@@ -56,7 +56,7 @@ WARN: Paginas com problema: 3
 OK: Jornada 1/6: Cadastro OK
 OK: Jornada 2/6: Login OK
 OK: Jornada 3/6: Chat OK
-WARN: Jornada 4/6: Diario 0
+OK: Jornada 4/6: Diario OK
 OK: Jornada 5/6: PHQ-9 OK — score=3
 OK: Jornada 6/6: XP OK — 50 XP
 OK: Cupom BEMVINDO: 50% desconto
@@ -64,13 +64,13 @@ OK: Cupom PSICOLOGO: 30% desconto
 OK: Cupom LAUNCH: 100% desconto
 OK: Cupom ALBERT10: 10% desconto
 OK: PIX/QR OK
-OK: Afiliados OK — codigo=AF3429AD5D
+OK: Afiliados OK — codigo=AFD8807350
 OK: Admin /admin OK (200)
 OK: Admin /api/v1/auth/stats/usuarios OK (200)
 OK: Admin /api/v1/metricas-sistema/status OK (200)
 OK: Admin /api/v1/logs-sistema/status OK (200)
 OK: Admin /api/v1/sistema/backup/status OK (200)
 OK: Admin /api/v1/feature-flags/status OK (200)
-OK: PWA /manifest.json OK (350ms)
-OK: PWA /sw.js OK (378ms)
-OK: PWA /offline OK (321ms)
+OK: PWA /manifest.json OK (334ms)
+OK: PWA /sw.js OK (301ms)
+OK: PWA /offline OK (307ms)
