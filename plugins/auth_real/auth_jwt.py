@@ -138,19 +138,38 @@ async def login(request: Request):
     body = await request.json()
     email = body.get("email", "")
     senha = body.get("senha", "")
-    try:
-        usuarios = _users.list(limite=5000)
-    except Exception:
-        usuarios = []
+    # Buscar por email (salvo como valor no banco)
     user_data = None
     user_db = None
-    for u in usuarios:
-        try:
-            dados = json.loads(u.get("dados","{}"))
-            if dados.get("email","").lower() == email.lower():
-                user_data = dados
+    try:
+        # Tentar buscar por valor (email) diretamente
+        from sqlalchemy import text
+        from plugins.db_manager import get_engine
+        engine = get_engine()
+        with engine.connect() as conn:
+            rows = conn.execute(text(
+                f"SELECT * FROM {_users.table} WHERE LOWER(valor) = LOWER(:email) LIMIT 1"
+            ), {"email": email}).fetchall()
+            if rows:
+                u = dict(rows[0]._mapping)
+                user_data = json.loads(u.get("dados","{}"))
                 user_db = u
-                break
+    except Exception:
+        pass
+
+    # Fallback: buscar em todos
+    if not user_data:
+        try:
+            usuarios = _users.list(limite=9999)
+            for u in usuarios:
+                try:
+                    dados = json.loads(u.get("dados","{}"))
+                    if dados.get("email","").lower() == email.lower():
+                        user_data = dados
+                        user_db = u
+                        break
+                except Exception:
+                    pass
         except Exception:
             pass
 
