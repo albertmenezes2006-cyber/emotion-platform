@@ -408,3 +408,8 @@ async def page_terapia():
 async def page_termos():
     html = ler_html("termos.html")
     return HTMLResponse(html) if html else HTMLResponse("<h1>termos</h1>")
+
+@router.get("/planos", response_class=HTMLResponse)
+async def page_planos_root():
+    html = ler_html("planos.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>Planos</h1>")
