@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/auth-jwt", tags=["auth"])
 security = HTTPBearer(auto_error=False)
 
-_users = SimpleDB("usuarios")
+_users = SimpleDB("auth_jwt_usuarios")
 _sessions = SimpleDB("sessoes")
 _tokens = {}  # cache rápido
 
