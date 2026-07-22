@@ -326,6 +326,13 @@ body {
 <script>
 let tipoSelecionado = 'paciente';
 
+// Abre aba correta baseado no parametro da URL
+const urlParams = new URLSearchParams(window.location.search);
+const tabParam = urlParams.get('tab');
+if (tabParam === 'cadastro') {
+  document.addEventListener('DOMContentLoaded', () => showForm('cadastro'));
+}
+
 function showForm(tipo) {
   document.getElementById('form-login').style.display = tipo === 'login' ? 'block' : 'none';
   document.getElementById('form-cadastro').style.display = tipo === 'cadastro' ? 'block' : 'none';
