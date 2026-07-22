@@ -1,308 +1,115 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
-<script>
-  // Verificar autenticação
-  const _token = localStorage.getItem('emotion_token');
-  const _userid = localStorage.getItem('emotion_userid');
-
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-JGLER9XVGY');
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bem-vindo — Emotion Intelligence</title>
+<title>EmotionAI — Pagamento Confirmado!</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--primary:#00d2ff;--secondary:#3a7bd5;--success:#2ecc71;--warning:#f39c12;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1)}
-body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-.container{max-width:780px;width:100%;text-align:center}
-.confetti{font-size:80px;margin-bottom:20px;animation:bounce 1.5s ease infinite}
-@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
-.badge{display:inline-block;background:rgba(46,204,113,0.15);border:1px solid rgba(46,204,113,0.3);padding:6px 18px;border-radius:20px;font-size:13px;color:var(--success);margin-bottom:16px;font-weight:600}
-h1{font-size:46px;font-weight:900;margin-bottom:12px;line-height:1.1;animation:fadeIn .6s ease}
-h1 span{background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.subtitle{font-size:18px;color:rgba(255,255,255,0.6);margin-bottom:32px;line-height:1.6}
-.card{background:var(--card);border-radius:22px;padding:28px;border:1px solid var(--border);margin-bottom:20px;text-align:left}
-.card h2{font-size:18px;color:var(--primary);margin-bottom:16px;text-align:center}
-.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
-.step{background:rgba(255,255,255,0.04);border-radius:14px;padding:18px;text-align:center;border:1px solid rgba(255,255,255,0.06);transition:all .2s;text-decoration:none;display:block;color:#fff}
-.step:hover{transform:translateY(-3px);background:rgba(255,255,255,0.08)}
-.step-icon{font-size:28px;margin-bottom:8px;display:block}
-.step p{font-size:12px;color:rgba(255,255,255,0.6);line-height:1.5}
-.gam-card{background:rgba(0,210,255,0.06);border:1px solid rgba(0,210,255,0.2);border-radius:18px;padding:20px 24px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
-.gam-item{text-align:center}
-.gam-val{font-size:24px;font-weight:bold;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.gam-label{font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px}
-/* UPSELL PREMIUM */
-.upsell{background:linear-gradient(135deg,rgba(243,156,18,0.12),rgba(230,126,34,0.08));border:2px solid rgba(243,156,18,0.4);border-radius:22px;padding:28px;margin-bottom:20px;text-align:center;position:relative;overflow:hidden}
-.upsell::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(243,156,18,0.05) 0%,transparent 60%);animation:pulse 3s ease infinite}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-.upsell-badge{background:linear-gradient(90deg,var(--warning),#e67e22);padding:4px 16px;border-radius:20px;font-size:12px;font-weight:bold;display:inline-block;margin-bottom:12px}
-.upsell h3{font-size:22px;font-weight:bold;margin-bottom:8px;color:#fff}
-.upsell p{font-size:14px;color:rgba(255,255,255,0.7);margin-bottom:16px;line-height:1.6}
-.upsell-features{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:20px}
-.upsell-feat{background:rgba(255,255,255,0.08);padding:6px 14px;border-radius:20px;font-size:12px;color:rgba(255,255,255,0.8)}
-.upsell-preco{font-size:36px;font-weight:900;color:var(--warning);margin-bottom:4px}
-.upsell-periodo{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:16px}
-.btn-upsell{background:linear-gradient(90deg,var(--warning),#e67e22);border:none;border-radius:14px;padding:14px 32px;color:#fff;font-size:16px;font-weight:bold;cursor:pointer;text-decoration:none;display:inline-block;transition:all .3s}
-.btn-upsell:hover{transform:translateY(-3px);box-shadow:0 15px 40px rgba(243,156,18,0.4)}
-.btn-skip{font-size:12px;color:rgba(255,255,255,0.3);margin-top:10px;display:block;cursor:pointer;background:none;border:none;text-decoration:underline}
-/* CUPOM */
-.cupom-box{background:rgba(0,210,255,0.06);border:1px solid rgba(0,210,255,0.2);border-radius:14px;padding:16px;margin-top:14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.cupom-input{flex:1;min-width:140px;padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:#fff;font-size:14px;text-transform:uppercase}
-.cupom-input::placeholder{color:rgba(255,255,255,0.3);text-transform:none}
-.btn-cupom{padding:10px 18px;background:linear-gradient(90deg,var(--primary),var(--secondary));border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:bold;cursor:pointer;white-space:nowrap}
-.cupom-result{width:100%;font-size:13px;padding:8px 12px;border-radius:8px;display:none}
-.cupom-result.ok{background:rgba(46,204,113,0.15);color:var(--success);border:1px solid rgba(46,204,113,0.3)}
-.cupom-result.erro{background:rgba(231,76,60,0.15);color:#e74c3c;border:1px solid rgba(231,76,60,0.3)}
-/* AFILIADO */
-.afil-card{background:linear-gradient(90deg,rgba(46,204,113,0.08),rgba(39,174,96,0.08));border:1px solid rgba(46,204,113,0.25);border-radius:20px;padding:24px;margin-bottom:20px}
-.afil-card h2{font-size:18px;margin-bottom:8px;color:var(--success)}
-.afil-card p{color:rgba(255,255,255,0.6);margin-bottom:14px;font-size:14px;line-height:1.6}
-.link-box{background:rgba(0,0,0,0.3);border-radius:12px;padding:13px 16px;font-size:13px;word-break:break-all;margin:12px 0;border:1px solid rgba(255,255,255,0.1);text-align:left;font-family:monospace;color:rgba(255,255,255,0.8)}
-.btn-copy{background:rgba(0,210,255,0.15);border:1px solid rgba(0,210,255,0.3);color:var(--primary);padding:8px 20px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;transition:all .2s}
-.btn-copy:hover{background:rgba(0,210,255,0.25)}
-.btn-primary{background:linear-gradient(90deg,var(--primary),var(--secondary));border:none;border-radius:14px;padding:14px 32px;color:#fff;font-size:16px;font-weight:bold;cursor:pointer;text-decoration:none;display:inline-block;transition:all .3s;margin-top:8px}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,210,255,0.3)}
-.timer{font-size:13px;color:var(--warning);font-weight:600;margin-top:8px}
-#timerCount{font-size:18px;font-weight:900}
-.toast{position:fixed;bottom:24px;right:24px;background:rgba(46,204,113,.95);color:#fff;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s}
-.toast.show{transform:translateY(0);opacity:1}
-@media(max-width:600px){h1{font-size:32px}.upsell-preco{font-size:28px}}
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --primary:#667eea; --accent:#38a169;
+  --gradient:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+  --border:#e2e8f0; --text2:#4a5568; --radius:16px;
+}
+body { font-family:'Inter',sans-serif; background:#f8fafc; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:2rem; }
+.container { max-width:560px; width:100%; text-align:center; }
+.icon { width:110px; height:110px; background:var(--gradient); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:3.5rem; margin:0 auto 2rem; box-shadow:0 8px 32px rgba(102,126,234,0.4); animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{box-shadow:0 8px 32px rgba(102,126,234,0.4)} 50%{box-shadow:0 8px 48px rgba(102,126,234,0.7)} }
+h1 { font-size:clamp(1.8rem,5vw,2.5rem); font-weight:900; margin-bottom:0.5rem; background:var(--gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.plano-badge { display:inline-flex; align-items:center; gap:0.5rem; background:rgba(56,161,105,0.1); border:1px solid rgba(56,161,105,0.3); color:var(--accent); padding:0.5rem 1.25rem; border-radius:50px; font-size:0.9rem; font-weight:700; margin:1rem 0 1.5rem; }
+p { color:var(--text2); line-height:1.7; margin-bottom:1.5rem; }
+.card { background:white; border:1px solid var(--border); border-radius:var(--radius); padding:1.75rem; margin-bottom:1.5rem; text-align:left; }
+.card h3 { font-size:1rem; font-weight:700; margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem; }
+.benefit { display:flex; align-items:center; gap:0.75rem; padding:0.6rem 0; border-bottom:1px solid var(--border); font-size:0.9rem; color:var(--text2); }
+.benefit:last-child { border:none; }
+.check { color:var(--accent); font-weight:700; font-size:1.1rem; flex-shrink:0; }
+.btns { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem; }
+.btn { padding:0.9rem 2rem; border-radius:50px; font-weight:700; font-size:0.95rem; cursor:pointer; border:none; text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem; transition:all 0.2s; }
+.btn-primary { background:var(--gradient); color:white; box-shadow:0 4px 16px rgba(102,126,234,0.4); }
+.btn-primary:hover { transform:translateY(-2px); }
+.btn-outline { background:transparent; border:1.5px solid var(--border); color:var(--text2); }
+.btn-outline:hover { border-color:var(--primary); color:var(--primary); }
+.nota { font-size:0.8rem; color:var(--text2); }
+.confetti { position:fixed; top:0; left:0; right:0; bottom:0; pointer-events:none; z-index:999; }
 </style>
-  <!-- WCAG 2.1 AA keyboard support -->
-  <link rel="stylesheet" href="/static/wcag.css">
-  <script>
-    /* onkeydown keypress keyup Enter — WCAG 2.1 keyboard */
-    document.addEventListener('keydown',function(e){
-      if((e.key==='Enter'||e.key===' ')&&e.target.tagName==='LABEL'){
-        e.preventDefault();
-        var i=document.getElementById(e.target.htmlFor);
-        if(i){i.checked=true;i.dispatchEvent(new Event('change'));}
-      }
-    });
-  </script>
-  <script src="/static/wcag.js" defer></script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Open Graph -->
-    <meta property="og:site_name" content="Emotion Intelligence Platform">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/og-image.png">
-    <meta property="og:locale" content="pt_BR">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@emotionai">
-    <!-- /Open Graph -->
-
-    <!-- Schema.org -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "MedicalWebPage",
-        "name": "Emotion Intelligence Platform",
-        "description": "Plataforma de saude mental com IA para psicologos brasileiros",
-        "url": "https://emotion-platform-albert.onrender.com",
-        "inLanguage": "pt-BR",
-        "about": {
-            "@type": "MedicalCondition",
-            "name": "Saude Mental"
-        },
-        "audience": {
-            "@type": "MedicalAudience",
-            "audienceType": "Psicologo"
-        }
-    }
-    </script>
-    <!-- /Schema.org -->
-
-    <!-- Preconnect para performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.clarity.ms">
-    <link rel="dns-prefetch" href="https://api.stripe.com">
-    <link rel="dns-prefetch" href="https://www.google-analytics.com">
-    <!-- /Preconnect -->
 </head>
 <body>
-<a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#667eea;color:white;padding:8px;z-index:9999;text-decoration:none" onfocus="this.style.top='0'">Pular para conteudo</a>
+<canvas class="confetti" id="confetti"></canvas>
 <div class="container">
-  <div class="confetti">🎉</div>
-  <div class="badge">✅ Cadastro realizado com sucesso!</div>
-  <h1>Bem-vindo(a), <span>{{ usuario.nome.split()[0] }}!</span></h1>
-  <p class="subtitle">Sua jornada de inteligência emocional começa agora.<br>Você ganhou <strong style="color:var(--success)">+{{ pontos_ganhos }} pontos</strong> de boas-vindas! 🚀</p>
+  <div class="icon">🎊</div>
+  <h1>Pagamento Confirmado!</h1>
+  <div class="plano-badge">⭐ <span id="plano-nome">Plano Pro</span> ativado com sucesso!</div>
+  <p>Obrigado por confiar no EmotionAI! Seu plano já está ativo e você tem acesso a todos os recursos premium agora.</p>
 
-  <!-- GAMIFICAÇÃO -->
-  <div class="gam-card">
-    <div class="gam-item"><div class="gam-val">{{ pontos_ganhos }}</div><div class="gam-label">Pontos iniciais</div></div>
-    <div class="gam-item"><div class="gam-val">🥉</div><div class="gam-label">Badge Iniciante</div></div>
-    <div class="gam-item"><div class="gam-val">FREE</div><div class="gam-label">Plano atual</div></div>
-    <div class="gam-item"><div class="gam-val">10</div><div class="gam-label">Análises/dia</div></div>
-  </div>
-
-  <!-- UPSELL PREMIUM -->
-  <div class="upsell" id="upsellBox">
-    <div class="upsell-badge">⭐ OFERTA ESPECIAL DE BOAS-VINDAS</div>
-    <h3>Desbloqueie tudo por R$49/mês</h3>
-    <p>Usuários Premium evoluem <strong>3x mais rápido</strong> em inteligência emocional.<br>Use o cupom abaixo e ganhe desconto na primeira mensalidade:</p>
-    <div class="upsell-features">
-      <span class="upsell-feat">♾️ Análises ilimitadas</span>
-      <span class="upsell-feat">🤖 Sofia IA ilimitada</span>
-      <span class="upsell-feat">📧 Relatório semanal</span>
-      <span class="upsell-feat">🎓 Certificado IE</span>
-      <span class="upsell-feat">📄 PDF mensal</span>
-    </div>
-    <!-- CUPOM -->
-    <div class="cupom-box">
-      <input class="cupom-input" id="cupomInput" type="text" placeholder="Digite seu cupom (ex: BEMVINDO10)" value="BEMVINDO10">
-      <button class="btn-cupom" onclick="validarCupom()">Aplicar</button>
-      <div class="cupom-result" id="cupomResult"></div>
-    </div>
-    <div style="margin-top:20px">
-      <div class="upsell-preco" id="precoFinal">R$49</div>
-      <div class="upsell-periodo">/mês · cancele quando quiser</div>
-      <div class="timer">⏰ Oferta expira em: <span id="timerCount">14:59</span></div>
-    </div>
-    <br>
-    <a href="/planos" class="btn-upsell">⭐ Assinar Premium Agora</a>
-    <br>
-    <button class="btn-skip" onclick="document.getElementById('upsellBox').style.display='none'">Não, prefiro continuar no plano gratuito</button>
-  </div>
-
-  <!-- PRÓXIMOS PASSOS -->
   <div class="card">
-    <h2>🚀 Por onde começar?</h2>
-    <div class="steps-grid">
-      <a href="/analyze" class="step">
-        <span class="step-icon">🧠</span>
-        <strong>1ª Análise</strong>
-        <p>Faça sua primeira análise emocional agora</p>
-      </a>
-      <a href="/chat" class="step">
-        <span class="step-icon">💬</span>
-        <strong>Falar com Sofia</strong>
-        <p>Converse com sua psicóloga IA 24h</p>
-      </a>
-      <a href="/diario" class="step">
-        <span class="step-icon">📔</span>
-        <strong>Diário Emocional</strong>
-        <p>Registre como você está se sentindo</p>
-      </a>
-      <a href="/terapia" class="step">
-        <span class="step-icon">🌱</span>
-        <strong>Programa 7 Dias</strong>
-        <p>Terapia estruturada guiada por IA</p>
-      </a>
-      <a href="/blog" class="step">
-        <span class="step-icon">📚</span>
-        <strong>Blog</strong>
-        <p>30 artigos sobre saúde emocional</p>
-      </a>
-      <a href="/ranking" class="step">
-        <span class="step-icon">🏆</span>
-        <strong>Ranking</strong>
-        <p>Veja sua posição global</p>
-      </a>
-    </div>
+    <h3>🎁 O que você desbloqueou:</h3>
+    <div class="benefit"><span class="check">✓</span> Avaliações ilimitadas (PHQ-9, GAD-7, PSS)</div>
+    <div class="benefit"><span class="check">✓</span> Chat IA ilimitado com Sofia</div>
+    <div class="benefit"><span class="check">✓</span> Prontuário digital completo</div>
+    <div class="benefit"><span class="check">✓</span> Agendamento online automático</div>
+    <div class="benefit"><span class="check">✓</span> Relatórios PDF ilimitados</div>
+    <div class="benefit"><span class="check">✓</span> Suporte prioritário</div>
   </div>
 
-  <!-- AFILIADO -->
-  <div class="afil-card">
-    <h2>💰 Ganhe dinheiro indicando amigos</h2>
-    <p>Compartilhe seu link e ganhe <strong>20% de comissão</strong> em cada assinatura Premium que vier pelo seu link!</p>
-    <div class="link-box" id="linkAfiliado">{{ link_afiliado }}</div>
-    <button class="btn-copy" onclick="copiarLink()">📋 Copiar Link</button>
+  <div class="card">
+    <h3>📧 Próximos passos:</h3>
+    <div class="benefit"><span class="check">1</span> Você receberá um email de confirmação em breve</div>
+    <div class="benefit"><span class="check">2</span> Acesse o Dashboard e explore todos os recursos</div>
+    <div class="benefit"><span class="check">3</span> Configure seu perfil e adicione seus pacientes</div>
   </div>
 
-  <a href="/dashboard" class="btn-primary">📊 Acessar Dashboard →</a>
+  <div class="btns">
+    <a href="/app/dashboard" class="btn btn-primary">🚀 Acessar plataforma →</a>
+    <a href="/contato" class="btn btn-outline">❓ Precisa de ajuda?</a>
+  </div>
+
+  <p class="nota">
+    🔒 Pagamento processado com segurança via Stripe<br>
+    Dúvidas? <a href="mailto:albertmenezes2006@gmail.com" style="color:var(--primary)">albertmenezes2006@gmail.com</a>
+  </p>
 </div>
 
-<div class="toast" id="toast"></div>
-
 <script>
-// TIMER OFERTA
-function iniciarTimer(){
-  const KEY = 'obrigado_timer';
-  let end = localStorage.getItem(KEY);
-  if(!end){ end = Date.now() + 15*60*1000; localStorage.setItem(KEY, end); }
-  function update(){
-    const diff = parseInt(end) - Date.now();
-    if(diff <= 0){ document.getElementById('timerCount').textContent = '00:00'; return; }
-    const m = Math.floor(diff/60000).toString().padStart(2,'0');
-    const s = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
-    document.getElementById('timerCount').textContent = m+':'+s;
-  }
-  update(); setInterval(update, 1000);
-}
-iniciarTimer();
+const TOKEN = localStorage.getItem('emotion_token');
+const USER_ID = localStorage.getItem('emotion_userid');
+const params = new URLSearchParams(window.location.search);
+const plano = params.get('plano') || localStorage.getItem('emotion_user_plano') || 'pro';
+const nomes = {free:'Gratuito', pro:'Pro', clinica:'Clínica', enterprise:'Enterprise'};
+document.getElementById('plano-nome').textContent = 'Plano ' + (nomes[plano] || 'Pro');
 
-// VALIDAR CUPOM
-function validarCupom(){
-  const codigo = document.getElementById('cupomInput').value.trim();
-  const result = document.getElementById('cupomResult');
-  if(!codigo){ showToast('Digite um cupom', 'error'); return; }
-  const form = new FormData();
-  form.append('codigo', codigo);
-  fetch('/cupom/validar', { method:'POST', body:form })
-    .then(r=>r.json())
-    .then(data=>{
-      result.style.display = 'block';
-      if(data.valido){
-        result.className = 'cupom-result ok';
-        result.textContent = '✅ ' + data.mensagem;
-        document.getElementById('precoFinal').textContent = 'R$' + data.preco_final;
-        showToast('Cupom ' + data.codigo + ' aplicado!');
-        gtag('event','cupom_aplicado',{event_category:'conversao',event_label:data.codigo});
-      } else {
-        result.className = 'cupom-result erro';
-        result.textContent = '❌ ' + (data.detail || 'Cupom invalido');
-      }
-    }).catch(()=>{ result.style.display='block'; result.className='cupom-result erro'; result.textContent='❌ Erro de conexao'; });
+if (TOKEN && USER_ID) {
+  fetch('/api/v1/xp/ganhar?user_id='+USER_ID+'&acao=upgrade_plano&xp=100', {
+    method:'POST', headers:{'Authorization':'Bearer '+TOKEN}
+  }).catch(()=>{});
 }
 
-// COPIAR LINK
-function copiarLink(){
-  const link = document.getElementById('linkAfiliado').textContent;
-  navigator.clipboard.writeText(link).then(()=>showToast('Link copiado!')).catch(()=>{
-    const el = document.createElement('textarea');
-    el.value = link; document.body.appendChild(el); el.select();
-    document.execCommand('copy'); document.body.removeChild(el);
-    showToast('Link copiado!');
+// Confetti
+const canvas = document.getElementById('confetti');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+const cores = ['#667eea','#764ba2','#38a169','#F6AD55','#FC8181'];
+const parts = Array.from({length:200}, () => ({
+  x:Math.random()*canvas.width, y:Math.random()*canvas.height-canvas.height,
+  w:Math.random()*12+4, h:Math.random()*6+3,
+  cor:cores[Math.floor(Math.random()*cores.length)],
+  vel:Math.random()*4+2, ang:Math.random()*360, rot:Math.random()*6-3, op:1
+}));
+let f=0;
+function draw() {
+  if(f>250) return;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  parts.forEach(p => {
+    p.y+=p.vel; p.ang+=p.rot; p.op=Math.max(0,1-f/250);
+    ctx.save(); ctx.globalAlpha=p.op;
+    ctx.translate(p.x,p.y); ctx.rotate(p.ang*Math.PI/180);
+    ctx.fillStyle=p.cor; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+    ctx.restore();
   });
+  f++; requestAnimationFrame(draw);
 }
-
-// TOAST
-function showToast(msg, tipo=''){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.background = tipo==='error' ? 'rgba(231,76,60,0.95)' : 'rgba(46,204,113,0.95)';
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 3000);
-}
-
-// GA EVENT
-gtag('event','cadastro_completo',{event_category:'conversao',event_label:'obrigado_page'});
+draw();
 </script>
 </body>
 </html>
