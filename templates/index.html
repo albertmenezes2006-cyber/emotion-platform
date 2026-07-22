@@ -605,17 +605,17 @@
     <div class="hero-badge fade-up">
       🇧🇷 Feito para psicólogos brasileiros · Conforme CFP & LGPD
     </div>
-    <h1 class="fade-up delay-1">
+    <h1 class="fade-up delay-1" id="hero-headline">
       Recupere 2 horas por dia<br>
       <span class="grad">de burocracia clínica</span>
     </h1>
-    <p class="hero-desc fade-up delay-2">
+    <p class="hero-desc fade-up delay-2" id="hero-desc">
       PHQ-9, GAD-7 e prontuário digital em um clique. Seus pacientes
       evoluem mais rápido. Você atende mais, anota menos —
       com IA treinada para a realidade do psicólogo brasileiro.
     </p>
     <div class="hero-btns fade-up delay-3">
-      <a href="/app/login?tab=cadastro" class="btn btn-primary btn-lg">
+      <a href="/app/login?tab=cadastro" class="btn btn-primary btn-lg" id="hero-cta">
         Testar grátis por 14 dias →
       </a>
       <a href="#como" class="btn btn-outline btn-lg">
@@ -669,6 +669,24 @@
   </div>
 </div>
 <!-- /TRUST BAR -->
+<!-- TRUST EXTRA -->
+<div style="background:#f0fff4;border-top:1px solid #c6f6d5;border-bottom:1px solid #c6f6d5;padding:1rem 2rem;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:2.5rem;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:#276749;font-weight:600">
+      <span style="font-size:1.2rem">✅</span> Dados nunca vendidos a terceiros
+    </div>
+    <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:#276749;font-weight:600">
+      <span style="font-size:1.2rem">🔐</span> Criptografia ponta a ponta
+    </div>
+    <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:#276749;font-weight:600">
+      <span style="font-size:1.2rem">💳</span> Cancele quando quiser
+    </div>
+    <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:#276749;font-weight:600">
+      <span style="font-size:1.2rem">🇧🇷</span> Suporte em português
+    </div>
+  </div>
+</div>
+<!-- /TRUST EXTRA -->
 
 <!-- PROBLEMA -->
 <section class="problema">
@@ -1435,5 +1453,43 @@ if (!localStorage.getItem('cookie_consent')) {
 }
 
 </script>
+
+<!-- A/B TEST + TRUST SIGNALS EXTRAS -->
+<script>
+// A/B Test simples
+const headlines = [
+  {
+    h1: 'Recupere 2 horas por dia<br><span class="grad">de burocracia clínica</span>',
+    desc: 'PHQ-9, GAD-7 e prontuário digital em um clique. Seus pacientes evoluem mais rápido. Você atende mais, anota menos — com IA treinada para a realidade do psicólogo brasileiro.',
+    cta: 'Testar grátis por 14 dias →'
+  },
+  {
+    h1: 'Atenda mais pacientes<br><span class="grad">sem trabalhar mais horas</span>',
+    desc: 'Automatize prontuários, agendamentos e escalas clínicas. Economize 2 horas por dia e use esse tempo para o que importa: seus pacientes.',
+    cta: 'Começar em 30 segundos →'
+  },
+  {
+    h1: 'Chega de prontuário em Word<br><span class="grad">e agendamento pelo WhatsApp</span>',
+    desc: 'PHQ-9, GAD-7, prontuário digital e IA de suporte — tudo em uma plataforma feita para psicólogos brasileiros. Conforme CFP e LGPD.',
+    cta: 'Criar minha conta grátis →'
+  }
+];
+
+const v = parseInt(localStorage.getItem('ab_hero') ?? Math.floor(Math.random()*3));
+localStorage.setItem('ab_hero', v);
+document.addEventListener('DOMContentLoaded', () => {
+  const h = document.getElementById('hero-headline');
+  const d = document.getElementById('hero-desc');
+  const c = document.getElementById('hero-cta');
+  if (h) h.innerHTML = headlines[v].h1;
+  if (d) d.textContent = headlines[v].desc;
+  if (c) c.textContent = headlines[v].cta;
+  if (c) c.addEventListener('click', () => {
+    fetch('/api/v1/ab/click?v=' + v).catch(()=>{});
+  });
+});
+</script>
+<!-- /A/B TEST -->
+
 </body>
 </html>
