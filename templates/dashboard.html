@@ -288,6 +288,7 @@ body { display: flex; min-height: 100vh; }
     })(window, document, "clarity", "script", "xnqbibnm1k");
   </script>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <!-- SIDEBAR -->
@@ -405,6 +406,12 @@ body { display: flex; min-height: 100vh; }
         </div>
       </div>
 
+      
+      <div class="card">
+        <div class="section-title">📈 Tendência de Humor</div>
+        <canvas id="humorChart" style="max-height: 200px;"></canvas>
+      </div>
+    
       <!-- HUMOR DO DIA -->
       <div class="card">
         <div class="section-title">😊 Como você está agora?</div>
@@ -569,6 +576,31 @@ function sair() {
   localStorage.clear();
   window.location.href = '/app/login';
 }
+</script>
+
+<script>
+async function renderizarGrafico() {
+    const ctx = document.getElementById('humorChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+            datasets: [{
+                label: 'Humor Médio',
+                data: [6, 7, 5, 8, 6, 9, 7],
+                borderColor: '#667eea',
+                backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: { y: { display: false }, x: { grid: { display: false } } }
+        }
+    });
+}
+setTimeout(renderizarGrafico, 1000);
 </script>
 </body>
 </html>
