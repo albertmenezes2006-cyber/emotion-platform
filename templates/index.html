@@ -507,12 +507,7 @@
 </style>
 
   
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-JGLER9XVGY');
-  </script>
+  
   
 
 
@@ -537,31 +532,7 @@
   <meta name="twitter:description" content="PHQ-9, GAD-7, prontuário digital e chat IA para psicólogos brasileiros.">
   
   <!-- Schema.org -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "EmotionAI",
-    "description": "Plataforma de gestão clínica com IA para psicólogos brasileiros",
-    "url": "https://emotion-platform-albert.onrender.com",
-    "applicationCategory": "HealthApplication",
-    "operatingSystem": "Web",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "BRL"
-    },
-    "author": {
-      "@type": "Person",
-      "name": "Albert Menezes"
-    },
-    "inLanguage": "pt-BR",
-    "audience": {
-      "@type": "Audience",
-      "audienceType": "Psicólogos brasileiros"
-    }
-  }
-  </script>
+  
 
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -578,22 +549,7 @@
   <a href="/app/login" style="color:white;text-decoration:underline;font-weight:700">Resgatar agora →</a>
   <button onclick="document.getElementById('urgency-bar').style.display='none'" style="position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:none;color:white;cursor:pointer;font-size:1.1rem;opacity:0.7">×</button>
 </div>
-<script>
-// Countdown timer — reseta todo dia à meia-noite
-function updateCountdown() {
-  const now = new Date();
-  const midnight = new Date(now);
-  midnight.setHours(23, 59, 59, 0);
-  const diff = midnight - now;
-  const h = Math.floor(diff / 3600000);
-  const m = Math.floor((diff % 3600000) / 60000);
-  const s = Math.floor((diff % 60000) / 1000);
-  const el = document.getElementById('countdown');
-  if (el) el.textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-}
-updateCountdown();
-setInterval(updateCountdown, 1000);
-</script>
+
 <!-- /BARRA DE URGÊNCIA -->
 
 
@@ -620,33 +576,7 @@ setInterval(updateCountdown, 1000);
     </p>
   </div>
 </div>
-<script>
-let popupMostrado = false;
-function mostrarPopup() {
-  if (!popupMostrado && !localStorage.getItem('popup_fechado')) {
-    popupMostrado = true;
-    const popup = document.getElementById('exit-popup');
-    popup.style.display = 'flex';
-  }
-}
-function fecharPopup() {
-  document.getElementById('exit-popup').style.display = 'none';
-  localStorage.setItem('popup_fechado', '1');
-}
-// Desktop: mouse saindo pela parte superior
-document.addEventListener('mouseleave', function(e) {
-  if (e.clientY <= 0) mostrarPopup();
-});
-// Mobile: scroll para cima rápido
-let lastScroll = 0;
-window.addEventListener('scroll', function() {
-  const current = window.scrollY;
-  if (lastScroll - current > 100 && current < 200) mostrarPopup();
-  lastScroll = current;
-});
-// Tempo na página: 45 segundos sem converter
-setTimeout(mostrarPopup, 45000);
-</script>
+
 <!-- /EXIT INTENT POPUP -->
 
 
@@ -1206,19 +1136,7 @@ setTimeout(mostrarPopup, 45000);
     </div>
   </div>
 </section>
-<script>
-function toggleFaqL(el) {
-  const answer = el.nextElementSibling;
-  const icon = el.querySelector('span:last-child');
-  const isOpen = answer.style.display === 'block';
-  document.querySelectorAll('.faq-l-item div:last-child').forEach(a => a.style.display = 'none');
-  document.querySelectorAll('.faq-l-item span:last-child').forEach(i => i.textContent = '+');
-  if (!isOpen) {
-    answer.style.display = 'block';
-    icon.textContent = '−';
-  }
-}
-</script>
+
 <!-- /FAQ NA LANDING -->
 
 <!-- CTA FINAL -->
@@ -1272,7 +1190,136 @@ function toggleFaqL(el) {
   </div>
 </footer>
 
+
+
+
+
+
+<!-- Analytics (carrega depois do conteúdo) -->
+
+
+
+<!-- Tawk.to Chat ao Vivo -->
+
+<!-- /Tawk.to -->
+
+
+
+
+
+<!-- SOCIAL PROOF TOAST -->
+<div id="sp-toast" style="position:fixed;bottom:2rem;left:2rem;z-index:9998;max-width:300px;display:none">
+  <div style="background:white;border:1px solid #e2e8f0;border-radius:16px;padding:1rem 1.25rem;box-shadow:0 8px 32px rgba(0,0,0,0.12);display:flex;align-items:center;gap:0.75rem;animation:slideIn 0.4s ease">
+    <div id="sp-avatar" style="width:40px;height:40px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:1rem;flex-shrink:0">A</div>
+    <div>
+      <div id="sp-nome" style="font-weight:700;font-size:0.85rem">Alguém</div>
+      <div id="sp-acao" style="font-size:0.8rem;color:#4a5568">acabou de se cadastrar</div>
+      <div style="font-size:0.7rem;color:#718096;margin-top:0.1rem" id="sp-tempo">agora mesmo</div>
+    </div>
+    <button onclick="document.getElementById('sp-toast').style.display='none'" style="background:none;border:none;cursor:pointer;color:#718096;font-size:1rem;margin-left:auto">×</button>
+  </div>
+</div>
+
+<style>
+@keyframes slideIn {
+  from { opacity:0; transform:translateX(-20px); }
+  to { opacity:1; transform:translateX(0); }
+}
+</style>
+
+
+<!-- /SOCIAL PROOF TOAST -->
+
+
 <script>
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-JGLER9XVGY');
+  
+
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "EmotionAI",
+    "description": "Plataforma de gestão clínica com IA para psicólogos brasileiros",
+    "url": "https://emotion-platform-albert.onrender.com",
+    "applicationCategory": "HealthApplication",
+    "operatingSystem": "Web",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "BRL"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Albert Menezes"
+    },
+    "inLanguage": "pt-BR",
+    "audience": {
+      "@type": "Audience",
+      "audienceType": "Psicólogos brasileiros"
+    }
+  }
+  
+
+// Countdown timer — reseta todo dia à meia-noite
+function updateCountdown() {
+  const now = new Date();
+  const midnight = new Date(now);
+  midnight.setHours(23, 59, 59, 0);
+  const diff = midnight - now;
+  const h = Math.floor(diff / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  const el = document.getElementById('countdown');
+  if (el) el.textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+
+let popupMostrado = false;
+function mostrarPopup() {
+  if (!popupMostrado && !localStorage.getItem('popup_fechado')) {
+    popupMostrado = true;
+    const popup = document.getElementById('exit-popup');
+    popup.style.display = 'flex';
+  }
+}
+function fecharPopup() {
+  document.getElementById('exit-popup').style.display = 'none';
+  localStorage.setItem('popup_fechado', '1');
+}
+// Desktop: mouse saindo pela parte superior
+document.addEventListener('mouseleave', function(e) {
+  if (e.clientY <= 0) mostrarPopup();
+});
+// Mobile: scroll para cima rápido
+let lastScroll = 0;
+window.addEventListener('scroll', function() {
+  const current = window.scrollY;
+  if (lastScroll - current > 100 && current < 200) mostrarPopup();
+  lastScroll = current;
+});
+// Tempo na página: 45 segundos sem converter
+setTimeout(mostrarPopup, 45000);
+
+
+function toggleFaqL(el) {
+  const answer = el.nextElementSibling;
+  const icon = el.querySelector('span:last-child');
+  const isOpen = answer.style.display === 'block';
+  document.querySelectorAll('.faq-l-item div:last-child').forEach(a => a.style.display = 'none');
+  document.querySelectorAll('.faq-l-item span:last-child').forEach(i => i.textContent = '+');
+  if (!isOpen) {
+    answer.style.display = 'block';
+    icon.textContent = '−';
+  }
+}
+
+
 function toggleFaq(el) {
   const item = el.parentElement;
   item.classList.toggle('open');
@@ -1316,9 +1363,8 @@ document.querySelectorAll('.feature-card, .depo-card, .preco-card, .step, .probl
   el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
   observer.observe(el);
 });
-</script>
 
-<script>
+
 // Contador animado de usuários
 function animarContador(el, fim, duracao) {
   let inicio = 0;
@@ -1350,11 +1396,8 @@ const observer = new IntersectionObserver((entries) => {
 
 const statsSection = document.querySelector('.hero-stats');
 if (statsSection) observer.observe(statsSection);
-</script>
 
 
-<!-- Analytics (carrega depois do conteúdo) -->
-<script>
 window.addEventListener('load', function() {
   // GA4
   var s = document.createElement('script');
@@ -1373,11 +1416,8 @@ window.addEventListener('load', function() {
     y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
   })(window, document, "clarity", "script", "xnqbibnm1k");
 });
-</script>
 
 
-<!-- Tawk.to Chat ao Vivo -->
-<script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 (function(){
   var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
@@ -1387,11 +1427,8 @@ var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
   s1.setAttribute('crossorigin','*');
   s0.parentNode.insertBefore(s1,s0);
 })();
-</script>
-<!-- /Tawk.to -->
 
 
-<script>
 // Buscar número real de usuários da API
 async function atualizarContadores() {
   try {
@@ -1406,30 +1443,8 @@ async function atualizarContadores() {
   } catch(e) {}
 }
 atualizarContadores();
-</script>
 
 
-<!-- SOCIAL PROOF TOAST -->
-<div id="sp-toast" style="position:fixed;bottom:2rem;left:2rem;z-index:9998;max-width:300px;display:none">
-  <div style="background:white;border:1px solid #e2e8f0;border-radius:16px;padding:1rem 1.25rem;box-shadow:0 8px 32px rgba(0,0,0,0.12);display:flex;align-items:center;gap:0.75rem;animation:slideIn 0.4s ease">
-    <div id="sp-avatar" style="width:40px;height:40px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:1rem;flex-shrink:0">A</div>
-    <div>
-      <div id="sp-nome" style="font-weight:700;font-size:0.85rem">Alguém</div>
-      <div id="sp-acao" style="font-size:0.8rem;color:#4a5568">acabou de se cadastrar</div>
-      <div style="font-size:0.7rem;color:#718096;margin-top:0.1rem" id="sp-tempo">agora mesmo</div>
-    </div>
-    <button onclick="document.getElementById('sp-toast').style.display='none'" style="background:none;border:none;cursor:pointer;color:#718096;font-size:1rem;margin-left:auto">×</button>
-  </div>
-</div>
-
-<style>
-@keyframes slideIn {
-  from { opacity:0; transform:translateX(-20px); }
-  to { opacity:1; transform:translateX(0); }
-}
-</style>
-
-<script>
 // Dados de prova social realistas
 const provas = [
   {nome:"Ana P.", cidade:"São Paulo", acao:"se cadastrou no plano Pro", avatar:"A"},
@@ -1466,8 +1481,7 @@ function mostrarProva() {
 
 // Primeira notificação após 8 segundos
 setTimeout(mostrarProva, 8000);
-</script>
-<!-- /SOCIAL PROOF TOAST -->
 
+</script>
 </body>
 </html>
