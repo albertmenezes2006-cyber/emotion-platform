@@ -537,7 +537,7 @@ document.getElementById('user-plano').textContent = 'Plano ' + PLANO.charAt(0).t
 // Carregar XP
 async function carregarXP() {
   try {
-    const r = await fetch('/api/v1/xp/' + USER_ID, {headers: {'Authorization': 'Bearer ' + TOKEN}});
+    const r = await fetch('/api/v1/xp-ranking/perfil/' + USER_ID, {headers: {'Authorization': 'Bearer ' + TOKEN}});
     if (r.ok) {
       const d = await r.json();
       const xp = d.xp || 0;
@@ -565,7 +565,7 @@ async function registrarHumor(humor, el) {
   msg.textContent = '✅ Humor registrado! Continue assim.';
   msg.style.display = 'block';
   try {
-    await fetch('/api/v1/xp/ganhar?user_id=' + USER_ID + '&acao=registro_humor&xp=5', {
+    await fetch('/api/v1/xp-ranking/ganhar/' + USER_ID + '/login_diario', {
       method: 'POST', headers: {'Authorization': 'Bearer ' + TOKEN}
     });
   } catch(e) {}
