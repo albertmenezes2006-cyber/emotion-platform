@@ -1,235 +1,65 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-JGLER9XVGY');
-</script>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Página não encontrada — Emotion Intelligence</title>
-<meta name="description" content="A página que você procura não existe. Volte para a Emotion Intelligence.">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--primary:#00d2ff;--secondary:#3a7bd5;--dark:#0f0c29;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1)}
-body{font-family:'Segoe UI',sans-serif;background:var(--dark);color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;overflow:hidden}
-.bg{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at center,rgba(0,210,255,0.06) 0%,transparent 70%);pointer-events:none}
-.container{max-width:600px;width:100%;position:relative;z-index:1}
-.emoji-404{font-size:80px;margin-bottom:16px;animation:float 3s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
-.code{font-size:120px;font-weight:900;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:8px}
-h1{font-size:28px;font-weight:700;margin-bottom:12px}
-p{color:rgba(255,255,255,0.5);font-size:16px;line-height:1.6;margin-bottom:32px;max-width:400px;margin-left:auto;margin-right:auto}
-/* LINKS UTEIS */
-.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:32px}
-.link-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;text-decoration:none;color:#fff;transition:all .2s;display:block}
-.link-card:hover{border-color:var(--primary);transform:translateY(-4px)}
-.link-icon{font-size:28px;margin-bottom:8px;display:block}
-.link-label{font-size:13px;font-weight:600}
-.link-desc{font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px}
-/* BUSCA */
-.busca{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:24px}
-.busca h3{font-size:14px;color:var(--primary);margin-bottom:12px}
-.busca-row{display:flex;gap:10px}
-.busca-input{flex:1;padding:11px 16px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,0.05);color:#fff;font-size:14px;outline:none}
-.busca-input:focus{border-color:var(--primary)}
-.busca-btn{padding:11px 20px;background:linear-gradient(90deg,var(--primary),var(--secondary));border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer}
-/* BTN */
-.btn-home{display:inline-block;padding:14px 32px;background:linear-gradient(90deg,var(--primary),var(--secondary));border-radius:12px;color:#fff;font-size:15px;font-weight:700;text-decoration:none;transition:all .3s}
-.btn-home:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,210,255,0.3)}
-.footer{margin-top:32px;color:rgba(255,255,255,0.2);font-size:12px}
-.footer a{color:rgba(255,255,255,0.3);text-decoration:none;margin:0 8px}
-.footer a:hover{color:var(--primary)}
-</style>
-  <!-- WCAG 2.1 AA keyboard support -->
-  <link rel="stylesheet" href="/static/wcag.css">
-  <script>
-    /* onkeydown keypress keyup Enter — WCAG 2.1 keyboard */
-    document.addEventListener('keydown',function(e){
-      if((e.key==='Enter'||e.key===' ')&&e.target.tagName==='LABEL'){
-        e.preventDefault();
-        var i=document.getElementById(e.target.htmlFor);
-        if(i){i.checked=true;i.dispatchEvent(new Event('change'));}
-      }
-    });
-  </script>
-  <script src="/static/wcag.js" defer></script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Open Graph -->
-    <meta property="og:site_name" content="Emotion Intelligence Platform">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/og-image.png">
-    <meta property="og:locale" content="pt_BR">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@emotionai">
-    <!-- /Open Graph -->
-
-    <!-- Schema.org -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "MedicalWebPage",
-        "name": "Emotion Intelligence Platform",
-        "description": "Plataforma de saude mental com IA para psicologos brasileiros",
-        "url": "https://emotion-platform-albert.onrender.com",
-        "inLanguage": "pt-BR",
-        "about": {
-            "@type": "MedicalCondition",
-            "name": "Saude Mental"
-        },
-        "audience": {
-            "@type": "MedicalAudience",
-            "audienceType": "Psicologo"
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página não encontrada — EmotionAI</title>
+    <style>
+        :root {
+            --primary: #667eea;
+            --primary-dark: #764ba2;
+            --bg: #f8fafc;
+            --text: #1a202c;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-    }
-    </script>
-    <!-- /Schema.org -->
-
-    <!-- Preconnect para performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.clarity.ms">
-    <link rel="dns-prefetch" href="https://api.stripe.com">
-    <link rel="dns-prefetch" href="https://www.google-analytics.com">
-    <!-- /Preconnect -->
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 500px;
+            padding: 2rem;
+        }
+        .error-code {
+            font-size: 8rem;
+            font-weight: 900;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+        h1 { font-size: 1.5rem; margin-bottom: 1rem; }
+        p { color: #4a5568; margin-bottom: 2rem; line-height: 1.6; }
+        .btn {
+            background: var(--gradient);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .brain-icon { font-size: 4rem; margin-bottom: 1rem; display: block; }
+    </style>
 </head>
 <body>
-<a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#667eea;color:white;padding:8px;z-index:9999;text-decoration:none" onfocus="this.style.top='0'">Pular para conteudo</a>
-<div class="bg"></div>
-<div class="container">
-  <div class="emoji-404">🔍</div>
-  <div class="code">404</div>
-  <h1>Página não encontrada</h1>
-  <p>Ops! A página que você está procurando não existe ou foi movida. Mas não se preocupe — ainda temos muito para explorar!</p>
-
-  <!-- BUSCA -->
-  <div class="busca">
-    <h3>🔎 O que você estava procurando?</h3>
-    <div class="busca-row">
-      <input class="busca-input" id="buscaInput" type="text" placeholder="Ex: análise emocional, Sofia, planos...">
-      <button class="busca-btn" onclick="buscar()">Buscar</button>
+    <div class="container">
+        <span class="brain-icon">🧠</span>
+        <div class="error-code">404</div>
+        <h1>Opa! Você se perdeu no caminho?</h1>
+        <p>A página que você está procurando não existe ou foi movida. Mas não se preocupe, nossa IA Sofia está pronta para te ajudar no painel principal.</p>
+        <a href="/" class="btn">Voltar para o Início</a>
     </div>
-  </div>
-
-  <!-- LINKS UTEIS -->
-  <div class="links">
-    <a href="/" class="link-card">
-      <span class="link-icon">🏠</span>
-      <div class="link-label">Início</div>
-      <div class="link-desc">Voltar ao começo</div>
-    </a>
-    <a href="/dashboard" class="link-card">
-      <span class="link-icon">📊</span>
-      <div class="link-label">Dashboard</div>
-      <div class="link-desc">Suas análises</div>
-    </a>
-    <a href="/blog" class="link-card">
-      <span class="link-icon">📚</span>
-      <div class="link-label">Blog</div>
-      <div class="link-desc">Artigos sobre IE</div>
-    </a>
-    <a href="/premium" class="link-card">
-      <span class="link-icon">⭐</span>
-      <div class="link-label">Premium</div>
-      <div class="link-desc">Desbloqueie tudo</div>
-    </a>
-    <a href="/terapia" class="link-card">
-      <span class="link-icon">🌱</span>
-      <div class="link-label">Terapia 7 Dias</div>
-      <div class="link-desc">Programa guiado</div>
-    </a>
-    <a href="/contato" class="link-card">
-      <span class="link-icon">📧</span>
-      <div class="link-label">Contato</div>
-      <div class="link-desc">Fale conosco</div>
-    </a>
-  </div>
-
-  <a href="/" class="btn-home">🏠 Voltar ao Início</a>
-
-  <div class="footer">
-    <a href="/privacidade">Privacidade</a>
-    <a href="/termos">Termos</a>
-    <a href="/faq">FAQ</a>
-    <br><br>🧠 Emotion Intelligence Platform v20.0
-  </div>
-</div>
-
-<script>
-function buscar() {
-  const q = document.getElementById('buscaInput').value.trim();
-  if(!q) return;
-  const mapa = {
-    'analise': '/dashboard',
-    'sofia': '/chat',
-    'chat': '/chat',
-    'premium': '/premium',
-    'plano': '/planos',
-    'preco': '/planos',
-    'diario': '/diario',
-    'score': '/score-ie',
-    'ie': '/score-ie',
-    'afiliado': '/afiliado',
-    'blog': '/blog',
-    'terapia': '/terapia',
-    'login': '/login',
-    'cadastro': '/cadastro',
-    'conta': '/perfil',
-    'perfil': '/perfil',
-    'carteira': '/carteira',
-    'credito': '/carteira',
-    'api': '/api/v1/docs',
-    'faq': '/faq',
-    'contato': '/contato',
-    'sobre': '/sobre',
-  };
-  const ql = q.toLowerCase();
-  for(const [key, url] of Object.entries(mapa)) {
-    if(ql.includes(key)) {
-      window.location.href = url;
-      return;
-    }
-  }
-  window.location.href = '/blog';
-}
-
-document.getElementById('buscaInput').addEventListener('keypress', function(e) {
-  if(e.key === 'Enter') buscar();
-});
-
-gtag('event','page_not_found',{event_category:'erro',event_label:window.location.pathname});
-</script>
-
-<div style="position:fixed;bottom:20px;left:20px;
-            background:#e53e3e;color:white;
-            padding:10px 20px;border-radius:50px;
-            font-family:sans-serif;font-size:14px;font-weight:700;
-            box-shadow:0 4px 15px rgba(229,62,62,0.4)">
-    <a href="/api/v1/crise/ajuda" style="color:white;text-decoration:none">
-        🆘 Precisa de ajuda?
-    </a>
-</div>
 </body>
 </html>
