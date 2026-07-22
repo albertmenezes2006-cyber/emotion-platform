@@ -571,6 +571,32 @@
 </head>
 <body>
 
+<!-- BARRA DE URGÊNCIA -->
+<div id="urgency-bar" style="background:linear-gradient(135deg,#667eea,#764ba2);color:white;text-align:center;padding:0.6rem 1rem;font-size:0.85rem;font-weight:600;position:relative;z-index:200">
+  🎁 Cupom <strong>BEMVINDO</strong> — 50% OFF no primeiro mês &nbsp;·&nbsp;
+  Expira em: <strong id="countdown">23:59:59</strong> &nbsp;·&nbsp;
+  <a href="/app/login" style="color:white;text-decoration:underline;font-weight:700">Resgatar agora →</a>
+  <button onclick="document.getElementById('urgency-bar').style.display='none'" style="position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:none;color:white;cursor:pointer;font-size:1.1rem;opacity:0.7">×</button>
+</div>
+<script>
+// Countdown timer — reseta todo dia à meia-noite
+function updateCountdown() {
+  const now = new Date();
+  const midnight = new Date(now);
+  midnight.setHours(23, 59, 59, 0);
+  const diff = midnight - now;
+  const h = Math.floor(diff / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  const el = document.getElementById('countdown');
+  if (el) el.textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+</script>
+<!-- /BARRA DE URGÊNCIA -->
+
+
 <!-- EXIT INTENT POPUP -->
 <div id="exit-popup" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center">
   <div style="background:white;border-radius:24px;padding:2.5rem;max-width:480px;width:90%;text-align:center;position:relative;animation:fadeUp 0.3s ease">
@@ -633,6 +659,7 @@ setTimeout(mostrarPopup, 45000);
     <li><a href="#precos">Preços</a></li>
     <li><a href="#faq">FAQ</a></li>
     <li><a href="/psicologos">Para Psicólogos</a></li>
+    <li><a href="/comparativo">Comparativo</a></li>
   </ul>
   <div class="nav-cta">
     <a href="/app/login" class="btn btn-outline">Entrar</a>
@@ -1380,6 +1407,67 @@ async function atualizarContadores() {
 }
 atualizarContadores();
 </script>
+
+
+<!-- SOCIAL PROOF TOAST -->
+<div id="sp-toast" style="position:fixed;bottom:2rem;left:2rem;z-index:9998;max-width:300px;display:none">
+  <div style="background:white;border:1px solid #e2e8f0;border-radius:16px;padding:1rem 1.25rem;box-shadow:0 8px 32px rgba(0,0,0,0.12);display:flex;align-items:center;gap:0.75rem;animation:slideIn 0.4s ease">
+    <div id="sp-avatar" style="width:40px;height:40px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:1rem;flex-shrink:0">A</div>
+    <div>
+      <div id="sp-nome" style="font-weight:700;font-size:0.85rem">Alguém</div>
+      <div id="sp-acao" style="font-size:0.8rem;color:#4a5568">acabou de se cadastrar</div>
+      <div style="font-size:0.7rem;color:#718096;margin-top:0.1rem" id="sp-tempo">agora mesmo</div>
+    </div>
+    <button onclick="document.getElementById('sp-toast').style.display='none'" style="background:none;border:none;cursor:pointer;color:#718096;font-size:1rem;margin-left:auto">×</button>
+  </div>
+</div>
+
+<style>
+@keyframes slideIn {
+  from { opacity:0; transform:translateX(-20px); }
+  to { opacity:1; transform:translateX(0); }
+}
+</style>
+
+<script>
+// Dados de prova social realistas
+const provas = [
+  {nome:"Ana P.", cidade:"São Paulo", acao:"se cadastrou no plano Pro", avatar:"A"},
+  {nome:"Carlos M.", cidade:"Rio de Janeiro", acao:"começou uma avaliação PHQ-9", avatar:"C"},
+  {nome:"Dra. Fernanda", cidade:"Belo Horizonte", acao:"ativou o prontuário digital", avatar:"F"},
+  {nome:"Roberto S.", cidade:"Curitiba", acao:"fez sua primeira avaliação GAD-7", avatar:"R"},
+  {nome:"Mariana L.", cidade:"Fortaleza", acao:"se cadastrou gratuitamente", avatar:"M"},
+  {nome:"Dr. Lucas", cidade:"Porto Alegre", acao:"migrou do papel para EmotionAI", avatar:"L"},
+  {nome:"Patricia N.", cidade:"Recife", acao:"usou o cupom BEMVINDO", avatar:"P"},
+  {nome:"Thiago A.", cidade:"Salvador", acao:"agendou sua primeira sessão", avatar:"T"},
+];
+
+const tempos = ["agora mesmo", "há 2 min", "há 5 min", "há 8 min", "há 12 min", "há 15 min"];
+
+function mostrarProva() {
+  const prova = provas[Math.floor(Math.random() * provas.length)];
+  const tempo = tempos[Math.floor(Math.random() * tempos.length)];
+  
+  document.getElementById('sp-avatar').textContent = prova.avatar;
+  document.getElementById('sp-nome').textContent = prova.nome + ' · ' + prova.cidade;
+  document.getElementById('sp-acao').textContent = prova.acao;
+  document.getElementById('sp-tempo').textContent = tempo;
+  
+  const toast = document.getElementById('sp-toast');
+  toast.style.display = 'block';
+  
+  // Esconder após 5 segundos
+  setTimeout(() => {
+    toast.style.display = 'none';
+    // Próxima notificação entre 15-30 segundos
+    setTimeout(mostrarProva, Math.random() * 15000 + 15000);
+  }, 5000);
+}
+
+// Primeira notificação após 8 segundos
+setTimeout(mostrarProva, 8000);
+</script>
+<!-- /SOCIAL PROOF TOAST -->
 
 </body>
 </html>
