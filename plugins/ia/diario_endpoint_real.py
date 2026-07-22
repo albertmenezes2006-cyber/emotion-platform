@@ -2,51 +2,95 @@ from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 from plugins.plugin_base import PluginBase
 from datetime import datetime
-from pathlib import Path
-import json
+import os, uuid, psycopg2
 
 router = APIRouter(prefix="/api/v1/diario", tags=["Diario"])
-ARQ = Path("diario_real.json")
+DATABASE_URL = os.getenv("DATABASE_URL", "")
 
-def load(): 
-    if ARQ.exists():
-        try: return json.loads(ARQ.read_text())
-        except: return []
-    return []
+def get_conn():
+    url = DATABASE_URL.replace("postgres://", "postgresql://")
+    return psycopg2.connect(url, sslmode="require", connect_timeout=10)
 
-def save(d): ARQ.write_text(json.dumps(d, ensure_ascii=False, indent=2))
+def init_table():
+    try:
+        conn = get_conn()
+        cur = conn.cursor()
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS diario_entradas (
+                id VARCHAR(8) PRIMARY KEY,
+                user_id VARCHAR(200),
+                conteudo TEXT,
+                humor INTEGER DEFAULT 5,
+                tags TEXT DEFAULT '',
+                criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        conn.commit()
+        cur.close()
+        conn.close()
+    except: pass
+
+init_table()
 
 @router.post("/salvar")
 async def salvar(request: Request):
     d = await request.json()
-    entradas = load()
-    entrada = {
-        "id": len(entradas)+1,
-        "user_id": d.get("user_id", "anonimo"),
-        "conteudo": d.get("conteudo", ""),
-        "humor": d.get("humor", 5),
-        "tags": d.get("tags", []),
-        "data": datetime.utcnow().strftime("%d/%m/%Y"),
-        "timestamp": datetime.utcnow().isoformat()
-    }
-    entradas.append(entrada)
-    save(entradas)
-    return JSONResponse({"ok": True, "id": entrada["id"], "xp_ganho": 20})
+    uid = str(uuid.uuid4())[:8]
+    user_id = d.get("user_id", "anonimo")
+    conteudo = d.get("conteudo", "")
+    humor = int(d.get("humor", 5))
+    tags = str(d.get("tags", []))
+    try:
+        conn = get_conn()
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO diario_entradas (id,user_id,conteudo,humor,tags) VALUES (%s,%s,%s,%s,%s)",
+            (uid, user_id, conteudo, humor, tags)
+        )
+        conn.commit()
+        cur.close()
+        conn.close()
+        return JSONResponse({"ok":True,"id":uid,"xp_ganho":20})
+    except Exception as e:
+        return JSONResponse({"ok":False,"erro":str(e)}, status_code=500)
 
 @router.get("/listar/{user_id}")
 async def listar(user_id: str):
-    entradas = load()
-    user_entries = [e for e in entradas if e.get("user_id") == user_id]
-    return JSONResponse({"entradas": user_entries, "total": len(user_entries)})
+    try:
+        conn = get_conn()
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT id,user_id,conteudo,humor,tags,criado_em FROM diario_entradas WHERE user_id=%s ORDER BY criado_em DESC LIMIT 50",
+            (user_id,)
+        )
+        rows = cur.fetchall()
+        cur.close()
+        conn.close()
+        entradas = [{"id":r[0],"user_id":r[1],"conteudo":r[2],"humor":r[3],"tags":r[4],"data":str(r[5])} for r in rows]
+        return JSONResponse({"entradas":entradas,"total":len(entradas)})
+    except Exception as e:
+        return JSONResponse({"entradas":[],"total":0,"erro":str(e)})
 
 @router.get("/stats/{user_id}")
 async def stats(user_id: str):
-    entradas = load()
-    ue = [e for e in entradas if e.get("user_id") == user_id]
-    media = sum(e.get("humor",5) for e in ue)/max(1,len(ue))
-    return JSONResponse({"total_entradas": len(ue), "humor_medio": round(media,1), "streak": len(ue)})
+    try:
+        conn = get_conn()
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT humor FROM diario_entradas WHERE user_id=%s",
+            (user_id,)
+        )
+        rows = cur.fetchall()
+        cur.close()
+        conn.close()
+        humores = [r[0] for r in rows]
+        media = sum(humores)/max(1,len(humores))
+        return JSONResponse({"total_entradas":len(humores),"humor_medio":round(media,1),"streak":len(humores)})
+    except Exception as e:
+        return JSONResponse({"total_entradas":0,"humor_medio":5,"streak":0})
 
 class Plugin(PluginBase):
     name = "diario_endpoint_real"
     def setup(self, app): app.include_router(router)
+
 plugin = Plugin()
