@@ -543,7 +543,7 @@ async function mostrarResultado() {
       });
     }
     // XP
-    await fetch(`/api/v1/xp/ganhar?user_id=${USER_ID}&acao=avaliacao&xp=20`, {
+    await fetch(`/api/v1/xp-ranking/ganhar/${USER_ID}/avaliacao_phq9`, {
       method: 'POST', headers: { 'Authorization': 'Bearer ' + TOKEN }
     });
   } catch(e) {}

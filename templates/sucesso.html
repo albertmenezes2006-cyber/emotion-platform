@@ -247,7 +247,7 @@ if (tipo === 'psicologo') {
 const TOKEN = localStorage.getItem('emotion_token');
 const USER_ID = localStorage.getItem('emotion_userid');
 if (TOKEN && USER_ID) {
-  fetch('/api/v1/xp/ganhar?user_id=' + USER_ID + '&acao=cadastro&xp=50', {
+  fetch('/api/v1/xp-ranking/ganhar/' + USER_ID + '/avaliacao_phq9', {
     method: 'POST',
     headers: {'Authorization': 'Bearer ' + TOKEN}
   }).catch(() => {});

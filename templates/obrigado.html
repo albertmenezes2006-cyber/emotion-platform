@@ -79,7 +79,7 @@ const nomes = {free:'Gratuito', pro:'Pro', clinica:'Clínica', enterprise:'Enter
 document.getElementById('plano-nome').textContent = 'Plano ' + (nomes[plano] || 'Pro');
 
 if (TOKEN && USER_ID) {
-  fetch('/api/v1/xp/ganhar?user_id='+USER_ID+'&acao=upgrade_plano&xp=100', {
+  fetch('/api/v1/xp-ranking/ganhar/'+USER_ID+'/indicar_amigo', {
     method:'POST', headers:{'Authorization':'Bearer '+TOKEN}
   }).catch(()=>{});
 }

@@ -340,7 +340,7 @@ async function salvarEntrada() {
       setTimeout(() => { msg.style.display = 'none'; carregarHistorico(); }, 2000);
 
       // Ganhar XP
-      fetch(`/api/v1/xp/ganhar?user_id=${USER_ID}&acao=diario&xp=10`, {
+      fetch(`/api/v1/xp-ranking/ganhar/${USER_ID}/entrada_diario`, {
         method: 'POST', headers: { 'Authorization': 'Bearer ' + TOKEN }
       });
     } else {
@@ -357,7 +357,7 @@ async function salvarEntrada() {
 
 async function carregarHistorico() {
   try {
-    const r = await fetch(`/api/v1/diario-emocional/historico/${USER_ID}`, {
+    const r = await fetch(`/api/v1/diario/listar/${USER_ID}`, {
       headers: { 'Authorization': 'Bearer ' + TOKEN }
     });
     if (!r.ok) return;
