@@ -438,3 +438,8 @@ async def artigo_tele():
 async def page_comparativo():
     html = ler_html("comparativo.html")
     return HTMLResponse(html) if html else HTMLResponse("<h1>Comparativo</h1>")
+
+@router.get("/para-clinicas", response_class=HTMLResponse)
+async def page_clinicas():
+    html = ler_html("para-clinicas.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>Para Clínicas</h1>")
