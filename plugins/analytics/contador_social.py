@@ -15,10 +15,10 @@ def get_contadores():
     if ARQUIVO.exists():
         return json.loads(ARQUIVO.read_text())
     base = {
-        "avaliacoes": 1247,
-        "psicologos": 89,
-        "sessoes_chat": 3421,
-        "dias_ativos": 127,
+        "avaliacoes": 0,
+        "psicologos": 0,
+        "sessoes_chat": 0,
+        "dias_ativos": 1,
         "ultimo_update": datetime.utcnow().isoformat()
     }
     ARQUIVO.write_text(json.dumps(base, indent=2))
