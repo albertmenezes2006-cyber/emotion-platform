@@ -418,3 +418,18 @@ async def page_planos_root():
 async def page_checkout_root():
     html = ler_html("checkout.html")
     return HTMLResponse(html) if html else HTMLResponse("<h1>Checkout</h1>")
+
+@router.get("/blog/phq9-guia", response_class=HTMLResponse)
+async def artigo_phq9():
+    html = ler_html("artigo_phq9.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>PHQ-9</h1>")
+
+@router.get("/blog/gad7-guia", response_class=HTMLResponse)
+async def artigo_gad7():
+    html = ler_html("artigo_gad7.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>GAD-7</h1>")
+
+@router.get("/blog/telepsicologia", response_class=HTMLResponse)
+async def artigo_tele():
+    html = ler_html("artigo_tele.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>Telepsicologia</h1>")
