@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """WHOQOL-BREF Qualidade de Vida OMS"""
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from plugins.plugin_base import PluginBase
 
@@ -80,6 +80,39 @@ function mostrarResultado(){
     'consulte seu psicólogo ou profissional de saúde.</p></div>';
 }
 </script></body></html>""")
+
+
+@router.post("/calcular")
+async def calcular_whoqol(request: Request):
+    from fastapi import Request as Req
+    try:
+        body = await request.json()
+        respostas = body.get("respostas", {})
+    except:
+        return JSONResponse({"erro":"JSON invalido"}, status_code=400)
+
+    dominios_scores = {}
+    for dom, info in DOMINIOS.items():
+        itens = info["itens"]
+        valores = []
+        for i in itens:
+            v = respostas.get(f"q{i}", 3)
+            valores.append(int(v))
+        media = sum(valores) / len(valores) if valores else 0
+        score = round((media / 5) * 100, 1)
+        dominios_scores[dom] = {
+            "nome": info["nome"],
+            "score": score,
+            "nivel": "Muito Bom" if score >= 75 else "Bom" if score >= 50 else "Regular" if score >= 25 else "Ruim"
+        }
+
+    score_geral = round(sum(d["score"] for d in dominios_scores.values()) / len(dominios_scores), 1)
+    return JSONResponse({
+        "score_geral": score_geral,
+        "nivel_geral": "Muito Bom" if score_geral >= 75 else "Bom" if score_geral >= 50 else "Regular" if score_geral >= 25 else "Ruim",
+        "dominios": dominios_scores,
+        "timestamp": __import__("datetime").datetime.utcnow().isoformat()
+    })
 
 class WHOQOLPlugin(PluginBase):
     name = "whoqol_bref"
