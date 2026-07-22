@@ -38,7 +38,7 @@
     line-height: 1.6;
   }
 
-  /* NAV */
+  
   nav {
     position: fixed; top: 0; left: 0; right: 0;
     background: rgba(255,255,255,0.95);
@@ -104,7 +104,7 @@
   }
   .hamburger { display: none; }
 
-  /* HERO */
+  
   .hero {
     min-height: 100vh;
     display: flex; align-items: center; justify-content: center;
@@ -172,7 +172,7 @@
     margin-top: 0.2rem;
   }
 
-  /* SECTION */
+  
   section { padding: 5rem 2rem; }
   .container { max-width: 1100px; margin: 0 auto; }
   .section-badge {
@@ -196,7 +196,7 @@
   .text-center { text-align: center; }
   .mx-auto { margin-left: auto; margin-right: auto; }
 
-  /* PROBLEMA */
+  
   .problema { background: white; }
   .problema-grid {
     display: grid;
@@ -222,7 +222,7 @@
     line-height: 1.6;
   }
 
-  /* FEATURES */
+  
   .features { background: var(--bg); }
   .features-grid {
     display: grid;
@@ -267,7 +267,7 @@
     margin-top: 1rem;
   }
 
-  /* COMO FUNCIONA */
+  
   .como { background: white; }
   .steps {
     display: grid;
@@ -299,7 +299,7 @@
     line-height: 1.6;
   }
 
-  /* DEPOIMENTOS */
+  
   .depoimentos { background: var(--bg); }
   .depo-grid {
     display: grid;
@@ -332,7 +332,7 @@
   .depo-name { font-weight: 700; font-size: 0.9rem; }
   .depo-role { font-size: 0.8rem; color: var(--text3); }
 
-  /* PRECOS */
+  
   .precos { background: white; }
   .precos-grid {
     display: grid;
@@ -388,7 +388,7 @@
   .preco-features li:last-child { border: none; }
   .check { color: var(--accent); font-weight: 700; flex-shrink: 0; }
 
-  /* FAQ */
+  
   .faq-section { background: var(--bg); }
   .faq-list {
     max-width: 700px; margin: 3rem auto 0;
@@ -417,7 +417,7 @@
   .faq-item.open .faq-icon { transform: rotate(45deg); }
   .faq-icon { transition: transform 0.2s; font-size: 1.2rem; }
 
-  /* CTA FINAL */
+  
   .cta-final {
     background: var(--gradient);
     padding: 6rem 2rem;
@@ -444,7 +444,7 @@
     box-shadow: 0 8px 32px rgba(0,0,0,0.2);
   }
 
-  /* FOOTER */
+  
   footer {
     background: #1a202c;
     color: #a0aec0;
@@ -480,7 +480,7 @@
     font-size: 0.8rem;
   }
 
-  /* MOBILE */
+  
   @media (max-width: 768px) {
     .nav-links { display: none; }
     .hamburger {
@@ -493,7 +493,7 @@
     .nav-cta .btn-outline { display: none; }
   }
 
-  /* ANIMATIONS */
+  
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -506,22 +506,14 @@
   .delay-3 { animation-delay: 0.3s; opacity: 0; }
 </style>
 
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
+  
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-JGLER9XVGY');
   </script>
-  <!-- Microsoft Clarity -->
-  <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "xnqbibnm1k");
-  </script>
+  
 
 
   <!-- SEO Avançado -->
@@ -570,6 +562,11 @@
     }
   }
   </script>
+
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+  <link rel="dns-prefetch" href="https://www.clarity.ms">
 
 </head>
 <body>
@@ -1203,6 +1200,29 @@ const observer = new IntersectionObserver((entries) => {
 
 const statsSection = document.querySelector('.hero-stats');
 if (statsSection) observer.observe(statsSection);
+</script>
+
+
+<!-- Analytics (carrega depois do conteúdo) -->
+<script>
+window.addEventListener('load', function() {
+  // GA4
+  var s = document.createElement('script');
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY';
+  s.async = true;
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JGLER9XVGY');
+
+  // Clarity
+  (function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "xnqbibnm1k");
+});
 </script>
 
 </body>
