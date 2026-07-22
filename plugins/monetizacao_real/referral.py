@@ -1,59 +1,82 @@
-#!/usr/bin/env python3
-"""Sistema de referral — indique e ganhe"""
 from fastapi import APIRouter, Request
-from fastapi.responses import JSONResponse, HTMLResponse
+from fastapi.responses import JSONResponse
 from plugins.plugin_base import PluginBase
 from datetime import datetime
-import json, hashlib
-from pathlib import Path
+import os, uuid, psycopg2, hashlib
 
 router = APIRouter(prefix="/api/v1/referral", tags=["Referral"])
-ARQUIVO = Path("referrals.json")
+DATABASE_URL = os.getenv("DATABASE_URL", "")
 
-def gerar_codigo(email: str) -> str:
+def get_conn():
+    url = DATABASE_URL.replace("postgres://", "postgresql://")
+    return psycopg2.connect(url, sslmode="require", connect_timeout=10)
+
+def init_table():
+    try:
+        conn = get_conn()
+        cur = conn.cursor()
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS referrals (
+                codigo VARCHAR(20) PRIMARY KEY,
+                email VARCHAR(200),
+                indicacoes INTEGER DEFAULT 0,
+                criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        conn.commit()
+        cur.close()
+        conn.close()
+    except: pass
+
+init_table()
+
+def gerar_codigo(email):
     return hashlib.md5(email.encode()).hexdigest()[:8].upper()
-
-def carregar():
-    if ARQUIVO.exists():
-        return json.loads(ARQUIVO.read_text())
-    return {}
 
 @router.get("/gerar/{email}")
 async def gerar_referral(email: str):
-    dados = carregar()
     codigo = gerar_codigo(email)
-    if codigo not in dados:
-        dados[codigo] = {"email": email, "indicacoes": 0,
-                         "criado": datetime.utcnow().isoformat()}
-        ARQUIVO.write_text(json.dumps(dados, ensure_ascii=False, indent=2))
-    d = dados[codigo]
-    url = f"https://emotion-platform-albert.onrender.com/?ref={codigo}"
-    return JSONResponse({
-        "codigo": codigo, "url": url,
-        "indicacoes": d["indicacoes"],
-        "beneficio": "30 dias gratis por indicacao",
-        "whatsapp": f"https://wa.me/?text=Use meu codigo {codigo} no Emotion Platform e ganhe 30 dias gratis: {url}"
-    })
+    try:
+        conn = get_conn()
+        cur = conn.cursor()
+        cur.execute("INSERT INTO referrals (codigo,email) VALUES (%s,%s) ON CONFLICT (codigo) DO NOTHING", (codigo, email))
+        conn.commit()
+        cur.execute("SELECT indicacoes FROM referrals WHERE codigo=%s", (codigo,))
+        row = cur.fetchone()
+        cur.close()
+        conn.close()
+        indicacoes = row[0] if row else 0
+        url = f"https://emotion-platform-albert.onrender.com/?ref={codigo}"
+        return JSONResponse({"codigo":codigo,"url":url,"indicacoes":indicacoes,"beneficio":"30 dias gratis por indicacao","whatsapp":f"https://wa.me/?text=Use meu codigo {codigo} no Emotion Platform e ganhe 30 dias gratis: {url}"})
+    except Exception as e:
+        return JSONResponse({"erro":str(e)}, status_code=500)
 
 @router.get("/usar/{codigo}")
 async def usar_referral(codigo: str):
-    dados = carregar()
-    if codigo in dados:
-        dados[codigo]["indicacoes"] += 1
-        ARQUIVO.write_text(json.dumps(dados, ensure_ascii=False, indent=2))
-        return JSONResponse({"ok": True, "desconto": "30 dias gratis aplicado"})
-    return JSONResponse({"erro": "Codigo invalido"}, status_code=404)
+    try:
+        conn = get_conn()
+        cur = conn.cursor()
+        cur.execute("UPDATE referrals SET indicacoes=indicacoes+1 WHERE codigo=%s", (codigo,))
+        conn.commit()
+        cur.close()
+        conn.close()
+        return JSONResponse({"ok":True,"desconto":"30 dias gratis aplicado"})
+    except: return JSONResponse({"erro":"Codigo invalido"}, status_code=404)
 
 @router.get("/stats")
 async def stats_referral():
-    dados = carregar()
-    total = sum(d["indicacoes"] for d in dados.values())
-    return JSONResponse({"total_codigos": len(dados),
-                         "total_indicacoes": total, "top": list(dados.values())[:5]})
+    try:
+        conn = get_conn()
+        cur = conn.cursor()
+        cur.execute("SELECT COUNT(*),SUM(indicacoes) FROM referrals")
+        row = cur.fetchone()
+        cur.close()
+        conn.close()
+        return JSONResponse({"total_codigos":row[0] or 0,"total_indicacoes":row[1] or 0})
+    except: return JSONResponse({"total_codigos":0,"total_indicacoes":0})
 
-class ReferralPlugin(PluginBase):
-    name = "sistema_referral"
-    def setup(self, app):
-        app.include_router(router)
+class Plugin(PluginBase):
+    name = "referral_system"
+    def setup(self, app): app.include_router(router)
 
-plugin = ReferralPlugin()
+plugin = Plugin()
