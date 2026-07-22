@@ -1,324 +1,207 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-JGLER9XVGY');
-</script>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Checkout — Emotion Intelligence Premium</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EmotionAI — Checkout</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--primary:#00d2ff;--secondary:#3a7bd5;--success:#2ecc71;--warning:#f39c12;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1)}
-body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh;padding:20px}
-.navbar{background:rgba(0,0,0,0.4);backdrop-filter:blur(10px);padding:15px 30px;display:flex;justify-content:space-between;align-items:center;border-radius:16px;margin-bottom:40px}
-.nav-logo{font-size:18px;font-weight:bold;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.nav-back{padding:8px 18px;border-radius:20px;background:rgba(255,255,255,0.1);color:#fff;text-decoration:none;font-size:13px;font-weight:600}
-.container{max-width:900px;margin:0 auto}
-.checkout-grid{display:grid;grid-template-columns:1fr 380px;gap:24px}
-/* LADO ESQUERDO */
-.left h1{font-size:28px;font-weight:900;margin-bottom:8px}
-.left h1 span{background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.left p{color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:24px}
-/* PLANO SELECIONADO */
-.plano-box{background:rgba(0,210,255,0.06);border:2px solid rgba(0,210,255,0.3);border-radius:18px;padding:24px;margin-bottom:20px}
-.plano-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.plano-nome{font-size:20px;font-weight:bold;color:var(--primary)}
-.plano-preco-original{font-size:14px;color:rgba(255,255,255,0.3);text-decoration:line-through}
-.plano-preco{font-size:36px;font-weight:900;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.plano-periodo{font-size:13px;color:rgba(255,255,255,0.5)}
-.features{list-style:none}
-.features li{padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px;color:rgba(255,255,255,0.8);display:flex;align-items:center;gap:8px}
-.features li:last-child{border-bottom:none}
-/* CUPOM */
-.cupom-section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:20px}
-.cupom-section h3{font-size:15px;font-weight:700;margin-bottom:14px;color:rgba(255,255,255,0.9)}
-.cupom-row{display:flex;gap:10px}
-.cupom-input{flex:1;padding:12px 16px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,0.05);color:#fff;font-size:14px;text-transform:uppercase;outline:none;transition:border .2s}
-.cupom-input:focus{border-color:var(--primary)}
-.cupom-input::placeholder{color:rgba(255,255,255,0.3);text-transform:none}
-.btn-aplicar{padding:12px 20px;background:linear-gradient(90deg,var(--primary),var(--secondary));border:none;border-radius:12px;color:#fff;font-size:13px;font-weight:bold;cursor:pointer;white-space:nowrap;transition:all .2s}
-.btn-aplicar:hover{transform:translateY(-1px)}
-.cupom-result{margin-top:10px;padding:10px 14px;border-radius:10px;font-size:13px;display:none}
-.cupom-result.ok{background:rgba(46,204,113,0.15);color:var(--success);border:1px solid rgba(46,204,113,0.3)}
-.cupom-result.erro{background:rgba(231,76,60,0.15);color:#e74c3c;border:1px solid rgba(231,76,60,0.3)}
-/* RESUMO */
-.resumo{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:20px}
-.resumo h3{font-size:15px;font-weight:700;margin-bottom:14px}
-.resumo-linha{display:flex;justify-content:space-between;padding:8px 0;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.05)}
-.resumo-linha:last-child{border-bottom:none;font-size:17px;font-weight:bold;padding-top:12px}
-.resumo-linha.desconto{color:var(--success)}
-.resumo-linha.total span:last-child{color:var(--primary)}
-/* LADO DIREITO */
-.right{}
-.seguranca{background:rgba(46,204,113,0.06);border:1px solid rgba(46,204,113,0.2);border-radius:16px;padding:20px;margin-bottom:20px;text-align:center}
-.seguranca h3{font-size:14px;color:var(--success);margin-bottom:12px}
-.seg-items{display:flex;flex-direction:column;gap:8px}
-.seg-item{font-size:12px;color:rgba(255,255,255,0.6);display:flex;align-items:center;gap:8px}
-/* BOTAO PAGAR */
-.btn-pagar{width:100%;padding:18px;background:linear-gradient(90deg,var(--primary),var(--secondary));border:none;border-radius:16px;color:#fff;font-size:18px;font-weight:bold;cursor:pointer;transition:all .3s;margin-bottom:12px}
-.btn-pagar:hover{transform:translateY(-2px);box-shadow:0 15px 40px rgba(0,210,255,0.4)}
-.btn-pagar:disabled{opacity:0.6;cursor:not-allowed;transform:none}
-.garantia-text{font-size:12px;color:rgba(255,255,255,0.3);text-align:center;line-height:1.6}
-/* DEPOIMENTOS */
-.deps{margin-top:20px}
-.dep{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px}
-.dep-stars{color:var(--warning);font-size:14px;margin-bottom:8px}
-.dep-text{font-size:12px;color:rgba(255,255,255,0.6);line-height:1.5;margin-bottom:8px;font-style:italic}
-.dep-autor{font-size:11px;color:rgba(255,255,255,0.3);font-weight:600}
-/* METODOS */
-.metodos{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-top:12px;text-align:center}
-.metodos p{font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:10px}
-.metodos-icons{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-.metodo{background:rgba(255,255,255,0.08);padding:6px 14px;border-radius:8px;font-size:11px;font-weight:600}
-.toast{position:fixed;bottom:24px;right:24px;background:rgba(46,204,113,.95);color:#fff;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s}
-.toast.show{transform:translateY(0);opacity:1}
-@media(max-width:768px){
-  .checkout-grid{grid-template-columns:1fr}
-  .right{order:-1}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #667eea; --primary-dark: #764ba2; --accent: #38a169;
+  --danger: #e53e3e; --bg: #f8fafc; --text: #1a202c; --text2: #4a5568;
+  --text3: #718096; --border: #e2e8f0;
+  --shadow: 0 4px 24px rgba(102,126,234,0.10);
+  --shadow-lg: 0 8px 48px rgba(102,126,234,0.15);
+  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --radius: 16px;
 }
+body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); z-index: 100; padding: 0 2rem; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+.nav-brand { font-size: 1.25rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+.nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+.nav-links a { color: var(--text2); text-decoration: none; font-size: 0.9rem; font-weight: 500; }
+.nav-links a:hover { color: var(--primary); }
+.nav-cta { display: flex; gap: 0.75rem; }
+.btn { padding: 0.6rem 1.5rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; }
+.btn-primary { background: var(--gradient); color: white; box-shadow: 0 4px 16px rgba(102,126,234,0.35); }
+.btn-primary:hover { transform: translateY(-1px); }
+.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text2); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-lg { padding: 0.9rem 2.5rem; font-size: 1rem; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+.section { padding: 5rem 0; }
+.grad { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.section-badge { display: inline-block; background: rgba(102,126,234,0.1); color: var(--primary); padding: 0.3rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; }
+.section-title { font-size: clamp(1.8rem,4vw,2.8rem); font-weight: 800; line-height: 1.2; margin-bottom: 1rem; }
+.section-desc { font-size: 1.1rem; color: var(--text2); max-width: 580px; line-height: 1.7; }
+.card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
+input, textarea, select { width: 100%; padding: 0.75rem 1rem; border: 1.5px solid var(--border); border-radius: 12px; font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s; background: white; color: var(--text); }
+input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+label { font-size: 0.85rem; font-weight: 600; color: var(--text2); display: block; margin-bottom: 0.4rem; }
+.form-group { margin-bottom: 1.25rem; }
+footer { background: #1a202c; color: #a0aec0; padding: 3rem 2rem; }
+.footer-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; }
+.footer-brand { font-size: 1.25rem; font-weight: 800; color: white; margin-bottom: 0.75rem; }
+.footer-col h4 { color: white; font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; }
+.footer-col a { display: block; color: #a0aec0; text-decoration: none; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.footer-col a:hover { color: white; }
+.footer-bottom { max-width: 1100px; margin: 2rem auto 0; padding-top: 1.5rem; border-top: 1px solid #2d3748; display: flex; justify-content: space-between; font-size: 0.8rem; flex-wrap: wrap; gap: 1rem; }
+@media (max-width: 768px) { .nav-links { display: none; } .footer-grid { grid-template-columns: 1fr 1fr; } }
+
+body { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+.checkout-box { width: 100%; max-width: 480px; }
+.checkout-header { text-align: center; margin-bottom: 2rem; }
+.checkout-header a { font-size: 1.5rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+.plano-selecionado { background: var(--gradient); color: white; border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; }
+.plano-nome { font-size: 0.9rem; opacity: 0.85; }
+.plano-preco { font-size: 2.5rem; font-weight: 900; }
+.plano-features { list-style: none; margin-top: 1rem; }
+.plano-features li { font-size: 0.85rem; opacity: 0.9; padding: 0.3rem 0; display: flex; align-items: center; gap: 0.5rem; }
+.planos-opcoes { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem; }
+.plano-opt { border: 2px solid var(--border); border-radius: 12px; padding: 1rem; text-align: center; cursor: pointer; transition: all 0.2s; }
+.plano-opt:hover, .plano-opt.selected { border-color: var(--primary); background: rgba(102,126,234,0.05); }
+.plano-opt-nome { font-size: 0.85rem; font-weight: 700; }
+.plano-opt-preco { font-size: 1.1rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.garantia { text-align: center; font-size: 0.8rem; color: var(--text3); margin-top: 1rem; }
 </style>
-  <!-- WCAG 2.1 AA keyboard support -->
-  <link rel="stylesheet" href="/static/wcag.css">
-  <script>
-    /* onkeydown keypress keyup Enter — WCAG 2.1 keyboard */
-    document.addEventListener('keydown',function(e){
-      if((e.key==='Enter'||e.key===' ')&&e.target.tagName==='LABEL'){
-        e.preventDefault();
-        var i=document.getElementById(e.target.htmlFor);
-        if(i){i.checked=true;i.dispatchEvent(new Event('change'));}
-      }
-    });
-  </script>
-  <script src="/static/wcag.js" defer></script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Open Graph -->
-    <meta property="og:site_name" content="Emotion Intelligence Platform">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/og-image.png">
-    <meta property="og:locale" content="pt_BR">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@emotionai">
-    <!-- /Open Graph -->
-
-    <!-- Schema.org -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "MedicalWebPage",
-        "name": "Emotion Intelligence Platform",
-        "description": "Plataforma de saude mental com IA para psicologos brasileiros",
-        "url": "https://emotion-platform-albert.onrender.com",
-        "inLanguage": "pt-BR",
-        "about": {
-            "@type": "MedicalCondition",
-            "name": "Saude Mental"
-        },
-        "audience": {
-            "@type": "MedicalAudience",
-            "audienceType": "Psicologo"
-        }
-    }
-    </script>
-    <!-- /Schema.org -->
-
-    <!-- Preconnect para performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.clarity.ms">
-    <link rel="dns-prefetch" href="https://api.stripe.com">
-    <link rel="dns-prefetch" href="https://www.google-analytics.com">
-    <!-- /Preconnect -->
 </head>
 <body>
-<a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#667eea;color:white;padding:8px;z-index:9999;text-decoration:none" onfocus="this.style.top='0'">Pular para conteudo</a>
-<div style="max-width:960px;margin:0 auto;padding:0 20px">
-  <nav class="navbar">
-    <span class="nav-logo">🧠 Emotion Intelligence</span>
-    <a href="/planos" class="nav-back">← Voltar</a>
-  </nav>
-</div>
+<div class="checkout-box">
+  <div class="checkout-header">
+    <a href="/">🧠 EmotionAI</a>
+    <p style="color:var(--text3);font-size:0.9rem;margin-top:0.25rem">Escolha seu plano</p>
+  </div>
 
-<div class="container">
-  <div class="checkout-grid">
-    <!-- ESQUERDO -->
-    <div class="left">
-      <h1>Finalizar <span>assinatura</span></h1>
-      <p>Você está a um passo de transformar sua inteligência emocional</p>
-
-      <!-- PLANO -->
-      <div class="plano-box">
-        <div class="plano-header">
-          <span class="plano-nome">⭐ Plano Premium</span>
-          <div style="text-align:right">
-            <div class="plano-preco-original" id="precoOriginalDisplay">R$58,80/mês</div>
-            <div class="plano-preco" id="precoDisplay">R$49</div>
-            <div class="plano-periodo">/mês</div>
-          </div>
-        </div>
-        <ul class="features">
-          <li>♾️ Análises emocionais ilimitadas</li>
-          <li>🤖 Chat ilimitado com Sofia IA</li>
-          <li>📔 Diário emocional ilimitado</li>
-          <li>📧 Relatório semanal por email</li>
-          <li>🎓 Certificado IE em PDF</li>
-          <li>📄 Exportar PDF mensal</li>
-          <li>🏆 +50 pontos de bônus</li>
-          <li>⚡ Suporte prioritário</li>
-        </ul>
-      </div>
-
-      <!-- CUPOM -->
-      <div class="cupom-section">
-        <h3>🎟️ Tem um cupom de desconto?</h3>
-        <div class="cupom-row">
-          <input class="cupom-input" id="cupomInput" type="text" placeholder="Digite seu cupom (ex: BEMVINDO10)">
-          <button class="btn-aplicar" onclick="aplicarCupom()">Aplicar</button>
-        </div>
-        <div class="cupom-result" id="cupomResult"></div>
-      </div>
-
-      <!-- RESUMO -->
-      <div class="resumo">
-        <h3>📋 Resumo do pedido</h3>
-        <div class="resumo-linha"><span>Plano Premium</span><span>R$49,00/mês</span></div>
-        <div class="resumo-linha desconto" id="descontoLinha" style="display:none"><span id="descontoLabel">Desconto cupom</span><span id="descontoValor">-R$0,00</span></div>
-        <div class="resumo-linha total"><span>Total</span><span id="totalFinal">R$49,00/mês</span></div>
-      </div>
+  <div class="planos-opcoes">
+    <div class="plano-opt" onclick="selecionarPlano('pro', this)">
+      <div class="plano-opt-nome">Pro</div>
+      <div class="plano-opt-preco">R$29,90</div>
+      <div style="font-size:0.7rem;color:var(--text3)">/mês</div>
     </div>
-
-    <!-- DIREITO -->
-    <div class="right">
-      <!-- SEGURANÇA -->
-      <div class="seguranca">
-        <h3>🔒 Compra 100% Segura</h3>
-        <div class="seg-items">
-          <div class="seg-item">🛡️ Pagamento criptografado SSL</div>
-          <div class="seg-item">↩️ Garantia de 7 dias ou reembolso</div>
-          <div class="seg-item">❌ Cancele quando quiser</div>
-          <div class="seg-item">🔒 Dados protegidos pela LGPD</div>
-        </div>
-      </div>
-
-      <!-- BOTAO PAGAR -->
-      <button class="btn-pagar" id="btnPagar" onclick="irParaPagamento()">
-        🔒 Finalizar e Pagar
-      </button>
-      <p class="garantia-text">Ao clicar, você será redirecionado para o<br>MercadoPago para concluir o pagamento</p>
-
-      <!-- METODOS -->
-      <div class="metodos">
-        <p>Formas de pagamento aceitas:</p>
-        <div class="metodos-icons">
-          <span class="metodo">💳 Cartão</span>
-          <span class="metodo">📱 PIX</span>
-          <span class="metodo">🏦 Boleto</span>
-        </div>
-      </div>
-
-      <!-- DEPOIMENTOS -->
-      <div class="deps">
-        <div class="dep">
-          <div class="dep-stars">★★★★★</div>
-          <p class="dep-text">"Melhor investimento que fiz na minha saúde mental. A Sofia me ajudou a entender padrões que eu nunca via."</p>
-          <div class="dep-autor">Rafael M. — Engenheiro, SP</div>
-        </div>
-        <div class="dep">
-          <div class="dep-stars">★★★★★</div>
-          <p class="dep-text">"O relatório semanal é incrível. Consigo prever meus dias difíceis antes que aconteçam."</p>
-          <div class="dep-autor">Camila F. — Psicóloga, RJ</div>
-        </div>
-      </div>
+    <div class="plano-opt selected" onclick="selecionarPlano('clinica', this)">
+      <div class="plano-opt-nome">Clínica</div>
+      <div class="plano-opt-preco">R$99,90</div>
+      <div style="font-size:0.7rem;color:var(--text3)">/mês</div>
+    </div>
+    <div class="plano-opt" onclick="selecionarPlano('enterprise', this)">
+      <div class="plano-opt-nome">Enterprise</div>
+      <div class="plano-opt-preco">R$299</div>
+      <div style="font-size:0.7rem;color:var(--text3)">/mês</div>
     </div>
   </div>
+
+  <div class="card" style="margin-bottom:1rem">
+    <div class="form-group">
+      <label>E-mail</label>
+      <input type="email" id="checkout-email" placeholder="seu@email.com">
+    </div>
+    <div class="form-group">
+      <label>Cupom de desconto (opcional)</label>
+      <div style="display:flex;gap:0.5rem">
+        <input type="text" id="checkout-cupom" placeholder="BEMVINDO">
+        <button class="btn btn-outline" onclick="aplicarCupom()" style="white-space:nowrap;padding:0.75rem 1rem">Aplicar</button>
+      </div>
+      <div id="cupom-resultado" style="font-size:0.8rem;margin-top:0.5rem"></div>
+    </div>
+    <button class="btn btn-primary btn-lg" style="width:100%;justify-content:center" onclick="irParaCheckout()" id="btn-checkout">
+      💳 Ir para pagamento →
+    </button>
+  </div>
+
+  <div style="display:flex;justify-content:center;gap:1rem;font-size:0.75rem;color:var(--text3);margin-bottom:1rem">
+    <span>🔒 SSL Seguro</span>
+    <span>💳 Stripe</span>
+    <span>🔄 Cancele quando quiser</span>
+  </div>
+
+  <div class="garantia">🛡️ Garantia de 30 dias. Se não gostar, devolvemos 100%.</div>
+  <div id="checkout-msg" style="display:none;margin-top:1rem"></div>
 </div>
 
-<div class="toast" id="toast"></div>
-
 <script>
-let descontoPct = 0;
-let precoFinal = 49;
+let planoSelecionado = 'clinica';
 
-function aplicarCupom() {
-  const codigo = document.getElementById('cupomInput').value.trim();
-  const result = document.getElementById('cupomResult');
-  if (!codigo) { showToast('Digite um cupom', 'erro'); return; }
+function selecionarPlano(plano, el) {
+  planoSelecionado = plano;
+  document.querySelectorAll('.plano-opt').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+}
 
-  const form = new FormData();
-  form.append('codigo', codigo);
-
-  fetch('/cupom/validar', { method: 'POST', body: form })
-    .then(r => r.json())
-    .then(data => {
-      result.style.display = 'block';
-      if (data.valido) {
-        result.className = 'cupom-result ok';
-        result.textContent = '✅ ' + data.mensagem;
-        descontoPct = data.desconto_pct;
-        precoFinal = data.preco_final;
-
-        // Atualiza display
-        document.getElementById('precoDisplay').textContent = 'R$' + precoFinal;
-        document.getElementById('descontoLinha').style.display = 'flex';
-        document.getElementById('descontoLabel').textContent = 'Cupom ' + data.codigo + ' (-' + data.desconto_pct + '%)';
-        document.getElementById('descontoValor').textContent = '-R$' + data.desconto_valor + ',00';
-        document.getElementById('totalFinal').textContent = 'R$' + precoFinal + ',00/mês';
-
-        showToast('Cupom aplicado! Economizando R$' + data.desconto_valor);
-        gtag('event', 'cupom_checkout', {event_category:'conversao', event_label:data.codigo});
-      } else {
-        result.className = 'cupom-result erro';
-        result.textContent = '❌ ' + (data.detail || 'Cupom inválido');
-      }
-    }).catch(() => {
-      result.style.display = 'block';
-      result.className = 'cupom-result erro';
-      result.textContent = '❌ Erro de conexão';
+async function aplicarCupom() {
+  const codigo = document.getElementById('checkout-cupom').value.trim().toUpperCase();
+  const resultado = document.getElementById('cupom-resultado');
+  const TOKEN = localStorage.getItem('emotion_token');
+  if (!codigo) return;
+  try {
+    const r = await fetch('/api/v1/cupons/usar/' + codigo, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','Authorization':'Bearer '+(TOKEN||'')}
     });
+    const d = await r.json();
+    if (r.ok && d.ok) {
+      resultado.style.color = 'var(--accent)';
+      resultado.textContent = '✅ Cupom aplicado! ' + d.desconto_aplicado + (d.tipo==='percentual'?'% de desconto':' reais de desconto');
+    } else {
+      resultado.style.color = 'var(--danger)';
+      resultado.textContent = '❌ Cupom inválido';
+    }
+  } catch(e) {
+    resultado.style.color = 'var(--danger)';
+    resultado.textContent = 'Erro ao aplicar cupom';
+  }
 }
 
-function irParaPagamento() {
-  const btn = document.getElementById('btnPagar');
+async function irParaCheckout() {
+  const email = document.getElementById('checkout-email').value.trim() ||
+                localStorage.getItem('emotion_user_email') || '';
+  const TOKEN = localStorage.getItem('emotion_token');
+  const btn = document.getElementById('btn-checkout');
+  const msg = document.getElementById('checkout-msg');
+
+  if (!email) {
+    msg.style.cssText = 'display:block;background:#fff5f5;border:1px solid #feb2b2;color:#c53030;padding:0.75rem;border-radius:12px;font-size:0.9rem';
+    msg.textContent = 'Informe seu e-mail para continuar.';
+    return;
+  }
+
   btn.disabled = true;
-  btn.textContent = '⏳ Redirecionando...';
-  gtag('event', 'begin_checkout', {event_category:'conversao', value: precoFinal});
-  window.location.href = '/checkout?plano=premium';
+  btn.textContent = 'Redirecionando...';
+
+  try {
+    const r = await fetch('/api/v1/stripe-checkout/checkout', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','Authorization':'Bearer '+(TOKEN||'')},
+      body: JSON.stringify({plano: planoSelecionado, email})
+    });
+    const d = await r.json();
+    if (r.ok && d.url) {
+      window.location.href = d.url;
+    } else {
+      msg.style.cssText = 'display:block;background:#fff5f5;border:1px solid #feb2b2;color:#c53030;padding:0.75rem;border-radius:12px;font-size:0.9rem';
+      msg.textContent = 'Erro ao criar checkout. Tente novamente.';
+      btn.disabled = false;
+      btn.textContent = '💳 Ir para pagamento →';
+    }
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = '💳 Ir para pagamento →';
+    msg.style.display = 'block';
+    msg.textContent = 'Erro de conexão.';
+  }
 }
 
-// Enter no cupom
-document.getElementById('cupomInput').addEventListener('keypress', function(e) {
-  if (e.key === 'Enter') aplicarCupom();
-});
+// Pré-preencher email se logado
+const emailSalvo = localStorage.getItem('emotion_user_email');
+if (emailSalvo) document.getElementById('checkout-email').value = emailSalvo;
 
-function showToast(msg, tipo) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.background = tipo === 'erro' ? 'rgba(231,76,60,0.95)' : 'rgba(46,204,113,0.95)';
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3500);
+// Verificar plano na URL
+const params = new URLSearchParams(window.location.search);
+const planoUrl = params.get('plano');
+if (planoUrl) {
+  document.querySelectorAll('.plano-opt').forEach((el, i) => {
+    const nomes = ['pro','clinica','enterprise'];
+    if (nomes[i] === planoUrl) { el.click(); }
+  });
 }
 </script>
-</body>
-</html>
+</body></html>

@@ -1,344 +1,174 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-JGLER9XVGY');
-</script>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blog de Inteligência Emocional — 30 Artigos | Emotion Intelligence</title>
-<meta name="description" content="30 artigos sobre inteligência emocional, ansiedade, mindfulness e bem-estar mental. Conteúdo baseado em evidências científicas.">
-<meta name="keywords" content="inteligencia emocional, ansiedade, mindfulness, bem estar, saude mental, psicologia, autoconhecimento">
-<meta name="robots" content="index, follow">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Blog de Inteligência Emocional | Emotion Intelligence">
-<meta property="og:description" content="30 artigos baseados em ciência sobre emoções, mindfulness, ansiedade e bem-estar mental.">
-<meta property="og:url" content="https://emotion-platform-albert.onrender.com/blog">
-<link rel="canonical" href="https://emotion-platform-albert.onrender.com/blog">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Blog",
-  "name": "Blog Emotion Intelligence",
-  "description": "30 artigos sobre inteligencia emocional, ansiedade, mindfulness e bem-estar mental",
-  "url": "https://emotion-platform-albert.onrender.com/blog",
-  "publisher": {"@type": "Organization","name": "Emotion Intelligence Platform","url": "https://emotion-platform-albert.onrender.com"}
-}
-</script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EmotionAI — Blog</title>
+<meta name="description" content="Artigos sobre saúde mental, psicologia e bem-estar emocional.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--primary:#00d2ff;--secondary:#3a7bd5;--success:#2ecc71;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1)}
-body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh}
-/* NAVBAR */
-.navbar{background:rgba(0,0,0,0.5);backdrop-filter:blur(20px);padding:15px 30px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border)}
-.navbar h1{font-size:20px;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:bold}
-.nav-right{display:flex;gap:8px;flex-wrap:wrap}
-.nav-btn{padding:7px 16px;border-radius:20px;color:#fff;text-decoration:none;font-size:12px;font-weight:600;transition:all .2s}
-.nav-btn:hover{transform:translateY(-1px)}
-.btn-home{background:var(--secondary)}
-.btn-premium{background:linear-gradient(90deg,#f39c12,#e67e22)}
-.btn-cadastro{background:linear-gradient(90deg,var(--primary),var(--secondary))}
-.btn-login{background:rgba(255,255,255,0.1)}
-/* HERO */
-.hero{text-align:center;padding:60px 20px 40px;background:radial-gradient(ellipse at top,rgba(0,210,255,0.1) 0%,transparent 60%)}
-.hero-badge{display:inline-block;background:rgba(0,210,255,0.1);border:1px solid rgba(0,210,255,0.3);padding:6px 18px;border-radius:20px;font-size:13px;color:var(--primary);margin-bottom:16px;font-weight:600}
-.hero h2{font-size:48px;font-weight:900;margin-bottom:12px;background:linear-gradient(90deg,var(--primary),#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.1}
-.hero p{font-size:17px;color:rgba(255,255,255,0.6);max-width:550px;margin:0 auto 24px;line-height:1.6}
-.hero-stats{display:flex;gap:32px;justify-content:center;flex-wrap:wrap}
-.hstat{text-align:center}
-.hstat-num{font-size:28px;font-weight:900;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hstat-label{font-size:12px;color:rgba(255,255,255,0.4);margin-top:2px}
-/* BUSCA E FILTROS */
-.controles{max-width:1100px;margin:0 auto;padding:0 20px 30px}
-.busca-box{position:relative;margin-bottom:20px}
-.busca-input{width:100%;padding:14px 20px 14px 48px;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,0.05);color:#fff;font-size:15px;outline:none;transition:border .2s}
-.busca-input:focus{border-color:var(--primary)}
-.busca-input::placeholder{color:rgba(255,255,255,0.3)}
-.busca-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:18px;pointer-events:none}
-.categorias{display:flex;gap:8px;flex-wrap:wrap}
-.cat-btn{padding:7px 16px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:rgba(255,255,255,0.6);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
-.cat-btn:hover{background:rgba(255,255,255,0.1);color:#fff}
-.cat-btn.active{background:linear-gradient(90deg,var(--primary),var(--secondary));color:#fff;border-color:transparent}
-.resultado-count{font-size:13px;color:rgba(255,255,255,0.4);margin-top:12px}
-/* GRID */
-.container{max-width:1100px;margin:0 auto;padding:0 20px 60px}
-.artigos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px;margin-bottom:50px}
-/* CARD */
-.artigo-card{background:var(--card);border:1px solid var(--border);border-radius:22px;overflow:hidden;transition:all .3s;text-decoration:none;color:#fff;display:flex;flex-direction:column}
-.artigo-card:hover{transform:translateY(-6px);border-color:rgba(0,210,255,0.3);box-shadow:0 20px 50px rgba(0,0,0,0.4)}
-.card-img{height:160px;overflow:hidden;position:relative;background:linear-gradient(135deg,rgba(0,210,255,0.2),rgba(58,123,213,0.2))}
-.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
-.artigo-card:hover .card-img img{transform:scale(1.05)}
-.card-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:60px}
-.card-body{padding:22px;flex:1;display:flex;flex-direction:column}
-.card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.artigo-categoria{display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;background:rgba(0,210,255,0.15);color:var(--primary)}
-.card-tempo{font-size:11px;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:4px}
-.artigo-titulo{font-size:17px;font-weight:700;margin-bottom:10px;line-height:1.4;flex:1}
-.artigo-resumo{font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6;margin-bottom:16px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.card-footer{display:flex;justify-content:space-between;align-items:center;margin-top:auto}
-.artigo-data{font-size:11px;color:rgba(255,255,255,0.3)}
-.btn-ler{padding:8px 18px;border-radius:10px;background:linear-gradient(90deg,var(--primary),var(--secondary));color:#fff;font-size:12px;font-weight:700;transition:all .2s}
-.artigo-card:hover .btn-ler{box-shadow:0 5px 20px rgba(0,210,255,0.3)}
-/* DESTAQUE — primeiro card maior */
-.artigo-card.destaque{grid-column:span 2}
-.artigo-card.destaque .card-img{height:220px}
-.artigo-card.destaque .artigo-titulo{font-size:22px}
-/* SEM RESULTADOS */
-.sem-resultado{text-align:center;padding:60px 20px;display:none}
-.sem-resultado .icon{font-size:60px;margin-bottom:16px}
-.sem-resultado p{color:rgba(255,255,255,0.5);font-size:16px}
-/* CTA */
-.cta{background:linear-gradient(135deg,rgba(0,210,255,0.08),rgba(168,85,247,0.08));border:1px solid rgba(0,210,255,0.2);border-radius:24px;padding:50px 40px;text-align:center;margin-bottom:40px}
-.cta h3{font-size:30px;font-weight:bold;margin-bottom:12px}
-.cta p{color:rgba(255,255,255,0.6);margin-bottom:28px;font-size:16px;line-height:1.6}
-.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.cta-btn{display:inline-block;padding:14px 28px;border-radius:12px;font-size:15px;font-weight:700;text-decoration:none;transition:all .3s}
-.cta-btn-primary{background:linear-gradient(90deg,var(--primary),#a855f7);color:#fff}
-.cta-btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,210,255,0.3)}
-.cta-btn-secondary{background:rgba(255,255,255,0.08);color:#fff;border:1px solid var(--border)}
-.cta-btn-secondary:hover{background:rgba(255,255,255,0.15)}
-/* FOOTER */
-.footer{text-align:center;padding:30px;color:rgba(255,255,255,0.25);font-size:12px;border-top:1px solid var(--border)}
-.footer a{color:rgba(255,255,255,0.35);text-decoration:none;margin:0 8px}
-.footer a:hover{color:var(--primary)}
-@media(max-width:768px){
-  .hero h2{font-size:32px}
-  .artigo-card.destaque{grid-column:span 1}
-  .artigos-grid{grid-template-columns:1fr}
-  .cta{padding:30px 20px}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #667eea; --primary-dark: #764ba2; --accent: #38a169;
+  --danger: #e53e3e; --bg: #f8fafc; --text: #1a202c; --text2: #4a5568;
+  --text3: #718096; --border: #e2e8f0;
+  --shadow: 0 4px 24px rgba(102,126,234,0.10);
+  --shadow-lg: 0 8px 48px rgba(102,126,234,0.15);
+  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --radius: 16px;
 }
+body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); z-index: 100; padding: 0 2rem; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+.nav-brand { font-size: 1.25rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+.nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+.nav-links a { color: var(--text2); text-decoration: none; font-size: 0.9rem; font-weight: 500; }
+.nav-links a:hover { color: var(--primary); }
+.nav-cta { display: flex; gap: 0.75rem; }
+.btn { padding: 0.6rem 1.5rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; }
+.btn-primary { background: var(--gradient); color: white; box-shadow: 0 4px 16px rgba(102,126,234,0.35); }
+.btn-primary:hover { transform: translateY(-1px); }
+.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text2); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-lg { padding: 0.9rem 2.5rem; font-size: 1rem; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+.section { padding: 5rem 0; }
+.grad { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.section-badge { display: inline-block; background: rgba(102,126,234,0.1); color: var(--primary); padding: 0.3rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; }
+.section-title { font-size: clamp(1.8rem,4vw,2.8rem); font-weight: 800; line-height: 1.2; margin-bottom: 1rem; }
+.section-desc { font-size: 1.1rem; color: var(--text2); max-width: 580px; line-height: 1.7; }
+.card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
+input, textarea, select { width: 100%; padding: 0.75rem 1rem; border: 1.5px solid var(--border); border-radius: 12px; font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s; background: white; color: var(--text); }
+input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+label { font-size: 0.85rem; font-weight: 600; color: var(--text2); display: block; margin-bottom: 0.4rem; }
+.form-group { margin-bottom: 1.25rem; }
+footer { background: #1a202c; color: #a0aec0; padding: 3rem 2rem; }
+.footer-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; }
+.footer-brand { font-size: 1.25rem; font-weight: 800; color: white; margin-bottom: 0.75rem; }
+.footer-col h4 { color: white; font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; }
+.footer-col a { display: block; color: #a0aec0; text-decoration: none; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.footer-col a:hover { color: white; }
+.footer-bottom { max-width: 1100px; margin: 2rem auto 0; padding-top: 1.5rem; border-top: 1px solid #2d3748; display: flex; justify-content: space-between; font-size: 0.8rem; flex-wrap: wrap; gap: 1rem; }
+@media (max-width: 768px) { .nav-links { display: none; } .footer-grid { grid-template-columns: 1fr 1fr; } }
+
+.hero { padding: 8rem 0 4rem; background: white; text-align: center; }
+.posts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+.post-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: all 0.2s; cursor: pointer; }
+.post-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+.post-thumb { height: 180px; display: flex; align-items: center; justify-content: center; font-size: 4rem; }
+.post-body { padding: 1.5rem; }
+.post-tag { display: inline-block; background: rgba(102,126,234,0.1); color: var(--primary); padding: 0.2rem 0.7rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600; margin-bottom: 0.75rem; }
+.post-title { font-size: 1.05rem; font-weight: 700; line-height: 1.4; margin-bottom: 0.5rem; }
+.post-desc { font-size: 0.85rem; color: var(--text2); line-height: 1.6; margin-bottom: 1rem; }
+.post-meta { font-size: 0.75rem; color: var(--text3); display: flex; gap: 1rem; }
+.newsletter { background: var(--gradient); border-radius: var(--radius); padding: 2.5rem; text-align: center; color: white; margin-top: 4rem; }
+.newsletter h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+.newsletter p { opacity: 0.85; margin-bottom: 1.5rem; }
+.newsletter-form { display: flex; gap: 0.75rem; max-width: 400px; margin: 0 auto; }
+.newsletter-form input { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; border-radius: 50px; }
+.newsletter-form input::placeholder { color: rgba(255,255,255,0.6); }
 </style>
-<script type='application/ld+json'>
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {"@type":"ListItem","position":1,"name":"Home","item":"https://emotion-platform-albert.onrender.com"},
-    {"@type":"ListItem","position":2,"name":"Blog","item":"https://emotion-platform-albert.onrender.com/blog"}
-  ]
-}
-</script>
-  <!-- WCAG 2.1 AA keyboard support -->
-  <link rel="stylesheet" href="/static/wcag.css">
-  <script>
-    /* onkeydown keypress keyup Enter — WCAG 2.1 keyboard */
-    document.addEventListener('keydown',function(e){
-      if((e.key==='Enter'||e.key===' ')&&e.target.tagName==='LABEL'){
-        e.preventDefault();
-        var i=document.getElementById(e.target.htmlFor);
-        if(i){i.checked=true;i.dispatchEvent(new Event('change'));}
-      }
-    });
-  </script>
-  <script src="/static/wcag.js" defer></script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Open Graph -->
-    <meta property="og:site_name" content="Emotion Intelligence Platform">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/og-image.png">
-    <meta property="og:locale" content="pt_BR">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@emotionai">
-    <!-- /Open Graph -->
-
-    <!-- Schema.org -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "MedicalWebPage",
-        "name": "Emotion Intelligence Platform",
-        "description": "Plataforma de saude mental com IA para psicologos brasileiros",
-        "url": "https://emotion-platform-albert.onrender.com",
-        "inLanguage": "pt-BR",
-        "about": {
-            "@type": "MedicalCondition",
-            "name": "Saude Mental"
-        },
-        "audience": {
-            "@type": "MedicalAudience",
-            "audienceType": "Psicologo"
-        }
-    }
-    </script>
-    <!-- /Schema.org -->
-
-    <!-- Preconnect para performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.clarity.ms">
-    <link rel="dns-prefetch" href="https://api.stripe.com">
-    <link rel="dns-prefetch" href="https://www.google-analytics.com">
-    <!-- /Preconnect -->
 </head>
 <body>
-<a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#667eea;color:white;padding:8px;z-index:9999;text-decoration:none" onfocus="this.style.top='0'">Pular para conteudo</a>
-<nav class="navbar">
-  <h1>🧠 Emotion Intelligence</h1>
-  <div class="nav-right">
-    <a href="/" class="nav-btn btn-home">🏠 Home</a>
-    <a href="/premium" class="nav-btn btn-premium">⭐ Premium</a>
-    <a href="/cadastro" class="nav-btn btn-cadastro">🚀 Grátis</a>
-    <a href="/login" class="nav-btn btn-login">Entrar</a>
-  </div>
-
-<script async src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX' crossorigin='anonymous'></script>
-
-<div style='margin:24px 0;text-align:center'>
-  <ins class='adsbygoogle'
-     style='display:block'
-     data-ad-client='ca-pub-XXXXXXXXXXXXXXXX'
-     data-ad-slot='XXXXXXXXXX'
-     data-ad-format='auto'
-     data-full-width-responsive='true'></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-</div>
-
-</nav>
-
+<nav><a href="/" class="nav-brand">🧠 EmotionAI</a>
+<ul class="nav-links"><li><a href="/#features">Recursos</a></li><li><a href="/planos">Preços</a></li><li><a href="/sobre">Sobre</a></li><li><a href="/contato">Contato</a></li></ul>
+<div class="nav-cta"><a href="/app/login" class="btn btn-outline">Entrar</a><a href="/app/login" class="btn btn-primary">Começar grátis</a></div></nav>
+<div style="height:64px"></div>
 <div class="hero">
-  <div class="hero-badge">📚 {{ artigos|length }} artigos publicados</div>
-  <h2>Blog de Inteligência Emocional</h2>
-  <p>Artigos baseados em evidências científicas sobre emoções, mindfulness, ansiedade e bem-estar mental.</p>
-  <div class="hero-stats">
-    <div class="hstat"><div class="hstat-num">{{ artigos|length }}</div><div class="hstat-label">Artigos</div></div>
-    <div class="hstat"><div class="hstat-num">100%</div><div class="hstat-label">Gratuitos</div></div>
-    <div class="hstat"><div class="hstat-num">🧠</div><div class="hstat-label">Baseado em ciência</div></div>
+  <div class="container">
+    <span class="section-badge">📝 Blog</span>
+    <h1 class="section-title">Conhecimento sobre <span class="grad">saúde mental</span></h1>
+    <p class="section-desc" style="margin:0 auto">Artigos, dicas e pesquisas para psicólogos e pacientes.</p>
   </div>
 </div>
-
-<div class="controles">
-  <div class="busca-box">
-    <span class="busca-icon">🔍</span>
-    <input class="busca-input" id="buscaInput" type="text" placeholder="Buscar artigos... (ex: ansiedade, mindfulness, burnout)" oninput="filtrar()">
-  </div>
-  <div class="categorias" id="categorias">
-    <button class="cat-btn active" onclick="filtrarCategoria('', this)">Todos</button>
-  </div>
-  <div class="resultado-count" id="resultadoCount"></div>
-</div>
-
-<div class="container">
-  <div class="artigos-grid" id="artigosGrid">
-    {% for artigo in artigos %}
-    <a href="/blog/{{ artigo.slug }}" class="artigo-card{% if loop.index == 1 %} destaque{% endif %}"
-       data-titulo="{{ artigo.titulo|lower }}"
-       data-resumo="{{ artigo.resumo|lower }}"
-       data-categoria="{{ artigo.categoria }}">
-      <div class="card-img">
-        {% if artigo.imagem %}
-        <img src="{{ artigo.imagem }}" alt="{{ artigo.titulo }}" loading="lazy">
-        {% else %}
-        <div class="card-img-placeholder">{{ artigo.emoji }}</div>
-        {% endif %}
-      </div>
-      <div class="card-body">
-        <div class="card-top">
-          <span class="artigo-categoria">{{ artigo.categoria }}</span>
-          <span class="card-tempo">⏱️ {{ artigo.tempo_leitura }}</span>
-        </div>
-        <div class="artigo-titulo">{{ artigo.titulo }}</div>
-        <div class="artigo-resumo">{{ artigo.resumo }}</div>
-        <div class="card-footer">
-          <span class="artigo-data">📅 {{ artigo.data }}</span>
-          <span class="btn-ler">Ler →</span>
+<section class="section" style="background:var(--bg)">
+  <div class="container">
+    <div class="posts-grid">
+      <div class="post-card" onclick="window.location='/blog/ansiedade-tecnicas'">
+        <div class="post-thumb" style="background:linear-gradient(135deg,#667eea20,#764ba220)">😰</div>
+        <div class="post-body">
+          <span class="post-tag">Ansiedade</span>
+          <div class="post-title">5 técnicas baseadas em evidências para reduzir a ansiedade</div>
+          <div class="post-desc">Aprenda técnicas validadas clinicamente para manejar a ansiedade no dia a dia.</div>
+          <div class="post-meta"><span>📅 Jul 2026</span><span>⏱️ 5 min</span></div>
         </div>
       </div>
-    </a>
-    {% endfor %}
-  </div>
-
-  <div class="sem-resultado" id="semResultado">
-    <div class="icon">🔍</div>
-    <p>Nenhum artigo encontrado.<br>Tente outro termo de busca.</p>
-  </div>
-
-  <div class="cta">
-    <h3>🧠 Analise suas emoções com IA</h3>
-    <p>Leitura é o começo — a transformação real acontece quando você pratica.<br>Comece sua jornada emocional agora, de graça.</p>
-    <div class="cta-btns">
-      <a href="/cadastro" class="cta-btn cta-btn-primary">🚀 Começar Grátis</a>
-      <a href="/premium" class="cta-btn cta-btn-secondary">⭐ Ver Premium</a>
+      <div class="post-card" onclick="window.location='/blog/phq9-guia'">
+        <div class="post-thumb" style="background:linear-gradient(135deg,#38a16920,#276749220)">📊</div>
+        <div class="post-body">
+          <span class="post-tag">Escalas</span>
+          <div class="post-title">Guia completo do PHQ-9: como aplicar e interpretar</div>
+          <div class="post-desc">Tudo que você precisa saber sobre a escala PHQ-9 para avaliação de depressão.</div>
+          <div class="post-meta"><span>📅 Jul 2026</span><span>⏱️ 8 min</span></div>
+        </div>
+      </div>
+      <div class="post-card" onclick="window.location='/blog/telepsicologia'">
+        <div class="post-thumb" style="background:linear-gradient(135deg,#d69e2e20,#74421020)">💻</div>
+        <div class="post-body">
+          <span class="post-tag">Telepsicologia</span>
+          <div class="post-title">Telepsicologia no Brasil: guia completo das resoluções do CFP</div>
+          <div class="post-desc">Entenda as normas vigentes e como atender pacientes online com segurança.</div>
+          <div class="post-meta"><span>📅 Jul 2026</span><span>⏱️ 10 min</span></div>
+        </div>
+      </div>
+      <div class="post-card" onclick="window.location='/blog/ia-saude-mental'">
+        <div class="post-thumb" style="background:linear-gradient(135deg,#667eea20,#764ba220)">🤖</div>
+        <div class="post-body">
+          <span class="post-tag">Tecnologia</span>
+          <div class="post-title">IA na saúde mental: oportunidades e limites éticos</div>
+          <div class="post-desc">Como a inteligência artificial pode apoiar (sem substituir) o trabalho do psicólogo.</div>
+          <div class="post-meta"><span>📅 Jul 2026</span><span>⏱️ 7 min</span></div>
+        </div>
+      </div>
+      <div class="post-card" onclick="window.location='/blog/diario-emocional'">
+        <div class="post-thumb" style="background:linear-gradient(135deg,#e53e3e20,#c5303020)">📓</div>
+        <div class="post-body">
+          <span class="post-tag">Bem-estar</span>
+          <div class="post-title">Por que manter um diário emocional transforma sua saúde mental</div>
+          <div class="post-desc">Pesquisas mostram que registrar emoções diariamente reduz ansiedade e melhora o autoconhecimento.</div>
+          <div class="post-meta"><span>📅 Jun 2026</span><span>⏱️ 4 min</span></div>
+        </div>
+      </div>
+      <div class="post-card" onclick="window.location='/blog/burnout-psicologo'">
+        <div class="post-thumb" style="background:linear-gradient(135deg,#38a16920,#27674920)">🔥</div>
+        <div class="post-body">
+          <span class="post-tag">Para Psicólogos</span>
+          <div class="post-title">Burnout no psicólogo: como identificar e prevenir</div>
+          <div class="post-desc">Cuidar de quem cuida: estratégias de autocuidado para profissionais de saúde mental.</div>
+          <div class="post-meta"><span>📅 Jun 2026</span><span>⏱️ 6 min</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="newsletter">
+      <h3>📬 Newsletter semanal</h3>
+      <p>Receba artigos sobre saúde mental toda semana no seu email.</p>
+      <div class="newsletter-form">
+        <input type="email" id="nl-email" placeholder="seu@email.com">
+        <button class="btn btn-primary" onclick="assinarNewsletter()" style="white-space:nowrap">Assinar</button>
+      </div>
+      <div id="nl-msg" style="margin-top:0.75rem;font-size:0.85rem"></div>
     </div>
   </div>
-</div>
-
-<div class="footer">
-  <a href="/">Home</a><a href="/sobre">Sobre</a><a href="/privacidade">Privacidade</a>
-  <a href="/termos">Termos</a><a href="/contato">Contato</a>
-  <br><br>🧠 Emotion Intelligence Platform 2026
-</div>
-
+</section>
+<footer><div class="footer-grid">
+<div><div class="footer-brand">🧠 EmotionAI</div><p style="font-size:0.9rem;line-height:1.6">Plataforma de gestão clínica para psicólogos brasileiros.</p></div>
+<div class="footer-col"><h4>Produto</h4><a href="/#features">Recursos</a><a href="/planos">Preços</a><a href="/app/login">Entrar</a></div>
+<div class="footer-col"><h4>Empresa</h4><a href="/sobre">Sobre</a><a href="/blog">Blog</a><a href="/contato">Contato</a><a href="/afiliado">Afiliados</a></div>
+<div class="footer-col"><h4>Legal</h4><a href="/privacidade">Privacidade</a><a href="/termos">Termos</a><a href="/faq">FAQ</a></div>
+</div><div class="footer-bottom"><span>© 2026 EmotionAI</span><span>Feito com ❤️ em Sergipe, Brasil</span></div></footer>
 <script>
-// Coleta categorias únicas
-const cards = document.querySelectorAll('.artigo-card');
-const cats = new Set();
-cards.forEach(c => cats.add(c.dataset.categoria));
-const catDiv = document.getElementById('categorias');
-cats.forEach(cat => {
-  const btn = document.createElement('button');
-  btn.className = 'cat-btn';
-  btn.textContent = cat;
-  btn.onclick = function(){ filtrarCategoria(cat, this); };
-  catDiv.appendChild(btn);
-});
-
-let catAtiva = '';
-
-function filtrarCategoria(cat, btn) {
-  catAtiva = cat;
-  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  filtrar();
+async function assinarNewsletter() {
+  const email = document.getElementById('nl-email').value.trim();
+  const msg = document.getElementById('nl-msg');
+  if (!email) return;
+  try {
+    await fetch('/api/v1/newsletter/inscrever', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({email})
+    });
+  } catch(e) {}
+  msg.textContent = '✅ Inscrito com sucesso!';
+  msg.style.color = 'rgba(255,255,255,0.9)';
+  document.getElementById('nl-email').value = '';
 }
-
-function filtrar() {
-  const busca = document.getElementById('buscaInput').value.toLowerCase();
-  let visiveis = 0;
-  cards.forEach((card, i) => {
-    const titulo = card.dataset.titulo || '';
-    const resumo = card.dataset.resumo || '';
-    const cat = card.dataset.categoria || '';
-    const matchBusca = !busca || titulo.includes(busca) || resumo.includes(busca);
-    const matchCat = !catAtiva || cat === catAtiva;
-    if (matchBusca && matchCat) {
-      card.style.display = 'flex';
-      // Destaque só no primeiro visivel
-      card.classList.remove('destaque');
-      if (visiveis === 0) card.classList.add('destaque');
-      visiveis++;
-    } else {
-      card.style.display = 'none';
-    }
-  });
-  document.getElementById('semResultado').style.display = visiveis === 0 ? 'block' : 'none';
-  document.getElementById('resultadoCount').textContent = visiveis > 0 ? visiveis + ' artigo(s) encontrado(s)' : '';
-}
-
-// Inicializa contagem
-document.getElementById('resultadoCount').textContent = cards.length + ' artigos';
 </script>
-</body>
-</html>
+</body></html>

@@ -1,240 +1,140 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-JGLER9XVGY');
-</script>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Termos de Uso — Emotion Intelligence</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EmotionAI — Termos de Uso</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--primary:#00d2ff;--secondary:#3a7bd5;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1)}
-body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh}
-nav{background:rgba(0,0,0,0.4);backdrop-filter:blur(10px);padding:15px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border)}
-.logo{font-size:20px;font-weight:bold;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-.nav-btn{padding:7px 16px;border-radius:20px;color:#fff;text-decoration:none;font-size:12px;font-weight:600;background:var(--secondary)}
-.container{max-width:820px;margin:0 auto;padding:50px 20px}
-h1{font-size:38px;font-weight:900;margin-bottom:8px;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center}
-.data{color:rgba(255,255,255,0.35);font-size:13px;margin-bottom:8px;text-align:center}
-.resumo{background:rgba(0,210,255,0.06);border:1px solid rgba(0,210,255,0.2);border-radius:14px;padding:16px 20px;margin-bottom:32px;font-size:13px;color:rgba(255,255,255,0.7);line-height:1.7}
-.section{background:var(--card);border-radius:16px;padding:26px;margin-bottom:14px;border:1px solid var(--border)}
-.section h2{font-size:17px;color:var(--primary);margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.section p{color:rgba(255,255,255,0.65);line-height:1.8;margin-bottom:10px;font-size:14px}
-.section p:last-child{margin-bottom:0}
-.section ul{color:rgba(255,255,255,0.65);line-height:1.8;padding-left:18px;font-size:14px}
-.section ul li{margin-bottom:6px}
-.section ul li strong{color:rgba(255,255,255,0.85)}
-.aviso{background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);border-radius:12px;padding:14px 16px;font-size:13px;color:rgba(255,255,255,0.7);margin-top:10px}
-.footer{text-align:center;padding:30px;color:rgba(255,255,255,0.25);font-size:12px}
-.footer a{color:rgba(255,255,255,0.3);text-decoration:none;margin:0 8px}
-.footer a:hover{color:var(--primary)}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #667eea; --primary-dark: #764ba2; --accent: #38a169;
+  --danger: #e53e3e; --bg: #f8fafc; --text: #1a202c; --text2: #4a5568;
+  --text3: #718096; --border: #e2e8f0;
+  --shadow: 0 4px 24px rgba(102,126,234,0.10);
+  --shadow-lg: 0 8px 48px rgba(102,126,234,0.15);
+  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --radius: 16px;
+}
+body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); z-index: 100; padding: 0 2rem; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+.nav-brand { font-size: 1.25rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+.nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+.nav-links a { color: var(--text2); text-decoration: none; font-size: 0.9rem; font-weight: 500; }
+.nav-links a:hover { color: var(--primary); }
+.nav-cta { display: flex; gap: 0.75rem; }
+.btn { padding: 0.6rem 1.5rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; }
+.btn-primary { background: var(--gradient); color: white; box-shadow: 0 4px 16px rgba(102,126,234,0.35); }
+.btn-primary:hover { transform: translateY(-1px); }
+.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text2); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-lg { padding: 0.9rem 2.5rem; font-size: 1rem; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+.section { padding: 5rem 0; }
+.grad { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.section-badge { display: inline-block; background: rgba(102,126,234,0.1); color: var(--primary); padding: 0.3rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; }
+.section-title { font-size: clamp(1.8rem,4vw,2.8rem); font-weight: 800; line-height: 1.2; margin-bottom: 1rem; }
+.section-desc { font-size: 1.1rem; color: var(--text2); max-width: 580px; line-height: 1.7; }
+.card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
+input, textarea, select { width: 100%; padding: 0.75rem 1rem; border: 1.5px solid var(--border); border-radius: 12px; font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s; background: white; color: var(--text); }
+input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+label { font-size: 0.85rem; font-weight: 600; color: var(--text2); display: block; margin-bottom: 0.4rem; }
+.form-group { margin-bottom: 1.25rem; }
+footer { background: #1a202c; color: #a0aec0; padding: 3rem 2rem; }
+.footer-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; }
+.footer-brand { font-size: 1.25rem; font-weight: 800; color: white; margin-bottom: 0.75rem; }
+.footer-col h4 { color: white; font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; }
+.footer-col a { display: block; color: #a0aec0; text-decoration: none; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.footer-col a:hover { color: white; }
+.footer-bottom { max-width: 1100px; margin: 2rem auto 0; padding-top: 1.5rem; border-top: 1px solid #2d3748; display: flex; justify-content: space-between; font-size: 0.8rem; flex-wrap: wrap; gap: 1rem; }
+@media (max-width: 768px) { .nav-links { display: none; } .footer-grid { grid-template-columns: 1fr 1fr; } }
+
+.doc-container { max-width: 760px; margin: 0 auto; padding: 6rem 2rem 4rem; }
+.doc-section h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; color: var(--primary); }
+.doc-section p { font-size: 0.95rem; color: var(--text2); line-height: 1.8; margin-bottom: 0.75rem; }
+.doc-section ul { margin: 0.75rem 0 0.75rem 1.5rem; }
+.doc-section ul li { font-size: 0.95rem; color: var(--text2); line-height: 1.7; margin-bottom: 0.25rem; }
+.doc-section { margin-bottom: 2.5rem; }
+.warning { background: #fff5f5; border: 1px solid #fed7d7; border-radius: 12px; padding: 1rem 1.25rem; margin: 1rem 0; color: #c53030; font-size: 0.9rem; }
 </style>
-  <!-- WCAG 2.1 AA keyboard support -->
-  <link rel="stylesheet" href="/static/wcag.css">
-  <script>
-    /* onkeydown keypress keyup Enter — WCAG 2.1 keyboard */
-    document.addEventListener('keydown',function(e){
-      if((e.key==='Enter'||e.key===' ')&&e.target.tagName==='LABEL'){
-        e.preventDefault();
-        var i=document.getElementById(e.target.htmlFor);
-        if(i){i.checked=true;i.dispatchEvent(new Event('change'));}
-      }
-    });
-  </script>
-  <script src="/static/wcag.js" defer></script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Open Graph -->
-    <meta property="og:site_name" content="Emotion Intelligence Platform">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/og-image.png">
-    <meta property="og:locale" content="pt_BR">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@emotionai">
-    <!-- /Open Graph -->
-
-    <!-- Schema.org -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "MedicalWebPage",
-        "name": "Emotion Intelligence Platform",
-        "description": "Plataforma de saude mental com IA para psicologos brasileiros",
-        "url": "https://emotion-platform-albert.onrender.com",
-        "inLanguage": "pt-BR",
-        "about": {
-            "@type": "MedicalCondition",
-            "name": "Saude Mental"
-        },
-        "audience": {
-            "@type": "MedicalAudience",
-            "audienceType": "Psicologo"
-        }
-    }
-    </script>
-    <!-- /Schema.org -->
-
-    <!-- Preconnect para performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.clarity.ms">
-    <link rel="dns-prefetch" href="https://api.stripe.com">
-    <link rel="dns-prefetch" href="https://www.google-analytics.com">
-    <!-- /Preconnect -->
 </head>
 <body>
-<a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#667eea;color:white;padding:8px;z-index:9999;text-decoration:none" onfocus="this.style.top='0'">Pular para conteudo</a>
-<nav>
-  <a href="/" class="logo">🧠 Emotion Intelligence</a>
-  <a href="/" class="nav-btn">← Voltar</a>
-</nav>
-
-<div class="container">
-  <h1>📋 Termos de Uso</h1>
-  <div class="data">Última atualização: Julho de 2026</div>
-
-  <div class="resumo">
-    <strong>Resumo:</strong> Ao usar a plataforma você concorda com estes termos. Use com responsabilidade, respeite outros usuários e não utilize para fins ilegais. A Sofia não substitui um psicólogo real.
+<nav><a href="/" class="nav-brand">🧠 EmotionAI</a>
+<ul class="nav-links"><li><a href="/#features">Recursos</a></li><li><a href="/planos">Preços</a></li><li><a href="/sobre">Sobre</a></li><li><a href="/contato">Contato</a></li></ul>
+<div class="nav-cta"><a href="/app/login" class="btn btn-outline">Entrar</a><a href="/app/login" class="btn btn-primary">Começar grátis</a></div></nav>
+<div class="doc-container" id="main-content">
+  <div style="margin-bottom:3rem">
+    <span class="section-badge">📋 Legal</span>
+    <h1 style="font-size:2rem;font-weight:800;margin-bottom:0.5rem">Termos de Uso</h1>
+    <div style="font-size:0.85rem;color:var(--text3)">Última atualização: 21 de julho de 2026</div>
   </div>
 
-  <div class="section">
-    <h2>1️⃣ Aceitação dos Termos</h2>
-    <p>Ao criar uma conta e utilizar a Emotion Intelligence Platform, você concorda integralmente com estes Termos de Uso e com nossa <a href="/privacidade" style="color:var(--primary)">Política de Privacidade</a>. Se não concordar, não utilize nossos serviços.</p>
+  <div class="warning">
+    ⚠️ <strong>Importante:</strong> O EmotionAI NÃO substitui psicoterapia ou tratamento médico. Em caso de crise, ligue 188 (CVV) ou procure um profissional de saúde.
   </div>
 
-  <div class="section">
-    <h2>2️⃣ Descrição do Serviço</h2>
-    <p>A Emotion Intelligence Platform oferece:</p>
+  <div class="doc-section">
+    <h2>1. Aceitação dos Termos</h2>
+    <p>Ao usar o EmotionAI, você concorda com estes termos. Se não concordar, não utilize a plataforma.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>2. Sobre o Serviço</h2>
+    <p>O EmotionAI oferece:</p>
     <ul>
-      <li>Análise emocional de textos por IA</li>
-      <li>Análise emocional por reconhecimento de voz</li>
-      <li>Sofia — psicóloga virtual baseada em IA (Google Gemini)</li>
-      <li>Diário emocional com análise automática</li>
-      <li>Gráficos e relatórios emocionais</li>
-      <li>Sistema de gamificação (pontos e badges)</li>
-      <li>Programa de afiliados com comissão de 20%</li>
-      <li>API pública para desenvolvedores (planos pagos)</li>
+      <li>Ferramentas digitais de apoio à saúde mental</li>
+      <li>Chat com IA para suporte emocional</li>
+      <li>Escalas psicológicas para autoavaliação</li>
+      <li>Diário emocional e gamificação</li>
+      <li>Gestão clínica para psicólogos</li>
+    </ul>
+    <p><strong>O EmotionAI NÃO é:</strong> serviço de psicoterapia, diagnóstico médico ou substituto para tratamento profissional.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>3. Responsabilidades do Usuário</h2>
+    <ul>
+      <li>Fornecer informações verdadeiras no cadastro</li>
+      <li>Manter a confidencialidade da sua senha</li>
+      <li>Usar a plataforma de forma ética e legal</li>
+      <li>Não usar para fins ilegais ou prejudiciais</li>
+      <li>Respeitar outros usuários e profissionais</li>
     </ul>
   </div>
 
-  <div class="section">
-    <h2>3️⃣ Cadastro e Conta</h2>
+  <div class="doc-section">
+    <h2>4. Planos e Pagamentos</h2>
     <ul>
-      <li>Você deve fornecer informações verdadeiras e atualizadas</li>
-      <li>Você é responsável pela segurança da sua senha</li>
-      <li>Uma conta por pessoa física</li>
-      <li>Menores de 18 anos precisam de autorização dos responsáveis</li>
-      <li>Não é permitido compartilhar sua conta com terceiros</li>
-      <li>Você deve notificar qualquer uso não autorizado da sua conta</li>
+      <li>O plano gratuito é disponibilizado sem garantias de disponibilidade futura</li>
+      <li>Planos pagos são cobrados conforme descrito na página de preços</li>
+      <li>Cancelamentos podem ser feitos a qualquer momento</li>
+      <li>Reembolsos seguem a política de 30 dias</li>
     </ul>
   </div>
 
-  <div class="section">
-    <h2>4️⃣ Planos e Pagamentos</h2>
+  <div class="doc-section">
+    <h2>5. Propriedade Intelectual</h2>
+    <p>Todo o conteúdo da plataforma (código, design, textos) é propriedade do EmotionAI. Seus dados pessoais pertencem a você.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2>6. Limitação de Responsabilidade</h2>
+    <p>O EmotionAI não se responsabiliza por:</p>
     <ul>
-      <li><strong>Free:</strong> gratuito, com limites diários de uso</li>
-      <li><strong>Trial:</strong> 7 dias de Premium grátis, sem cartão</li>
-      <li><strong>Premium:</strong> R$49/mês — uso ilimitado</li>
-      <li><strong>Enterprise:</strong> R$199/mês — recursos corporativos</li>
-      <li>Pagamentos processados pelo MercadoPago</li>
-      <li>Preços podem ser alterados com 30 dias de aviso prévio</li>
-      <li>Cancelamentos em até 24h via email de suporte</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2>5️⃣ Programa de Afiliados</h2>
-    <ul>
-      <li>Comissão de 20% por cada venda indicada</li>
-      <li>Calculada automaticamente pelo sistema</li>
-      <li>Pagamentos realizados mensalmente via transferência</li>
-      <li>Fraudes ou manipulações resultarão em cancelamento imediato</li>
-      <li>A empresa se reserva o direito de encerrar o programa</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2>6️⃣ Uso da Sofia — IA Psicóloga</h2>
-    <p>A Sofia é uma ferramenta de apoio emocional baseada em IA.</p>
-    <div class="aviso">⚠️ <strong>IMPORTANTE:</strong> A Sofia NÃO substitui acompanhamento profissional de saúde mental. Em caso de sofrimento intenso, crise, pensamentos de automutilação ou suicídio, procure IMEDIATAMENTE um psicólogo, médico ou ligue para o CVV: 188.</div>
-    <ul style="margin-top:12px">
-      <li>As respostas da Sofia são geradas por IA e podem conter imprecisões</li>
-      <li>Não tome decisões médicas baseadas nas respostas da Sofia</li>
-      <li>As conversas são armazenadas para melhorar a experiência</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2>7️⃣ Uso Aceitável</h2>
-    <p>É <strong>proibido</strong> utilizar a plataforma para:</p>
-    <ul>
-      <li>Atividades ilegais ou fraudulentas</li>
-      <li>Assédio, discriminação ou discurso de ódio</li>
-      <li>Spam ou divulgação não autorizada</li>
-      <li>Tentativas de acesso não autorizado ao sistema</li>
-      <li>Criação de múltiplas contas para burlar limites</li>
-      <li>Revenda ou compartilhamento não autorizado do serviço</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2>8️⃣ Propriedade Intelectual</h2>
-    <p>Todo o conteúdo da plataforma — código, design, marca, algoritmos — é propriedade exclusiva da Emotion Intelligence Platform. É proibida a reprodução sem autorização expressa.</p>
-  </div>
-
-  <div class="section">
-    <h2>9️⃣ Limitação de Responsabilidade</h2>
-    <p>A Emotion Intelligence Platform não se responsabiliza por:</p>
-    <ul>
-      <li>Decisões tomadas com base nas análises da IA</li>
-      <li>Imprecisões nas respostas da Sofia</li>
+      <li>Decisões tomadas com base nas avaliações da plataforma</li>
       <li>Indisponibilidade temporária do serviço</li>
-      <li>Perdas financeiras decorrentes do uso da plataforma</li>
+      <li>Conteúdo gerado pela IA (sempre consulte um profissional)</li>
     </ul>
   </div>
 
-  <div class="section">
-    <h2>🔟 Modificações dos Termos</h2>
-    <p>Reservamos o direito de modificar estes termos a qualquer momento. Alterações serão comunicadas por email com 30 dias de antecedência. O uso continuado após as alterações implica aceitação.</p>
-  </div>
-
-  <div class="section">
-    <h2>📧 Contato</h2>
-    <p>Para dúvidas sobre os Termos de Uso:</p>
-    <p>📧 <strong>albertmenezes2006@gmail.com</strong><br>
-    🌐 <strong>https://emotion-platform-albert.onrender.com/contato</strong></p>
+  <div class="doc-section">
+    <h2>7. Contato</h2>
+    <p>Dúvidas sobre os termos: <strong>albertmenezes2006@gmail.com</strong></p>
   </div>
 </div>
-
-<div class="footer">
-  <a href="/">Início</a>
-  <a href="/privacidade">Privacidade</a>
-  <a href="/faq">FAQ</a>
-  <a href="/contato">Contato</a>
-  <br><br>🧠 Emotion Intelligence Platform 2026
-</div>
-</body>
-</html>
+<footer><div class="footer-grid">
+<div><div class="footer-brand">🧠 EmotionAI</div><p style="font-size:0.9rem;line-height:1.6">Plataforma de gestão clínica para psicólogos brasileiros.</p></div>
+<div class="footer-col"><h4>Produto</h4><a href="/#features">Recursos</a><a href="/planos">Preços</a><a href="/app/login">Entrar</a></div>
+<div class="footer-col"><h4>Empresa</h4><a href="/sobre">Sobre</a><a href="/blog">Blog</a><a href="/contato">Contato</a><a href="/afiliado">Afiliados</a></div>
+<div class="footer-col"><h4>Legal</h4><a href="/privacidade">Privacidade</a><a href="/termos">Termos</a><a href="/faq">FAQ</a></div>
+</div><div class="footer-bottom"><span>© 2026 EmotionAI</span><span>Feito com ❤️ em Sergipe, Brasil</span></div></footer>
+</body></html>

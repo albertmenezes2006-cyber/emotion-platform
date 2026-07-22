@@ -1,325 +1,187 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
-<script>
-  // Verificar autenticação
-  const _token = localStorage.getItem('emotion_token');
-  const _userid = localStorage.getItem('emotion_userid');
-
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-JGLER9XVGY');
-</script>
-<meta charset="UTF-8">
-
-<meta property="og:type" content="website">
-<meta property="og:title" content="Terapia 7 Dias — Emotion Intelligence">
-<meta property="og:description" content="Programa de terapia guiada por IA com TCC e Mindfulness. 7 dias transformadores.">
-<meta property="og:url" content="https://emotion-platform-albert.onrender.com/terapia">
-<meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/favicon.svg">
-<meta property="og:site_name" content="Emotion Intelligence">
-<meta property="og:locale" content="pt_BR">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Terapia 7 Dias — Emotion Intelligence">
-<meta name="twitter:description" content="Programa de terapia guiada por IA com TCC e Mindfulness. 7 dias transformadores.">
-<meta name="twitter:image" content="https://emotion-platform-albert.onrender.com/static/favicon.svg">
-<link rel="canonical" href="https://emotion-platform-albert.onrender.com/terapia">
-<meta name="keywords" content="terapia online, TCC, mindfulness, programa 7 dias, autoconhecimento">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Programa de Terapia Emocional 7 Dias — TCC, Mindfulness e EMDR guiados por IA. Gratuito na Emotion Intelligence.">
-<meta name="robots" content="index, follow">
-<title>Programa de Terapia 7 Dias — Emotion Intelligence</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EmotionAI — Terapia Online</title>
+<meta name="description" content="Encontre um psicólogo online no EmotionAI e comece sua jornada de saúde mental.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh}
-.navbar{background:rgba(0,0,0,0.4);backdrop-filter:blur(10px);padding:15px 30px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,255,255,0.1)}
-.navbar h1{font-size:20px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.nav-right{display:flex;gap:8px}
-.nav-btn{padding:7px 16px;border-radius:20px;color:#fff;text-decoration:none;font-size:12px;font-weight:600}
-.btn-back{background:#3a7bd5}
-.btn-logout{background:#e74c3c}
-.container{max-width:900px;margin:0 auto;padding:30px 20px}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #667eea; --primary-dark: #764ba2; --accent: #38a169;
+  --danger: #e53e3e; --bg: #f8fafc; --text: #1a202c; --text2: #4a5568;
+  --text3: #718096; --border: #e2e8f0;
+  --shadow: 0 4px 24px rgba(102,126,234,0.10);
+  --shadow-lg: 0 8px 48px rgba(102,126,234,0.15);
+  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --radius: 16px;
+}
+body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); z-index: 100; padding: 0 2rem; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+.nav-brand { font-size: 1.25rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+.nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+.nav-links a { color: var(--text2); text-decoration: none; font-size: 0.9rem; font-weight: 500; }
+.nav-links a:hover { color: var(--primary); }
+.nav-cta { display: flex; gap: 0.75rem; }
+.btn { padding: 0.6rem 1.5rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; }
+.btn-primary { background: var(--gradient); color: white; box-shadow: 0 4px 16px rgba(102,126,234,0.35); }
+.btn-primary:hover { transform: translateY(-1px); }
+.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text2); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-lg { padding: 0.9rem 2.5rem; font-size: 1rem; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+.section { padding: 5rem 0; }
+.grad { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.section-badge { display: inline-block; background: rgba(102,126,234,0.1); color: var(--primary); padding: 0.3rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; }
+.section-title { font-size: clamp(1.8rem,4vw,2.8rem); font-weight: 800; line-height: 1.2; margin-bottom: 1rem; }
+.section-desc { font-size: 1.1rem; color: var(--text2); max-width: 580px; line-height: 1.7; }
+.card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
+input, textarea, select { width: 100%; padding: 0.75rem 1rem; border: 1.5px solid var(--border); border-radius: 12px; font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s; background: white; color: var(--text); }
+input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+label { font-size: 0.85rem; font-weight: 600; color: var(--text2); display: block; margin-bottom: 0.4rem; }
+.form-group { margin-bottom: 1.25rem; }
+footer { background: #1a202c; color: #a0aec0; padding: 3rem 2rem; }
+.footer-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; }
+.footer-brand { font-size: 1.25rem; font-weight: 800; color: white; margin-bottom: 0.75rem; }
+.footer-col h4 { color: white; font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; }
+.footer-col a { display: block; color: #a0aec0; text-decoration: none; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.footer-col a:hover { color: white; }
+.footer-bottom { max-width: 1100px; margin: 2rem auto 0; padding-top: 1.5rem; border-top: 1px solid #2d3748; display: flex; justify-content: space-between; font-size: 0.8rem; flex-wrap: wrap; gap: 1rem; }
+@media (max-width: 768px) { .nav-links { display: none; } .footer-grid { grid-template-columns: 1fr 1fr; } }
 
-/* Progresso dos dias */
-.dias-nav{display:flex;gap:8px;margin-bottom:30px;flex-wrap:wrap;justify-content:center}
-.dia-btn{
-  width:48px;height:48px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);
-  background:rgba(255,255,255,0.05);color:#fff;font-size:14px;font-weight:700;
-  cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;
-  transition:all .2s;
-}
-.dia-btn:hover{transform:scale(1.1);border-color:#00d2ff}
-.dia-btn.ativo{border-color:#00d2ff;background:rgba(0,210,255,0.2);color:#00d2ff}
-
-/* Header do dia */
-.dia-header{
-  border-radius:20px;padding:32px;margin-bottom:24px;
-  text-align:center;position:relative;overflow:hidden;
-}
-.dia-emoji{font-size:64px;margin-bottom:12px}
-.dia-numero{font-size:13px;font-weight:700;opacity:0.7;margin-bottom:8px;letter-spacing:2px;text-transform:uppercase}
-.dia-titulo{font-size:28px;font-weight:900;margin-bottom:10px}
-.dia-descricao{font-size:15px;opacity:0.8;line-height:1.6}
-
-/* Exercicios */
-.exercicios-grid{display:grid;gap:16px;margin-bottom:24px}
-.exercicio-card{
-  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);
-  border-radius:16px;padding:22px;transition:all .3s;
-}
-.exercicio-card:hover{background:rgba(255,255,255,0.08);transform:translateY(-2px)}
-.exercicio-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
-.exercicio-nome{font-size:17px;font-weight:700}
-.exercicio-meta{display:flex;gap:8px}
-.tag{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600}
-.tag-duracao{background:rgba(0,210,255,0.15);color:#00d2ff}
-.tag-tipo{background:rgba(46,204,113,0.15);color:#2ecc71}
-.exercicio-instrucao{font-size:14px;color:rgba(255,255,255,0.75);line-height:1.7}
-.btn-concluir{
-  margin-top:14px;padding:10px 20px;border-radius:10px;
-  border:1px solid rgba(46,204,113,0.3);background:rgba(46,204,113,0.1);
-  color:#2ecc71;cursor:pointer;font-size:13px;font-weight:600;
-  transition:all .2s;
-}
-.btn-concluir:hover{background:rgba(46,204,113,0.2)}
-.btn-concluir.concluido{background:rgba(46,204,113,0.3);border-color:#2ecc71}
-
-/* Reflexao */
-.reflexao-card{
-  background:rgba(255,255,255,0.05);border-radius:16px;padding:24px;
-  margin-bottom:24px;border-left:4px solid #f39c12;
-}
-.reflexao-card h3{color:#f39c12;margin-bottom:10px;font-size:16px}
-.reflexao-card p{font-size:15px;color:rgba(255,255,255,0.8);line-height:1.7;font-style:italic}
-
-/* Navegacao entre dias */
-.nav-dias{display:flex;justify-content:space-between;gap:12px;margin-top:24px}
-.btn-nav{
-  padding:12px 24px;border-radius:12px;text-decoration:none;font-weight:600;
-  font-size:14px;transition:all .2s;display:inline-flex;align-items:center;gap:8px;
-}
-.btn-anterior{background:rgba(255,255,255,0.1);color:#fff}
-.btn-proximo{background:linear-gradient(90deg,#00d2ff,#3a7bd5);color:#fff}
-.btn-nav:hover{transform:translateY(-2px)}
-
-/* Progresso bar */
-.progresso-bar{
-  background:rgba(255,255,255,0.1);border-radius:8px;height:8px;margin-bottom:24px;
-}
-.progresso-fill{
-  height:100%;border-radius:8px;background:linear-gradient(90deg,#00d2ff,#a855f7);
-  transition:width 1s ease;
-}
-
-/* CTA diario */
-.cta-diario{
-  background:rgba(0,210,255,0.08);border:1px solid rgba(0,210,255,0.2);
-  border-radius:16px;padding:22px;text-align:center;margin-top:24px;
-}
-.cta-diario h3{margin-bottom:8px}
-.cta-diario p{color:rgba(255,255,255,0.6);font-size:13px;margin-bottom:16px}
-.btn-diario{
-  display:inline-block;padding:12px 28px;border-radius:12px;
-  background:linear-gradient(90deg,#00d2ff,#a855f7);color:#fff;
-  font-weight:700;text-decoration:none;font-size:14px;
-}
-
-.footer{text-align:center;padding:30px;color:rgba(255,255,255,0.3);font-size:12px;margin-top:20px}
+.hero { padding: 8rem 0 5rem; background: white; }
+.hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+.hero h1 { font-size: clamp(2rem,5vw,3.5rem); font-weight: 900; line-height: 1.1; margin-bottom: 1.5rem; }
+.hero p { font-size: 1.1rem; color: var(--text2); line-height: 1.7; margin-bottom: 2rem; }
+.tipos-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 1rem; margin-top: 3rem; }
+.tipo-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; text-align: center; transition: all 0.2s; cursor: pointer; }
+.tipo-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); border-color: rgba(102,126,234,0.3); }
+.tipo-emoji { font-size: 2.5rem; margin-bottom: 0.75rem; }
+.tipo-nome { font-weight: 700; margin-bottom: 0.25rem; }
+.tipo-desc { font-size: 0.8rem; color: var(--text3); }
+.como-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 1.5rem; margin-top: 3rem; }
+.como-step { text-align: center; padding: 1.5rem; }
+.como-num { width: 52px; height: 52px; background: var(--gradient); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 800; margin: 0 auto 1rem; }
+.como-step h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; }
+.como-step p { font-size: 0.85rem; color: var(--text2); line-height: 1.6; }
+.hero-visual { background: var(--gradient); border-radius: 24px; padding: 2rem; color: white; }
+@media (max-width: 768px) { .hero-grid { grid-template-columns: 1fr; } .hero-visual { display: none; } }
 </style>
-  <!-- WCAG 2.1 AA keyboard support -->
-  <link rel="stylesheet" href="/static/wcag.css">
-  <script>
-    /* onkeydown keypress keyup Enter — WCAG 2.1 keyboard */
-    document.addEventListener('keydown',function(e){
-      if((e.key==='Enter'||e.key===' ')&&e.target.tagName==='LABEL'){
-        e.preventDefault();
-        var i=document.getElementById(e.target.htmlFor);
-        if(i){i.checked=true;i.dispatchEvent(new Event('change'));}
-      }
-    });
-  </script>
-  <script src="/static/wcag.js" defer></script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Schema.org -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "MedicalWebPage",
-        "name": "Emotion Intelligence Platform",
-        "description": "Plataforma de saude mental com IA para psicologos brasileiros",
-        "url": "https://emotion-platform-albert.onrender.com",
-        "inLanguage": "pt-BR",
-        "about": {
-            "@type": "MedicalCondition",
-            "name": "Saude Mental"
-        },
-        "audience": {
-            "@type": "MedicalAudience",
-            "audienceType": "Psicologo"
-        }
-    }
-    </script>
-    <!-- /Schema.org -->
-
-    <!-- Preconnect para performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.clarity.ms">
-    <link rel="dns-prefetch" href="https://api.stripe.com">
-    <link rel="dns-prefetch" href="https://www.google-analytics.com">
-    <!-- /Preconnect -->
 </head>
 <body>
-<a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#667eea;color:white;padding:8px;z-index:9999;text-decoration:none" onfocus="this.style.top='0'">Pular para conteudo</a>
-<nav class="navbar">
-  <h1>🧠 Emotion Intelligence</h1>
-  <div class="nav-right">
-    <a href="/dashboard" class="nav-btn btn-back">← Dashboard</a>
-    <a href="/logout" class="nav-btn btn-logout">Sair</a>
-  </div>
-</nav>
-
-<div class="container">
-
-  <!-- Titulo -->
-  <div style="text-align:center;margin-bottom:24px">
-    <h2 style="font-size:24px;font-weight:900;margin-bottom:6px">🌱 Programa de Terapia — 7 Dias</h2>
-    <p style="color:rgba(255,255,255,0.5);font-size:14px">Olá, {{ usuario.nome }}! Sua jornada de autoconhecimento emocional.</p>
-  </div>
-
-  <!-- Barra de progresso -->
-  <div class="progresso-bar">
-    <div class="progresso-fill" style="width:{{ ((dia / total_dias) * 100)|int }}%"></div>
-  </div>
-
-  <!-- Navegacao dos dias -->
-  <div class="dias-nav">
-    {% for d in todos_dias %}
-    <a href="/terapia?dia={{ d.dia }}"
-       class="dia-btn {% if d.dia == dia %}ativo{% endif %}"
-       title="Dia {{ d.dia }}: {{ d.titulo }}"
-       style="{% if d.dia == dia %}border-color:{{ programa.cor }};color:{{ programa.cor }}{% endif %}">
-      {{ d.dia }}
-    </a>
-    {% endfor %}
-  </div>
-
-  <!-- Header do dia -->
-  <div class="dia-header" style="background:linear-gradient(135deg,{{ programa.cor }}22,{{ programa.cor }}11);border:1px solid {{ programa.cor }}44">
-    <div class="dia-emoji">{{ programa.emoji }}</div>
-    <div class="dia-numero">DIA {{ dia }} DE {{ total_dias }}</div>
-    <div class="dia-titulo">{{ programa.titulo }}</div>
-    <div class="dia-descricao">{{ programa.descricao }}</div>
-  </div>
-
-  <!-- Exercicios -->
-  <h3 style="margin-bottom:16px;font-size:18px">📋 Exercícios do Dia {{ dia }}</h3>
-  <div class="exercicios-grid">
-    {% for ex in programa.exercicios %}
-    <div class="exercicio-card" id="ex{{ loop.index }}">
-      <div class="exercicio-header">
-        <div class="exercicio-nome">{{ loop.index }}. {{ ex.nome }}</div>
-        <div class="exercicio-meta">
-          <span class="tag tag-duracao">⏱️ {{ ex.duracao }}</span>
-          <span class="tag tag-tipo">{{ ex.tipo }}</span>
+<nav><a href="/" class="nav-brand">🧠 EmotionAI</a>
+<ul class="nav-links"><li><a href="/#features">Recursos</a></li><li><a href="/planos">Preços</a></li><li><a href="/sobre">Sobre</a></li><li><a href="/contato">Contato</a></li></ul>
+<div class="nav-cta"><a href="/app/login" class="btn btn-outline">Entrar</a><a href="/app/login" class="btn btn-primary">Começar grátis</a></div></nav>
+<div style="height:64px"></div>
+<section style="padding:8rem 0 5rem;background:white">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <span class="section-badge">🧘 Terapia Online</span>
+        <h1>Cuide da sua <span class="grad">saúde mental</span> onde estiver</h1>
+        <p>Acesse apoio psicológico de qualidade, converse com nossa IA de suporte e monitore seu bem-estar emocional.</p>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap">
+          <a href="/app/login" class="btn btn-primary btn-lg">Começar agora →</a>
+          <a href="/app/avaliacao" class="btn btn-outline btn-lg">Fazer avaliação</a>
+        </div>
+        <p style="font-size:0.85rem;color:var(--text3);margin-top:1rem">✅ Gratuito para começar · ✅ Sem compromisso</p>
+      </div>
+      <div class="hero-visual">
+        <div style="font-weight:700;margin-bottom:1.5rem;font-size:1.1rem">💙 Sofia — IA de Suporte</div>
+        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:1rem;margin-bottom:0.75rem;font-size:0.9rem">
+          Olá! Como você está se sentindo hoje? Estou aqui para te ouvir. 💙
+        </div>
+        <div style="background:rgba(255,255,255,0.25);border-radius:12px;padding:1rem;margin-bottom:0.75rem;font-size:0.9rem;margin-left:2rem">
+          Estou me sentindo ansioso com o trabalho...
+        </div>
+        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:1rem;font-size:0.9rem">
+          Entendo. A ansiedade no trabalho é muito comum. Vamos tentar uma técnica de respiração? 🌬️
+        </div>
+        <div style="margin-top:1rem;font-size:0.8rem;opacity:0.8;text-align:center">
+          IA disponível 24/7 · Não substitui terapia
         </div>
       </div>
-      <div class="exercicio-instrucao">{{ ex.instrucao }}</div>
-      <button class="btn-concluir" onclick="concluirExercicio(this, {{ loop.index }})">
-        ✅ Marcar como feito
-      </button>
-    </div>
-    {% endfor %}
-  </div>
-
-  <!-- Reflexao do dia -->
-  <div class="reflexao-card">
-    <h3>💡 Reflexão do Dia {{ dia }}</h3>
-    <p>"{{ programa.reflexao }}"</p>
-  </div>
-
-  <!-- Tecnica principal -->
-  <div style="background:rgba(255,255,255,0.05);border-radius:14px;padding:18px;margin-bottom:20px;display:flex;align-items:center;gap:14px">
-    <div style="font-size:32px">🎯</div>
-    <div>
-      <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px">TÉCNICA PRINCIPAL DO DIA</div>
-      <div style="font-size:16px;font-weight:700;color:{{ programa.cor }}">{{ programa.tecnica_principal }}</div>
     </div>
   </div>
+</section>
 
-  <!-- CTA Diario -->
-  <div class="cta-diario">
-    <h3>📔 Registre no seu Diário</h3>
-    <p>Anote suas reflexões do dia {{ dia }} no diário emocional para acompanhar sua evolução.</p>
-    <a href="/dashboard" class="btn-diario">Abrir Diário Emocional</a>
+<section class="section" style="background:var(--bg)">
+  <div class="container">
+    <div style="text-align:center">
+      <span class="section-badge">🎯 O que oferecemos</span>
+      <h2 class="section-title">Suporte completo para <span class="grad">sua jornada</span></h2>
+    </div>
+    <div class="tipos-grid">
+      <div class="tipo-card" onclick="window.location='/app/chat'">
+        <div class="tipo-emoji">🤖</div>
+        <div class="tipo-nome">Chat com IA</div>
+        <div class="tipo-desc">Apoio emocional 24/7 com IA especializada em saúde mental</div>
+      </div>
+      <div class="tipo-card" onclick="window.location='/app/avaliacao'">
+        <div class="tipo-emoji">📊</div>
+        <div class="tipo-nome">Avaliações</div>
+        <div class="tipo-desc">PHQ-9, GAD-7 e PSS — escalas validadas para monitorar sua saúde</div>
+      </div>
+      <div class="tipo-card" onclick="window.location='/app/diario'">
+        <div class="tipo-emoji">📓</div>
+        <div class="tipo-nome">Diário emocional</div>
+        <div class="tipo-desc">Registre seu humor e acompanhe sua evolução emocional</div>
+      </div>
+      <div class="tipo-card" onclick="window.location='/respiracao'">
+        <div class="tipo-emoji">🌬️</div>
+        <div class="tipo-nome">Respiração guiada</div>
+        <div class="tipo-desc">Técnicas de respiração para ansiedade e estresse</div>
+      </div>
+      <div class="tipo-card" onclick="window.location='/meditacao'">
+        <div class="tipo-emoji">🧘</div>
+        <div class="tipo-nome">Meditação</div>
+        <div class="tipo-desc">Sessões guiadas de mindfulness e meditação</div>
+      </div>
+      <div class="tipo-card" onclick="window.location='/app/gamificacao'">
+        <div class="tipo-emoji">🎮</div>
+        <div class="tipo-nome">Gamificação</div>
+        <div class="tipo-desc">XP, conquistas e streak para manter a consistência</div>
+      </div>
+    </div>
   </div>
+</section>
 
-  <!-- Navegacao entre dias -->
-  <div class="nav-dias">
-    {% if dia > 1 %}
-    <a href="/terapia?dia={{ dia - 1 }}" class="btn-nav btn-anterior">← Dia {{ dia - 1 }}</a>
-    {% else %}
-    <span></span>
-    {% endif %}
-
-    {% if dia < total_dias %}
-    <a href="/terapia?dia={{ dia + 1 }}" class="btn-nav btn-proximo">Dia {{ dia + 1 }} →</a>
-    {% else %}
-    <a href="/dashboard" class="btn-nav btn-proximo">🎉 Concluir Programa</a>
-    {% endif %}
+<section class="section" style="background:white">
+  <div class="container">
+    <div style="text-align:center">
+      <span class="section-badge">🚀 Como começar</span>
+      <h2 class="section-title">Em <span class="grad">3 passos simples</span></h2>
+    </div>
+    <div class="como-grid">
+      <div class="como-step">
+        <div class="como-num">1</div>
+        <h3>Crie sua conta grátis</h3>
+        <p>Cadastro em 30 segundos. Sem cartão de crédito necessário.</p>
+      </div>
+      <div class="como-step">
+        <div class="como-num">2</div>
+        <h3>Faça uma avaliação</h3>
+        <p>Responda o PHQ-9 ou GAD-7 para entender seu estado atual.</p>
+      </div>
+      <div class="como-step">
+        <div class="como-num">3</div>
+        <h3>Comece sua jornada</h3>
+        <p>Use o chat, o diário e as ferramentas de bem-estar.</p>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:3rem">
+      <a href="/app/login" class="btn btn-primary btn-lg">Começar grátis agora →</a>
+      <p style="margin-top:1rem;font-size:0.85rem;color:var(--text3)">
+        ⚠️ O EmotionAI não substitui psicoterapia profissional.<br>
+        Em caso de crise, ligue 188 (CVV) ou acesse cvv.org.br
+      </p>
+    </div>
   </div>
-
-</div>
-
-<div class="footer">
-  🧠 Emotion Intelligence Platform 2026 — v15.0 ULTIMATE
-</div>
-
-<script>
-function concluirExercicio(btn, idx) {
-  btn.textContent = '✅ Concluído!';
-  btn.classList.add('concluido');
-  btn.disabled = true;
-  var card = document.getElementById('ex' + idx);
-  card.style.borderColor = 'rgba(46,204,113,0.4)';
-  card.style.background  = 'rgba(46,204,113,0.05)';
-  // Salva no localStorage
-  var key = 'terapia_dia_{{ dia }}_ex_' + idx;
-  localStorage.setItem(key, '1');
-}
-
-// Restaurar estado ao carregar
-window.onload = function() {
-  {% for ex in programa.exercicios %}
-  if(localStorage.getItem('terapia_dia_{{ dia }}_ex_{{ loop.index }}')) {
-    concluirExercicio(
-      document.querySelector('#ex{{ loop.index }} .btn-concluir'),
-      {{ loop.index }}
-    );
-  }
-  {% endfor %}
-}
-</script>
-</body>
-</html>
+</section>
+<footer><div class="footer-grid">
+<div><div class="footer-brand">🧠 EmotionAI</div><p style="font-size:0.9rem;line-height:1.6">Plataforma de gestão clínica para psicólogos brasileiros.</p></div>
+<div class="footer-col"><h4>Produto</h4><a href="/#features">Recursos</a><a href="/planos">Preços</a><a href="/app/login">Entrar</a></div>
+<div class="footer-col"><h4>Empresa</h4><a href="/sobre">Sobre</a><a href="/blog">Blog</a><a href="/contato">Contato</a><a href="/afiliado">Afiliados</a></div>
+<div class="footer-col"><h4>Legal</h4><a href="/privacidade">Privacidade</a><a href="/termos">Termos</a><a href="/faq">FAQ</a></div>
+</div><div class="footer-bottom"><span>© 2026 EmotionAI</span><span>Feito com ❤️ em Sergipe, Brasil</span></div></footer>
+</body></html>
