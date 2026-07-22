@@ -413,3 +413,8 @@ async def page_termos():
 async def page_planos_root():
     html = ler_html("planos.html")
     return HTMLResponse(html) if html else HTMLResponse("<h1>Planos</h1>")
+
+@router.get("/checkout", response_class=HTMLResponse)
+async def page_checkout_root():
+    html = ler_html("checkout.html")
+    return HTMLResponse(html) if html else HTMLResponse("<h1>Checkout</h1>")
