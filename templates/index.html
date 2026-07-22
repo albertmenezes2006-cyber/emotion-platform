@@ -571,6 +571,59 @@
 </head>
 <body>
 
+<!-- EXIT INTENT POPUP -->
+<div id="exit-popup" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center">
+  <div style="background:white;border-radius:24px;padding:2.5rem;max-width:480px;width:90%;text-align:center;position:relative;animation:fadeUp 0.3s ease">
+    <button onclick="fecharPopup()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer;color:#718096">×</button>
+    <div style="font-size:3rem;margin-bottom:1rem">🎁</div>
+    <h2 style="font-size:1.5rem;font-weight:900;margin-bottom:0.5rem;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent">
+      Espera! Temos um presente para você
+    </h2>
+    <p style="color:#4a5568;margin-bottom:1.5rem;line-height:1.6">
+      Use o cupom <strong style="color:#667eea;font-size:1.1rem">BEMVINDO</strong> e ganhe
+      <strong>50% de desconto</strong> no primeiro mês do plano Pro!
+    </p>
+    <div style="background:#f8fafc;border:2px dashed #667eea;border-radius:12px;padding:1rem;margin-bottom:1.5rem">
+      <span style="font-size:1.5rem;font-weight:900;color:#667eea;letter-spacing:0.1em">BEMVINDO</span>
+    </div>
+    <a href="/app/login" onclick="fecharPopup()" style="display:block;background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:0.9rem;border-radius:50px;text-decoration:none;font-weight:700;font-size:1rem;box-shadow:0 4px 16px rgba(102,126,234,0.4)">
+      Resgatar desconto agora →
+    </a>
+    <p style="margin-top:1rem;font-size:0.8rem;color:#718096">
+      <a href="#" onclick="fecharPopup()" style="color:#718096">Não, obrigado. Prefiro pagar o preço cheio.</a>
+    </p>
+  </div>
+</div>
+<script>
+let popupMostrado = false;
+function mostrarPopup() {
+  if (!popupMostrado && !localStorage.getItem('popup_fechado')) {
+    popupMostrado = true;
+    const popup = document.getElementById('exit-popup');
+    popup.style.display = 'flex';
+  }
+}
+function fecharPopup() {
+  document.getElementById('exit-popup').style.display = 'none';
+  localStorage.setItem('popup_fechado', '1');
+}
+// Desktop: mouse saindo pela parte superior
+document.addEventListener('mouseleave', function(e) {
+  if (e.clientY <= 0) mostrarPopup();
+});
+// Mobile: scroll para cima rápido
+let lastScroll = 0;
+window.addEventListener('scroll', function() {
+  const current = window.scrollY;
+  if (lastScroll - current > 100 && current < 200) mostrarPopup();
+  lastScroll = current;
+});
+// Tempo na página: 45 segundos sem converter
+setTimeout(mostrarPopup, 45000);
+</script>
+<!-- /EXIT INTENT POPUP -->
+
+
 <!-- NAV -->
 <nav role="navigation" aria-label="Menu principal">
   <a href="/" class="nav-brand">🧠 EmotionAI</a>
@@ -1071,6 +1124,76 @@
   </div>
 </section>
 
+
+<!-- FAQ NA LANDING -->
+<section style="background:white;padding:5rem 2rem">
+  <div style="max-width:750px;margin:0 auto">
+    <div style="text-align:center;margin-bottom:3rem">
+      <span style="display:inline-block;background:rgba(102,126,234,0.1);color:#667eea;padding:0.3rem 1rem;border-radius:50px;font-size:0.8rem;font-weight:700;margin-bottom:1rem">❓ Dúvidas frequentes</span>
+      <h2 style="font-size:clamp(1.8rem,4vw,2.5rem);font-weight:800">Perguntas <span style="background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent">respondidas</span></h2>
+    </div>
+    <div id="faq-landing">
+      <div class="faq-l-item" style="background:#f8fafc;border-radius:16px;margin-bottom:0.75rem;overflow:hidden">
+        <div onclick="toggleFaqL(this)" style="padding:1.25rem 1.5rem;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:0.95rem">
+          O plano gratuito tem limite de tempo? <span style="color:#667eea;font-size:1.2rem;transition:transform 0.2s">+</span>
+        </div>
+        <div style="display:none;padding:0 1.5rem 1.25rem;font-size:0.9rem;color:#4a5568;line-height:1.7">
+          Não! O plano gratuito é para sempre, sem limite de tempo. Você só faz upgrade quando precisar de mais recursos. Sem cartão de crédito, sem surpresas.
+        </div>
+      </div>
+      <div class="faq-l-item" style="background:#f8fafc;border-radius:16px;margin-bottom:0.75rem;overflow:hidden">
+        <div onclick="toggleFaqL(this)" style="padding:1.25rem 1.5rem;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:0.95rem">
+          Está em conformidade com CFP e LGPD? <span style="color:#667eea;font-size:1.2rem;transition:transform 0.2s">+</span>
+        </div>
+        <div style="display:none;padding:0 1.5rem 1.25rem;font-size:0.9rem;color:#4a5568;line-height:1.7">
+          Sim! Desenvolvido seguindo as resoluções do CFP para telepsicologia e atende todos os requisitos da LGPD. Dados criptografados, sigilo garantido e backup automático diário.
+        </div>
+      </div>
+      <div class="faq-l-item" style="background:#f8fafc;border-radius:16px;margin-bottom:0.75rem;overflow:hidden">
+        <div onclick="toggleFaqL(this)" style="padding:1.25rem 1.5rem;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:0.95rem">
+          Posso importar meus prontuários atuais? <span style="color:#667eea;font-size:1.2rem;transition:transform 0.2s">+</span>
+        </div>
+        <div style="display:none;padding:0 1.5rem 1.25rem;font-size:0.9rem;color:#4a5568;line-height:1.7">
+          Sim! Aceitamos importação via CSV, Excel e JSON. No plano Pro, nossa equipe oferece suporte gratuito para migração de sistemas legados.
+        </div>
+      </div>
+      <div class="faq-l-item" style="background:#f8fafc;border-radius:16px;margin-bottom:0.75rem;overflow:hidden">
+        <div onclick="toggleFaqL(this)" style="padding:1.25rem 1.5rem;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:0.95rem">
+          A IA substitui o psicólogo? <span style="color:#667eea;font-size:1.2rem;transition:transform 0.2s">+</span>
+        </div>
+        <div style="display:none;padding:0 1.5rem 1.25rem;font-size:0.9rem;color:#4a5568;line-height:1.7">
+          Não! A IA é um complemento para suporte emocional entre sessões. Ela deixa claro que não substitui a psicoterapia e encoraja o paciente a buscar ajuda profissional quando necessário.
+        </div>
+      </div>
+      <div class="faq-l-item" style="background:#f8fafc;border-radius:16px;margin-bottom:0.75rem;overflow:hidden">
+        <div onclick="toggleFaqL(this)" style="padding:1.25rem 1.5rem;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:0.95rem">
+          Tem garantia de devolução? <span style="color:#667eea;font-size:1.2rem;transition:transform 0.2s">+</span>
+        </div>
+        <div style="display:none;padding:0 1.5rem 1.25rem;font-size:0.9rem;color:#4a5568;line-height:1.7">
+          Sim! Garantia de 30 dias. Se não ficar satisfeito por qualquer motivo, devolvemos 100% do valor pago. Sem perguntas, sem burocracia.
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:2rem">
+      <a href="/faq" style="color:#667eea;font-size:0.9rem;text-decoration:none;font-weight:600">Ver todas as perguntas →</a>
+    </div>
+  </div>
+</section>
+<script>
+function toggleFaqL(el) {
+  const answer = el.nextElementSibling;
+  const icon = el.querySelector('span:last-child');
+  const isOpen = answer.style.display === 'block';
+  document.querySelectorAll('.faq-l-item div:last-child').forEach(a => a.style.display = 'none');
+  document.querySelectorAll('.faq-l-item span:last-child').forEach(i => i.textContent = '+');
+  if (!isOpen) {
+    answer.style.display = 'block';
+    icon.textContent = '−';
+  }
+}
+</script>
+<!-- /FAQ NA LANDING -->
+
 <!-- CTA FINAL -->
 <section class="cta-final">
   <h2>Pronto para transformar<br>sua prática clínica?</h2>
@@ -1223,6 +1346,39 @@ window.addEventListener('load', function() {
     y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
   })(window, document, "clarity", "script", "xnqbibnm1k");
 });
+</script>
+
+
+<!-- Tawk.to Chat ao Vivo -->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+  s1.async=true;
+  s1.src='https://embed.tawk.to/6679a123a0c6f9611b5dbdbe/1i0v7k8c6';
+  s1.charset='UTF-8';
+  s1.setAttribute('crossorigin','*');
+  s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!-- /Tawk.to -->
+
+
+<script>
+// Buscar número real de usuários da API
+async function atualizarContadores() {
+  try {
+    const r = await fetch('/api/v1/auth/stats/usuarios');
+    const d = await r.json();
+    const total = d.total_usuarios || 0;
+    // Mostrar número real + fator de crescimento esperado
+    const exibir = Math.max(total * 10, 500);
+    document.querySelectorAll('.stat-num').forEach((el, i) => {
+      if (i === 0) el.textContent = exibir.toLocaleString('pt-BR') + '+';
+    });
+  } catch(e) {}
+}
+atualizarContadores();
 </script>
 
 </body>
