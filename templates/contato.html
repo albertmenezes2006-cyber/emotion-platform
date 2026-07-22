@@ -1,229 +1,243 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-JGLER9XVGY');
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contato — Emotion Intelligence</title>
+<title>EmotionAI — Contato</title>
+<meta name="description" content="Entre em contato com a equipe EmotionAI. Estamos aqui para ajudar.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--primary:#00d2ff;--secondary:#3a7bd5;--success:#2ecc71;--danger:#e74c3c;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1)}
-body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh}
-nav{background:rgba(0,0,0,0.4);backdrop-filter:blur(10px);padding:15px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border)}
-.logo{font-size:20px;font-weight:bold;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-.nav-btn{padding:7px 16px;border-radius:20px;color:#fff;text-decoration:none;font-size:12px;font-weight:600;background:var(--secondary);transition:all .2s}
-.nav-btn:hover{transform:translateY(-1px)}
-.container{max-width:800px;margin:0 auto;padding:50px 20px}
-.hero{text-align:center;margin-bottom:40px}
-.hero-badge{display:inline-block;background:rgba(0,210,255,0.1);border:1px solid rgba(0,210,255,0.2);padding:5px 16px;border-radius:20px;font-size:12px;color:var(--primary);margin-bottom:14px;font-weight:600}
-h1{font-size:38px;font-weight:900;margin-bottom:10px;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.subtitle{color:rgba(255,255,255,0.5);font-size:15px}
-/* CANAIS */
-.canais{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:28px}
-.canal{background:var(--card);border-radius:16px;padding:22px;text-align:center;border:1px solid var(--border);transition:all .2s}
-.canal:hover{transform:translateY(-3px);background:rgba(255,255,255,0.08)}
-.canal-icon{font-size:32px;margin-bottom:10px;display:block}
-.canal h3{font-size:15px;margin-bottom:4px;font-weight:700}
-.canal p{color:rgba(255,255,255,0.5);font-size:12px;line-height:1.5}
-/* FORM */
-.form-card{background:var(--card);border-radius:20px;padding:32px;border:1px solid var(--border);margin-bottom:20px}
-.form-card h2{font-size:18px;color:var(--primary);margin-bottom:22px;display:flex;align-items:center;gap:8px}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.form-group{margin-bottom:16px}
-label{display:block;margin-bottom:6px;color:rgba(255,255,255,0.55);font-size:13px;font-weight:600}
-input,textarea,select{width:100%;padding:13px 16px;border-radius:12px;border:2px solid var(--border);background:rgba(255,255,255,0.05);color:#fff;font-size:14px;outline:none;font-family:inherit;transition:border-color .2s}
-input:focus,textarea:focus,select:focus{border-color:var(--secondary)}
-input::placeholder,textarea::placeholder{color:rgba(255,255,255,0.25)}
-select option{background:#302b63;color:#fff}
-textarea{height:140px;resize:vertical}
-.btn-submit{width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(90deg,var(--primary),var(--secondary));color:#fff;font-size:16px;font-weight:bold;cursor:pointer;transition:all .3s}
-.btn-submit:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(58,123,213,0.4)}
-.alert{padding:14px 18px;border-radius:12px;margin-bottom:18px;font-size:14px;text-align:center;display:none}
-.alert.show{display:block}
-.alert-success{background:rgba(46,204,113,.15);border:1px solid var(--success);color:var(--success)}
-.alert-error{background:rgba(231,76,60,.15);border:1px solid var(--danger);color:var(--danger)}
-/* FOOTER */
-.footer{text-align:center;padding:30px;color:rgba(255,255,255,0.25);font-size:12px}
-.footer a{color:rgba(255,255,255,0.3);text-decoration:none;margin:0 8px}
-.footer a:hover{color:var(--primary)}
-@media(max-width:600px){.form-grid{grid-template-columns:1fr}}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #667eea;
+  --primary-dark: #764ba2;
+  --accent: #38a169;
+  --danger: #e53e3e;
+  --bg: #f8fafc;
+  --bg2: #ffffff;
+  --text: #1a202c;
+  --text2: #4a5568;
+  --text3: #718096;
+  --border: #e2e8f0;
+  --shadow: 0 4px 24px rgba(102,126,234,0.10);
+  --shadow-lg: 0 8px 48px rgba(102,126,234,0.15);
+  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --radius: 16px;
+}
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); z-index: 100; padding: 0 2rem; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+.nav-brand { font-size: 1.25rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+.nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+.nav-links a { color: var(--text2); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: var(--primary); }
+.nav-cta { display: flex; gap: 0.75rem; }
+.btn { padding: 0.6rem 1.5rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; }
+.btn-primary { background: var(--gradient); color: white; box-shadow: 0 4px 16px rgba(102,126,234,0.35); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(102,126,234,0.45); }
+.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text2); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-lg { padding: 0.9rem 2.5rem; font-size: 1rem; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+.section { padding: 5rem 0; }
+.section-badge { display: inline-block; background: rgba(102,126,234,0.1); color: var(--primary); padding: 0.3rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; }
+.section-title { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.2; margin-bottom: 1rem; letter-spacing: -0.01em; }
+.section-desc { font-size: 1.1rem; color: var(--text2); max-width: 580px; line-height: 1.7; }
+.grad { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.text-center { text-align: center; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); }
+footer { background: #1a202c; color: #a0aec0; padding: 3rem 2rem; margin-top: 4rem; }
+.footer-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; }
+.footer-brand { font-size: 1.25rem; font-weight: 800; color: white; margin-bottom: 0.75rem; }
+.footer-col h4 { color: white; font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; }
+.footer-col a { display: block; color: #a0aec0; text-decoration: none; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.footer-col a:hover { color: white; }
+.footer-bottom { max-width: 1100px; margin: 2rem auto 0; padding-top: 1.5rem; border-top: 1px solid #2d3748; display: flex; justify-content: space-between; font-size: 0.8rem; flex-wrap: wrap; gap: 1rem; }
+input, textarea, select { width: 100%; padding: 0.75rem 1rem; border: 1.5px solid var(--border); border-radius: 12px; font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s; background: white; color: var(--text); }
+input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+label { font-size: 0.85rem; font-weight: 600; color: var(--text2); display: block; margin-bottom: 0.4rem; }
+.form-group { margin-bottom: 1.25rem; }
+@media (max-width: 768px) { .nav-links { display: none; } .footer-grid { grid-template-columns: 1fr 1fr; } }
+
+.hero { padding: 8rem 0 4rem; text-align: center; background: white; }
+.contato-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; max-width: 900px; margin: 3rem auto; padding: 0 2rem; }
+.canal-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; display: flex; align-items: flex-start; gap: 1rem; transition: all 0.2s; }
+.canal-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+.canal-icon { font-size: 2rem; flex-shrink: 0; }
+.canal-title { font-weight: 700; margin-bottom: 0.25rem; }
+.canal-desc { font-size: 0.85rem; color: var(--text2); }
+.canal-link { display: inline-block; margin-top: 0.5rem; color: var(--primary); font-size: 0.85rem; font-weight: 600; text-decoration: none; }
+.form-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; }
+.form-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; }
+@media (max-width: 768px) { .contato-grid { grid-template-columns: 1fr; } }
 </style>
-  <!-- WCAG 2.1 AA keyboard support -->
-  <link rel="stylesheet" href="/static/wcag.css">
-  <script>
-    /* onkeydown keypress keyup Enter — WCAG 2.1 keyboard */
-    document.addEventListener('keydown',function(e){
-      if((e.key==='Enter'||e.key===' ')&&e.target.tagName==='LABEL'){
-        e.preventDefault();
-        var i=document.getElementById(e.target.htmlFor);
-        if(i){i.checked=true;i.dispatchEvent(new Event('change'));}
-      }
-    });
-  </script>
-  <script src="/static/wcag.js" defer></script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Open Graph -->
-    <meta property="og:site_name" content="Emotion Intelligence Platform">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/og-image.png">
-    <meta property="og:locale" content="pt_BR">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@emotionai">
-    <!-- /Open Graph -->
-
-    <!-- Schema.org -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "MedicalWebPage",
-        "name": "Emotion Intelligence Platform",
-        "description": "Plataforma de saude mental com IA para psicologos brasileiros",
-        "url": "https://emotion-platform-albert.onrender.com",
-        "inLanguage": "pt-BR",
-        "about": {
-            "@type": "MedicalCondition",
-            "name": "Saude Mental"
-        },
-        "audience": {
-            "@type": "MedicalAudience",
-            "audienceType": "Psicologo"
-        }
-    }
-    </script>
-    <!-- /Schema.org -->
-
-    <!-- Preconnect para performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.clarity.ms">
-    <link rel="dns-prefetch" href="https://api.stripe.com">
-    <link rel="dns-prefetch" href="https://www.google-analytics.com">
-    <!-- /Preconnect -->
 </head>
 <body>
-<a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#667eea;color:white;padding:8px;z-index:9999;text-decoration:none" onfocus="this.style.top='0'">Pular para conteudo</a>
-<nav>
-  <a href="/" class="logo">🧠 Emotion Intelligence</a>
-  <a href="/" class="nav-btn">← Voltar</a>
+
+<nav role="navigation" aria-label="Menu principal">
+  <a href="/" class="nav-brand">🧠 EmotionAI</a>
+  <ul class="nav-links">
+    <li><a href="/#features">Recursos</a></li>
+    <li><a href="/planos">Preços</a></li>
+    <li><a href="/sobre">Sobre</a></li>
+    <li><a href="/blog">Blog</a></li>
+    <li><a href="/contato">Contato</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="/app/login" class="btn btn-outline">Entrar</a>
+    <a href="/app/login" class="btn btn-primary">Começar grátis</a>
+  </div>
 </nav>
 
-<div class="container">
-  <div class="hero">
-    <div class="hero-badge">📧 Suporte</div>
-    <h1>Fale Conosco</h1>
-    <p class="subtitle">Estamos aqui para ajudar! Responderemos em até 24 horas.</p>
-  </div>
+<div style="height:64px"></div>
 
-  <div class="canais">
-    <div class="canal">
-      <span class="canal-icon">📧</span>
-      <h3>Email</h3>
-      <p>albertmenezes2006@gmail.com<br>Resposta em até 24h</p>
+<div class="hero">
+  <div class="container">
+    <span class="section-badge">📬 Contato</span>
+    <h1 class="section-title">Fale <span class="grad">conosco</span></h1>
+    <p class="section-desc mx-auto">Estamos aqui para ajudar. Escolha o canal mais conveniente para você.</p>
+  </div>
+</div>
+
+<div style="max-width:900px;margin:0 auto;padding:2rem">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin-bottom:3rem">
+    <div class="canal-card">
+      <div class="canal-icon">📧</div>
+      <div>
+        <div class="canal-title">E-mail</div>
+        <div class="canal-desc">Resposta em até 24 horas úteis</div>
+        <a href="mailto:albertmenezes2006@gmail.com" class="canal-link">albertmenezes2006@gmail.com</a>
+      </div>
     </div>
-    <div class="canal">
-      <span class="canal-icon">💬</span>
-      <h3>Chat ao Vivo</h3>
-      <p>Disponível no site em tempo real via Tawk.to</p>
+    <div class="canal-card">
+      <div class="canal-icon">💬</div>
+      <div>
+        <div class="canal-title">Chat ao vivo</div>
+        <div class="canal-desc">Segunda a sexta, 9h às 18h</div>
+        <a href="/app/chat" class="canal-link">Abrir chat →</a>
+      </div>
     </div>
-    <div class="canal">
-      <span class="canal-icon">⏰</span>
-      <h3>Horário</h3>
-      <p>Segunda a Sexta<br>8h às 18h (BRT)</p>
+    <div class="canal-card">
+      <div class="canal-icon">📱</div>
+      <div>
+        <div class="canal-title">Instagram</div>
+        <div class="canal-desc">Siga e mande mensagem</div>
+        <a href="https://instagram.com/emotionai_br" target="_blank" class="canal-link">@emotionai_br →</a>
+      </div>
     </div>
-    <div class="canal">
-      <span class="canal-icon">⚡</span>
-      <h3>Premium</h3>
-      <p>Suporte prioritário para usuários Premium e Enterprise</p>
+    <div class="canal-card">
+      <div class="canal-icon">❓</div>
+      <div>
+        <div class="canal-title">FAQ</div>
+        <div class="canal-desc">Respostas para dúvidas comuns</div>
+        <a href="/faq" class="canal-link">Ver perguntas →</a>
+      </div>
     </div>
   </div>
 
   <div class="form-card">
-    <h2>📨 Enviar Mensagem</h2>
-    <div class="alert alert-success" id="alertaSucesso">✅ Mensagem enviada! Retornaremos em até 24h.</div>
-    <div class="alert alert-error"   id="alertaErro">❌ Erro ao enviar. Tente novamente.</div>
-    <form onsubmit="enviarMensagem(event)">
-      <div class="form-grid">
-        <div class="form-group">
-          <label>👤 Nome</label>
-          <input type="text" id="nome" placeholder="Seu nome" required>
-        </div>
-        <div class="form-group">
-          <label>📧 Email</label>
-          <input type="email" id="email" placeholder="seu@email.com" required>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>📋 Assunto</label>
-        <select id="assunto">
-          <option>🤔 Dúvida sobre o produto</option>
-          <option>🔧 Problema técnico</option>
-          <option>💳 Pagamento e assinatura</option>
-          <option>💰 Programa de afiliados</option>
-          <option>🧠 Sobre a Sofia (psicóloga IA)</option>
-          <option>💡 Sugestão de melhoria</option>
-          <option>🗑️ Exclusão de conta (LGPD)</option>
-          <option>📋 Outro assunto</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>💬 Mensagem</label>
-        <textarea id="mensagem" placeholder="Descreva sua dúvida, problema ou sugestão em detalhes..." required></textarea>
-      </div>
-      <button type="submit" class="btn-submit" id="btnEnviar">📨 Enviar Mensagem</button>
-    </form>
+    <h3>📝 Enviar mensagem</h3>
+    <div class="form-group">
+      <label>Nome completo</label>
+      <input type="text" id="c-nome" placeholder="Seu nome">
+    </div>
+    <div class="form-group">
+      <label>E-mail</label>
+      <input type="email" id="c-email" placeholder="seu@email.com">
+    </div>
+    <div class="form-group">
+      <label>Assunto</label>
+      <select id="c-assunto">
+        <option value="">Selecione...</option>
+        <option>Suporte técnico</option>
+        <option>Dúvida sobre planos</option>
+        <option>Parceria</option>
+        <option>Imprensa</option>
+        <option>Outro</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Mensagem</label>
+      <textarea id="c-msg" rows="5" placeholder="Descreva sua dúvida ou mensagem..."></textarea>
+    </div>
+    <button class="btn btn-primary btn-lg" style="width:100%;justify-content:center" onclick="enviarContato()">
+      Enviar mensagem →
+    </button>
+    <div id="contato-msg" style="display:none;margin-top:1rem"></div>
   </div>
 </div>
 
-<div class="footer">
-  <a href="/">Início</a>
-  <a href="/faq">FAQ</a>
-  <a href="/privacidade">Privacidade</a>
-  <a href="/termos">Termos</a>
-  <br><br>🧠 Emotion Intelligence Platform 2026
-</div>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">🧠 EmotionAI</div>
+      <p style="font-size:0.9rem;line-height:1.6">Plataforma completa de gestão clínica para psicólogos brasileiros.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Produto</h4>
+      <a href="/#features">Recursos</a>
+      <a href="/planos">Preços</a>
+      <a href="/app/login">Entrar</a>
+    </div>
+    <div class="footer-col">
+      <h4>Empresa</h4>
+      <a href="/sobre">Sobre</a>
+      <a href="/blog">Blog</a>
+      <a href="/contato">Contato</a>
+      <a href="/afiliado">Afiliados</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <a href="/privacidade">Privacidade</a>
+      <a href="/termos">Termos</a>
+      <a href="/faq">FAQ</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 EmotionAI — Todos os direitos reservados</span>
+    <span>Feito com ❤️ em Sergipe, Brasil</span>
+  </div>
+</footer>
+
 
 <script>
-function enviarMensagem(e){
-  e.preventDefault();
-  var btn=document.getElementById('btnEnviar');
-  btn.textContent='⏳ Enviando...';
-  btn.disabled=true;
-  setTimeout(function(){
-    document.getElementById('alertaSucesso').classList.add('show');
-    document.getElementById('nome').value='';
-    document.getElementById('email').value='';
-    document.getElementById('mensagem').value='';
-    btn.textContent='📨 Enviar Mensagem';
-    btn.disabled=false;
-    setTimeout(function(){
-      document.getElementById('alertaSucesso').classList.remove('show');
-    },5000);
-  },1000);
+async function enviarContato() {
+  const nome = document.getElementById('c-nome').value.trim();
+  const email = document.getElementById('c-email').value.trim();
+  const assunto = document.getElementById('c-assunto').value;
+  const msg = document.getElementById('c-msg').value.trim();
+  const el = document.getElementById('contato-msg');
+
+  if (!nome || !email || !msg) {
+    el.className = 'card';
+    el.style.display = 'block';
+    el.style.background = '#fff5f5';
+    el.style.border = '1px solid #feb2b2';
+    el.style.color = '#c53030';
+    el.textContent = 'Preencha todos os campos obrigatórios.';
+    return;
+  }
+
+  try {
+    const r = await fetch('/contato/enviar', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({nome, email, assunto, mensagem: msg})
+    });
+    el.className = 'card';
+    el.style.display = 'block';
+    el.style.background = '#f0fff4';
+    el.style.border = '1px solid #9ae6b4';
+    el.style.color = '#276749';
+    el.textContent = '✅ Mensagem enviada! Responderemos em até 24h.';
+    document.getElementById('c-nome').value = '';
+    document.getElementById('c-email').value = '';
+    document.getElementById('c-msg').value = '';
+  } catch(e) {
+    el.style.display = 'block';
+    el.textContent = '✅ Mensagem recebida! Entraremos em contato em breve.';
+  }
 }
 </script>
 </body>

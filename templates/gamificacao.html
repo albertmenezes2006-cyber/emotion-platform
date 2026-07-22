@@ -1,297 +1,185 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-JGLER9XVGY');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gamificação — Emotion Intelligence</title>
+<title>EmotionAI — Gamificação</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--primary:#00d2ff;--secondary:#3a7bd5;--gold:#f39c12;--dark:#0f0c29;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1);--success:#2ecc71}
-body{font-family:'Segoe UI',sans-serif;background:var(--dark);color:#fff;min-height:100vh}
-nav{padding:14px 24px;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
-.logo{font-size:18px;font-weight:bold;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-.container{max-width:900px;margin:0 auto;padding:40px 20px}
-.hero{text-align:center;padding:40px 20px;margin-bottom:32px}
-.hero h1{font-size:36px;font-weight:900;margin-bottom:8px}
-.hero h1 span{background:linear-gradient(90deg,var(--gold),#e67e22);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{color:rgba(255,255,255,0.5);font-size:15px}
-/* STATS GERAIS */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:32px}
-.stat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center;transition:all .2s}
-.stat:hover{transform:translateY(-3px);border-color:var(--primary)}
-.stat-num{font-size:36px;font-weight:900;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
-.stat-label{font-size:12px;color:rgba(255,255,255,0.5);margin-top:6px}
-/* NIVEL */
-.nivel-card{background:linear-gradient(135deg,rgba(243,156,18,0.1),rgba(230,126,34,0.08));border:2px solid rgba(243,156,18,0.3);border-radius:20px;padding:28px;margin-bottom:24px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
-.nivel-badge{font-size:56px}
-.nivel-info{flex:1}
-.nivel-nome{font-size:22px;font-weight:900;color:var(--gold);margin-bottom:4px}
-.nivel-desc{font-size:14px;color:rgba(255,255,255,0.6);margin-bottom:12px}
-.nivel-barra{background:rgba(255,255,255,0.1);border-radius:8px;height:10px;overflow:hidden;margin-bottom:6px}
-.nivel-fill{height:100%;background:linear-gradient(90deg,var(--gold),#e67e22);border-radius:8px;transition:width 1s ease}
-.nivel-prox{font-size:12px;color:rgba(255,255,255,0.4)}
-/* PONTOS POR ACAO */
-.acoes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:32px}
-.acao-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;display:flex;align-items:center;gap:12px;transition:all .2s}
-.acao-card:hover{border-color:var(--success);transform:translateX(4px)}
-.acao-icon{font-size:28px;flex-shrink:0}
-.acao-info{flex:1}
-.acao-nome{font-size:14px;font-weight:600}
-.acao-pts{font-size:11px;color:var(--success);margin-top:2px}
-/* BADGES */
-.badges-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:32px}
-.badge-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;text-align:center;transition:all .3s;position:relative}
-.badge-card.desbloqueado{border-color:rgba(243,156,18,0.4);background:rgba(243,156,18,0.06)}
-.badge-card.bloqueado{opacity:0.4;filter:grayscale(1)}
-.badge-emoji{font-size:36px;margin-bottom:8px;display:block}
-.badge-nome{font-size:13px;font-weight:700;margin-bottom:4px}
-.badge-req{font-size:11px;color:rgba(255,255,255,0.4)}
-.badge-desbloqueado-tag{position:absolute;top:8px;right:8px;background:var(--gold);border-radius:10px;padding:2px 8px;font-size:9px;font-weight:bold;color:#000}
-/* CONQUISTAS */
-.conquistas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:32px}
-.conquista{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;align-items:center;gap:12px;transition:all .2s}
-.conquista:hover{border-color:var(--gold)}
-.conquista-emoji{font-size:28px;flex-shrink:0}
-.conquista-nome{font-size:14px;font-weight:600}
-.conquista-desc{font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px}
-/* CTA */
-.cta{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px;text-align:center;margin-top:24px}
-.cta h3{font-size:20px;margin-bottom:8px}
-.cta p{color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:16px}
-.btn{display:inline-block;padding:12px 24px;background:linear-gradient(90deg,var(--primary),var(--secondary));border-radius:12px;color:#fff;font-weight:700;font-size:14px;text-decoration:none;margin:4px;transition:all .2s}
-.btn:hover{transform:translateY(-2px)}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #667eea;
+  --primary-dark: #764ba2;
+  --accent: #38a169;
+  --danger: #e53e3e;
+  --bg: #f8fafc;
+  --bg2: #ffffff;
+  --text: #1a202c;
+  --text2: #4a5568;
+  --text3: #718096;
+  --border: #e2e8f0;
+  --shadow: 0 4px 24px rgba(102,126,234,0.10);
+  --shadow-lg: 0 8px 48px rgba(102,126,234,0.15);
+  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --radius: 16px;
+}
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); z-index: 100; padding: 0 2rem; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+.nav-brand { font-size: 1.25rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+.nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+.nav-links a { color: var(--text2); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: var(--primary); }
+.nav-cta { display: flex; gap: 0.75rem; }
+.btn { padding: 0.6rem 1.5rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; }
+.btn-primary { background: var(--gradient); color: white; box-shadow: 0 4px 16px rgba(102,126,234,0.35); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(102,126,234,0.45); }
+.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text2); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-lg { padding: 0.9rem 2.5rem; font-size: 1rem; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+.section { padding: 5rem 0; }
+.section-badge { display: inline-block; background: rgba(102,126,234,0.1); color: var(--primary); padding: 0.3rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; }
+.section-title { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.2; margin-bottom: 1rem; letter-spacing: -0.01em; }
+.section-desc { font-size: 1.1rem; color: var(--text2); max-width: 580px; line-height: 1.7; }
+.grad { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.text-center { text-align: center; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); }
+footer { background: #1a202c; color: #a0aec0; padding: 3rem 2rem; margin-top: 4rem; }
+.footer-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; }
+.footer-brand { font-size: 1.25rem; font-weight: 800; color: white; margin-bottom: 0.75rem; }
+.footer-col h4 { color: white; font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; }
+.footer-col a { display: block; color: #a0aec0; text-decoration: none; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.footer-col a:hover { color: white; }
+.footer-bottom { max-width: 1100px; margin: 2rem auto 0; padding-top: 1.5rem; border-top: 1px solid #2d3748; display: flex; justify-content: space-between; font-size: 0.8rem; flex-wrap: wrap; gap: 1rem; }
+input, textarea, select { width: 100%; padding: 0.75rem 1rem; border: 1.5px solid var(--border); border-radius: 12px; font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s; background: white; color: var(--text); }
+input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+label { font-size: 0.85rem; font-weight: 600; color: var(--text2); display: block; margin-bottom: 0.4rem; }
+.form-group { margin-bottom: 1.25rem; }
+@media (max-width: 768px) { .nav-links { display: none; } .footer-grid { grid-template-columns: 1fr 1fr; } }
+
+body { background: var(--bg); }
+.topbar { background: white; border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; align-items: center; gap: 1rem; position: sticky; top: 0; z-index: 40; }
+.topbar a { color: var(--text2); text-decoration: none; font-size: 0.9rem; }
+.content { max-width: 700px; margin: 0 auto; padding: 2rem; }
+.xp-hero { background: var(--gradient); border-radius: 20px; padding: 2rem; color: white; text-align: center; margin-bottom: 2rem; }
+.xp-score { font-size: 4rem; font-weight: 900; line-height: 1; }
+.xp-label { font-size: 1rem; opacity: 0.85; margin-bottom: 1rem; }
+.xp-bar-wrap { background: rgba(255,255,255,0.2); border-radius: 50px; height: 10px; overflow: hidden; }
+.xp-bar-fill { height: 100%; background: white; border-radius: 50px; transition: width 1s ease; }
+.nivel-badge { display: inline-block; background: rgba(255,255,255,0.2); padding: 0.3rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 700; margin-top: 0.75rem; }
+.conquistas-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(150px,1fr)); gap: 1rem; margin-top: 1rem; }
+.conquista { background: white; border: 2px solid var(--border); border-radius: 16px; padding: 1.25rem; text-align: center; transition: all 0.2s; }
+.conquista.desbloqueada { border-color: var(--accent); }
+.conquista.desbloqueada:hover { box-shadow: 0 4px 16px rgba(56,161,105,0.2); transform: translateY(-2px); }
+.conquista-emoji { font-size: 2.5rem; margin-bottom: 0.5rem; }
+.conquista-nome { font-size: 0.8rem; font-weight: 700; margin-bottom: 0.25rem; }
+.conquista-desc { font-size: 0.7rem; color: var(--text3); }
+.conquista.bloqueada { opacity: 0.4; filter: grayscale(1); }
+.acoes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+.acao-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; display: flex; align-items: center; gap: 1rem; }
+.acao-icon { font-size: 1.5rem; }
+.acao-nome { font-size: 0.85rem; font-weight: 600; }
+.acao-xp { font-size: 0.75rem; color: var(--accent); font-weight: 700; }
+.streak-card { background: rgba(246,173,85,0.1); border: 1px solid rgba(246,173,85,0.3); border-radius: var(--radius); padding: 1.5rem; text-align: center; margin-bottom: 1.5rem; }
 </style>
-  <!-- WCAG 2.1 AA keyboard support -->
-  <link rel="stylesheet" href="/static/wcag.css">
-  <script>
-    /* onkeydown keypress keyup Enter — WCAG 2.1 keyboard */
-    document.addEventListener('keydown',function(e){
-      if((e.key==='Enter'||e.key===' ')&&e.target.tagName==='LABEL'){
-        e.preventDefault();
-        var i=document.getElementById(e.target.htmlFor);
-        if(i){i.checked=true;i.dispatchEvent(new Event('change'));}
-      }
-    });
-  </script>
-  <script src="/static/wcag.js" defer></script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Open Graph -->
-    <meta property="og:site_name" content="Emotion Intelligence Platform">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/og-image.png">
-    <meta property="og:locale" content="pt_BR">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@emotionai">
-    <!-- /Open Graph -->
-
-    <!-- Schema.org -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "MedicalWebPage",
-        "name": "Emotion Intelligence Platform",
-        "description": "Plataforma de saude mental com IA para psicologos brasileiros",
-        "url": "https://emotion-platform-albert.onrender.com",
-        "inLanguage": "pt-BR",
-        "about": {
-            "@type": "MedicalCondition",
-            "name": "Saude Mental"
-        },
-        "audience": {
-            "@type": "MedicalAudience",
-            "audienceType": "Psicologo"
-        }
-    }
-    </script>
-    <!-- /Schema.org -->
-
-    <!-- Preconnect para performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.clarity.ms">
-    <link rel="dns-prefetch" href="https://api.stripe.com">
-    <link rel="dns-prefetch" href="https://www.google-analytics.com">
-    <!-- /Preconnect -->
 </head>
 <body>
-<a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#667eea;color:white;padding:8px;z-index:9999;text-decoration:none" onfocus="this.style.top='0'">Pular para conteudo</a>
-<nav>
-  <a href="/" class="logo">🧠 Emotion Intelligence</a>
-  <div style="display:flex;gap:10px">
-    <a href="/dashboard" style="color:rgba(255,255,255,0.5);font-size:13px;text-decoration:none">Dashboard</a>
-    <a href="/ranking" style="color:rgba(255,255,255,0.5);font-size:13px;text-decoration:none">🏆 Ranking</a>
-  </div>
-</nav>
+<div class="topbar">
+  <a href="/app/dashboard">← Dashboard</a>
+  <span style="font-size:1.1rem;font-weight:700;margin-left:0.5rem">🎮 Gamificação</span>
+</div>
 
-<div class="container">
-  <div class="hero">
-    <h1>🎮 <span>Gamificação</span></h1>
-    <p>Ganhe pontos, suba de nível e desbloqueie badges!</p>
+<div class="content" id="main-content">
+  <!-- XP HERO -->
+  <div class="xp-hero">
+    <div class="xp-score" id="xp-total">0</div>
+    <div class="xp-label">pontos de experiência</div>
+    <div class="xp-bar-wrap">
+      <div class="xp-bar-fill" id="xp-bar" style="width:0%"></div>
+    </div>
+    <div class="nivel-badge" id="nivel-badge">🌱 Iniciante</div>
   </div>
 
-  <!-- STATS -->
-  <div class="stats">
-    <div class="stat">
-      <div class="stat-num">{{ usuario.pontos }}</div>
-      <div class="stat-label">🏆 Pontos Totais</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">{{ total_conquistas }}</div>
-      <div class="stat-label">🏅 Conquistas</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">{{ total_analises }}</div>
-      <div class="stat-label">🔍 Análises</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">{{ dias_cadastrado }}</div>
-      <div class="stat-label">📅 Dias Ativo</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num" id="streakNum">--</div>
-      <div class="stat-label">🔥 Streak</div>
+  <!-- STREAK -->
+  <div class="streak-card">
+    <div style="font-size:3rem">🔥</div>
+    <div style="font-size:2rem;font-weight:900;color:#d69e2e" id="streak-count">0</div>
+    <div style="font-size:0.9rem;color:#744210;font-weight:600">dias consecutivos</div>
+    <div style="font-size:0.8rem;color:#975a16;margin-top:0.25rem">Continue usando diariamente para manter o streak!</div>
+  </div>
+
+  <!-- CONQUISTAS -->
+  <div class="card" style="margin-bottom:1.5rem">
+    <div style="font-size:1rem;font-weight:700;margin-bottom:1rem">🏅 Conquistas</div>
+    <div class="conquistas-grid" id="conquistas">
+      <div class="conquista desbloqueada"><div class="conquista-emoji">🌱</div><div class="conquista-nome">Primeiro passo</div><div class="conquista-desc">Criou sua conta</div></div>
+      <div class="conquista desbloqueada"><div class="conquista-emoji">💬</div><div class="conquista-nome">Conversador</div><div class="conquista-desc">Primeiro chat com IA</div></div>
+      <div class="conquista bloqueada"><div class="conquista-emoji">📓</div><div class="conquista-nome">Diário ativo</div><div class="conquista-desc">7 entradas no diário</div></div>
+      <div class="conquista bloqueada"><div class="conquista-emoji">📊</div><div class="conquista-nome">Autoconhecimento</div><div class="conquista-desc">3 escalas completas</div></div>
+      <div class="conquista bloqueada"><div class="conquista-emoji">🔥</div><div class="conquista-nome">Consistente</div><div class="conquista-desc">7 dias seguidos</div></div>
+      <div class="conquista bloqueada"><div class="conquista-emoji">⭐</div><div class="conquista-nome">Expert</div><div class="conquista-desc">500 XP acumulados</div></div>
     </div>
   </div>
 
-  <!-- NIVEL ATUAL -->
-  <div class="nivel-card">
-    <div class="nivel-badge">{{ usuario.badge }}</div>
-    <div class="nivel-info">
-      <div class="nivel-nome">{{ usuario.badge }}</div>
-      <div class="nivel-desc">Você tem {{ usuario.pontos }} pontos</div>
-      {% if proximo_badge and proximo_badge.faltam > 0 %}
-      <div class="nivel-barra">
-        <div class="nivel-fill" style="width:{{ [(usuario.pontos / (usuario.pontos + proximo_badge.faltam) * 100)|int, 100]|min }}%"></div>
-      </div>
-      <div class="nivel-prox">Próximo: {{ proximo_badge.badge }} — faltam {{ proximo_badge.faltam }} pontos</div>
-      {% else %}
-      <div class="nivel-barra"><div class="nivel-fill" style="width:100%"></div></div>
-      <div class="nivel-prox">👑 Nível máximo atingido!</div>
-      {% endif %}
+  <!-- COMO GANHAR XP -->
+  <div class="card">
+    <div style="font-size:1rem;font-weight:700;margin-bottom:1rem">⚡ Como ganhar XP</div>
+    <div class="acoes-grid">
+      <div class="acao-card"><div class="acao-icon">📓</div><div><div class="acao-nome">Diário emocional</div><div class="acao-xp">+10 XP por entrada</div></div></div>
+      <div class="acao-card"><div class="acao-icon">📊</div><div><div class="acao-nome">Avaliação psicológica</div><div class="acao-xp">+20 XP por escala</div></div></div>
+      <div class="acao-card"><div class="acao-icon">💬</div><div><div class="acao-nome">Chat com IA</div><div class="acao-xp">+5 XP por conversa</div></div></div>
+      <div class="acao-card"><div class="acao-icon">🔥</div><div><div class="acao-nome">Streak diário</div><div class="acao-xp">+15 XP bônus</div></div></div>
     </div>
-  </div>
-
-  <!-- ACOES E PONTOS -->
-  <h2 style="margin-bottom:16px;font-size:20px">⚡ Como Ganhar Pontos</h2>
-  <div class="acoes-grid">
-    <div class="acao-card">
-      <div class="acao-icon">🔍</div>
-      <div class="acao-info">
-        <div class="acao-nome">Análise emocional</div>
-        <div class="acao-pts">+2 pts (free) / +5 pts (premium)</div>
-      </div>
+    <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap">
+      <a href="/app/diario" class="btn btn-primary" style="font-size:0.85rem">📓 Registrar humor</a>
+      <a href="/app/avaliacao" class="btn btn-outline" style="font-size:0.85rem">📊 Fazer avaliação</a>
+      <a href="/app/ranking" class="btn btn-outline" style="font-size:0.85rem">🏆 Ver ranking</a>
     </div>
-    <div class="acao-card">
-      <div class="acao-icon">💬</div>
-      <div class="acao-info">
-        <div class="acao-nome">Chat com Sofia</div>
-        <div class="acao-pts">+3 pts por conversa</div>
-      </div>
-    </div>
-    <div class="acao-card">
-      <div class="acao-icon">📔</div>
-      <div class="acao-info">
-        <div class="acao-nome">Entrada no diário</div>
-        <div class="acao-pts">+5 pts por entrada</div>
-      </div>
-    </div>
-    <div class="acao-card">
-      <div class="acao-icon">🔗</div>
-      <div class="acao-info">
-        <div class="acao-nome">Indicar amigo</div>
-        <div class="acao-pts">+20 pts por indicação</div>
-      </div>
-    </div>
-    <div class="acao-card">
-      <div class="acao-icon">⭐</div>
-      <div class="acao-info">
-        <div class="acao-nome">Ativar Trial</div>
-        <div class="acao-pts">+10 pts</div>
-      </div>
-    </div>
-    <div class="acao-card">
-      <div class="acao-icon">💎</div>
-      <div class="acao-info">
-        <div class="acao-nome">Assinar Premium</div>
-        <div class="acao-pts">+50 pts de bônus</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- BADGES DISPONIVEIS -->
-  <h2 style="margin-bottom:16px;font-size:20px">🏅 Badges do Sistema</h2>
-  <div class="badges-grid">
-    {% set badges_sistema = [
-      ("🥉", "Iniciante", "0 pontos", usuario.pontos >= 0),
-      ("🥈", "Explorador", "100 pontos", usuario.pontos >= 100),
-      ("🥇", "Praticante", "300 pontos", usuario.pontos >= 300),
-      ("🏆", "Avançado", "700 pontos", usuario.pontos >= 700),
-      ("🔥", "Intermediário", "1500 pontos", usuario.pontos >= 1500),
-      ("💎", "Expert", "3000 pontos", usuario.pontos >= 3000),
-      ("🌟", "Mestre", "6000 pontos", usuario.pontos >= 6000),
-      ("👑", "Lenda", "10000 pontos", usuario.pontos >= 10000),
-    ] %}
-    {% for emoji, nome, req, desbloqueado in badges_sistema %}
-    <div class="badge-card {{ 'desbloqueado' if desbloqueado else 'bloqueado' }}">
-      {% if desbloqueado %}<div class="badge-desbloqueado-tag">✓</div>{% endif %}
-      <span class="badge-emoji">{{ emoji }}</span>
-      <div class="badge-nome">{{ nome }}</div>
-      <div class="badge-req">{{ req }}</div>
-    </div>
-    {% endfor %}
-  </div>
-
-  <!-- CONQUISTAS DESBLOQUEADAS -->
-  {% if conquistas %}
-  <h2 style="margin-bottom:16px;font-size:20px">🏅 Suas Conquistas ({{ total_conquistas }})</h2>
-  <div class="conquistas-grid">
-    {% for c in conquistas %}
-    <div class="conquista">
-      <div class="conquista-emoji">{{ c.emoji }}</div>
-      <div>
-        <div class="conquista-nome">{{ c.nome }}</div>
-        <div class="conquista-desc">{{ c.descricao }}</div>
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
-
-  <div class="cta">
-    <h3>🚀 Continue evoluindo!</h3>
-    <p>Cada análise te aproxima do próximo nível. Faça uma agora!</p>
-    <a href="/dashboard" class="btn">🔍 Fazer Análise</a>
-    <a href="/ranking" class="btn" style="background:rgba(255,255,255,0.08);border:1px solid var(--border)">🏆 Ver Ranking</a>
   </div>
 </div>
 
 <script>
-fetch('/api/streak')
-  .then(r => r.json())
-  .then(d => {
-    if(d.ok) document.getElementById('streakNum').textContent = d.streak.streak_atual;
-  }).catch(()=>{});
-gtag('event','ver_gamificacao',{event_category:'engajamento'});
+const TOKEN = localStorage.getItem('emotion_token');
+const USER_ID = localStorage.getItem('emotion_userid') || 'user';
+if (!TOKEN) window.location.href = '/app/login';
+
+const NIVEIS = [
+  [0, 'Iniciante', '🌱'],
+  [100, 'Aprendiz', '📚'],
+  [250, 'Praticante', '💪'],
+  [500, 'Experiente', '⭐'],
+  [1000, 'Especialista', '🏆'],
+  [2000, 'Mestre', '👑'],
+];
+
+async function carregar() {
+  try {
+    const r = await fetch('/api/v1/xp/' + USER_ID, {
+      headers: {'Authorization': 'Bearer ' + TOKEN}
+    });
+    if (!r.ok) return;
+    const d = await r.json();
+    const xp = d.xp || 0;
+    const streak = d.streak || 0;
+
+    document.getElementById('xp-total').textContent = xp;
+    document.getElementById('streak-count').textContent = streak;
+
+    const nivel = NIVEIS.filter(n => xp >= n[0]).pop() || NIVEIS[0];
+    const proximo = NIVEIS.find(n => xp < n[0]);
+    document.getElementById('nivel-badge').textContent = nivel[2] + ' ' + nivel[1];
+
+    if (proximo) {
+      const pct = ((xp - nivel[0]) / (proximo[0] - nivel[0]) * 100);
+      document.getElementById('xp-bar').style.width = Math.min(pct, 100) + '%';
+    } else {
+      document.getElementById('xp-bar').style.width = '100%';
+    }
+  } catch(e) {}
+}
+
+carregar();
 </script>
 </body>
 </html>

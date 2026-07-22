@@ -1,256 +1,159 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-JGLER9XVGY');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ranking Global — Emotion Intelligence</title>
-<meta property="og:title" content="Ranking Global — Emotion Intelligence">
-<meta property="og:description" content="Veja os usuários mais engajados na Emotion Intelligence Platform.">
+<title>EmotionAI — Ranking</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--primary:#00d2ff;--secondary:#3a7bd5;--gold:#f39c12;--dark:#0f0c29;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1)}
-body{font-family:'Segoe UI',sans-serif;background:var(--dark);color:#fff;min-height:100vh}
-nav{padding:14px 24px;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
-.logo{font-size:18px;font-weight:bold;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-.container{max-width:800px;margin:0 auto;padding:40px 20px}
-/* HERO */
-.hero{text-align:center;padding:40px 20px;margin-bottom:32px}
-.hero h1{font-size:36px;font-weight:900;margin-bottom:8px}
-.hero h1 span{background:linear-gradient(90deg,var(--gold),#e67e22);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{color:rgba(255,255,255,0.5);font-size:15px;margin-bottom:16px}
-.total-badge{display:inline-block;background:rgba(0,210,255,0.1);border:1px solid rgba(0,210,255,0.2);padding:6px 16px;border-radius:20px;font-size:13px;color:var(--primary)}
-/* MINHA POSICAO */
-.minha-pos{background:rgba(0,210,255,0.08);border:2px solid rgba(0,210,255,0.3);border-radius:18px;padding:20px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-.pos-info{display:flex;align-items:center;gap:14px}
-.pos-num{font-size:36px;font-weight:900;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.pos-label{font-size:12px;color:rgba(255,255,255,0.5)}
-.pos-pontos{text-align:right}
-.pos-pontos-num{font-size:28px;font-weight:900;color:var(--gold)}
-/* TOP 3 */
-.top3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:28px}
-.top3-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;text-align:center;transition:all .3s;position:relative;overflow:hidden}
-.top3-card:hover{transform:translateY(-4px)}
-.top3-card.primeiro{border-color:rgba(255,215,0,0.4);background:rgba(255,215,0,0.06);order:-1}
-.top3-card.segundo{border-color:rgba(192,192,192,0.3)}
-.top3-card.terceiro{border-color:rgba(205,127,50,0.3)}
-.top3-emoji{font-size:40px;margin-bottom:8px;display:block}
-.top3-nome{font-size:15px;font-weight:700;margin-bottom:4px}
-.top3-pontos{font-size:22px;font-weight:900;color:var(--gold)}
-.top3-badge{font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px}
-.top3-plano{font-size:10px;padding:3px 10px;border-radius:20px;margin-top:6px;display:inline-block}
-.plano-premium{background:rgba(0,210,255,0.15);color:var(--primary)}
-.plano-enterprise{background:rgba(46,204,113,0.15);color:#2ecc71}
-.plano-free{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.5)}
-/* LISTA */
-.lista-titulo{font-size:16px;font-weight:700;margin-bottom:14px;color:rgba(255,255,255,0.7)}
-.ranking-item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;margin-bottom:10px;display:flex;align-items:center;gap:14px;transition:all .2s}
-.ranking-item:hover{border-color:var(--primary);transform:translateX(4px)}
-.ranking-item.eu{border-color:rgba(0,210,255,0.4);background:rgba(0,210,255,0.05)}
-.ranking-pos{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;flex-shrink:0}
-.ranking-info{flex:1}
-.ranking-nome{font-size:15px;font-weight:600}
-.ranking-badge{font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px}
-.ranking-pontos{font-size:20px;font-weight:900;color:var(--gold)}
-.ranking-plano{font-size:10px;padding:2px 8px;border-radius:10px;margin-top:4px;display:inline-block}
-/* CTA */
-.cta-card{background:linear-gradient(135deg,rgba(0,210,255,0.1),rgba(58,123,213,0.1));border:1px solid rgba(0,210,255,0.2);border-radius:18px;padding:28px;text-align:center;margin-top:24px}
-.cta-card h3{font-size:20px;margin-bottom:8px}
-.cta-card p{color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:16px}
-.btn-cta{display:inline-block;padding:12px 28px;background:linear-gradient(90deg,var(--primary),var(--secondary));border-radius:12px;color:#fff;font-weight:700;font-size:15px;text-decoration:none;margin:4px}
-.btn-sec{background:rgba(255,255,255,0.08);border:1px solid var(--border)}
-/* LOADING */
-.loading{text-align:center;padding:40px;color:rgba(255,255,255,0.4)}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #667eea;
+  --primary-dark: #764ba2;
+  --accent: #38a169;
+  --danger: #e53e3e;
+  --bg: #f8fafc;
+  --bg2: #ffffff;
+  --text: #1a202c;
+  --text2: #4a5568;
+  --text3: #718096;
+  --border: #e2e8f0;
+  --shadow: 0 4px 24px rgba(102,126,234,0.10);
+  --shadow-lg: 0 8px 48px rgba(102,126,234,0.15);
+  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --radius: 16px;
+}
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); z-index: 100; padding: 0 2rem; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+.nav-brand { font-size: 1.25rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+.nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+.nav-links a { color: var(--text2); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: var(--primary); }
+.nav-cta { display: flex; gap: 0.75rem; }
+.btn { padding: 0.6rem 1.5rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; }
+.btn-primary { background: var(--gradient); color: white; box-shadow: 0 4px 16px rgba(102,126,234,0.35); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(102,126,234,0.45); }
+.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text2); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-lg { padding: 0.9rem 2.5rem; font-size: 1rem; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+.section { padding: 5rem 0; }
+.section-badge { display: inline-block; background: rgba(102,126,234,0.1); color: var(--primary); padding: 0.3rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; }
+.section-title { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.2; margin-bottom: 1rem; letter-spacing: -0.01em; }
+.section-desc { font-size: 1.1rem; color: var(--text2); max-width: 580px; line-height: 1.7; }
+.grad { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.text-center { text-align: center; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); }
+footer { background: #1a202c; color: #a0aec0; padding: 3rem 2rem; margin-top: 4rem; }
+.footer-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; }
+.footer-brand { font-size: 1.25rem; font-weight: 800; color: white; margin-bottom: 0.75rem; }
+.footer-col h4 { color: white; font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; }
+.footer-col a { display: block; color: #a0aec0; text-decoration: none; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.footer-col a:hover { color: white; }
+.footer-bottom { max-width: 1100px; margin: 2rem auto 0; padding-top: 1.5rem; border-top: 1px solid #2d3748; display: flex; justify-content: space-between; font-size: 0.8rem; flex-wrap: wrap; gap: 1rem; }
+input, textarea, select { width: 100%; padding: 0.75rem 1rem; border: 1.5px solid var(--border); border-radius: 12px; font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s; background: white; color: var(--text); }
+input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+label { font-size: 0.85rem; font-weight: 600; color: var(--text2); display: block; margin-bottom: 0.4rem; }
+.form-group { margin-bottom: 1.25rem; }
+@media (max-width: 768px) { .nav-links { display: none; } .footer-grid { grid-template-columns: 1fr 1fr; } }
+
+body { background: var(--bg); }
+.topbar { background: white; border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; align-items: center; gap: 1rem; position: sticky; top: 0; z-index: 40; }
+.topbar a { color: var(--text2); text-decoration: none; font-size: 0.9rem; }
+.content { max-width: 700px; margin: 0 auto; padding: 2rem; }
+.podium { display: flex; align-items: flex-end; justify-content: center; gap: 1rem; margin-bottom: 2rem; }
+.podium-item { text-align: center; }
+.podium-avatar { width: 60px; height: 60px; background: var(--gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: 700; margin: 0 auto 0.5rem; }
+.podium-name { font-size: 0.8rem; font-weight: 600; }
+.podium-xp { font-size: 0.75rem; color: var(--text3); }
+.podium-bar { background: var(--gradient); border-radius: 8px 8px 0 0; width: 80px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 0.5rem; color: white; font-size: 1.5rem; }
+.rank-item { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 1rem; transition: all 0.2s; }
+.rank-item:hover { box-shadow: var(--shadow); }
+.rank-item.me { border-color: var(--primary); background: rgba(102,126,234,0.03); }
+.rank-pos { width: 32px; height: 32px; border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
+.rank-pos.gold { background: #F6E05E; color: #744210; }
+.rank-pos.silver { background: #E2E8F0; color: #4a5568; }
+.rank-pos.bronze { background: #ED8936; color: white; }
+.rank-avatar { width: 40px; height: 40px; background: var(--gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; flex-shrink: 0; }
+.rank-name { font-weight: 600; font-size: 0.9rem; }
+.rank-nivel { font-size: 0.75rem; color: var(--text3); }
+.rank-xp { margin-left: auto; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 </style>
-  <!-- WCAG 2.1 AA keyboard support -->
-  <link rel="stylesheet" href="/static/wcag.css">
-  <script>
-    /* onkeydown keypress keyup Enter — WCAG 2.1 keyboard */
-    document.addEventListener('keydown',function(e){
-      if((e.key==='Enter'||e.key===' ')&&e.target.tagName==='LABEL'){
-        e.preventDefault();
-        var i=document.getElementById(e.target.htmlFor);
-        if(i){i.checked=true;i.dispatchEvent(new Event('change'));}
-      }
-    });
-  </script>
-  <script src="/static/wcag.js" defer></script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Open Graph -->
-    <meta property="og:site_name" content="Emotion Intelligence Platform">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/og-image.png">
-    <meta property="og:locale" content="pt_BR">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@emotionai">
-    <!-- /Open Graph -->
-
-    <!-- Schema.org -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "MedicalWebPage",
-        "name": "Emotion Intelligence Platform",
-        "description": "Plataforma de saude mental com IA para psicologos brasileiros",
-        "url": "https://emotion-platform-albert.onrender.com",
-        "inLanguage": "pt-BR",
-        "about": {
-            "@type": "MedicalCondition",
-            "name": "Saude Mental"
-        },
-        "audience": {
-            "@type": "MedicalAudience",
-            "audienceType": "Psicologo"
-        }
-    }
-    </script>
-    <!-- /Schema.org -->
-
-    <!-- Preconnect para performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.clarity.ms">
-    <link rel="dns-prefetch" href="https://api.stripe.com">
-    <link rel="dns-prefetch" href="https://www.google-analytics.com">
-    <!-- /Preconnect -->
 </head>
 <body>
-<a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#667eea;color:white;padding:8px;z-index:9999;text-decoration:none" onfocus="this.style.top='0'">Pular para conteudo</a>
-<nav>
-  <a href="/" class="logo">🧠 Emotion Intelligence</a>
-  <div style="display:flex;gap:10px">
-    <a href="/dashboard" style="color:rgba(255,255,255,0.5);font-size:13px;text-decoration:none">Dashboard</a>
-    <a href="/gamificacao" style="color:rgba(255,255,255,0.5);font-size:13px;text-decoration:none">Conquistas</a>
-  </div>
-</nav>
+<div class="topbar">
+  <a href="/app/dashboard">← Dashboard</a>
+  <span style="font-size:1.1rem;font-weight:700;margin-left:0.5rem">🏆 Ranking</span>
+</div>
 
-<div class="container">
-  <div class="hero">
-    <h1>🏆 Ranking <span>Global</span></h1>
-    <p>Os usuários mais engajados na Emotion Intelligence</p>
-    <div class="total-badge" id="totalBadge">Carregando...</div>
+<div class="content" id="main-content">
+  <div style="text-align:center;margin-bottom:2rem">
+    <h2 style="font-size:1.5rem;font-weight:800;margin-bottom:0.25rem">🏆 Top da semana</h2>
+    <p style="color:var(--text3);font-size:0.9rem">Usuários com mais XP acumulado</p>
   </div>
 
-  <!-- MINHA POSICAO -->
-  <div class="minha-pos" id="minhaPos" style="display:none">
-    <div class="pos-info">
-      <div class="pos-num" id="posNum">#--</div>
-      <div>
-        <div style="font-weight:700">Sua posição</div>
-        <div class="pos-label" id="posLabel">no ranking global</div>
-      </div>
-    </div>
-    <div class="pos-pontos">
-      <div class="pos-pontos-num" id="possPontos">--</div>
-      <div class="pos-label">pontos</div>
-    </div>
-  </div>
-
-  <!-- TOP 3 -->
-  <div class="top3" id="top3Container">
-    <div class="loading">⏳ Carregando ranking...</div>
-  </div>
-
-  <!-- LISTA 4-20 -->
-  <div class="lista-titulo">📋 Top 20 — Ranking Completo</div>
-  <div id="listaRanking">
-    <div class="loading">⏳ Carregando...</div>
-  </div>
-
-  <!-- CTA -->
-  <div class="cta-card">
-    <h3>🚀 Suba no ranking!</h3>
-    <p>Faça análises diárias, converse com a Sofia e escreva no diário para ganhar pontos.</p>
-    <a href="/dashboard" class="btn-cta">📊 Fazer Análise Agora</a>
-    <a href="/premium" class="btn-cta btn-sec">⭐ Premium +5pts/análise</a>
-  </div>
+  <div id="podium" style="margin-bottom:2rem"></div>
+  <div id="lista-ranking"></div>
 </div>
 
 <script>
-fetch('/ranking')
-  .then(r => r.json())
-  .then(d => {
-    // Total
-    document.getElementById('totalBadge').textContent = `👥 ${d.total_usuarios} usuários na plataforma`;
+const TOKEN = localStorage.getItem('emotion_token');
+const USER_ID = localStorage.getItem('emotion_userid');
+if (!TOKEN) window.location.href = '/app/login';
 
-    // Minha posicao
-    if(d.logado && d.minha_posicao) {
-      const mp = document.getElementById('minhaPos');
-      mp.style.display = 'flex';
-      document.getElementById('posNum').textContent = '#' + d.minha_posicao;
-      document.getElementById('possPontos').textContent = d.meus_pontos;
-      document.getElementById('posLabel').textContent = `de ${d.total_usuarios} usuários`;
+async function carregarRanking() {
+  try {
+    const r = await fetch('/api/v1/xp/ranking/top', {
+      headers: {'Authorization': 'Bearer ' + TOKEN}
+    });
+    if (!r.ok) return;
+    const d = await r.json();
+    const ranking = d.ranking || [];
+
+    if (ranking.length === 0) {
+      document.getElementById('lista-ranking').innerHTML = '<div style="text-align:center;padding:3rem;color:var(--text3)"><div style="font-size:3rem">🏆</div><div style="margin-top:1rem">Seja o primeiro no ranking!<br>Ganhe XP usando a plataforma.</div></div>';
+      return;
     }
 
-    // TOP 3
-    const top3 = document.getElementById('top3Container');
-    const ranking = d.ranking;
-    if(ranking.length === 0) {
-      top3.innerHTML = '<div class="loading">Nenhum usuário ainda</div>';
-    } else {
-      const classes = ['segundo','primeiro','terceiro'];
-      const itens = [ranking[1], ranking[0], ranking[2]].filter(Boolean);
-      top3.innerHTML = itens.map((u, i) => {
-        const cls = u ? (u.posicao === 1 ? 'primeiro' : u.posicao === 2 ? 'segundo' : 'terceiro') : '';
-        return u ? `
-          <div class="top3-card ${cls}">
-            <span class="top3-emoji">${u.emoji}</span>
-            <div class="top3-nome">${u.nome}</div>
-            <div class="top3-pontos">${u.pontos} pts</div>
-            <div class="top3-badge">${u.badge}</div>
-            <div class="top3-plano plano-${u.plano}">${u.plano.toUpperCase()}</div>
-            ${u.eu ? '<div style="margin-top:8px;font-size:11px;color:#00d2ff;font-weight:700">← Você</div>' : ''}
-          </div>
-        ` : '<div></div>';
-      }).join('');
-    }
+    // Pódio top 3
+    const top3 = ranking.slice(0, 3);
+    const podiumOrder = top3.length >= 3 ? [top3[1], top3[0], top3[2]] : top3;
+    const alturas = ['80px', '110px', '60px'];
+    const pos = ['🥈', '🥇', '🥉'];
 
-    // LISTA 4-20
-    const lista = document.getElementById('listaRanking');
-    const resto = ranking.slice(3);
-    if(resto.length === 0) {
-      lista.innerHTML = '<div class="loading" style="font-size:14px">Seja um dos primeiros! 🚀</div>';
-    } else {
-      lista.innerHTML = resto.map(u => `
-        <div class="ranking-item ${u.eu ? 'eu' : ''}">
-          <div class="ranking-pos" style="color:${u.eu ? 'var(--primary)' : 'rgba(255,255,255,0.5)'}">#${u.posicao}</div>
-          <div class="ranking-info">
-            <div class="ranking-nome">${u.nome} ${u.eu ? '← Você' : ''}</div>
-            <div class="ranking-badge">${u.badge}</div>
-            <span class="ranking-plano plano-${u.plano}">${u.plano.toUpperCase()}</span>
-          </div>
-          <div style="text-align:right">
-            <div class="ranking-pontos">${u.pontos}</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.4)">pontos</div>
-          </div>
+    document.getElementById('podium').innerHTML = '<div style="display:flex;align-items:flex-end;justify-content:center;gap:1rem">' +
+      podiumOrder.map((u, i) => `
+        <div style="text-align:center">
+          <div style="width:56px;height:56px;background:var(--gradient);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:1.3rem;font-weight:700;margin:0 auto 0.5rem">${(u.user_id||'?')[0].toUpperCase()}</div>
+          <div style="font-size:0.8rem;font-weight:600;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u.user_id||'Anon'}</div>
+          <div style="font-size:0.75rem;color:var(--text3)">${u.xp||0} XP</div>
+          <div style="background:var(--gradient);border-radius:8px 8px 0 0;width:70px;height:${alturas[i]};display:flex;align-items:flex-start;justify-content:center;padding-top:0.5rem;color:white;font-size:1.5rem;margin-top:0.5rem">${pos[i]}</div>
         </div>
-      `).join('');
-    }
+      `).join('') + '</div>';
 
-    gtag('event','ver_ranking',{event_category:'engajamento',event_label:'ranking_page'});
-  })
-  .catch(e => {
-    document.getElementById('top3Container').innerHTML = '<div class="loading">❌ Erro ao carregar</div>';
-  });
+    // Lista completa
+    document.getElementById('lista-ranking').innerHTML = ranking.map((u, i) => {
+      const posClasses = ['gold','silver','bronze'];
+      const isMe = u.user_id === USER_ID;
+      return `
+        <div class="rank-item ${isMe ? 'me' : ''}">
+          <div class="rank-pos ${posClasses[i] || ''}">${i+1}</div>
+          <div class="rank-avatar">${(u.user_id||'?')[0].toUpperCase()}</div>
+          <div>
+            <div class="rank-name">${isMe ? 'Você 👈' : (u.user_id||'Usuário')}</div>
+            <div class="rank-nivel">${u.nivel||'Iniciante'}</div>
+          </div>
+          <div class="rank-xp">${u.xp||0} XP</div>
+        </div>
+      `;
+    }).join('');
+  } catch(e) {
+    document.getElementById('lista-ranking').innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text3)">Erro ao carregar ranking.</div>';
+  }
+}
+
+carregarRanking();
 </script>
 </body>
 </html>

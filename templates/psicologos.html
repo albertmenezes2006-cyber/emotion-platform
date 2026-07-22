@@ -1,612 +1,223 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Ferramenta de IA para psicólogos aplicarem PHQ-9 e GAD-7 digitalmente. Prontuário, relatórios PDF e dashboard de evolução do paciente.">
-  <meta name="robots" content="index, follow">
-  <title>Emotion Platform para Psicólogos — PHQ-9, GAD-7 e IA Clínica</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: system-ui, sans-serif; background: #0f172a; color: #e2e8f0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EmotionAI — Para Psicólogos</title>
+<meta name="description" content="EmotionAI para psicólogos — prontuário digital, agendamento e escalas validadas.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #667eea;
+  --primary-dark: #764ba2;
+  --accent: #38a169;
+  --danger: #e53e3e;
+  --bg: #f8fafc;
+  --bg2: #ffffff;
+  --text: #1a202c;
+  --text2: #4a5568;
+  --text3: #718096;
+  --border: #e2e8f0;
+  --shadow: 0 4px 24px rgba(102,126,234,0.10);
+  --shadow-lg: 0 8px 48px rgba(102,126,234,0.15);
+  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --radius: 16px;
+}
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); z-index: 100; padding: 0 2rem; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+.nav-brand { font-size: 1.25rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+.nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+.nav-links a { color: var(--text2); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: var(--primary); }
+.nav-cta { display: flex; gap: 0.75rem; }
+.btn { padding: 0.6rem 1.5rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; }
+.btn-primary { background: var(--gradient); color: white; box-shadow: 0 4px 16px rgba(102,126,234,0.35); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(102,126,234,0.45); }
+.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text2); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-lg { padding: 0.9rem 2.5rem; font-size: 1rem; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+.section { padding: 5rem 0; }
+.section-badge { display: inline-block; background: rgba(102,126,234,0.1); color: var(--primary); padding: 0.3rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; }
+.section-title { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.2; margin-bottom: 1rem; letter-spacing: -0.01em; }
+.section-desc { font-size: 1.1rem; color: var(--text2); max-width: 580px; line-height: 1.7; }
+.grad { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.text-center { text-align: center; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); }
+footer { background: #1a202c; color: #a0aec0; padding: 3rem 2rem; margin-top: 4rem; }
+.footer-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; }
+.footer-brand { font-size: 1.25rem; font-weight: 800; color: white; margin-bottom: 0.75rem; }
+.footer-col h4 { color: white; font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; }
+.footer-col a { display: block; color: #a0aec0; text-decoration: none; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.footer-col a:hover { color: white; }
+.footer-bottom { max-width: 1100px; margin: 2rem auto 0; padding-top: 1.5rem; border-top: 1px solid #2d3748; display: flex; justify-content: space-between; font-size: 0.8rem; flex-wrap: wrap; gap: 1rem; }
+input, textarea, select { width: 100%; padding: 0.75rem 1rem; border: 1.5px solid var(--border); border-radius: 12px; font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s; background: white; color: var(--text); }
+input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+label { font-size: 0.85rem; font-weight: 600; color: var(--text2); display: block; margin-bottom: 0.4rem; }
+.form-group { margin-bottom: 1.25rem; }
+@media (max-width: 768px) { .nav-links { display: none; } .footer-grid { grid-template-columns: 1fr 1fr; } }
 
-    /* HERO */
-    .hero {
-      min-height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      text-align: center; padding: 60px 20px;
-      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
-    }
-    .hero-inner { max-width: 800px; }
-    .badge {
-      display: inline-block; background: #2e1065; color: #a78bfa;
-      padding: 8px 20px; border-radius: 20px; font-size: 14px;
-      font-weight: 600; margin-bottom: 24px; border: 1px solid #4c1d95;
-    }
-    .hero h1 {
-      font-size: clamp(32px, 5vw, 56px); font-weight: 800;
-      line-height: 1.2; margin-bottom: 20px; color: #f1f5f9;
-    }
-    .hero h1 span { color: #7c3aed; }
-    .hero p {
-      font-size: 18px; color: #94a3b8; max-width: 600px;
-      margin: 0 auto 40px; line-height: 1.7;
-    }
-    .hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-    .btn-primary {
-      background: #7c3aed; color: white; padding: 16px 32px;
-      border-radius: 12px; text-decoration: none; font-size: 16px;
-      font-weight: 700; transition: all .2s;
-    }
-    .btn-primary:hover { background: #6d28d9; transform: translateY(-2px); }
-    .btn-secondary {
-      background: transparent; color: #a78bfa; padding: 16px 32px;
-      border-radius: 12px; text-decoration: none; font-size: 16px;
-      font-weight: 600; border: 2px solid #4c1d95; transition: all .2s;
-    }
-    .btn-secondary:hover { background: #1e1b4b; }
-    .hero-note { color: #475569; font-size: 13px; margin-top: 16px; }
-
-    /* PROBLEMAS */
-    .section { padding: 80px 20px; }
-    .container { max-width: 1100px; margin: 0 auto; }
-    .section-label {
-      text-align: center; color: #7c3aed; font-size: 13px;
-      font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
-      margin-bottom: 12px;
-    }
-    .section-title {
-      text-align: center; font-size: clamp(24px, 4vw, 40px);
-      font-weight: 800; color: #f1f5f9; margin-bottom: 16px;
-    }
-    .section-sub {
-      text-align: center; color: #64748b; font-size: 16px;
-      max-width: 600px; margin: 0 auto 60px;
-    }
-
-    /* DORES */
-    .dores-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
-      gap: 20px;
-    }
-    .dor-card {
-      background: #1e293b; border-radius: 16px; padding: 28px;
-      border: 1px solid #334155;
-    }
-    .dor-emoji { font-size: 32px; margin-bottom: 16px; }
-    .dor-card h3 { color: #f87171; font-size: 18px; margin-bottom: 8px; }
-    .dor-card p { color: #64748b; font-size: 14px; line-height: 1.6; }
-
-    /* SOLUCOES */
-    .sol { background: #0a0f1e; }
-    .sol-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
-      gap: 24px;
-    }
-    .sol-card {
-      background: #1e293b; border-radius: 16px; padding: 32px;
-      border: 1px solid #334155; transition: border-color .2s;
-    }
-    .sol-card:hover { border-color: #7c3aed; }
-    .sol-icon {
-      width: 56px; height: 56px; background: #2e1065;
-      border-radius: 14px; display: flex; align-items: center;
-      justify-content: center; font-size: 28px; margin-bottom: 20px;
-    }
-    .sol-card h3 { color: #a78bfa; font-size: 20px; margin-bottom: 12px; }
-    .sol-card p { color: #64748b; font-size: 14px; line-height: 1.7; }
-
-    /* COMO FUNCIONA */
-    .steps { display: flex; flex-direction: column; gap: 24px; max-width: 700px; margin: 0 auto; }
-    .step { display: flex; gap: 20px; align-items: flex-start; }
-    .step-num {
-      width: 48px; height: 48px; background: #7c3aed; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 800; font-size: 20px; flex-shrink: 0;
-    }
-    .step-content h3 { color: #f1f5f9; margin-bottom: 6px; font-size: 18px; }
-    .step-content p { color: #64748b; font-size: 14px; line-height: 1.6; }
-
-    /* PLANOS */
-    .planos-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
-      gap: 24px; align-items: start;
-    }
-    .plano-card {
-      background: #1e293b; border-radius: 20px; padding: 36px;
-      border: 2px solid #334155; position: relative;
-    }
-    .plano-card.destaque { border-color: #7c3aed; }
-    .plano-badge {
-      position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
-      background: #7c3aed; color: white; padding: 4px 16px;
-      border-radius: 20px; font-size: 12px; font-weight: 700;
-      white-space: nowrap;
-    }
-    .plano-nome { color: #94a3b8; font-size: 14px; font-weight: 600;
-                  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-    .plano-preco { font-size: 48px; font-weight: 800; color: #f1f5f9; margin-bottom: 4px; }
-    .plano-preco span { font-size: 18px; color: #64748b; }
-    .plano-desc { color: #64748b; font-size: 13px; margin-bottom: 28px; }
-    .plano-features { list-style: none; margin-bottom: 32px; }
-    .plano-features li {
-      color: #94a3b8; font-size: 14px; padding: 8px 0;
-      border-bottom: 1px solid #1e293b; display: flex; align-items: center; gap: 10px;
-    }
-    .plano-features li::before { content: "✅"; font-size: 12px; }
-    .plano-btn {
-      display: block; text-align: center; padding: 14px;
-      background: #7c3aed; color: white; border-radius: 10px;
-      text-decoration: none; font-weight: 700; transition: all .2s;
-    }
-    .plano-btn:hover { background: #6d28d9; }
-    .plano-btn.outline {
-      background: transparent; border: 2px solid #334155; color: #94a3b8;
-    }
-    .plano-btn.outline:hover { border-color: #7c3aed; color: #a78bfa; }
-
-    /* DEPOIMENTOS */
-    .dep { background: #0a0f1e; }
-    .dep-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
-      gap: 24px;
-    }
-    .dep-card {
-      background: #1e293b; border-radius: 16px; padding: 28px;
-      border: 1px solid #334155;
-    }
-    .dep-stars { color: #fbbf24; font-size: 18px; margin-bottom: 16px; }
-    .dep-texto { color: #94a3b8; font-size: 14px; line-height: 1.7; margin-bottom: 20px; font-style: italic; }
-    .dep-autor { display: flex; align-items: center; gap: 12px; }
-    .dep-avatar {
-      width: 44px; height: 44px; background: #2e1065; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center; font-size: 20px;
-    }
-    .dep-nome { color: #f1f5f9; font-size: 14px; font-weight: 600; }
-    .dep-cargo { color: #475569; font-size: 12px; }
-
-    /* STATS */
-    .stats { background: #2e1065; padding: 60px 20px; }
-    .stats-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
-      gap: 40px; text-align: center; max-width: 800px; margin: 0 auto;
-    }
-    .stat-num { font-size: 48px; font-weight: 800; color: #a78bfa; }
-    .stat-label { color: #c4b5fd; font-size: 14px; margin-top: 4px; }
-
-    /* CTA FINAL */
-    .cta-final {
-      background: linear-gradient(135deg, #1e1b4b, #0f172a);
-      padding: 100px 20px; text-align: center;
-    }
-    .cta-final h2 { font-size: clamp(28px,4vw,48px); font-weight: 800;
-                    color: #f1f5f9; margin-bottom: 16px; }
-    .cta-final p { color: #64748b; font-size: 18px; margin-bottom: 40px; }
-
-    /* FAQ */
-    .faq-list { max-width: 700px; margin: 0 auto; }
-    .faq-item {
-      background: #1e293b; border-radius: 12px; padding: 24px;
-      margin-bottom: 12px; border: 1px solid #334155;
-    }
-    .faq-q { color: #a78bfa; font-size: 16px; font-weight: 600; margin-bottom: 8px; }
-    .faq-a { color: #64748b; font-size: 14px; line-height: 1.7; }
-
-    /* NAVBAR */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      background: rgba(15,23,42,0.95); backdrop-filter: blur(10px);
-      padding: 16px 24px; display: flex; align-items: center;
-      justify-content: space-between; border-bottom: 1px solid #1e293b;
-    }
-    .nav-logo { color: #7c3aed; font-weight: 800; font-size: 18px; text-decoration: none; }
-    .nav-links { display: flex; gap: 24px; align-items: center; }
-    .nav-links a { color: #94a3b8; text-decoration: none; font-size: 14px; }
-    .nav-links a:hover { color: #a78bfa; }
-    .nav-cta {
-      background: #7c3aed; color: white; padding: 8px 20px;
-      border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;
-    }
-    main { padding-top: 64px; }
-
-    /* FOOTER */
-    footer {
-      background: #020817; padding: 40px 20px; text-align: center;
-      color: #334155; font-size: 13px; border-top: 1px solid #1e293b;
-    }
-    footer a { color: #475569; text-decoration: none; }
-    footer a:hover { color: #7c3aed; }
-  </style>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Open Graph -->
-    <meta property="og:site_name" content="Emotion Intelligence Platform">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/og-image.png">
-    <meta property="og:locale" content="pt_BR">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@emotionai">
-    <!-- /Open Graph -->
-
-    <!-- Schema.org -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "MedicalWebPage",
-        "name": "Emotion Intelligence Platform",
-        "description": "Plataforma de saude mental com IA para psicologos brasileiros",
-        "url": "https://emotion-platform-albert.onrender.com",
-        "inLanguage": "pt-BR",
-        "about": {
-            "@type": "MedicalCondition",
-            "name": "Saude Mental"
-        },
-        "audience": {
-            "@type": "MedicalAudience",
-            "audienceType": "Psicologo"
-        }
-    }
-    </script>
-    <!-- /Schema.org -->
-
-    <!-- Preconnect para performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.clarity.ms">
-    <link rel="dns-prefetch" href="https://api.stripe.com">
-    <link rel="dns-prefetch" href="https://www.google-analytics.com">
-    <!-- /Preconnect -->
+.hero { padding: 8rem 0 5rem; background: white; }
+.hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+.hero h1 { font-size: clamp(2rem,5vw,3.5rem); font-weight: 900; line-height: 1.1; margin-bottom: 1.5rem; }
+.hero p { font-size: 1.1rem; color: var(--text2); line-height: 1.7; margin-bottom: 2rem; }
+.hero-visual { background: var(--gradient); border-radius: 24px; padding: 2rem; color: white; }
+.feature-row { display: flex; gap: 1rem; margin-bottom: 1rem; }
+.feature-row-icon { font-size: 1.5rem; }
+.feature-row-text { font-size: 0.9rem; opacity: 0.9; }
+.beneficios-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap: 1.5rem; margin-top: 3rem; }
+.beneficio { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
+.beneficio-num { font-size: 2rem; font-weight: 900; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.beneficio h3 { font-size: 1rem; font-weight: 700; margin: 0.5rem 0; }
+.beneficio p { font-size: 0.85rem; color: var(--text2); line-height: 1.6; }
+.comparativo { background: white; border-radius: 24px; overflow: hidden; border: 1px solid var(--border); margin-top: 3rem; }
+.comp-header { display: grid; grid-template-columns: 2fr 1fr 1fr; background: var(--bg); padding: 1rem 1.5rem; font-weight: 700; font-size: 0.9rem; }
+.comp-row { display: grid; grid-template-columns: 2fr 1fr 1fr; padding: 0.875rem 1.5rem; border-top: 1px solid var(--border); font-size: 0.9rem; align-items: center; }
+.comp-row:hover { background: var(--bg); }
+.check-ok { color: var(--accent); font-weight: 700; text-align: center; }
+.check-no { color: var(--danger); text-align: center; }
+@media (max-width: 768px) { .hero-grid { grid-template-columns: 1fr; } .hero-visual { display: none; } }
+</style>
 </head>
 <body>
-<a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#667eea;color:white;padding:8px;z-index:9999;text-decoration:none" onfocus="this.style.top='0'">Pular para conteudo</a>
 
-<!-- NAVBAR -->
-<nav>
-  <a class="nav-logo" href="/">🧠 Emotion Platform</a>
-  <div class="nav-links">
-    <a href="#solucoes">Funcionalidades</a>
-    <a href="#planos">Planos</a>
-    <a href="#faq">FAQ</a>
-    <a class="nav-cta" href="/app/avaliacao">Testar Grátis</a>
+<nav role="navigation" aria-label="Menu principal">
+  <a href="/" class="nav-brand">🧠 EmotionAI</a>
+  <ul class="nav-links">
+    <li><a href="/#features">Recursos</a></li>
+    <li><a href="/planos">Preços</a></li>
+    <li><a href="/sobre">Sobre</a></li>
+    <li><a href="/blog">Blog</a></li>
+    <li><a href="/contato">Contato</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="/app/login" class="btn btn-outline">Entrar</a>
+    <a href="/app/login" class="btn btn-primary">Começar grátis</a>
   </div>
 </nav>
 
-<main>
+<div style="height:64px"></div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-inner">
-    <div class="badge">🧠 Ferramenta clínica com IA para psicólogos</div>
-    <h1>Aplique <span>PHQ-9 e GAD-7</span><br>com IA na sua clínica</h1>
-    <p>
-      Chega de papel e planilha. Avalie seus pacientes digitalmente,
-      gere relatórios em PDF e acompanhe a evolução clínica com Inteligência Artificial.
-    </p>
-    <div class="hero-btns">
-      <a class="btn-primary" href="/app/avaliacao">Começar Grátis Agora</a>
-      <a class="btn-secondary" href="#como-funciona">Ver como funciona</a>
-    </div>
-    <p class="hero-note">✅ 30 dias grátis · Sem cartão · Cancele quando quiser</p>
-  </div>
-</section>
-
-<!-- DORES -->
-<section class="section">
+<section style="padding:8rem 0 5rem;background:white">
   <div class="container">
-    <div class="section-label">O problema</div>
-    <h2 class="section-title">Você reconhece alguma dessas situações?</h2>
-    <p class="section-sub">Psicólogos perdem horas com burocracia que poderiam estar atendendo pacientes.</p>
-    <div class="dores-grid">
-      <div class="dor-card">
-        <div class="dor-emoji">📋</div>
-        <h3>PHQ-9 e GAD-7 em papel</h3>
-        <p>Aplicar, calcular e arquivar manualmente. Perda de tempo e risco de erro humano na pontuação.</p>
+    <div class="hero-grid">
+      <div>
+        <span class="section-badge">🩺 Para psicólogos</span>
+        <h1>A plataforma que seu <span class="grad">consultório merece</span></h1>
+        <p>Pare de perder tempo com burocracia. O EmotionAI automatiza as tarefas administrativas para você focar no que importa: seus pacientes.</p>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap">
+          <a href="/app/login" class="btn btn-primary btn-lg">Começar grátis →</a>
+          <a href="/planos" class="btn btn-outline btn-lg">Ver planos</a>
+        </div>
+        <p style="font-size:0.85rem;color:var(--text3);margin-top:1rem">✅ Sem cartão · ✅ Setup em 5 min · ✅ Conformidade CFP</p>
       </div>
-      <div class="dor-card">
-        <div class="dor-emoji">📊</div>
-        <h3>Sem histórico de evolução</h3>
-        <p>Difícil comparar o estado do paciente ao longo do tempo sem dados estruturados e visuais.</p>
-      </div>
-      <div class="dor-card">
-        <div class="dor-emoji">📄</div>
-        <h3>Relatórios demoram horas</h3>
-        <p>Criar laudos e relatórios clínicos consome tempo precioso que poderia ser usado com pacientes.</p>
-      </div>
-      <div class="dor-card">
-        <div class="dor-emoji">🔒</div>
-        <h3>Dados em planilhas inseguras</h3>
-        <p>Excel e Google Sheets não são adequados para dados clínicos sensíveis. Risco de violação da LGPD.</p>
+      <div class="hero-visual">
+        <div style="font-size:1rem;font-weight:700;margin-bottom:1.5rem;opacity:0.9">📊 Resumo da semana</div>
+        <div class="feature-row"><span class="feature-row-icon">👥</span><div><div style="font-weight:700">12 sessões</div><div class="feature-row-text">Esta semana</div></div></div>
+        <div class="feature-row"><span class="feature-row-icon">📋</span><div><div style="font-weight:700">8 prontuários</div><div class="feature-row-text">Atualizados</div></div></div>
+        <div class="feature-row"><span class="feature-row-icon">📊</span><div><div style="font-weight:700">15 escalas</div><div class="feature-row-text">Aplicadas</div></div></div>
+        <div class="feature-row"><span class="feature-row-icon">⭐</span><div><div style="font-weight:700">4.9/5</div><div class="feature-row-text">Satisfação dos pacientes</div></div></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SOLUCOES -->
-<section class="section sol" id="solucoes">
+<section class="section" style="background:var(--bg)">
   <div class="container">
-    <div class="section-label">A solução</div>
-    <h2 class="section-title">Tudo que você precisa em uma plataforma</h2>
-    <p class="section-sub">Desenvolvida por um engenheiro brasileiro com foco total na realidade da psicologia clínica.</p>
-    <div class="sol-grid">
-      <div class="sol-card">
-        <div class="sol-icon">🧠</div>
-        <h3>PHQ-9 e GAD-7 Digital</h3>
-        <p>Aplique os testes validados cientificamente de forma digital. Cálculo automático e classificação instantânea.</p>
+    <div class="text-center">
+      <span class="section-badge">📈 Benefícios</span>
+      <h2 class="section-title">Quanto tempo você <span class="grad">vai recuperar</span></h2>
+    </div>
+    <div class="beneficios-grid">
+      <div class="beneficio">
+        <div class="beneficio-num">5h</div>
+        <h3>Por semana economizadas</h3>
+        <p>Com agendamento automático, lembretes e prontuário digital você elimina o trabalho administrativo repetitivo.</p>
       </div>
-      <div class="sol-card">
-        <div class="sol-icon">📈</div>
-        <h3>Dashboard de Evolução</h3>
-        <p>Acompanhe a evolução do paciente ao longo das sessões com gráficos claros e comparativos históricos.</p>
+      <div class="beneficio">
+        <div class="beneficio-num">30%</div>
+        <h3>Menos faltas</h3>
+        <p>Lembretes automáticos por email reduzem drasticamente o número de pacientes que esquecem as sessões.</p>
       </div>
-      <div class="sol-card">
-        <div class="sol-icon">📄</div>
-        <h3>Relatórios PDF Automáticos</h3>
-        <p>Gere laudos e relatórios clínicos profissionais em segundos. Com sua logo e dados do paciente.</p>
+      <div class="beneficio">
+        <div class="beneficio-num">2x</div>
+        <h3>Mais dados clínicos</h3>
+        <p>Escalas digitais aplicadas regularmente geram dados objetivos para acompanhar a evolução do paciente.</p>
       </div>
-      <div class="sol-card">
-        <div class="sol-icon">💬</div>
-        <h3>Chat IA de Suporte</h3>
-        <p>IA treinada em psicologia clínica para auxiliar com referências técnicas e sugestões de abordagem.</p>
-      </div>
-      <div class="sol-card">
-        <div class="sol-icon">🔒</div>
-        <h3>100% LGPD Compliant</h3>
-        <p>Dados criptografados, acesso controlado e conformidade total com a Lei Geral de Proteção de Dados.</p>
-      </div>
-      <div class="sol-card">
-        <div class="sol-icon">📱</div>
-        <h3>Acesso em Qualquer Lugar</h3>
-        <p>Funciona no celular, tablet e PC. Seu paciente pode responder de casa antes da sessão.</p>
+      <div class="beneficio">
+        <div class="beneficio-num">100%</div>
+        <h3>Conformidade LGPD/CFP</h3>
+        <p>Trabalhe tranquilo sabendo que seus dados e os dos pacientes estão protegidos e em conformidade.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- COMO FUNCIONA -->
-<section class="section" id="como-funciona">
+<section class="section" style="background:white">
   <div class="container">
-    <div class="section-label">Simples e rápido</div>
-    <h2 class="section-title">Como funciona na prática</h2>
-    <p class="section-sub">Em menos de 5 minutos você já está usando com seu primeiro paciente.</p>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-content">
-          <h3>Crie sua conta grátis</h3>
-          <p>Cadastro em 30 segundos. Sem cartão de crédito. 30 dias completos para testar tudo.</p>
-        </div>
+    <div class="text-center">
+      <span class="section-badge">⚖️ Comparativo</span>
+      <h2 class="section-title">EmotionAI vs <span class="grad">métodos tradicionais</span></h2>
+    </div>
+    <div class="comparativo">
+      <div class="comp-header">
+        <div>Funcionalidade</div>
+        <div style="text-align:center;color:var(--primary)">🧠 EmotionAI</div>
+        <div style="text-align:center">📄 Papel/Word</div>
       </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-content">
-          <h3>Cadastre seu paciente</h3>
-          <p>Adicione o paciente e envie o link da avaliação por WhatsApp ou email. Ele responde de casa.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-content">
-          <h3>Receba o resultado instantâneo</h3>
-          <p>PHQ-9 e GAD-7 calculados automaticamente com classificação clínica e alertas de risco.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">4</div>
-        <div class="step-content">
-          <h3>Gere o relatório PDF</h3>
-          <p>Relatório clínico completo em PDF com histórico de evolução do paciente. Pronto para prontuário.</p>
-        </div>
-      </div>
+      <div class="comp-row"><div>Prontuário digital organizado</div><div class="check-ok">✓</div><div class="check-no">✗</div></div>
+      <div class="comp-row"><div>Agendamento online automático</div><div class="check-ok">✓</div><div class="check-no">✗</div></div>
+      <div class="comp-row"><div>Escalas psicológicas validadas</div><div class="check-ok">✓</div><div class="check-no">✗</div></div>
+      <div class="comp-row"><div>Lembretes automáticos</div><div class="check-ok">✓</div><div class="check-no">✗</div></div>
+      <div class="comp-row"><div>IA de suporte 24/7</div><div class="check-ok">✓</div><div class="check-no">✗</div></div>
+      <div class="comp-row"><div>Backup automático seguro</div><div class="check-ok">✓</div><div class="check-no">✗</div></div>
+      <div class="comp-row"><div>Conformidade LGPD</div><div class="check-ok">✓</div><div class="check-no">✗</div></div>
+      <div class="comp-row"><div>Relatórios PDF automáticos</div><div class="check-ok">✓</div><div class="check-no">✗</div></div>
     </div>
   </div>
 </section>
 
-<!-- STATS -->
-<div class="stats">
-  <div class="stats-grid">
-    <div>
-      <div class="stat-num">1.485+</div>
-      <div class="stat-label">Recursos clínicos</div>
-    </div>
-    <div>
-      <div class="stat-num">100%</div>
-      <div class="stat-label">LGPD compliant</div>
-    </div>
-    <div>
-      <div class="stat-num">9</div>
-      <div class="stat-label">Questões PHQ-9 validadas</div>
-    </div>
-    <div>
-      <div class="stat-num">30</div>
-      <div class="stat-label">Dias grátis</div>
-    </div>
-  </div>
-</div>
-
-<!-- PLANOS -->
-<section class="section" id="planos">
-  <div class="container">
-    <div class="section-label">Investimento</div>
-    <h2 class="section-title">Planos para psicólogos</h2>
-    <p class="section-sub">Comece grátis. Sem surpresas. Cancele quando quiser.</p>
-    <div class="planos-grid">
-
-      <div class="plano-card">
-        <div class="plano-nome">Gratuito</div>
-        <div class="plano-preco">R$ 0<span>/mês</span></div>
-        <div class="plano-desc">Para conhecer a plataforma</div>
-        <ul class="plano-features">
-          <li>5 avaliações por mês</li>
-          <li>PHQ-9 e GAD-7 digital</li>
-          <li>Dashboard básico</li>
-          <li>Chat IA (20 msgs)</li>
-        </ul>
-        <a class="plano-btn outline" href="/app/login">Criar conta grátis</a>
-      </div>
-
-      <div class="plano-card destaque">
-        <div class="plano-badge">⭐ Mais popular</div>
-        <div class="plano-nome">Pro</div>
-        <div class="plano-preco">R$ 29<span>,90/mês</span></div>
-        <div class="plano-desc">Para psicólogos autônomos</div>
-        <ul class="plano-features">
-          <li>Avaliações ilimitadas</li>
-          <li>Relatórios PDF automáticos</li>
-          <li>Dashboard completo</li>
-          <li>Chat IA ilimitado</li>
-          <li>Histórico 1 ano</li>
-          <li>Suporte prioritário</li>
-        </ul>
-        <a class="plano-btn" href="/app/planos">Começar 30 dias grátis</a>
-      </div>
-
-      <div class="plano-card">
-        <div class="plano-nome">Clínica</div>
-        <div class="plano-preco">R$ 99<span>,90/mês</span></div>
-        <div class="plano-desc">Para clínicas e grupos</div>
-        <ul class="plano-features">
-          <li>Tudo do Pro</li>
-          <li>Multi-pacientes</li>
-          <li>Acesso API completa</li>
-          <li>Logo da sua clínica nos PDFs</li>
-          <li>LGPD compliant avançado</li>
-          <li>Suporte dedicado</li>
-        </ul>
-        <a class="plano-btn outline" href="/app/planos">Assinar Clínica</a>
-      </div>
-
-    </div>
-  </div>
+<section style="background:var(--gradient);padding:5rem 2rem;text-align:center;color:white">
+  <h2 style="font-size:2rem;font-weight:900;margin-bottom:1rem">Comece hoje mesmo</h2>
+  <p style="opacity:0.85;margin-bottom:2rem;max-width:400px;margin-left:auto;margin-right:auto">Sem cartão de crédito. Sem instalação. Setup em 5 minutos.</p>
+  <a href="/app/login" class="btn" style="background:white;color:var(--primary);font-weight:700;padding:0.9rem 2.5rem">
+    Criar conta grátis →
+  </a>
 </section>
 
-<!-- DEPOIMENTOS -->
-<section class="section dep">
-  <div class="container">
-    <div class="section-label">Feedback</div>
-    <h2 class="section-title">O que dizem os primeiros usuários</h2>
-    <p class="section-sub">Testadores beta da plataforma.</p>
-    <div class="dep-grid">
-      <div class="dep-card">
-        <div class="dep-stars">★★★★★</div>
-        <p class="dep-texto">"Finalmente uma ferramenta brasileira que entende o fluxo clínico. O PHQ-9 digital economiza pelo menos 20 minutos por paciente."</p>
-        <div class="dep-autor">
-          <div class="dep-avatar">👩</div>
-          <div>
-            <div class="dep-nome">Ana C., CRP 06/XXXXX</div>
-            <div class="dep-cargo">Psicóloga Clínica — São Paulo</div>
-          </div>
-        </div>
-      </div>
-      <div class="dep-card">
-        <div class="dep-stars">★★★★★</div>
-        <p class="dep-texto">"O dashboard de evolução mudou como apresento resultados para meus pacientes. Eles se engajam muito mais vendo os gráficos."</p>
-        <div class="dep-autor">
-          <div class="dep-avatar">👨</div>
-          <div>
-            <div class="dep-nome">Carlos M., CRP 08/XXXXX</div>
-            <div class="dep-cargo">Psicólogo — Curitiba</div>
-          </div>
-        </div>
-      </div>
-      <div class="dep-card">
-        <div class="dep-stars">★★★★★</div>
-        <p class="dep-texto">"Uso o relatório PDF direto no prontuário. Minha clínica economizou horas de trabalho administrativo por semana."</p>
-        <div class="dep-autor">
-          <div class="dep-avatar">👩</div>
-          <div>
-            <div class="dep-nome">Dra. Mariana S.</div>
-            <div class="dep-cargo">Diretora Clínica — Rio de Janeiro</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- FAQ -->
-<section class="section" id="faq">
-  <div class="container">
-    <div class="section-label">Dúvidas</div>
-    <h2 class="section-title">Perguntas frequentes</h2>
-    <p class="section-sub">Respostas rápidas para as principais dúvidas.</p>
-    <div class="faq-list">
-      <div class="faq-item">
-        <div class="faq-q">O PHQ-9 e GAD-7 são validados cientificamente?</div>
-        <div class="faq-a">Sim. Usamos as versões validadas e traduzidas para o português brasileiro, seguindo os critérios científicos estabelecidos. A ferramenta não substitui a avaliação clínica profissional.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q">Os dados dos pacientes são seguros?</div>
-        <div class="faq-a">Sim. Somos 100% LGPD compliant. Dados criptografados, acesso controlado e servidores seguros. Nunca compartilhamos dados de pacientes com terceiros.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q">Preciso de cartão para o período grátis?</div>
-        <div class="faq-a">Não. 30 dias completamente grátis sem precisar de cartão de crédito. Só pedimos após o período de teste se você quiser continuar.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q">Posso cancelar a qualquer momento?</div>
-        <div class="faq-a">Sim. Sem fidelidade, sem multa. Cancele quando quiser direto pelo painel. Seus dados ficam disponíveis por 30 dias após o cancelamento.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q">Funciona para clínicas com vários psicólogos?</div>
-        <div class="faq-a">Sim! O plano Clínica (R$ 99,90/mês) suporta múltiplos profissionais com dashboards individuais e relatórios com a logo da clínica.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q">Tem suporte em português?</div>
-        <div class="faq-a">Sim. Suporte 100% em português por email e chat. Somos uma empresa brasileira desenvolvida por brasileiros para psicólogos brasileiros.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA FINAL -->
-<section class="cta-final">
-  <div class="container">
-    <h2>Pronto para modernizar sua clínica?</h2>
-    <p>Junte-se aos psicólogos que já usam IA na prática clínica.<br>30 dias grátis. Sem cartão. Sem compromisso.</p>
-    <div class="hero-btns">
-      <a class="btn-primary" href="/app/login">Criar conta grátis agora</a>
-      <a class="btn-secondary" href="/app/avaliacao">Ver demo do PHQ-9</a>
-    </div>
-    <p class="hero-note" style="margin-top:20px">
-      Dúvidas? Fale comigo diretamente:
-      <a href="mailto:albertmenezes2006@gmail.com" style="color:#7c3aed">albertmenezes2006@gmail.com</a>
-    </p>
-  </div>
-</section>
-
-</main>
-
-<!-- FOOTER -->
 <footer>
-  <p>
-    <a href="/">Home</a> ·
-    <a href="/app/avaliacao">PHQ-9</a> ·
-    <a href="/app/planos">Planos</a> ·
-    <a href="/app/chat">Chat IA</a> ·
-    <a href="/api/v1/tip/apoiar">Apoiar</a>
-  </p>
-  <p style="margin-top:12px">
-    © 2026 Emotion Intelligence Platform · Feito no Brasil 🇧🇷 ·
-    <a href="/privacidade">Privacidade</a> · LGPD Compliant
-  </p>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">🧠 EmotionAI</div>
+      <p style="font-size:0.9rem;line-height:1.6">Plataforma completa de gestão clínica para psicólogos brasileiros.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Produto</h4>
+      <a href="/#features">Recursos</a>
+      <a href="/planos">Preços</a>
+      <a href="/app/login">Entrar</a>
+    </div>
+    <div class="footer-col">
+      <h4>Empresa</h4>
+      <a href="/sobre">Sobre</a>
+      <a href="/blog">Blog</a>
+      <a href="/contato">Contato</a>
+      <a href="/afiliado">Afiliados</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <a href="/privacidade">Privacidade</a>
+      <a href="/termos">Termos</a>
+      <a href="/faq">FAQ</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 EmotionAI — Todos os direitos reservados</span>
+    <span>Feito com ❤️ em Sergipe, Brasil</span>
+  </div>
 </footer>
 
 </body>

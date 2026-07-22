@@ -1,251 +1,190 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-JGLER9XVGY');
-</script>
 <meta charset="UTF-8">
-
-<meta property="og:type" content="website">
-<meta property="og:title" content="Configurações — Emotion Intelligence">
-<meta property="og:description" content="Gerencie suas configurações de conta na Emotion Intelligence Platform.">
-<meta property="og:url" content="https://emotion-platform-albert.onrender.com/configuracoes">
-<meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/favicon.svg">
-<meta property="og:site_name" content="Emotion Intelligence">
-<meta property="og:locale" content="pt_BR">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Configurações — Emotion Intelligence">
-<meta name="twitter:description" content="Gerencie suas configurações de conta na Emotion Intelligence Platform.">
-<meta name="twitter:image" content="https://emotion-platform-albert.onrender.com/static/favicon.svg">
-<link rel="canonical" href="https://emotion-platform-albert.onrender.com/configuracoes">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Configurações — Emotion Intelligence</title>
+<title>EmotionAI — Configurações</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',sans-serif;background:#0f0f1a;color:#fff;min-height:100vh}
-.hero{background:linear-gradient(135deg,#667eea,#764ba2);padding:40px 20px;text-align:center}
-.hero h1{font-size:1.8rem}
-.container{max-width:600px;margin:0 auto;padding:30px 20px}
-.card{background:#1a1a2e;border-radius:16px;padding:30px;border:1px solid #333;margin-bottom:20px}
-.card h2{color:#667eea;margin-bottom:20px;font-size:1.1rem}
-.form-group{margin-bottom:15px}
-.form-group label{display:block;margin-bottom:8px;color:#aaa;font-size:.9rem}
-.form-group input,.form-group textarea{width:100%;padding:12px;background:#111;border:1px solid #333;border-radius:8px;color:#fff;font-size:1rem}
-.form-group textarea{height:80px;resize:none}
-.btn{width:100%;padding:14px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:10px}
-.btn:hover{opacity:.9}
-.btn-danger{background:linear-gradient(135deg,#f5576c,#c0392b)}
-.info-box{background:#667eea22;border-left:3px solid #667eea;padding:12px 15px;border-radius:0 8px 8px 0;margin-bottom:20px;font-size:.9rem}
-.plano-badge{display:inline-block;padding:6px 15px;border-radius:20px;font-weight:700;background:#ffd70022;color:#ffd700;border:1px solid #ffd700;margin-left:10px}
-.nav{display:flex;gap:10px;justify-content:center;margin-bottom:25px;flex-wrap:wrap}
-.nav a{padding:8px 16px;background:#1a1a2e;border-radius:8px;text-decoration:none;color:#fff;border:1px solid #333}
-.sucesso{background:#1a3a1a;border:1px solid #38ef7d;border-radius:8px;padding:12px;color:#38ef7d;margin-bottom:15px;display:none}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #667eea;
+  --primary-dark: #764ba2;
+  --accent: #38a169;
+  --danger: #e53e3e;
+  --bg: #f8fafc;
+  --bg2: #ffffff;
+  --text: #1a202c;
+  --text2: #4a5568;
+  --text3: #718096;
+  --border: #e2e8f0;
+  --shadow: 0 4px 24px rgba(102,126,234,0.10);
+  --shadow-lg: 0 8px 48px rgba(102,126,234,0.15);
+  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --radius: 16px;
+}
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); z-index: 100; padding: 0 2rem; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+.nav-brand { font-size: 1.25rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+.nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+.nav-links a { color: var(--text2); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: var(--primary); }
+.nav-cta { display: flex; gap: 0.75rem; }
+.btn { padding: 0.6rem 1.5rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; }
+.btn-primary { background: var(--gradient); color: white; box-shadow: 0 4px 16px rgba(102,126,234,0.35); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(102,126,234,0.45); }
+.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text2); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-lg { padding: 0.9rem 2.5rem; font-size: 1rem; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+.section { padding: 5rem 0; }
+.section-badge { display: inline-block; background: rgba(102,126,234,0.1); color: var(--primary); padding: 0.3rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; }
+.section-title { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.2; margin-bottom: 1rem; letter-spacing: -0.01em; }
+.section-desc { font-size: 1.1rem; color: var(--text2); max-width: 580px; line-height: 1.7; }
+.grad { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.text-center { text-align: center; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); }
+footer { background: #1a202c; color: #a0aec0; padding: 3rem 2rem; margin-top: 4rem; }
+.footer-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; }
+.footer-brand { font-size: 1.25rem; font-weight: 800; color: white; margin-bottom: 0.75rem; }
+.footer-col h4 { color: white; font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; }
+.footer-col a { display: block; color: #a0aec0; text-decoration: none; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.footer-col a:hover { color: white; }
+.footer-bottom { max-width: 1100px; margin: 2rem auto 0; padding-top: 1.5rem; border-top: 1px solid #2d3748; display: flex; justify-content: space-between; font-size: 0.8rem; flex-wrap: wrap; gap: 1rem; }
+input, textarea, select { width: 100%; padding: 0.75rem 1rem; border: 1.5px solid var(--border); border-radius: 12px; font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s; background: white; color: var(--text); }
+input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+label { font-size: 0.85rem; font-weight: 600; color: var(--text2); display: block; margin-bottom: 0.4rem; }
+.form-group { margin-bottom: 1.25rem; }
+@media (max-width: 768px) { .nav-links { display: none; } .footer-grid { grid-template-columns: 1fr 1fr; } }
+
+body { background: var(--bg); }
+.topbar { background: white; border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; align-items: center; gap: 1rem; position: sticky; top: 0; z-index: 40; }
+.topbar a { color: var(--text2); text-decoration: none; font-size: 0.9rem; }
+.content { max-width: 700px; margin: 0 auto; padding: 2rem; }
+.config-section { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.25rem; }
+.config-section h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+.toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+.toggle-row:last-child { border: none; padding-bottom: 0; }
+.toggle-info { font-size: 0.9rem; }
+.toggle-label { font-weight: 600; }
+.toggle-desc { font-size: 0.8rem; color: var(--text3); margin-top: 0.2rem; }
+.toggle-switch { position: relative; width: 44px; height: 24px; background: var(--border); border-radius: 50px; cursor: pointer; transition: background 0.3s; flex-shrink: 0; }
+.toggle-switch.on { background: var(--accent); }
+.toggle-knob { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: left 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+.toggle-switch.on .toggle-knob { left: 22px; }
 </style>
-  <!-- WCAG 2.1 AA keyboard support -->
-  <link rel="stylesheet" href="/static/wcag.css">
-  <script>
-    /* onkeydown keypress keyup Enter — WCAG 2.1 keyboard */
-    document.addEventListener('keydown',function(e){
-      if((e.key==='Enter'||e.key===' ')&&e.target.tagName==='LABEL'){
-        e.preventDefault();
-        var i=document.getElementById(e.target.htmlFor);
-        if(i){i.checked=true;i.dispatchEvent(new Event('change'));}
-      }
-    });
-  </script>
-  <script src="/static/wcag.js" defer></script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Schema.org -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "MedicalWebPage",
-        "name": "Emotion Intelligence Platform",
-        "description": "Plataforma de saude mental com IA para psicologos brasileiros",
-        "url": "https://emotion-platform-albert.onrender.com",
-        "inLanguage": "pt-BR",
-        "about": {
-            "@type": "MedicalCondition",
-            "name": "Saude Mental"
-        },
-        "audience": {
-            "@type": "MedicalAudience",
-            "audienceType": "Psicologo"
-        }
-    }
-    </script>
-    <!-- /Schema.org -->
-
-    <!-- Preconnect para performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.clarity.ms">
-    <link rel="dns-prefetch" href="https://api.stripe.com">
-    <link rel="dns-prefetch" href="https://www.google-analytics.com">
-    <!-- /Preconnect -->
 </head>
 <body>
-<a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#667eea;color:white;padding:8px;z-index:9999;text-decoration:none" onfocus="this.style.top='0'">Pular para conteudo</a>
-<div class="hero">
-  <h1>⚙️ Configurações</h1>
-  <p style="color:#ffffff99">Gerencie sua conta</p>
+<div class="topbar">
+  <a href="/app/dashboard">← Dashboard</a>
+  <span style="font-size:1.1rem;font-weight:700;margin-left:0.5rem">⚙️ Configurações</span>
 </div>
-<div class="container">
-  <div class="nav">
-    <a href="/">🏠 Home</a>
-    <a href="/perfil">👤 Perfil</a>
-    <a href="/carteira">💳 Carteira</a>
+
+<div class="content" id="main-content">
+  <div class="config-section">
+    <h3>🔔 Notificações</h3>
+    <div class="toggle-row">
+      <div class="toggle-info">
+        <div class="toggle-label">Lembretes de sessão</div>
+        <div class="toggle-desc">Receber lembretes 24h antes das sessões</div>
+      </div>
+      <div class="toggle-switch on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div>
+    </div>
+    <div class="toggle-row">
+      <div class="toggle-info">
+        <div class="toggle-label">Digest semanal</div>
+        <div class="toggle-desc">Resumo semanal do seu progresso por email</div>
+      </div>
+      <div class="toggle-switch on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div>
+    </div>
+    <div class="toggle-row">
+      <div class="toggle-info">
+        <div class="toggle-label">Alertas de humor</div>
+        <div class="toggle-desc">Notificações quando humor cair muito</div>
+      </div>
+      <div class="toggle-switch" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div>
+    </div>
   </div>
 
-  <div class="info-box">
-    👤 <strong>{{usuario.email}}</strong>
-    <span class="plano-badge">{{usuario.plano.upper()}}</span>
+  <div class="config-section">
+    <h3>🔒 Privacidade</h3>
+    <div class="toggle-row">
+      <div class="toggle-info">
+        <div class="toggle-label">Perfil público no ranking</div>
+        <div class="toggle-desc">Aparecer no ranking de usuários</div>
+      </div>
+      <div class="toggle-switch on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div>
+    </div>
+    <div class="toggle-row">
+      <div class="toggle-info">
+        <div class="toggle-label">Compartilhar dados anônimos</div>
+        <div class="toggle-desc">Ajudar a melhorar a plataforma (sem identificação)</div>
+      </div>
+      <div class="toggle-switch on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div>
+    </div>
   </div>
 
-  <div class="card">
-    <h2>✏️ Informações Pessoais</h2>
-    <div class="sucesso" id="sucesso">✅ Configurações salvas!</div>
+  <div class="config-section">
+    <h3>🎨 Aparência</h3>
     <div class="form-group">
-      <label>Nome</label>
-      <input type="text" id="nome" value="{{usuario.nome}}" placeholder="Seu nome">
+      <label>Idioma</label>
+      <select>
+        <option>Português (Brasil)</option>
+        <option>English</option>
+        <option>Español</option>
+      </select>
     </div>
     <div class="form-group">
-      <label>Bio</label>
-      <textarea id="bio" placeholder="Conte um pouco sobre você...">{{usuario.bio or ""}}</textarea>
+      <label>Fuso horário</label>
+      <select>
+        <option>América/São Paulo (GMT-3)</option>
+        <option>América/Manaus (GMT-4)</option>
+        <option>América/Belém (GMT-3)</option>
+      </select>
     </div>
-    <button class="btn" onclick="salvar()">💾 Salvar Alterações</button>
   </div>
 
-  <div class="card">
-    <h2>🔑 Segurança</h2>
-    <div class="form-group">
-      <label>Email</label>
-      <input type="email" value="{{usuario.email}}" disabled style="opacity:.5">
+  <div class="config-section">
+    <h3>📊 Dados e exportação</h3>
+    <p style="font-size:0.85rem;color:var(--text2);margin-bottom:1rem">Exporte todos os seus dados a qualquer momento.</p>
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+      <a href="/api/v1/export-json/criar" class="btn btn-outline" style="font-size:0.85rem">📄 Exportar JSON</a>
+      <a href="/api/v1/export-csv/criar" class="btn btn-outline" style="font-size:0.85rem">📊 Exportar CSV</a>
     </div>
-    <p style="color:#888;font-size:.85rem">Para alterar email ou senha, entre em contato com o suporte.</p>
   </div>
 
-  <div class="card">
-    <h2>💎 Meu Plano</h2>
-    <p style="margin-bottom:15px">Plano atual: <strong style="color:#ffd700">{{usuario.plano.upper()}}</strong></p>
-    {% if usuario.plano == "free" %}
-    <a href="/checkout/anual" class="btn" style="display:block;text-align:center;text-decoration:none">⭐ Fazer Upgrade para Premium</a>
-    {% else %}
-    <p style="color:#38ef7d">✅ Você tem acesso completo!</p>
-    {% endif %}
+  <div class="config-section">
+    <h3>⭐ Plano atual</h3>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-weight:700" id="cfg-plano">Plano Free</div>
+        <div style="font-size:0.85rem;color:var(--text3)">Para fazer upgrade, veja os planos disponíveis</div>
+      </div>
+      <a href="/planos" class="btn btn-primary" style="font-size:0.85rem">Upgrade →</a>
+    </div>
   </div>
 
-  <div class="card">
-    <h2>📊 Dados</h2>
-    <a href="/exportar/csv" class="btn" style="display:block;text-align:center;text-decoration:none;margin-bottom:10px">📥 Exportar CSV</a>
-    <a href="/exportar/pdf" class="btn" style="display:block;text-align:center;text-decoration:none;background:linear-gradient(135deg,#4facfe,#00f2fe);color:#000">📄 Exportar PDF</a>
+  <div style="text-align:center;margin-top:1.5rem">
+    <button class="btn btn-outline" onclick="sair()" style="color:var(--danger);border-color:var(--danger)">
+      🚪 Sair da conta
+    </button>
   </div>
 </div>
+
 <script>
-async function salvar(){
-  const nome = document.getElementById('nome').value;
-  const bio = document.getElementById('bio').value;
-  const fd = new FormData();
-  fd.append('nome', nome);
-  fd.append('bio', bio);
-  const r = await fetch('/configuracoes/salvar', {method:'POST', body:fd});
-  const d = await r.json();
-  if(d.ok){
-    document.getElementById('sucesso').style.display='block';
-    setTimeout(()=>document.getElementById('sucesso').style.display='none', 3000);
+const TOKEN = localStorage.getItem('emotion_token');
+const PLANO = localStorage.getItem('emotion_user_plano') || 'free';
+if (!TOKEN) window.location.href = '/app/login';
+
+document.getElementById('cfg-plano').textContent = 'Plano ' + PLANO.charAt(0).toUpperCase() + PLANO.slice(1);
+
+function sair() {
+  if (confirm('Tem certeza que deseja sair?')) {
+    localStorage.clear();
+    window.location.href = '/app/login';
   }
 }
 </script>
-
-  <div class='card'>
-    <h2>🔐 Segurança Avançada</h2>
-    <p style='font-size:13px;color:#888;margin-bottom:16px'>Verificação em dois fatores por email</p>
-    <button class='btn' onclick='enviar2FA()' style='margin-bottom:10px'>📧 Enviar Código 2FA</button>
-    <div id='div2fa' style='display:none;margin-top:10px'>
-      <input type='text' id='codigo2fa' placeholder='Digite o código de 6 dígitos' 
-             style='width:100%;padding:12px;border-radius:8px;border:1px solid #333;background:#111;color:#fff;font-size:18px;letter-spacing:4px;text-align:center;margin-bottom:10px'>
-      <button class='btn' onclick='verificar2FA()'>✅ Verificar Código</button>
-    </div>
-    <div id='result2fa' style='margin-top:10px;font-size:13px'></div>
-  </div>
-
-  <div class='card'>
-    <h2>🔔 Notificações Push</h2>
-    <p style='font-size:13px;color:#888;margin-bottom:16px'>Receba alertas direto no seu dispositivo</p>
-    <button class='btn' onclick='ativarPush()'>🔔 Ativar Notificações</button>
-    <div id='pushStatus' style='margin-top:10px;font-size:13px;color:#888'></div>
-  </div>
-
-<script>
-async function enviar2FA() {
-  const r = await fetch('/api/2fa/enviar', {method:'POST'});
-  const d = await r.json();
-  if(d.ok) {
-    document.getElementById('div2fa').style.display = 'block';
-    document.getElementById('result2fa').innerHTML = '<span style="color:#2ecc71">✅ ' + d.mensagem + '</span>';
-  } else {
-    document.getElementById('result2fa').innerHTML = '<span style="color:#e74c3c">❌ ' + d.erro + '</span>';
-  }
-}
-
-async function verificar2FA() {
-  const codigo = document.getElementById('codigo2fa').value;
-  const r = await fetch('/api/2fa/verificar', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({codigo})
-  });
-  const d = await r.json();
-  if(d.ok) {
-    document.getElementById('result2fa').innerHTML = '<span style="color:#2ecc71">✅ ' + d.mensagem + '</span>';
-    document.getElementById('div2fa').style.display = 'none';
-  } else {
-    document.getElementById('result2fa').innerHTML = '<span style="color:#e74c3c">❌ ' + d.erro + '</span>';
-  }
-}
-
-async function ativarPush() {
-  const status = document.getElementById('pushStatus');
-  if(!('Notification' in window)) {
-    status.textContent = '❌ Navegador não suporta notificações';
-    return;
-  }
-  const perm = await Notification.requestPermission();
-  if(perm === 'granted') {
-    status.innerHTML = '<span style="color:#2ecc71">✅ Notificações ativadas!</span>';
-    await fetch('/api/push/subscribe', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({endpoint: 'browser', activated: true})
-    });
-  } else {
-    status.textContent = '❌ Permissão negada';
-  }
-}
-</script>
-
 </body>
 </html>

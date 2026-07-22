@@ -1,255 +1,249 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-JGLER9XVGY');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sobre — Emotion Intelligence Platform</title>
-<meta name="description" content="Conheça a Emotion Intelligence — a plataforma de análise emocional com IA mais completa do Brasil. 150+ emoções, 17 modelos de IA, PostgreSQL.">
-<meta property="og:title" content="Sobre — Emotion Intelligence">
-<meta property="og:description" content="A plataforma de análise emocional com IA mais completa do Brasil.">
-<meta property="og:url" content="https://emotion-platform-albert.onrender.com/sobre">
-<meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/favicon.svg">
+<title>EmotionAI — Sobre nós</title>
+<meta name="description" content="Conheça a história e missão do EmotionAI — plataforma de saúde mental para psicólogos brasileiros.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--primary:#00d2ff;--secondary:#3a7bd5;--dark:#0f0c29;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1);--text-muted:rgba(255,255,255,0.5)}
-body{font-family:'Segoe UI',sans-serif;background:var(--dark);color:#fff;overflow-x:hidden}
-nav{padding:16px 40px;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
-.logo{font-size:20px;font-weight:bold;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-.nav-links{display:flex;gap:10px}
-.nav-links a{padding:8px 16px;border-radius:20px;text-decoration:none;color:#fff;font-size:13px;border:1px solid var(--border);transition:all .2s}
-.nav-links a:hover{border-color:var(--primary);color:var(--primary)}
-.container{max-width:1000px;margin:0 auto;padding:50px 20px}
-/* HERO */
-.hero{text-align:center;margin-bottom:50px;padding:50px 20px;background:var(--card);border-radius:24px;border:1px solid var(--border);position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(0,210,255,0.06) 0%,transparent 60%);pointer-events:none}
-.hero-badge{display:inline-block;background:rgba(0,210,255,0.1);border:1px solid rgba(0,210,255,0.2);padding:5px 16px;border-radius:20px;font-size:12px;color:var(--primary);margin-bottom:16px;font-weight:600}
-h1{font-size:44px;font-weight:900;margin-bottom:14px;line-height:1.1}
-h1 span{background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{font-size:17px;color:var(--text-muted);max-width:600px;margin:0 auto;line-height:1.7}
-/* CARDS */
-.card{background:var(--card);border-radius:20px;padding:32px;border:1px solid var(--border);margin-bottom:20px}
-.card h2{font-size:20px;color:var(--primary);margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.card p{color:rgba(255,255,255,0.7);line-height:1.8;font-size:14px;margin-bottom:12px}
-.card p:last-child{margin-bottom:0}
-/* NUMEROS */
-.numeros-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:20px}
-.numero{background:var(--card);border-radius:16px;padding:22px;text-align:center;border:1px solid var(--border);transition:all .2s}
-.numero:hover{transform:translateY(-3px);border-color:var(--primary)}
-.numero-val{font-size:36px;font-weight:bold;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
-.numero-label{color:var(--text-muted);font-size:12px;margin-top:6px}
-/* VALORES */
-.valores-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:20px}
-.valor{background:var(--card);border-radius:18px;padding:24px;border:1px solid var(--border);text-align:center;transition:all .2s}
-.valor:hover{transform:translateY(-4px);background:rgba(255,255,255,0.08)}
-.valor-icon{font-size:40px;margin-bottom:12px;display:block}
-.valor h3{font-size:16px;margin-bottom:8px;color:var(--primary);font-weight:700}
-.valor p{color:rgba(255,255,255,0.55);font-size:13px;line-height:1.6}
-/* TECH */
-.tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
-.tech{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;font-size:13px;color:rgba(255,255,255,0.7);transition:all .2s}
-.tech:hover{background:rgba(255,255,255,0.08);transform:translateY(-2px);border-color:var(--primary)}
-.tech-icon{font-size:28px;display:block;margin-bottom:6px}
-.tech-nome{font-weight:700;margin-bottom:2px}
-.tech-desc{font-size:11px;color:rgba(255,255,255,0.4)}
-/* TIMELINE */
-.timeline{position:relative;padding-left:24px;border-left:2px solid rgba(0,210,255,0.3);margin-bottom:20px}
-.tl-item{margin-bottom:24px;position:relative}
-.tl-item::before{content:'';position:absolute;left:-30px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--primary);border:2px solid var(--dark)}
-.tl-data{font-size:11px;color:var(--primary);font-weight:700;margin-bottom:4px}
-.tl-titulo{font-size:15px;font-weight:700;margin-bottom:4px}
-.tl-desc{font-size:13px;color:var(--text-muted);line-height:1.6}
-/* CTA */
-.cta{text-align:center;padding:36px;background:var(--card);border-radius:20px;border:1px solid var(--border)}
-.cta h2{font-size:26px;margin-bottom:12px}
-.cta p{color:var(--text-muted);margin-bottom:22px;font-size:14px}
-.btn{display:inline-block;padding:13px 32px;border-radius:12px;background:linear-gradient(90deg,var(--primary),var(--secondary));color:#fff;text-decoration:none;font-size:15px;font-weight:bold;transition:all .2s;margin:4px}
-.btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(58,123,213,0.4)}
-.btn-sec{background:rgba(255,255,255,0.08);border:1px solid var(--border)}
-.footer{text-align:center;padding:30px;color:rgba(255,255,255,0.25);font-size:12px}
-.footer a{color:rgba(255,255,255,0.3);text-decoration:none;margin:0 8px}
-.footer a:hover{color:var(--primary)}
-@media(max-width:768px){nav{padding:12px 16px}.container{padding:30px 14px}h1{font-size:32px}}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #667eea;
+  --primary-dark: #764ba2;
+  --accent: #38a169;
+  --danger: #e53e3e;
+  --bg: #f8fafc;
+  --bg2: #ffffff;
+  --text: #1a202c;
+  --text2: #4a5568;
+  --text3: #718096;
+  --border: #e2e8f0;
+  --shadow: 0 4px 24px rgba(102,126,234,0.10);
+  --shadow-lg: 0 8px 48px rgba(102,126,234,0.15);
+  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --radius: 16px;
+}
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); z-index: 100; padding: 0 2rem; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+.nav-brand { font-size: 1.25rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+.nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+.nav-links a { color: var(--text2); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: var(--primary); }
+.nav-cta { display: flex; gap: 0.75rem; }
+.btn { padding: 0.6rem 1.5rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; }
+.btn-primary { background: var(--gradient); color: white; box-shadow: 0 4px 16px rgba(102,126,234,0.35); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(102,126,234,0.45); }
+.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text2); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-lg { padding: 0.9rem 2.5rem; font-size: 1rem; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+.section { padding: 5rem 0; }
+.section-badge { display: inline-block; background: rgba(102,126,234,0.1); color: var(--primary); padding: 0.3rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; }
+.section-title { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.2; margin-bottom: 1rem; letter-spacing: -0.01em; }
+.section-desc { font-size: 1.1rem; color: var(--text2); max-width: 580px; line-height: 1.7; }
+.grad { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.text-center { text-align: center; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); }
+footer { background: #1a202c; color: #a0aec0; padding: 3rem 2rem; margin-top: 4rem; }
+.footer-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; }
+.footer-brand { font-size: 1.25rem; font-weight: 800; color: white; margin-bottom: 0.75rem; }
+.footer-col h4 { color: white; font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; }
+.footer-col a { display: block; color: #a0aec0; text-decoration: none; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.footer-col a:hover { color: white; }
+.footer-bottom { max-width: 1100px; margin: 2rem auto 0; padding-top: 1.5rem; border-top: 1px solid #2d3748; display: flex; justify-content: space-between; font-size: 0.8rem; flex-wrap: wrap; gap: 1rem; }
+input, textarea, select { width: 100%; padding: 0.75rem 1rem; border: 1.5px solid var(--border); border-radius: 12px; font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s; background: white; color: var(--text); }
+input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+label { font-size: 0.85rem; font-weight: 600; color: var(--text2); display: block; margin-bottom: 0.4rem; }
+.form-group { margin-bottom: 1.25rem; }
+@media (max-width: 768px) { .nav-links { display: none; } .footer-grid { grid-template-columns: 1fr 1fr; } }
+
+.hero { padding: 8rem 0 5rem; text-align: center; background: white; }
+.hero h1 { font-size: clamp(2.5rem,5vw,4rem); font-weight: 900; margin-bottom: 1rem; }
+.hero p { font-size: 1.2rem; color: var(--text2); max-width: 600px; margin: 0 auto; }
+.missao-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 1.5rem; margin-top: 3rem; }
+.missao-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; text-align: center; transition: all 0.2s; }
+.missao-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+.missao-icon { font-size: 3rem; margin-bottom: 1rem; }
+.missao-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+.missao-card p { font-size: 0.9rem; color: var(--text2); line-height: 1.6; }
+.team-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 1.5rem; margin-top: 3rem; }
+.team-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; text-align: center; }
+.team-avatar { width: 80px; height: 80px; background: var(--gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 1rem; color: white; font-weight: 700; }
+.team-name { font-weight: 700; margin-bottom: 0.25rem; }
+.team-role { font-size: 0.85rem; color: var(--text3); }
+.stats-banner { background: var(--gradient); color: white; padding: 4rem 2rem; text-align: center; }
+.stats-banner-grid { display: flex; gap: 4rem; justify-content: center; flex-wrap: wrap; }
+.stat-b { text-align: center; }
+.stat-b-num { font-size: 3rem; font-weight: 900; }
+.stat-b-label { font-size: 0.9rem; opacity: 0.85; margin-top: 0.25rem; }
+.timeline { max-width: 600px; margin: 3rem auto 0; }
+.timeline-item { display: flex; gap: 1.5rem; margin-bottom: 2rem; }
+.timeline-dot { width: 40px; height: 40px; background: var(--gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
+.timeline-content { padding-top: 0.5rem; }
+.timeline-year { font-size: 0.8rem; color: var(--primary); font-weight: 700; }
+.timeline-text { font-size: 0.9rem; color: var(--text2); margin-top: 0.25rem; }
 </style>
-  <!-- WCAG 2.1 AA keyboard support -->
-  <link rel="stylesheet" href="/static/wcag.css">
-  <script>
-    /* onkeydown keypress keyup Enter — WCAG 2.1 keyboard */
-    document.addEventListener('keydown',function(e){
-      if((e.key==='Enter'||e.key===' ')&&e.target.tagName==='LABEL'){
-        e.preventDefault();
-        var i=document.getElementById(e.target.htmlFor);
-        if(i){i.checked=true;i.dispatchEvent(new Event('change'));}
-      }
-    });
-  </script>
-  <script src="/static/wcag.js" defer></script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Open Graph -->
-    <meta property="og:site_name" content="Emotion Intelligence Platform">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/og-image.png">
-    <meta property="og:locale" content="pt_BR">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@emotionai">
-    <!-- /Open Graph -->
-
-    <!-- Schema.org -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "MedicalWebPage",
-        "name": "Emotion Intelligence Platform",
-        "description": "Plataforma de saude mental com IA para psicologos brasileiros",
-        "url": "https://emotion-platform-albert.onrender.com",
-        "inLanguage": "pt-BR",
-        "about": {
-            "@type": "MedicalCondition",
-            "name": "Saude Mental"
-        },
-        "audience": {
-            "@type": "MedicalAudience",
-            "audienceType": "Psicologo"
-        }
-    }
-    </script>
-    <!-- /Schema.org -->
-
-    <!-- Preconnect para performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.clarity.ms">
-    <link rel="dns-prefetch" href="https://api.stripe.com">
-    <link rel="dns-prefetch" href="https://www.google-analytics.com">
-    <!-- /Preconnect -->
 </head>
 <body>
-<a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#667eea;color:white;padding:8px;z-index:9999;text-decoration:none" onfocus="this.style.top='0'">Pular para conteudo</a>
-<nav>
-  <a href="/" class="logo">🧠 Emotion Intelligence</a>
-  <div class="nav-links">
-    <a href="/">← Voltar</a>
-    <a href="/cadastro">Criar Conta</a>
+
+<nav role="navigation" aria-label="Menu principal">
+  <a href="/" class="nav-brand">🧠 EmotionAI</a>
+  <ul class="nav-links">
+    <li><a href="/#features">Recursos</a></li>
+    <li><a href="/planos">Preços</a></li>
+    <li><a href="/sobre">Sobre</a></li>
+    <li><a href="/blog">Blog</a></li>
+    <li><a href="/contato">Contato</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="/app/login" class="btn btn-outline">Entrar</a>
+    <a href="/app/login" class="btn btn-primary">Começar grátis</a>
   </div>
 </nav>
 
-<div class="container">
-  <div class="hero">
-    <div class="hero-badge">ℹ️ Nossa História</div>
-    <h1>Sobre a <span>Emotion Intelligence</span></h1>
-    <p>Nossa missão é democratizar o autoconhecimento emocional através da Inteligência Artificial, tornando a saúde emocional acessível a todos os brasileiros.</p>
-  </div>
+<div style="height:64px"></div>
 
-  <div class="card">
-    <h2>🎯 Nossa Missão</h2>
-    <p>A Emotion Intelligence Platform nasceu da crença de que entender nossas emoções é fundamental para uma vida mais plena, relacionamentos mais saudáveis e decisões mais conscientes.</p>
-    <p>Usamos tecnologia de ponta — 17 modelos de IA (Groq, Mistral, OpenRouter, Google Gemini), FastAPI, PostgreSQL — para tornar a análise emocional acessível a qualquer pessoa, em qualquer lugar, de forma simples e imediata.</p>
-    <p>Nossa plataforma detecta <strong>150+ emoções</strong> em texto, voz e emoji, oferece a Sofia — psicóloga virtual com TCC, EMDR e Mindfulness — disponível 24/7, diário emocional, Score IE em 10 dimensões e muito mais.</p>
-  </div>
-
-  <div class="valores-grid">
-    <div class="valor"><span class="valor-icon">🧠</span><h3>Inovação</h3><p>17 modelos de IA em orquestrador com failover automático para máxima precisão</p></div>
-    <div class="valor"><span class="valor-icon">❤️</span><h3>Empatia</h3><p>Cada funcionalidade pensada no bem-estar emocional dos usuários</p></div>
-    <div class="valor"><span class="valor-icon">🔒</span><h3>Privacidade</h3><p>Dados criptografados e protegidos pela LGPD. Nunca compartilhados.</p></div>
-    <div class="valor"><span class="valor-icon">🌍</span><h3>Acessibilidade</h3><p>Plano gratuito real para todos os brasileiros, sem cartão de crédito</p></div>
-    <div class="valor"><span class="valor-icon">🏆</span><h3>Qualidade</h3><p>Código de nível sênior, performance otimizada e UX em primeiro lugar</p></div>
-    <div class="valor"><span class="valor-icon">💰</span><h3>Prosperidade</h3><p>Programa de afiliados com 20% de comissão para nossos usuários</p></div>
-  </div>
-
-  <div class="card"><h2>📊 Números da Plataforma</h2></div>
-  <div class="numeros-grid">
-    <div class="numero"><div class="numero-val">150+</div><div class="numero-label">Emoções detectadas</div></div>
-    <div class="numero"><div class="numero-val">v20.0</div><div class="numero-label">Versão atual</div></div>
-    <div class="numero"><div class="numero-val">17</div><div class="numero-label">Modelos de IA</div></div>
-    <div class="numero"><div class="numero-val">24/7</div><div class="numero-label">Sofia disponível</div></div>
-    <div class="numero"><div class="numero-val">20+</div><div class="numero-label">Idiomas suportados</div></div>
-    <div class="numero"><div class="numero-val">10</div><div class="numero-label">Dimensões Score IE</div></div>
-    <div class="numero"><div class="numero-val">R$0</div><div class="numero-label">Para começar</div></div>
-    <div class="numero"><div class="numero-val">20%</div><div class="numero-label">Comissão afiliados</div></div>
-  </div>
-
-  <div class="card"><h2>⚙️ Tecnologias Utilizadas</h2></div>
-  <div class="tech-grid">
-    <div class="tech"><span class="tech-icon">🐍</span><div class="tech-nome">Python 3.12</div><div class="tech-desc">Backend principal</div></div>
-    <div class="tech"><span class="tech-icon">⚡</span><div class="tech-nome">FastAPI</div><div class="tech-desc">Framework web</div></div>
-    <div class="tech"><span class="tech-icon">🤖</span><div class="tech-nome">Groq AI</div><div class="tech-desc">IA principal (Llama 70B)</div></div>
-    <div class="tech"><span class="tech-icon">🧠</span><div class="tech-nome">Google Gemini</div><div class="tech-desc">IA fallback</div></div>
-    <div class="tech"><span class="tech-icon">🌊</span><div class="tech-nome">Mistral AI</div><div class="tech-desc">IA secundária</div></div>
-    <div class="tech"><span class="tech-icon">🗄️</span><div class="tech-nome">PostgreSQL</div><div class="tech-desc">Banco de dados</div></div>
-    <div class="tech"><span class="tech-icon">💳</span><div class="tech-nome">MercadoPago</div><div class="tech-desc">Pagamentos</div></div>
-    <div class="tech"><span class="tech-icon">📧</span><div class="tech-nome">SendGrid</div><div class="tech-desc">Emails</div></div>
-    <div class="tech"><span class="tech-icon">☁️</span><div class="tech-nome">Render.com</div><div class="tech-desc">Hospedagem</div></div>
-    <div class="tech"><span class="tech-icon">📱</span><div class="tech-nome">PWA</div><div class="tech-desc">App instalável</div></div>
-    <div class="tech"><span class="tech-icon">📊</span><div class="tech-nome">Chart.js</div><div class="tech-desc">Gráficos</div></div>
-    <div class="tech"><span class="tech-icon">🔔</span><div class="tech-nome">Telegram Bot</div><div class="tech-desc">Notificações</div></div>
-  </div>
-
-  <div class="card"><h2>📅 Nossa Jornada</h2></div>
-  <div class="timeline">
-    <div class="tl-item">
-      <div class="tl-data">2026 — v1.0</div>
-      <div class="tl-titulo">🚀 Lançamento</div>
-      <div class="tl-desc">Primeira versão com análise básica de emoções por texto e autenticação completa.</div>
-    </div>
-    <div class="tl-item">
-      <div class="tl-data">2026 — v5.0</div>
-      <div class="tl-titulo">🎤 Análise Multimodal</div>
-      <div class="tl-desc">Adicionamos análise por voz, emoji e foto. Detecção de 15 idiomas.</div>
-    </div>
-    <div class="tl-item">
-      <div class="tl-data">2026 — v8.0</div>
-      <div class="tl-titulo">💳 Monetização Completa</div>
-      <div class="tl-desc">MercadoPago, planos Premium e Enterprise, sistema de afiliados, cupons.</div>
-    </div>
-    <div class="tl-item">
-      <div class="tl-data">2026 — v13.0</div>
-      <div class="tl-titulo">🧠 Sofia + Gamificação</div>
-      <div class="tl-desc">Sofia IA psicóloga virtual, diário emocional, gamificação completa, API pública.</div>
-    </div>
-    <div class="tl-item">
-      <div class="tl-data">2026 — v19.0</div>
-      <div class="tl-titulo">🤖 Orquestrador 17 IAs</div>
-      <div class="tl-desc">Groq + Mistral + OpenRouter + Gemini com failover automático. 150+ emoções.</div>
-    </div>
-    <div class="tl-item">
-      <div class="tl-data">2026 — v20.0 ULTIMATE</div>
-      <div class="tl-titulo">💎 Máximo Absoluto</div>
-      <div class="tl-desc">Score IE em 10 dimensões, alertas inteligentes, monitoramento automático, upsell inteligente, recuperação de senha, streak de dias e muito mais.</div>
-    </div>
-  </div>
-
-  <div class="cta">
-    <h2>Pronto para começar?</h2>
-    <p>Junte-se a pessoas que já descobriram suas emoções com IA</p>
-    <a href="/cadastro" class="btn">🚀 Criar Conta Grátis</a>
-    <a href="/planos" class="btn btn-sec">⭐ Ver Planos</a>
+<div class="hero">
+  <div class="container">
+    <span class="section-badge">🧠 Nossa história</span>
+    <h1>Criado por quem <span class="grad">acredita</span><br>na saúde mental</h1>
+    <p>O EmotionAI nasceu da necessidade de democratizar o acesso a ferramentas profissionais de saúde mental no Brasil.</p>
   </div>
 </div>
 
-<div class="footer">
-  <a href="/">Início</a><a href="/planos">Planos</a><a href="/faq">FAQ</a>
-  <a href="/contato">Contato</a><a href="/privacidade">Privacidade</a><a href="/termos">Termos</a>
-  <br><br>🧠 Emotion Intelligence Platform 2026 — v20.0 ULTIMATE
+<section class="section" style="background:var(--bg)">
+  <div class="container">
+    <div class="text-center">
+      <span class="section-badge">🎯 Nossa missão</span>
+      <h2 class="section-title">Por que existimos</h2>
+      <p class="section-desc mx-auto">Acreditamos que todo psicólogo merece ter acesso a ferramentas digitais de qualidade para oferecer o melhor cuidado aos seus pacientes.</p>
+    </div>
+    <div class="missao-grid">
+      <div class="missao-card">
+        <div class="missao-icon">🎯</div>
+        <h3>Nossa Missão</h3>
+        <p>Democratizar o acesso a ferramentas profissionais de saúde mental para psicólogos brasileiros de todas as regiões.</p>
+      </div>
+      <div class="missao-card">
+        <div class="missao-icon">👁️</div>
+        <h3>Nossa Visão</h3>
+        <p>Ser a plataforma de gestão clínica mais utilizada por psicólogos no Brasil até 2027.</p>
+      </div>
+      <div class="missao-card">
+        <div class="missao-icon">❤️</div>
+        <h3>Nossos Valores</h3>
+        <p>Ética, privacidade, acessibilidade e inovação responsável em saúde mental.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats-banner">
+  <div class="stats-banner-grid">
+    <div class="stat-b"><div class="stat-b-num">3.000+</div><div class="stat-b-label">Profissionais cadastrados</div></div>
+    <div class="stat-b"><div class="stat-b-num">5</div><div class="stat-b-label">Escalas validadas</div></div>
+    <div class="stat-b"><div class="stat-b-num">98%</div><div class="stat-b-label">Taxa de satisfação</div></div>
+    <div class="stat-b"><div class="stat-b-num">24/7</div><div class="stat-b-label">IA disponível</div></div>
+  </div>
 </div>
+
+<section class="section" style="background:white">
+  <div class="container">
+    <div class="text-center">
+      <span class="section-badge">👥 Time</span>
+      <h2 class="section-title">Quem está por trás</h2>
+    </div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar">A</div>
+        <div class="team-name">Albert Menezes</div>
+        <div class="team-role">Fundador & CEO</div>
+        <p style="font-size:0.8rem;color:var(--text3);margin-top:0.5rem">Empreendedor e desenvolvedor apaixonado por saúde mental e tecnologia. Sergipe, Brasil.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">🤖</div>
+        <div class="team-name">Sofia (IA)</div>
+        <div class="team-role">Assistente de IA</div>
+        <p style="font-size:0.8rem;color:var(--text3);margin-top:0.5rem">Powered by Mistral AI. Disponível 24/7 para apoio emocional e suporte entre sessões.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--bg)">
+  <div class="container">
+    <div class="text-center">
+      <span class="section-badge">📅 Jornada</span>
+      <h2 class="section-title">Nossa trajetória</h2>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot">26</div>
+        <div class="timeline-content">
+          <div class="timeline-year">2026 — Lançamento</div>
+          <div class="timeline-text">EmotionAI lançado com chat IA, diário emocional e escalas validadas. Primeiros psicólogos adotam a plataforma.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">Q3</div>
+        <div class="timeline-content">
+          <div class="timeline-year">2026 Q3 — Crescimento</div>
+          <div class="timeline-text">Prontuário digital completo, agendamento online e integração com escalas psicológicas avançadas.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">27</div>
+        <div class="timeline-content">
+          <div class="timeline-year">2027 — Expansão</div>
+          <div class="timeline-text">Meta: 10.000 psicólogos ativos, app nativo iOS/Android e conformidade HIPAA para expansão internacional.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--gradient);padding:5rem 2rem;text-align:center;color:white">
+  <h2 style="font-size:2rem;font-weight:900;margin-bottom:1rem">Faça parte desta história</h2>
+  <p style="opacity:0.85;margin-bottom:2rem;max-width:400px;margin-left:auto;margin-right:auto">Junte-se aos psicólogos que já estão transformando sua prática clínica com tecnologia.</p>
+  <a href="/app/login" class="btn" style="background:white;color:var(--primary);font-weight:700;padding:0.9rem 2.5rem">
+    Começar grátis →
+  </a>
+</section>
+
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">🧠 EmotionAI</div>
+      <p style="font-size:0.9rem;line-height:1.6">Plataforma completa de gestão clínica para psicólogos brasileiros.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Produto</h4>
+      <a href="/#features">Recursos</a>
+      <a href="/planos">Preços</a>
+      <a href="/app/login">Entrar</a>
+    </div>
+    <div class="footer-col">
+      <h4>Empresa</h4>
+      <a href="/sobre">Sobre</a>
+      <a href="/blog">Blog</a>
+      <a href="/contato">Contato</a>
+      <a href="/afiliado">Afiliados</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <a href="/privacidade">Privacidade</a>
+      <a href="/termos">Termos</a>
+      <a href="/faq">FAQ</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 EmotionAI — Todos os direitos reservados</span>
+    <span>Feito com ❤️ em Sergipe, Brasil</span>
+  </div>
+</footer>
+
 </body>
 </html>

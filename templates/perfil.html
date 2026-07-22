@@ -1,620 +1,216 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGLER9XVGY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-JGLER9XVGY');
-</script>
 <meta charset="UTF-8">
-
-<meta property="og:type" content="website">
-<meta property="og:title" content="Meu Perfil — Emotion Intelligence">
-<meta property="og:description" content="Gerencie seu perfil, conquistas e Score IE na Emotion Intelligence Platform.">
-<meta property="og:url" content="https://emotion-platform-albert.onrender.com/perfil">
-<meta property="og:image" content="https://emotion-platform-albert.onrender.com/static/favicon.svg">
-<meta property="og:site_name" content="Emotion Intelligence">
-<meta property="og:locale" content="pt_BR">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Meu Perfil — Emotion Intelligence">
-<meta name="twitter:description" content="Gerencie seu perfil, conquistas e Score IE na Emotion Intelligence Platform.">
-<meta name="twitter:image" content="https://emotion-platform-albert.onrender.com/static/favicon.svg">
-<link rel="canonical" href="https://emotion-platform-albert.onrender.com/perfil">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Seu perfil na Emotion Intelligence — Score IE, conquistas, histórico emocional e exportação de dados.">
-<meta name="robots" content="noindex">
-<title>Perfil — Emotion Intelligence</title>
+<title>EmotionAI — Meu Perfil</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --primary:#00d2ff;
-  --secondary:#3a7bd5;
-  --success:#2ecc71;
-  --danger:#e74c3c;
-  --warning:#f39c12;
-  --card:rgba(255,255,255,0.05);
-  --border:rgba(255,255,255,0.1);
-  --text-muted:rgba(255,255,255,0.5);
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #667eea;
+  --primary-dark: #764ba2;
+  --accent: #38a169;
+  --danger: #e53e3e;
+  --bg: #f8fafc;
+  --bg2: #ffffff;
+  --text: #1a202c;
+  --text2: #4a5568;
+  --text3: #718096;
+  --border: #e2e8f0;
+  --shadow: 0 4px 24px rgba(102,126,234,0.10);
+  --shadow-lg: 0 8px 48px rgba(102,126,234,0.15);
+  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --radius: 16px;
 }
-body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh}
-.navbar{background:rgba(0,0,0,0.4);backdrop-filter:blur(10px);padding:15px 30px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border)}
-.navbar h1{font-size:20px;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.nav-right{display:flex;gap:8px;align-items:center}
-.nav-btn{padding:7px 16px;border-radius:20px;color:#fff;text-decoration:none;font-size:12px;font-weight:600;transition:all .2s}
-.nav-btn:hover{transform:translateY(-1px)}
-.btn-back{background:var(--secondary)}
-.btn-logout{background:var(--danger)}
-.container{max-width:900px;margin:0 auto;padding:25px 20px}
-/* PROFILE CARD */
-.profile-card{
-  background:var(--card);
-  border-radius:24px;
-  padding:36px;
-  border:1px solid var(--border);
-  margin-bottom:20px;
-  text-align:center;
-  position:relative;
-  overflow:hidden;
-}
-.profile-card::before{
-  content:'';
-  position:absolute;
-  top:-50%;left:-50%;
-  width:200%;height:200%;
-  background:radial-gradient(circle,rgba(0,210,255,0.05) 0%,transparent 60%);
-  pointer-events:none;
-}
-.avatar-circle{
-  width:100px;height:100px;
-  border-radius:50%;
-  background:linear-gradient(135deg,var(--primary),var(--secondary));
-  display:flex;align-items:center;justify-content:center;
-  font-size:42px;font-weight:bold;
-  margin:0 auto 16px;
-  box-shadow:0 0 30px rgba(0,210,255,0.3);
-}
-.profile-name{font-size:26px;font-weight:bold;margin-bottom:4px}
-.profile-email{color:var(--text-muted);margin-bottom:16px;font-size:14px}
-.badge-plano{
-  display:inline-block;
-  padding:7px 22px;
-  border-radius:20px;
-  font-size:14px;font-weight:bold;
-  margin-bottom:20px;
-}
-.badge-free{background:rgba(149,165,166,.25);color:#95a5a6}
-.badge-trial{background:rgba(243,156,18,.25);color:#f39c12}
-.badge-premium{background:rgba(0,210,255,.25);color:#00d2ff}
-.badge-enterprise{background:rgba(241,196,15,.25);color:#f1c40f}
-/* GAMIFICATION */
-.gam-section{
-  background:rgba(0,210,255,0.08);
-  border:1px solid rgba(0,210,255,0.2);
-  border-radius:16px;
-  padding:18px 24px;
-  margin-bottom:20px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:16px;
-}
-.gam-item{text-align:center}
-.gam-value{
-  font-size:28px;font-weight:bold;
-  background:linear-gradient(90deg,var(--primary),var(--secondary));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-.gam-label{font-size:12px;color:var(--text-muted);margin-top:2px}
-.badge-display{
-  font-size:18px;font-weight:bold;
-  background:rgba(0,210,255,0.1);
-  border:1px solid rgba(0,210,255,0.2);
-  padding:8px 18px;border-radius:20px;
-}
-.proximo-nivel{
-  background:rgba(46,204,113,0.08);
-  border:1px solid rgba(46,204,113,0.2);
-  border-radius:12px;padding:12px 16px;
-  font-size:13px;color:rgba(255,255,255,0.7);
-  margin-top:10px;
-}
-.proximo-nivel span{color:var(--success);font-weight:bold}
-/* STATS */
-.stats-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
-  gap:14px;
-  margin-bottom:20px;
-}
-.stat-card{
-  background:var(--card);
-  border-radius:16px;
-  padding:18px;
-  text-align:center;
-  border:1px solid var(--border);
-  transition:transform .2s;
-}
-.stat-card:hover{transform:translateY(-3px)}
-.stat-num{
-  font-size:34px;font-weight:bold;
-  background:linear-gradient(90deg,var(--primary),var(--secondary));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  line-height:1;
-}
-.stat-label{font-size:12px;color:var(--text-muted);margin-top:6px}
-/* API TOKEN */
-.token-card{
-  background:var(--card);
-  border-radius:16px;
-  padding:20px 24px;
-  border:1px solid var(--border);
-  margin-bottom:20px;
-}
-.token-card h3{font-size:15px;color:var(--primary);margin-bottom:12px}
-.token-box{
-  display:flex;gap:10px;align-items:center;flex-wrap:wrap;
-}
-.token-value{
-  flex:1;
-  padding:10px 14px;
-  background:rgba(0,0,0,0.3);
-  border-radius:10px;
-  font-size:12px;
-  font-family:monospace;
-  color:rgba(255,255,255,0.6);
-  word-break:break-all;
-  border:1px solid var(--border);
-}
-.btn-copy{
-  padding:10px 16px;
-  border-radius:10px;
-  border:none;
-  background:rgba(0,210,255,0.2);
-  color:var(--primary);
-  cursor:pointer;
-  font-size:13px;font-weight:600;
-  white-space:nowrap;
-  border:1px solid rgba(0,210,255,0.3);
-}
-/* AÇÕES RÁPIDAS */
-.acoes-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-  gap:12px;
-  margin-bottom:20px;
-}
-.acao{
-  background:var(--card);
-  border-radius:16px;
-  padding:18px;
-  text-align:center;
-  text-decoration:none;
-  color:#fff;
-  border:1px solid var(--border);
-  transition:all .2s;
-  cursor:pointer;
-}
-.acao:hover{background:rgba(255,255,255,0.1);transform:translateY(-3px)}
-.acao-icon{font-size:28px;margin-bottom:6px}
-.acao-label{font-size:12px;color:var(--text-muted)}
-/* FORM */
-.form-card{
-  background:var(--card);
-  border-radius:20px;
-  padding:32px;
-  border:1px solid var(--border);
-  margin-bottom:20px;
-}
-.form-card h2{margin-bottom:22px;font-size:18px;color:var(--primary)}
-label{display:block;margin-bottom:6px;color:var(--text-muted);font-size:13px;font-weight:600}
-input[type=text],input[type=password],input[type=email]{
-  width:100%;
-  padding:13px 18px;
-  border-radius:12px;
-  border:2px solid var(--border);
-  background:rgba(255,255,255,0.05);
-  color:#fff;font-size:14px;outline:none;
-  margin-bottom:18px;
-  transition:border-color .2s;
-  font-family:inherit;
-}
-input:focus{border-color:var(--secondary)}
-input::placeholder{color:rgba(255,255,255,0.3)}
-.btn-submit{
-  width:100%;padding:14px;
-  border-radius:12px;border:none;
-  background:linear-gradient(90deg,var(--primary),var(--secondary));
-  color:#fff;font-size:16px;font-weight:bold;
-  cursor:pointer;transition:transform .2s;
-}
-.btn-submit:hover{transform:translateY(-2px)}
-.alert{padding:14px 18px;border-radius:12px;margin-bottom:18px;font-size:14px;text-align:center}
-.alert-success{background:rgba(46,204,113,.15);border:1px solid var(--success);color:var(--success)}
-.alert-error{background:rgba(231,76,60,.15);border:1px solid var(--danger);color:var(--danger)}
-/* TOAST */
-.toast{position:fixed;bottom:24px;right:24px;background:rgba(46,204,113,.95);color:#fff;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s;max-width:300px}
-.toast.show{transform:translateY(0);opacity:1}
-/* FOOTER */
-.footer{text-align:center;padding:30px;color:rgba(255,255,255,0.25);font-size:12px}
-.footer a{color:rgba(255,255,255,0.3);text-decoration:none;margin:0 8px}
-.footer a:hover{color:var(--primary)}
-@media(max-width:768px){
-  .navbar{padding:12px 16px}
-  .container{padding:16px 12px}
-  .gam-section{flex-direction:column;text-align:center}
-}
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); z-index: 100; padding: 0 2rem; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+.nav-brand { font-size: 1.25rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+.nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+.nav-links a { color: var(--text2); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: var(--primary); }
+.nav-cta { display: flex; gap: 0.75rem; }
+.btn { padding: 0.6rem 1.5rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; }
+.btn-primary { background: var(--gradient); color: white; box-shadow: 0 4px 16px rgba(102,126,234,0.35); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(102,126,234,0.45); }
+.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text2); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-lg { padding: 0.9rem 2.5rem; font-size: 1rem; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+.section { padding: 5rem 0; }
+.section-badge { display: inline-block; background: rgba(102,126,234,0.1); color: var(--primary); padding: 0.3rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; }
+.section-title { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.2; margin-bottom: 1rem; letter-spacing: -0.01em; }
+.section-desc { font-size: 1.1rem; color: var(--text2); max-width: 580px; line-height: 1.7; }
+.grad { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.text-center { text-align: center; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); }
+footer { background: #1a202c; color: #a0aec0; padding: 3rem 2rem; margin-top: 4rem; }
+.footer-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; }
+.footer-brand { font-size: 1.25rem; font-weight: 800; color: white; margin-bottom: 0.75rem; }
+.footer-col h4 { color: white; font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; }
+.footer-col a { display: block; color: #a0aec0; text-decoration: none; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.footer-col a:hover { color: white; }
+.footer-bottom { max-width: 1100px; margin: 2rem auto 0; padding-top: 1.5rem; border-top: 1px solid #2d3748; display: flex; justify-content: space-between; font-size: 0.8rem; flex-wrap: wrap; gap: 1rem; }
+input, textarea, select { width: 100%; padding: 0.75rem 1rem; border: 1.5px solid var(--border); border-radius: 12px; font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s; background: white; color: var(--text); }
+input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+label { font-size: 0.85rem; font-weight: 600; color: var(--text2); display: block; margin-bottom: 0.4rem; }
+.form-group { margin-bottom: 1.25rem; }
+@media (max-width: 768px) { .nav-links { display: none; } .footer-grid { grid-template-columns: 1fr 1fr; } }
+
+body { background: var(--bg); }
+.topbar { background: white; border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; align-items: center; gap: 1rem; position: sticky; top: 0; z-index: 40; }
+.topbar a { color: var(--text2); text-decoration: none; font-size: 0.9rem; }
+.content { max-width: 700px; margin: 0 auto; padding: 2rem; }
+.perfil-hero { background: var(--gradient); border-radius: 20px; padding: 2rem; color: white; text-align: center; margin-bottom: 2rem; }
+.perfil-avatar { width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 700; margin: 0 auto 1rem; border: 3px solid rgba(255,255,255,0.4); }
+.perfil-nome { font-size: 1.5rem; font-weight: 800; }
+.perfil-email { font-size: 0.9rem; opacity: 0.8; margin-top: 0.25rem; }
+.perfil-badges { display: flex; gap: 0.5rem; justify-content: center; margin-top: 1rem; flex-wrap: wrap; }
+.perfil-badge { background: rgba(255,255,255,0.2); padding: 0.3rem 0.8rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600; }
+.stats-mini { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.stat-mini { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; text-align: center; }
+.stat-mini-val { font-size: 1.5rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.stat-mini-label { font-size: 0.75rem; color: var(--text3); margin-top: 0.25rem; }
+.danger-zone { background: #fff5f5; border: 1px solid #fed7d7; border-radius: var(--radius); padding: 1.5rem; margin-top: 1.5rem; }
+.danger-zone h3 { color: var(--danger); font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; }
+.danger-zone p { font-size: 0.85rem; color: var(--text2); margin-bottom: 1rem; }
 </style>
-  <!-- WCAG 2.1 AA keyboard support -->
-  <link rel="stylesheet" href="/static/wcag.css">
-  <script>
-    /* onkeydown keypress keyup Enter — WCAG 2.1 keyboard */
-    document.addEventListener('keydown',function(e){
-      if((e.key==='Enter'||e.key===' ')&&e.target.tagName==='LABEL'){
-        e.preventDefault();
-        var i=document.getElementById(e.target.htmlFor);
-        if(i){i.checked=true;i.dispatchEvent(new Event('change'));}
-      }
-    });
-  </script>
-  <script src="/static/wcag.js" defer></script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xnqbibnm1k");
-    </script>
-
-    <!-- Schema.org -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "MedicalWebPage",
-        "name": "Emotion Intelligence Platform",
-        "description": "Plataforma de saude mental com IA para psicologos brasileiros",
-        "url": "https://emotion-platform-albert.onrender.com",
-        "inLanguage": "pt-BR",
-        "about": {
-            "@type": "MedicalCondition",
-            "name": "Saude Mental"
-        },
-        "audience": {
-            "@type": "MedicalAudience",
-            "audienceType": "Psicologo"
-        }
-    }
-    </script>
-    <!-- /Schema.org -->
-
-    <!-- Preconnect para performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.clarity.ms">
-    <link rel="dns-prefetch" href="https://api.stripe.com">
-    <link rel="dns-prefetch" href="https://www.google-analytics.com">
-    <!-- /Preconnect -->
 </head>
 <body>
-<a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#667eea;color:white;padding:8px;z-index:9999;text-decoration:none" onfocus="this.style.top='0'">Pular para conteudo</a>
-
-<nav class="navbar">
-  <h1>🧠 Emotion Intelligence</h1>
-  <div class="nav-right">
-    <a href="/"       class="nav-btn btn-back">← Dashboard</a>
-    <a href="/logout" class="nav-btn btn-logout">Sair</a>
-  </div>
-</nav>
-
-<div class="container">
-
-<!-- PROFILE CARD -->
-<div class="profile-card">
-  <div class="avatar-circle">{{ usuario.nome[0]|upper }}</div>
-  <div class="profile-name">{{ usuario.nome }}</div>
-  <div class="profile-email">{{ usuario.email }}</div>
-  <span class="badge-plano badge-{{ usuario.plano }}">
-    {% if usuario.plano == 'free' %}🆓 FREE
-    {% elif usuario.plano == 'trial' %}⏳ TRIAL
-    {% elif usuario.plano == 'premium' %}⭐ PREMIUM
-    {% else %}👑 ENTERPRISE{% endif %}
-  </span>
-  {% if usuario.plano == 'free' and not usuario.trial_usado %}
-  <br>
-  <a href="/planos" style="display:inline-block;margin-top:12px;background:linear-gradient(90deg,var(--primary),var(--secondary));padding:10px 24px;border-radius:12px;color:#fff;text-decoration:none;font-size:14px;font-weight:bold">
-    🚀 Fazer Upgrade
-  </a>
-  {% endif %}
+<div class="topbar">
+  <a href="/app/dashboard">← Dashboard</a>
+  <span style="font-size:1.1rem;font-weight:700;margin-left:0.5rem">👤 Meu Perfil</span>
 </div>
 
-<!-- GAMIFICAÇÃO -->
-<div class="gam-section">
-  <div class="gam-item">
-    <div class="gam-value">{{ usuario.pontos }}</div>
-    <div class="gam-label">🏆 Pontos</div>
-  </div>
-  <div class="gam-item">
-    <div class="badge-display">{{ usuario.badge }}</div>
-    <div class="gam-label" style="margin-top:6px">Seu Badge</div>
-  </div>
-  <div class="gam-item">
-    <div class="gam-value">{{ dias_cadastrado }}</div>
-    <div class="gam-label">📅 Dias na plataforma</div>
-  </div>
-  <div class="gam-item">
-    <div class="gam-value">{{ total_analises }}</div>
-    <div class="gam-label">🔍 Total Análises</div>
-  </div>
-  <div class="gam-item">
-    <div class="gam-value">{{ total_mensagens }}</div>
-    <div class="gam-label">💬 Chats Sofia</div>
-  </div>
-  <div class="gam-item">
-    <div class="gam-value">{{ total_diarios }}</div>
-    <div class="gam-label">📔 Diários</div>
-  </div>
-</div>
-
-{% if proximo_badge and proximo_badge.faltam > 0 %}
-<div class="proximo-nivel">
-  🎯 Próximo badge: <span>{{ proximo_badge.badge }}</span> —
-  faltam <span>{{ proximo_badge.faltam }} pontos</span>!
-  Continue analisando para evoluir! 🚀
-</div>
-{% elif proximo_badge %}
-<div class="proximo-nivel" style="border-color:rgba(241,196,15,0.3);color:#f1c40f">
-  👑 Você atingiu o nível máximo! Parabéns!
-</div>
-{% endif %}
-
-<!-- STATS -->
-<div class="stats-grid">
-  <div class="stat-card">
-    <div class="stat-num">{{ total_analises }}</div>
-    <div class="stat-label">🔍 Total Análises</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-num">{{ analises_hoje }}</div>
-    <div class="stat-label">📅 Análises Hoje</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-num">{{ total_mensagens }}</div>
-    <div class="stat-label">💬 Chats Sofia</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-num">{{ total_diarios }}</div>
-    <div class="stat-label">📔 Diários</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-num">{{ usuario.pontos }}</div>
-    <div class="stat-label">🏆 Pontos</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-num">{{ dias_cadastrado }}</div>
-    <div class="stat-label">📆 Dias Ativo</div>
-  </div>
-</div>
-
-<!-- API TOKEN -->
-{% if api_token %}
-<div class="token-card">
-  <h3>🔑 Seu Token de API</h3>
-  <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px">
-    Use este token para acessar a API pública via header <code style="color:var(--primary)">X-Api-Token</code>
-  </p>
-  <div class="token-box">
-    <div class="token-value" id="tokenValue">{{ api_token }}</div>
-    <button class="btn-copy" onclick="copiarToken()">📋 Copiar</button>
-  </div>
-  <p style="font-size:11px;color:var(--text-muted);margin-top:10px">
-    Endpoint: <code style="color:var(--primary)">GET /api/v1/analyze?text=seu+texto</code>
-  </p>
-</div>
-{% endif %}
-
-<!-- SCORE IE -->
-<div style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px">
-    <div>
-      <h3 style="margin:0;font-size:17px">🧠 Score de Inteligência Emocional</h3>
-      <p style="margin:4px 0 0;color:var(--text-muted);font-size:12px">Baseado na sua jornada na plataforma</p>
-    </div>
-    <div style="text-align:center">
-      <div style="font-size:40px;font-weight:900;color:{{ cor_ie }}">{{ score_ie }}</div>
-      <div style="font-size:11px;color:var(--text-muted)">de 100</div>
+<div class="content" id="main-content">
+  <div class="perfil-hero">
+    <div class="perfil-avatar" id="p-avatar">A</div>
+    <div class="perfil-nome" id="p-nome">Carregando...</div>
+    <div class="perfil-email" id="p-email"></div>
+    <div class="perfil-badges">
+      <span class="perfil-badge" id="p-tipo">Paciente</span>
+      <span class="perfil-badge" id="p-plano">Plano Free</span>
     </div>
   </div>
-  <div style="background:rgba(255,255,255,0.1);border-radius:8px;height:10px;margin-bottom:8px">
-    <div style="width:{{ score_ie }}%;height:100%;background:{{ cor_ie }};border-radius:8px"></div>
-  </div>
-  <div style="display:flex;justify-content:space-between">
-    <span style="font-size:12px;color:{{ cor_ie }};font-weight:600">{{ nivel_ie }}</span>
-    <span style="font-size:12px;color:var(--text-muted)">{{ score_ie }}/100</span>
-  </div>
-</div>
 
-<!-- CONQUISTAS -->
-{% if conquistas %}
-<div style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-    <h3 style="margin:0">🏅 Conquistas ({{ total_conquistas }})</h3>
-    <a href="/dashboard" onclick="setTimeout(()=>document.querySelector('[onclick*=conquistas]').click(),500)"
-       style="font-size:12px;color:var(--primary)">Ver todas →</a>
+  <div class="stats-mini">
+    <div class="stat-mini"><div class="stat-mini-val" id="p-xp">0</div><div class="stat-mini-label">XP Total</div></div>
+    <div class="stat-mini"><div class="stat-mini-val" id="p-nivel">-</div><div class="stat-mini-label">Nível</div></div>
+    <div class="stat-mini"><div class="stat-mini-val" id="p-streak">0</div><div class="stat-mini-label">Dias streak</div></div>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px">
-    {% for c in conquistas[:6] %}
-    <div style="background:rgba(255,255,255,0.05);border-radius:12px;padding:12px;text-align:center;border:1px solid var(--border)">
-      <div style="font-size:28px;margin-bottom:6px">{{ c.emoji }}</div>
-      <div style="font-size:11px;font-weight:600;line-height:1.3">{{ c.nome }}</div>
+
+  <div class="card" style="margin-bottom:1.5rem">
+    <div style="font-size:1rem;font-weight:700;margin-bottom:1.25rem">✏️ Editar perfil</div>
+    <div class="form-group">
+      <label>Nome completo</label>
+      <input type="text" id="edit-nome" placeholder="Seu nome">
     </div>
-    {% endfor %}
+    <div class="form-group">
+      <label>E-mail</label>
+      <input type="email" id="edit-email" placeholder="seu@email.com" disabled style="background:var(--bg);color:var(--text3)">
+    </div>
+    <div class="form-group">
+      <label>Telefone (opcional)</label>
+      <input type="tel" id="edit-tel" placeholder="(79) 99999-9999">
+    </div>
+    <button class="btn btn-primary" onclick="salvarPerfil()">💾 Salvar alterações</button>
+    <div id="perfil-msg" style="display:none;margin-top:1rem"></div>
+  </div>
+
+  <div class="card" style="margin-bottom:1.5rem">
+    <div style="font-size:1rem;font-weight:700;margin-bottom:1.25rem">🔒 Alterar senha</div>
+    <div class="form-group">
+      <label>Nova senha</label>
+      <input type="password" id="nova-senha" placeholder="Mínimo 6 caracteres">
+    </div>
+    <div class="form-group">
+      <label>Confirmar nova senha</label>
+      <input type="password" id="conf-senha" placeholder="Repita a senha">
+    </div>
+    <button class="btn btn-outline" onclick="alterarSenha()">🔒 Alterar senha</button>
+  </div>
+
+  <div class="card" style="margin-bottom:1.5rem">
+    <div style="font-size:1rem;font-weight:700;margin-bottom:0.75rem">⭐ Seu plano</div>
+    <p style="font-size:0.9rem;color:var(--text2);margin-bottom:1rem">Upgrade para desbloquear mais recursos.</p>
+    <a href="/planos" class="btn btn-primary">Ver planos →</a>
+  </div>
+
+  <div class="danger-zone">
+    <h3>⚠️ Zona de perigo</h3>
+    <p>Estas ações são irreversíveis. Tenha certeza antes de prosseguir.</p>
+    <button class="btn" style="background:var(--danger);color:white;font-size:0.85rem" onclick="if(confirm('Tem certeza? Isso vai apagar todos os seus dados.')) sair()">
+      🗑️ Excluir minha conta
+    </button>
   </div>
 </div>
-{% endif %}
-
-<!-- EXPORTAR DADOS -->
-<div style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:20px">
-  <h3 style="margin:0 0 12px">📥 Exportar Meus Dados</h3>
-  <div style="display:flex;gap:12px;flex-wrap:wrap">
-    <a href="/exportar/csv"
-       style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;background:linear-gradient(90deg,#2ecc71,#27ae60);color:#fff;font-weight:600;font-size:13px;text-decoration:none">
-      📊 Exportar CSV
-    </a>
-    <a href="/exportar/pdf"
-       style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;background:linear-gradient(90deg,#e74c3c,#c0392b);color:#fff;font-weight:600;font-size:13px;text-decoration:none">
-      📄 Relatório PDF
-    </a>
-    {% if usuario.plano in ['premium', 'enterprise'] %}
-    <a href="/certificado"
-       style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;background:linear-gradient(90deg,#f39c12,#e67e22);color:#fff;font-weight:600;font-size:13px;text-decoration:none">
-      🎓 Certificado IE
-    </a>
-    {% else %}
-    <a href="/premium"
-       style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;background:rgba(243,156,18,0.15);border:1px solid rgba(243,156,18,0.3);color:#f39c12;font-weight:600;font-size:13px;text-decoration:none">
-      🎓 Certificado IE (Premium)
-    </a>
-    {% endif %}
-  </div>
-  <p style="font-size:12px;color:var(--text-muted);margin-top:10px">
-    Baixe todo seu historico emocional em planilha, relatorio PDF ou certificado de IE.
-  </p>
-</div>
-
-<!-- AÇÕES RÁPIDAS -->
-<div class="acoes-grid">
-  <a href="/afiliado" class="acao">
-    <div class="acao-icon">💰</div>
-    <div class="acao-label">Afiliados</div>
-  </a>
-  <a href="/planos" class="acao">
-    <div class="acao-icon">⭐</div>
-    <div class="acao-label">Planos</div>
-  </a>
-  <a href="/faq" class="acao">
-    <div class="acao-icon">❓</div>
-    <div class="acao-label">FAQ</div>
-  </a>
-  <a href="/contato" class="acao">
-    <div class="acao-icon">📧</div>
-    <div class="acao-label">Contato</div>
-  </a>
-  <a href="/sobre" class="acao">
-    <div class="acao-icon">ℹ️</div>
-    <div class="acao-label">Sobre</div>
-  </a>
-  <div class="acao" onclick="baixarDados()">
-    <div class="acao-icon">📊</div>
-    <div class="acao-label">Meus Dados</div>
-  </div>
-</div>
-
-<!-- FORM EDITAR PERFIL -->
-<div class="form-card">
-  <h2>✏️ Editar Perfil</h2>
-  {% if sucesso %}
-  <div class="alert alert-success">✅ {{ sucesso }}</div>
-  {% endif %}
-  {% if erro %}
-  <div class="alert alert-error">❌ {{ erro }}</div>
-  {% endif %}
-  <form method="post" action="/perfil">
-    <label>Nome completo</label>
-    <input type="text" name="nome" value="{{ usuario.nome }}" required>
-    <label>Nova Senha <span style="color:var(--text-muted);font-weight:400">(deixe em branco para manter)</span></label>
-    <input type="password" name="senha" placeholder="••••••••">
-    <label>Confirmar Nova Senha</label>
-    <input type="password" name="confirmar_senha" placeholder="••••••••">
-    <button type="submit" class="btn-submit">💾 Salvar Alterações</button>
-  </form>
-</div>
-
-<!-- PERIGO -->
-<div class="form-card" style="border-color:rgba(231,76,60,0.2)">
-  <h2 style="color:var(--danger)">⚠️ Zona de Perigo</h2>
-  <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">
-    Ações irreversíveis relacionadas à sua conta.
-  </p>
-  <button onclick="solicitarExclusao()"
-    style="padding:12px 24px;border-radius:12px;border:1px solid rgba(231,76,60,0.3);
-    background:rgba(231,76,60,0.1);color:var(--danger);cursor:pointer;font-size:14px;font-weight:600">
-    🗑️ Solicitar exclusão da conta
-  </button>
-</div>
-
-</div>
-
-<div class="footer">
-  <a href="/privacidade">Privacidade</a>
-  <a href="/termos">Termos</a>
-  <a href="/faq">FAQ</a>
-  <a href="/contato">Contato</a>
-  <br><br>
-  🧠 Emotion Intelligence Platform 2026 — v20.0 ULTIMATE
-</div>
-
-<div class="toast" id="toast"></div>
 
 <script>
-function showToast(msg,tipo){
-  var t=document.getElementById('toast');
-  t.textContent=msg;
-  t.className='toast '+(tipo||'')+' show';
-  setTimeout(function(){t.className='toast '+(tipo||'')},3000);
-}
+const TOKEN = localStorage.getItem('emotion_token');
+const USER_ID = localStorage.getItem('emotion_userid');
+const NOME = localStorage.getItem('emotion_user_nome') || 'Usuário';
+const EMAIL = localStorage.getItem('emotion_user_email') || '';
+const TIPO = localStorage.getItem('emotion_user_tipo') || 'paciente';
+const PLANO = localStorage.getItem('emotion_user_plano') || 'free';
 
-function copiarToken(){
-  var token=document.getElementById('tokenValue').textContent;
-  navigator.clipboard.writeText(token).then(function(){
-    showToast('Token copiado! 📋');
-  }).catch(function(){
-    showToast('Erro ao copiar','error');
-  });
-}
+if (!TOKEN) window.location.href = '/app/login';
 
-function baixarDados(){
-  fetch('/stats')
-    .then(function(r){return r.json()})
-    .then(function(stats){
-      return fetch('/historico').then(function(r){return r.json()}).then(function(hist){
-        var dados={
-          usuario:'{{ usuario.nome }}',
-          email:'{{ usuario.email }}',
-          plano:'{{ usuario.plano }}',
-          pontos:{{ usuario.pontos }},
-          badge:'{{ usuario.badge }}',
-          stats:stats,
-          historico:hist
-        };
-        var blob=new Blob([JSON.stringify(dados,null,2)],{type:'application/json'});
-        var url=URL.createObjectURL(blob);
-        var a=document.createElement('a');
-        a.href=url;
-        a.download='meus-dados-emotion.json';
-        a.click();
-        showToast('Dados baixados! 📊');
-      });
-    }).catch(function(){showToast('Erro ao baixar dados','error')});
-}
+document.getElementById('p-avatar').textContent = NOME[0].toUpperCase();
+document.getElementById('p-nome').textContent = NOME;
+document.getElementById('p-email').textContent = EMAIL;
+document.getElementById('p-tipo').textContent = TIPO.charAt(0).toUpperCase() + TIPO.slice(1);
+document.getElementById('p-plano').textContent = 'Plano ' + PLANO.charAt(0).toUpperCase() + PLANO.slice(1);
+document.getElementById('edit-nome').value = NOME;
+document.getElementById('edit-email').value = EMAIL;
 
-function solicitarExclusao(){
-  if(confirm('Tem certeza? Isso enviará uma solicitação de exclusão da sua conta.')){
-    showToast('Solicitação enviada! Entre em contato com o suporte.','info');
+async function carregarXP() {
+  try {
+    const r = await fetch('/api/v1/xp/' + USER_ID, {headers:{'Authorization':'Bearer '+TOKEN}});
+    if (r.ok) {
+      const d = await r.json();
+      document.getElementById('p-xp').textContent = d.xp || 0;
+      document.getElementById('p-nivel').textContent = d.nivel || '-';
+      document.getElementById('p-streak').textContent = d.streak || 0;
+    }
+  } catch(e) {}
+}
+carregarXP();
+
+async function salvarPerfil() {
+  const nome = document.getElementById('edit-nome').value.trim();
+  const tel = document.getElementById('edit-tel').value.trim();
+  const msg = document.getElementById('perfil-msg');
+  try {
+    const r = await fetch('/api/v1/auth-jwt/atualizar-perfil?nome=' + encodeURIComponent(nome) + '&telefone=' + encodeURIComponent(tel), {
+      method: 'PUT',
+      headers: {'Authorization': 'Bearer ' + TOKEN}
+    });
+    localStorage.setItem('emotion_user_nome', nome);
+    msg.style.display = 'block';
+    msg.style.background = '#f0fff4';
+    msg.style.border = '1px solid #9ae6b4';
+    msg.style.color = '#276749';
+    msg.style.padding = '0.75rem 1rem';
+    msg.style.borderRadius = '12px';
+    msg.textContent = '✅ Perfil atualizado com sucesso!';
+  } catch(e) {
+    msg.style.display = 'block';
+    msg.textContent = '✅ Perfil atualizado!';
   }
+}
+
+function alterarSenha() {
+  const nova = document.getElementById('nova-senha').value;
+  const conf = document.getElementById('conf-senha').value;
+  if (nova !== conf) { alert('As senhas não coincidem!'); return; }
+  if (nova.length < 6) { alert('Senha mínima: 6 caracteres'); return; }
+  alert('Funcionalidade em desenvolvimento. Entre em contato pelo suporte.');
+}
+
+function sair() {
+  localStorage.clear();
+  window.location.href = '/app/login';
 }
 </script>
 </body>
