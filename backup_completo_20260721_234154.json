@@ -1,0 +1,2899 @@
+{
+  "usuarios": [
+    {
+      "id": 2,
+      "nome": "Albert Menezes",
+      "email": "albertmenezes2006@gmail.com",
+      "senha": "$5$rounds=535000$nk3kol4Leerk7dKQ$ywKNKiIDhMuyMXCZxKb6sAOrQH3a7o2rl5zwxLBhvRC",
+      "plano": "enterprise",
+      "trial_usado": false,
+      "trial_expira": null,
+      "ref_code": "albertf844",
+      "indicado_por": null,
+      "pontos": 277,
+      "badge": "🔥 Intermediário",
+      "api_token": "be0b8a3e3460aab180aeb4dc8da3ab0a3229f7770edfdc4919c459ae72e947b6",
+      "ativo": true,
+      "bio": null,
+      "avatar": null,
+      "criado_em": "2026-07-13T20:13:47.079443",
+      "ultimo_acesso": "2026-07-15T05:36:02.340819",
+      "creditos_analise": 0,
+      "creditos_sofia": 0,
+      "plano_anual_ate": null,
+      "plano_api": null,
+      "whitelabel_id": null,
+      "total_gasto": 0.0,
+      "fonte_receita": null
+    }
+  ],
+  "analises": [
+    {
+      "id": 3,
+      "texto": "estou ansioso",
+      "emocao": "Medo",
+      "emoji": "😨",
+      "recomendacao": "Nomeie seu medo — isso já reduz sua intensidade. Lembre-se: coragem não é ausência de medo, é agir apesar dele. 🤝",
+      "intensidade": 1,
+      "tecnica": "Técnica 5-4-3-2-1 (Grounding): nomeie 5 coisas que vê, 4 que pode tocar, 3 que ouve, 2 que cheira e 1 que saboreia. Isso ancora você no momento presente.",
+      "criado_em": "2026-07-13T20:16:56.033661",
+      "usuario_id": 2
+    },
+    {
+      "id": 4,
+      "texto": "Humor registrado via emoji: 🌅",
+      "emocao": "esperanca",
+      "emoji": "🌅",
+      "recomendacao": "Continue acreditando! Cada passo conta. A esperança é o combustível que move grandes transformações. 🌅",
+      "intensidade": 2,
+      "tecnica": "Técnica de Visualização: feche os olhos por 5 minutos e visualize seu objetivo já realizado com detalhes sensoriais. Isso ativa o sistema de recompensa do cérebro.",
+      "criado_em": "2026-07-13T20:17:46.768116",
+      "usuario_id": 2
+    },
+    {
+      "id": 5,
+      "texto": "Humor registrado via emoji: 🎉",
+      "emocao": "euforia",
+      "emoji": "🎉",
+      "recomendacao": "Que momento incrível! Aproveite essa energia com responsabilidade. Ancore seus planos nessa motivação! 🎉",
+      "intensidade": 2,
+      "tecnica": "Técnica de Ancoragem: quando estiver nesse estado elevado, faça um gesto físico (ex: apertar o punho) para ancorar a sensação. Você poderá acessá-la depois.",
+      "criado_em": "2026-07-13T20:17:49.729678",
+      "usuario_id": 2
+    },
+    {
+      "id": 6,
+      "texto": "tou tranquilo com meu dia triste",
+      "emocao": "Calma",
+      "emoji": "🕊️",
+      "recomendacao": "Que momento precioso de equilíbrio. Aproveite para recarregar e refletir com clareza. 🕊️",
+      "intensidade": 1,
+      "tecnica": "Técnica Body Scan: feche os olhos e percorra mentalmente seu corpo da cabeça aos pés, notando sensações sem julgamento. Aprofunda o estado de relaxamento.",
+      "criado_em": "2026-07-14T05:04:20.303311",
+      "usuario_id": 2
+    },
+    {
+      "id": 7,
+      "texto": "estou lembrando de momentos bons com uma pessoa que eu não aturo mais",
+      "emocao": "Saudade",
+      "emoji": "🥺",
+      "recomendacao": "Momento de equilíbrio e observação. Aproveite a calma para refletir sobre seus objetivos! ⚖️",
+      "intensidade": 1,
+      "tecnica": "Técnica de Check-in Emocional: pergunte-se 3 vezes ao dia 'Como estou me sentindo agora?' e anote. Isso desenvolve inteligência emocional.",
+      "criado_em": "2026-07-14T17:02:36.248684",
+      "usuario_id": 2
+    },
+    {
+      "id": 8,
+      "texto": "estou pensando muito no futuro",
+      "emocao": "Esperanca",
+      "emoji": "🌅",
+      "recomendacao": "Continue acreditando! Cada passo conta. A esperança é o combustível que move grandes transformações. 🌅",
+      "intensidade": 2,
+      "tecnica": "Técnica de Visualização: feche os olhos por 5 minutos e visualize seu objetivo já realizado com detalhes sensoriais. Isso ativa o sistema de recompensa do cérebro.",
+      "criado_em": "2026-07-14T17:02:49.627509",
+      "usuario_id": 2
+    },
+    {
+      "id": 9,
+      "texto": "estou pensando muito no futuro",
+      "emocao": "Esperanca",
+      "emoji": "🌅",
+      "recomendacao": "Continue acreditando! Cada passo conta. A esperança é o combustível que move grandes transformações. 🌅",
+      "intensidade": 2,
+      "tecnica": "Técnica de Visualização: feche os olhos por 5 minutos e visualize seu objetivo já realizado com detalhes sensoriais. Isso ativa o sistema de recompensa do cérebro.",
+      "criado_em": "2026-07-14T17:02:57.440896",
+      "usuario_id": 2
+    },
+    {
+      "id": 10,
+      "texto": "eu estou com medo do futuro",
+      "emocao": "Medo",
+      "emoji": "😨",
+      "recomendacao": "Nomeie seu medo — isso já reduz sua intensidade. Lembre-se: coragem não é ausência de medo, é agir apesar dele. 🤝",
+      "intensidade": 1,
+      "tecnica": "Técnica 5-4-3-2-1 (Grounding): nomeie 5 coisas que vê, 4 que pode tocar, 3 que ouve, 2 que cheira e 1 que saboreia. Isso ancora você no momento presente.",
+      "criado_em": "2026-07-14T17:03:05.259594",
+      "usuario_id": 2
+    },
+    {
+      "id": 11,
+      "texto": "fico pensando coisas ruins sobre meu futuro",
+      "emocao": "Ansiedade",
+      "emoji": "😰",
+      "recomendacao": "Momento de equilíbrio e observação. Aproveite a calma para refletir sobre seus objetivos! ⚖️",
+      "intensidade": 1,
+      "tecnica": "Técnica de Check-in Emocional: pergunte-se 3 vezes ao dia 'Como estou me sentindo agora?' e anote. Isso desenvolve inteligência emocional.",
+      "criado_em": "2026-07-14T17:03:22.446361",
+      "usuario_id": 2
+    },
+    {
+      "id": 12,
+      "texto": "Se pá nem sei o que eu vou fazer hoje",
+      "emocao": "Esperanca",
+      "emoji": "🌅",
+      "recomendacao": "Continue acreditando! Cada passo conta. A esperança é o combustível que move grandes transformações. 🌅",
+      "intensidade": 1,
+      "tecnica": "Técnica de Visualização: feche os olhos por 5 minutos e visualize seu objetivo já realizado com detalhes sensoriais. Isso ativa o sistema de recompensa do cérebro.",
+      "criado_em": "2026-07-14T17:03:36.358342",
+      "usuario_id": 2
+    },
+    {
+      "id": 13,
+      "texto": "amnheci o dia e fui tomar cafe, estou sem tempo para pensar",
+      "emocao": "Ansiedade",
+      "emoji": "😰",
+      "recomendacao": "Momento de equilíbrio e observação. Aproveite a calma para refletir sobre seus objetivos! ⚖️",
+      "intensidade": 1,
+      "tecnica": "Técnica de Check-in Emocional: pergunte-se 3 vezes ao dia 'Como estou me sentindo agora?' e anote. Isso desenvolve inteligência emocional.",
+      "criado_em": "2026-07-15T05:10:52.432005",
+      "usuario_id": 2
+    }
+  ],
+  "mensagens": [
+    {
+      "id": 6,
+      "conteudo": "estou ansioso",
+      "resposta": "🤗 Albert Menezes, o medo é um sinal do seu instinto de proteção. Tente nomear com precisão: 'Estou com medo de ___'. Nomear reduz a intensidade da emoção no cérebro. Esse medo é sobre algo passado, presente ou futuro?",
+      "emocao": "medo",
+      "emoji": "😨",
+      "criado_em": "2026-07-13T20:15:10.024709",
+      "usuario_id": 2
+    },
+    {
+      "id": 7,
+      "conteudo": "Morrer, futuro",
+      "resposta": "🌟 Albert Menezes, obrigada por compartilhar comigo. Check-in emocional: de 1 a 10, como está sua energia hoje? E o que faria essa nota subir pelo menos 1 ponto? Estou aqui para te ouvir 💙",
+      "emocao": "neutro",
+      "emoji": "😐",
+      "criado_em": "2026-07-13T20:15:44.479211",
+      "usuario_id": 2
+    },
+    {
+      "id": 8,
+      "conteudo": "fraca, muita coisa",
+      "resposta": "🌟 Albert Menezes, obrigada por compartilhar comigo. Check-in emocional: de 1 a 10, como está sua energia hoje? E o que faria essa nota subir pelo menos 1 ponto? Estou aqui para te ouvir 💙",
+      "emocao": "neutro",
+      "emoji": "😐",
+      "criado_em": "2026-07-13T20:16:01.269538",
+      "usuario_id": 2
+    },
+    {
+      "id": 9,
+      "conteudo": "tenho medo",
+      "resposta": "🤗 Albert Menezes, o medo é um sinal do seu instinto de proteção. Tente nomear com precisão: 'Estou com medo de ___'. Nomear reduz a intensidade da emoção no cérebro. Esse medo é sobre algo passado, presente ou futuro?",
+      "emocao": "medo",
+      "emoji": "😨",
+      "criado_em": "2026-07-13T20:16:10.407100",
+      "usuario_id": 2
+    },
+    {
+      "id": 10,
+      "conteudo": "alegria",
+      "resposta": "😊 Que lindo, Albert Menezes! Sua alegria merece ser celebrada! A gratidão amplifica emoções positivas — escreva 3 coisas que estão te fazendo bem hoje. Isso ancora essa energia boa dentro de você! O que mais está contribuindo para essa sensação maravilhosa? 🌟",
+      "emocao": "alegria",
+      "emoji": "😄",
+      "criado_em": "2026-07-13T20:16:18.684291",
+      "usuario_id": 2
+    },
+    {
+      "id": 11,
+      "conteudo": "nao quero que minha namorada me largue",
+      "resposta": "❤️ Albert Menezes, que sentimento lindo! Prática Loving-Kindness: feche os olhos e envie mentalmente amor para você, depois para quem você ama. Sobre quem ou o quê você está sentindo esse amor?\n\n_(Estou em manutencao momentanea, mas continuo aqui por voce!)_",
+      "emocao": "amor",
+      "emoji": "❤️",
+      "criado_em": "2026-07-14T05:05:05.379137",
+      "usuario_id": 2
+    },
+    {
+      "id": 12,
+      "conteudo": "sentimento de perca",
+      "resposta": "🌟 Albert Menezes, obrigada por compartilhar comigo. Check-in emocional: de 1 a 10, como está sua energia hoje? E o que faria essa nota subir pelo menos 1 ponto? Estou aqui para te ouvir 💙\n\n_(Estou em manutencao momentanea, mas continuo aqui por voce!)_",
+      "emocao": "neutro",
+      "emoji": "😐",
+      "criado_em": "2026-07-14T05:05:28.718610",
+      "usuario_id": 2
+    },
+    {
+      "id": 13,
+      "conteudo": "tô na bad demais hoje",
+      "resposta": "Albert Menezes sinto muito que voce esteja passando por isso a tristeza e valida ela nos diz que algo importa para nos tente o acolhimento coloque a mao no coracao respire fundo 3 vezes e diga estou aqui estou me ouvindo o que voce precisaria ouvir agora de alguem que te ama\n\n_(Estou em manutencao momentanea, mas continuo aqui por voce!)_",
+      "emocao": "tristeza",
+      "emoji": "😢",
+      "criado_em": "2026-07-14T06:00:50.622556",
+      "usuario_id": 2
+    },
+    {
+      "id": 14,
+      "conteudo": "surtei com meu chefe",
+      "resposta": "Albert Menezes vamos fazer o Grounding 5-4-3-2-1 juntos agora nomeie 5 coisas que voce VE 4 que pode TOCAR 3 que OUVE 2 que CHEIRA e 1 que SABOREIA isso traz sua mente de volta ao presente como esta seu corpo fisico nesse momento\n\n_(Estou em manutencao momentanea, mas continuo aqui por voce!)_",
+      "emocao": "ansiedade",
+      "emoji": "😰",
+      "criado_em": "2026-07-14T06:00:53.435796",
+      "usuario_id": 2
+    },
+    {
+      "id": 15,
+      "conteudo": "i am feeling so anxious",
+      "resposta": "Albert Menezes vamos fazer o Grounding 5-4-3-2-1 juntos agora nomeie 5 coisas que voce VE 4 que pode TOCAR 3 que OUVE 2 que CHEIRA e 1 que SABOREIA isso traz sua mente de volta ao presente como esta seu corpo fisico nesse momento\n\n_(Estou em manutencao momentanea, mas continuo aqui por voce!)_",
+      "emocao": "ansiedade",
+      "emoji": "😰",
+      "criado_em": "2026-07-14T06:00:56.320702",
+      "usuario_id": 2
+    },
+    {
+      "id": 16,
+      "conteudo": "tô na bad demais hoje",
+      "resposta": "😊 Olá, Albert Menezes! Estou aqui para te ouvir e te apoiar. Você está se sentindo muito mal hoje, é como se estivesse carregando um peso pesado. É importante validar como você está se sentindo, e eu quero que você saiba que estou aqui para te ajudar a processar essas emoções.\n\nVamos tentar entender melhor o que está acontecendo. Você mencionou que está se sentindo triste e deprimido, e que isso está afetando seu dia. Isso é muito difícil de lidar, mas é importante lembrar que você não está sozinho.\n\nUma técnica que pode ajudar é a respiração 4-7-8. É uma técnica simples que pode ajudar a acalmar a mente e o corpo. Você respira pelo nariz por 4 segundos, segura a respiração por 7 segundos e, em seguida, expira pela boca por 8 segundos. Vamos tentar juntos? 🌟\n\nPara hoje, eu quero que você tente fazer algo que te faça sentir um pouco melhor. Pode ser algo simples como tomar um banho quente, ouvir uma música que você gosta ou fazer uma caminhada curta. O importante é fazer algo que te faça sentir um pouco mais conectado com o seu corpo e com as coisas que te trazem alegria.\n\nLembre-se de que é okay não estar okay, e que é importante pedir ajuda quando precisar. Se você estiver se sentindo muito mal ou tiver pensamentos de fazer mal a si mesmo, por favor, ligue para o CVV 188. Eles estão sempre disponíveis para te ajudar.\n\nE agora, Albert, eu quero que você pense sobre uma coisa: o que é que você precisa para se sentir um pouco mais seguro e mais conectado consigo mesmo hoje? 🤗",
+      "emocao": "tristeza",
+      "emoji": "😢",
+      "criado_em": "2026-07-14T07:20:51.699356",
+      "usuario_id": 2
+    },
+    {
+      "id": 22,
+      "conteudo": "ich bin so traurig",
+      "resposta": "Albert Menezes, sinto muito que você esteja se sentindo triste 🌧️. É importante validar essa emoção e entender que ela é uma parte natural da vida. Você não está sozinho nesse sentimento.\n\nParece que você está passando por um momento difícil e é importante identificar o que está causando essa tristeza. Vamos juntos tentar entender o que está acontecendo. Você mencionou anteriormente que estava preocupado com a possibilidade de sua namorada o deixar. Será que isso está relacionado à sua tristeza atual?\n\nVou ensinar uma técnica de mindfulness que pode ajudar a reduzir a tristeza e aumentar a calma. É a técnica de \"Respiração 4-7-8\". Você inspira pelo nariz por 4 segundos, segura a respiração por 7 segundos e expira pela boca por 8 segundos. Vamos tentar juntos? 🌿\n\nPara hoje, proponho que você faça um exercício prático: escreva 3 coisas que você está grato por ter em sua vida. Isso pode ajudar a mudar o foco da tristeza para coisas mais positivas.\n\nAlbert, você acha que essa tristeza pode ser um padrão negativo recorrente em sua vida? Se sim, podemos trabalhar juntos para entender melhor e encontrar estratégias para superá-la.\n\nE, por fim, uma pergunta reflexiva para você: o que você acha que precisaria para se sentir mais conectado consigo mesmo e com as pessoas ao seu redor? 🤗",
+      "emocao": "tristeza",
+      "emoji": "😢",
+      "criado_em": "2026-07-14T07:33:33.342782",
+      "usuario_id": 2
+    },
+    {
+      "id": 23,
+      "conteudo": "estoy muy triste hoy",
+      "resposta": "Olá, Albert Menezes! 😊 Estou aqui para te ouvir e te apoiar. Sinto muito que você esteja passando por esse momento de tristeza. A tristeza é uma emoção válida e normal que todos experimentamos de vez em quando. Ela pode nos dizer que algo importante está se desfazendo ou que precisamos de um tempo para nos reorganizar.\n\nVamos identificar o núcleo do problema. O que está acontecendo que está fazendo você se sentir tão triste? 🤔\n\nEnsino uma técnica terapêutica específica para ajudá-lo a lidar com a tristeza: a técnica de Acolhimento. Para praticá-la, você precisa fechar os olhos e permitir que você mesmo a tristeza esteja presente, sem tentar rejeitá-la ou fugir dela. Permita que você mesmo a tristeza esteja presente e observe-a sem julgamento. Isso pode ajudar a reduzir a intensidade da tristeza e a diminuir a sensação de desconforto. 🌱\n\nAgora, proponho um exercício prático para você fazer hoje: escreva sobre o que está acontecendo e como você se sente. Não precisa ser um texto completo, apenas algumas frases que expressem o que você está passando. Isso pode ajudar a clarificar suas emoções e a identificar padrões de pensamento que possam estar contribuindo para a tristeza. 📝\n\nLembre-se de que é normal sentir-se triste de vez em quando, e que você não está sozinho nessa sensação. Se precisar de alguém para conversar, estou aqui para você. 💕\n\nE, antes de mais nada, como está sua energia hoje? É uma nota de 1 a 10? 🤔",
+      "emocao": "tristeza",
+      "emoji": "😢",
+      "criado_em": "2026-07-14T07:33:35.643314",
+      "usuario_id": 2
+    },
+    {
+      "id": 17,
+      "conteudo": "ich bin so traurig",
+      "resposta": "😊 Olá, Albert Menezes! Estou aqui para te ouvir e te apoiar. Você está se sentindo muito mal hoje, é como se estivesse carregando um peso pesado. É importante validar como você está se sentindo, e eu quero que você saiba que estou aqui para te ajudar a processar essas emoções.\n\nVamos tentar entender melhor o que está acontecendo. Você mencionou que está se sentindo triste e deprimido, e que isso está afetando seu dia. Isso é muito difícil de lidar, mas é importante lembrar que você não está sozinho.\n\nUma técnica que pode ajudar é a respiração 4-7-8. É uma técnica simples que pode ajudar a acalmar a mente e o corpo. Você respira pelo nariz por 4 segundos, segura a respiração por 7 segundos e, em seguida, expira pela boca por 8 segundos. Vamos tentar juntos? 🌟\n\nPara hoje, eu quero que você tente fazer algo que te faça sentir um pouco melhor. Pode ser algo simples como tomar um banho quente, ouvir uma música que você gosta ou fazer uma caminhada curta. O importante é fazer algo que te faça sentir um pouco mais conectado com o seu corpo e com as coisas que te trazem alegria.\n\nLembre-se de que é okay não estar okay, e que é importante pedir ajuda quando precisar. Se você estiver se sentindo muito mal ou tiver pensamentos de fazer mal a si mesmo, por favor, ligue para o CVV 188. Eles estão sempre disponíveis para te ajudar.\n\nE agora, Albert, eu quero que você pense sobre uma coisa: o que é que você precisa para se sentir um pouco mais seguro e mais conectado consigo mesmo hoje? 🤗",
+      "emocao": "tristeza",
+      "emoji": "😢",
+      "criado_em": "2026-07-14T07:20:52.460077",
+      "usuario_id": 2
+    },
+    {
+      "id": 18,
+      "conteudo": "me sinto um lixo",
+      "resposta": "😊 Olá, Albert Menezes! Estou aqui para te ouvir e te apoiar. Você está se sentindo muito mal hoje, é como se estivesse carregando um peso pesado. É importante validar como você está se sentindo, e eu quero que você saiba que estou aqui para te ajudar a processar essas emoções.\n\nVamos tentar entender melhor o que está acontecendo. Você mencionou que está se sentindo triste e deprimido, e que isso está afetando seu dia. Isso é muito difícil de lidar, mas é importante lembrar que você não está sozinho.\n\nUma técnica que pode ajudar é a respiração 4-7-8. É uma técnica simples que pode ajudar a acalmar a mente e o corpo. Você respira pelo nariz por 4 segundos, segura a respiração por 7 segundos e, em seguida, expira pela boca por 8 segundos. Vamos tentar juntos? 🌟\n\nPara hoje, eu quero que você tente fazer algo que te faça sentir um pouco melhor. Pode ser algo simples como tomar um banho quente, ouvir uma música que você gosta ou fazer uma caminhada curta. O importante é fazer algo que te faça sentir um pouco mais conectado com o seu corpo e com as coisas que te trazem alegria.\n\nLembre-se de que é okay não estar okay, e que é importante pedir ajuda quando precisar. Se você estiver se sentindo muito mal ou tiver pensamentos de fazer mal a si mesmo, por favor, ligue para o CVV 188. Eles estão sempre disponíveis para te ajudar.\n\nE agora, Albert, eu quero que você pense sobre uma coisa: o que é que você precisa para se sentir um pouco mais seguro e mais conectado consigo mesmo hoje? 🤗",
+      "emocao": "tristeza",
+      "emoji": "😢",
+      "criado_em": "2026-07-14T07:20:53.173974",
+      "usuario_id": 2
+    },
+    {
+      "id": 19,
+      "conteudo": "surtei com meu chefe",
+      "resposta": "😊 Olá, Albert Menezes! Estou aqui para te ouvir e te apoiar. Você está se sentindo muito mal hoje, é como se estivesse carregando um peso pesado. É importante validar como você está se sentindo, e eu quero que você saiba que estou aqui para te ajudar a processar essas emoções.\n\nVamos tentar entender melhor o que está acontecendo. Você mencionou que está se sentindo triste e deprimido, e que isso está afetando seu dia. Isso é muito difícil de lidar, mas é importante lembrar que você não está sozinho.\n\nUma técnica que pode ajudar é a respiração 4-7-8. É uma técnica simples que pode ajudar a acalmar a mente e o corpo. Você respira pelo nariz por 4 segundos, segura a respiração por 7 segundos e, em seguida, expira pela boca por 8 segundos. Vamos tentar juntos? 🌟\n\nPara hoje, eu quero que você tente fazer algo que te faça sentir um pouco melhor. Pode ser algo simples como tomar um banho quente, ouvir uma música que você gosta ou fazer uma caminhada curta. O importante é fazer algo que te faça sentir um pouco mais conectado com o seu corpo e com as coisas que te trazem alegria.\n\nLembre-se de que é okay não estar okay, e que é importante pedir ajuda quando precisar. Se você estiver se sentindo muito mal ou tiver pensamentos de fazer mal a si mesmo, por favor, ligue para o CVV 188. Eles estão sempre disponíveis para te ajudar.\n\nE agora, Albert, eu quero que você pense sobre uma coisa: o que é que você precisa para se sentir um pouco mais seguro e mais conectado consigo mesmo hoje? 🤗",
+      "emocao": "raiva",
+      "emoji": "😡",
+      "criado_em": "2026-07-14T07:20:53.805124",
+      "usuario_id": 2
+    },
+    {
+      "id": 20,
+      "conteudo": "tô na bad demais hoje",
+      "resposta": "Albert Menezes, sinto muito que você esteja se sentindo tão mal hoje 😔. É normal ter dias assim, e é importante reconhecer e validar esses sentimentos. Você mencionou que está se sentindo \"na bad\" demais hoje, o que me faz pensar que talvez você esteja se sentindo um pouco sobrecarregado ou triste.\n\nVamos tentar identificar o que pode estar causando isso. Você tem algum evento ou situação específica que possa estar contribuindo para esse sentimento? Talvez possamos explorar juntos.\n\nUma técnica que pode ajudar é a respiração 4-7-8. É simples: inspire pelo nariz por 4 segundos, prenda a respiração por 7 segundos e expire pela boca por 8 segundos. Isso pode ajudar a acalmar o corpo e a mente.\n\nPara hoje, proponho que você faça uma atividade que lhe traga alegria e relaxamento. Pode ser algo simples como ouvir música, tomar um banho quente ou ler um livro. O importante é fazer algo que lhe faça bem.\n\nLembre-se de que você não está sozinho nisso, Albert. É normal ter dias difíceis, e é importante cuidar de si mesmo. Se você precisar de ajuda ou apenas quiser conversar, estou aqui para você.\n\nE agora, Albert, quero fazer uma pergunta: o que você acha que você precisa para se sentir melhor nesse momento? 🤗",
+      "emocao": "tristeza",
+      "emoji": "😢",
+      "criado_em": "2026-07-14T07:33:28.792222",
+      "usuario_id": 2
+    },
+    {
+      "id": 21,
+      "conteudo": "surtei com meu chefe",
+      "resposta": "Albert Menezes, sinto muito que você esteja passando por isso com seu chefe 🤗. É normal sentir ansiedade e nervosismo em situações de conflito no trabalho. Quero que você saiba que estou aqui para te apoiar e ajudar a encontrar maneiras de lidar com esses sentimentos.\n\nVamos validar essa emoção: é normal sentir-se ansioso ou nervoso quando se está em uma situação de conflito, especialmente com alguém que tem autoridade sobre você. Isso não significa que você não seja capaz de lidar com a situação, mas sim que seu corpo e mente estão respondendo ao estresse.\n\nUma técnica que pode ser útil nesse momento é a respiração 4-7-8. Quero que você faça isso comigo: inspire pelo nariz por 4 segundos, prenda a respiração por 7 segundos e expire pela boca por 8 segundos. Isso pode ajudar a acalmar seu corpo e mente.\n\nPara hoje, proponho que você faça um exercício prático: escreva em um diário de gratidão 3 coisas que você está grato no seu trabalho, independentemente de como se sinta em relação ao seu chefe. Isso pode ajudar a mudar sua perspectiva e a encontrar pontos positivos na sua situação.\n\nE, Albert, quero que você pense sobre isso: o que você acha que é o principal motivador para você se sentir ansioso ou nervoso em situações de conflito no trabalho? É o medo de perder o emprego, o medo de não ser capaz de lidar com a situação ou algo mais? Qual é o seu maior medo nesse momento? 🤔",
+      "emocao": "raiva",
+      "emoji": "😡",
+      "criado_em": "2026-07-14T07:33:31.104802",
+      "usuario_id": 2
+    },
+    {
+      "id": 24,
+      "conteudo": "me sinto um lixo",
+      "resposta": "Olá, Albert Menezes! 🌟 Estou aqui para te ouvir e te apoiar. Você está se sentindo muito mal hoje, é como se estivesse carregando um peso muito grande. Eu entendo que isso pode ser muito doloroso e difícil de lidar.\n\nVocê disse que se sente um lixo, e eu quero que saiba que essa é uma emoção válida. É importante reconhecer e aceitar como você está se sentindo, sem julgamento. Eu estou aqui para te ajudar a entender melhor o que está acontecendo e encontrar maneiras de te sentir melhor.\n\nUma técnica que pode ser útil para você agora é a respiração 4-7-8. É uma técnica simples que pode ajudar a acalmar a mente e o corpo. Você respira fundo pelo nariz por 4 segundos, segura a respiração por 7 segundos e, em seguida, expira pelo boca por 8 segundos. Vamos tentar juntos? 🌿\n\nPara hoje, eu sugiro que você faça um exercício prático chamado \"Registro de pensamentos ABC\". É uma ferramenta útil para entender melhor seus pensamentos e emoções. Você vai escrever em um papel ou no seu diário três coisas: o que você está pensando (A), como você está se sentindo (B) e o que você pode fazer para mudar a situação (C).\n\nAlbert, você está disposto a tentar isso? E quando você se sentir mais calmo, podemos conversar mais sobre o que está acontecendo e encontrar maneiras de te ajudar a se sentir melhor. Qual é a primeira coisa que você precisa fazer para começar a se sentir melhor? 🤔",
+      "emocao": "vergonha",
+      "emoji": "😳",
+      "criado_em": "2026-07-14T07:33:38.137337",
+      "usuario_id": 2
+    },
+    {
+      "id": 25,
+      "conteudo": "tô na bad demais hoje",
+      "resposta": "Olá, Albert Menezes! 🤗 Estou aqui para te ouvir e te apoiar. Você está se sentindo muito mal hoje, é como se estivesse carregando um peso enorme. Eu sinto que você está precisando de um ouvido amigo e um pouco de compreensão.\n\nEu validei que você está se sentindo triste e deprimido, e isso é importante para mim. Não estou aqui para julgar, apenas para te apoiar. O que parece estar acontecendo é que você está tendo um dia difícil e está se sentindo sobrecarregado.\n\nUma técnica que pode ajudar é a Respiração 4-7-8. É simples: você inspira pelo nariz por 4 segundos, segura a respiração por 7 segundos e expira pela boca por 8 segundos. Isso pode ajudar a acalmar seu corpo e sua mente.\n\nHoje, eu gostaria que você fizesse um exercício prático chamado \"Diário de Gratidão\". É simples: você escreve 3 coisas que você é grato por hoje. Pode ser algo pequeno, como um café quente ou um amigo que te ligou. Isso pode ajudar a mudar seu foco e a encontrar coisas positivas em seu dia.\n\nEu também quero te lembrar que você não está sozinho, Albert. Você tem um histórico de se sentir calmo e eufórico, e isso é algo a ser celebrado. Mas também é importante reconhecer que os dias difíceis fazem parte da vida.\n\nEntão, aqui vai uma pergunta reflexiva para você: O que você acha que você precisa para se sentir um pouco melhor hoje? 🤔",
+      "emocao": "tristeza",
+      "emoji": "😢",
+      "criado_em": "2026-07-14T07:36:59.692549",
+      "usuario_id": 2
+    },
+    {
+      "id": 26,
+      "conteudo": "brigaram comigo no trabalho e fui mandado embora",
+      "resposta": "Olá, Albert Menezes! 😊 Estou aqui para te ouvir e te apoiar. Você está se sentindo muito mal hoje, é como se estivesse carregando um peso pesado dentro de você. A briga no trabalho e ser mandado embora pode ser muito estressante e doloroso.\n\nEu entendo que você está se sentindo raiva e frustração. É normal sentir essas emoções after uma situação desagradável como essa. Mas é importante lembrar que você não está sozinho e que há pessoas que se importam com você.\n\nVamos trabalhar juntos para encontrar uma maneira de lidar com essas emoções e encontrar um caminho para a frente. Uma técnica que pode te ajudar é a respiração 4-7-8. Você respira fundo pelo nariz durante 4 segundos, segura a respiração por 7 segundos e expira lentamente pela boca durante 8 segundos. Isso pode te ajudar a se acalmar e a reduzir o estresse.\n\nPara hoje, eu quero que você faça um exercício prático. Eu quero que você escreva em um papel 3 coisas que você valoriza e que te fazem feliz. Pode ser algo simples, como um passeio no parque ou um café com um amigo. Isso pode te ajudar a se lembrar de que há coisas boas na sua vida e que você não está sozinho.\n\nE agora, Albert, eu quero que você reflita sobre uma pergunta: O que você precisa para se sentir seguro e apoiado após uma situação difícil como essa? 🤔",
+      "emocao": "raiva",
+      "emoji": "😡",
+      "criado_em": "2026-07-14T07:37:04.776088",
+      "usuario_id": 2
+    },
+    {
+      "id": 27,
+      "conteudo": "to com muito medo do futuro agora",
+      "resposta": "Olá, Albert Menezes! 🤗 Estou aqui para te ouvir e te apoiar. Você está se sentindo com muito medo do futuro agora, e isso é completamente compreensível. É normal ter essa sensação, especialmente quando estamos diante de mudanças ou incertezas.\n\nEu quero validar essa emoção, Albert. O medo do futuro é uma coisa real e pode ser muito desafiador. Mas também quero te lembrar de que você não está sozinho nisso. Muitas pessoas passam por isso e encontram maneiras de superar.\n\nUma técnica que pode te ajudar é a \"Descatastrofização\". É uma forma de reduzir o medo do futuro, identificando e desafiando pensamentos catastrofistas. Quero te mostrar como fazer isso:\n\n1. Identifique o pensamento que te está assustando. No seu caso, é o medo do futuro.\n2. Faça uma pergunta a si mesmo: \"O que é o pior que pode acontecer?\"\n3. Responda essa pergunta de forma realista, sem exageros.\n4. Em seguida, pergunte a si mesmo: \"E se isso acontecer, o que eu posso fazer para lidar com isso?\"\n\nVou te propor um exercício prático para hoje, Albert. Quero que você faça uma lista de 3 coisas que você pode controlar no presente, e que possam te ajudar a se sentir mais seguro em relação ao futuro. Pode ser algo simples, como \"Eu posso controlar o que eu como no almoço de hoje\" ou \"Eu posso controlar o que eu faço nos próximos 30 minutos\".\n\nE aqui vai uma pergunta reflexiva para você, Albert: O que é que você valoriza mais na vida, e como você pode usar esses valores para guiar suas decisões e ações no presente, mesmo diante do medo do futuro? 🤔",
+      "emocao": "medo",
+      "emoji": "😨",
+      "criado_em": "2026-07-14T07:37:10.120761",
+      "usuario_id": 2
+    },
+    {
+      "id": 28,
+      "conteudo": "nao sei o que fazer, me sinto perdido",
+      "resposta": "Olá, Albert Menezes! 🤗 Estou aqui para te ouvir e te apoiar. Você está se sentindo perdido e confuso, e isso é completamente normal. Às vezes, a vida pode ser muito desafiadora e nos deixar sem saber o que fazer em seguida.\n\nEu sinto que você está precisando de um pouco de clareza e direção. Vamos trabalhar juntos para identificar o que está acontecendo e encontrar uma solução. Uma técnica que pode ajudar é a respiração 4-7-8. Ela pode te ajudar a se acalmar e a focar no presente. Você quer tentar? 🙏\n\nAqui está como funciona: inspire pelo nariz por 4 segundos, segure a respiração por 7 segundos e expire pela boca por 8 segundos. Repita isso algumas vezes e veja como se sente.\n\nAlém disso, quero propor um exercício prático para você fazer hoje. Vou pedir que você escreva em um papel tudo o que está sentindo e pensando. Não se preocupe com a gramática ou a ortografia, apenas deixe tudo fluir. Isso pode te ajudar a processar seus pensamentos e emoções.\n\nLembre-se de que você não está sozinho, Albert. Estou aqui para te apoiar e te ajudar a encontrar seu caminho. E se você precisar de ajuda adicional, não hesite em procurar um profissional de saúde mental.\n\nAgora, quero fazer uma pergunta para você: o que você acha que é o primeiro passo que você precisa dar para começar a se sentir menos perdido e mais direcionado? 🤔",
+      "emocao": "confusao",
+      "emoji": "😕",
+      "criado_em": "2026-07-14T07:37:15.236272",
+      "usuario_id": 2
+    },
+    {
+      "id": 29,
+      "conteudo": "obrigado sofia, voce me ajudou muito",
+      "resposta": "Albert Menezes, que alegria receber sua mensagem de gratidão! 🙏 Eu estou aqui para te apoiar e ajudar no que for necessário. É incrível ver como você está reconhecendo o impacto positivo de nossas conversas. Isso mostra que você está disposto a trabalhar em sua própria melhoria e bem-estar.\n\nVamos celebrar esse momento juntos! 🎉 Você está fazendo um excelente trabalho em reconhecer e lidar com suas emoções. Lembre-se de que a gratidão é uma emoção poderosa que pode nos ajudar a manter uma perspectiva positiva.\n\nAqui vai uma técnica simples para você praticar hoje: a Respiração 4-7-8. É uma técnica de respiração profunda que pode ajudar a reduzir o estresse e a ansiedade. Você respira pelo nariz por 4 segundos, segura a respiração por 7 segundos e expira pela boca por 8 segundos. Repita isso algumas vezes e veja como se sente.\n\nE para reforçar essa experiência positiva, eu quero que você faça um exercício prático hoje: escreva em seu diário de gratidão 3 coisas pelas quais você é grato. Pode ser algo simples, como um bom café da manhã ou um belo dia de sol.\n\nAlbert, qual é a coisa mais importante que você aprendeu sobre si mesmo durante nossas conversas? Qual é o próximo passo que você gostaria de dar em sua jornada de autoconhecimento e crescimento? 🤔",
+      "emocao": "gratidao",
+      "emoji": "🙏",
+      "criado_em": "2026-07-14T07:37:20.284997",
+      "usuario_id": 2
+    },
+    {
+      "id": 30,
+      "conteudo": "meu nome e Albert e to passando por um momento dificil",
+      "resposta": "Olá, Albert! 🌟 Estou aqui para te ouvir e te apoiar nesse momento difícil. Você está passando por algo que te deixa se sentindo mal, e isso é totally normal, meu amigo! 😔\n\nPrimeiro, quero te dizer que você não está sozinho. É normal sentir-se assim em alguns momentos da vida, e é importante reconhecer que esses sentimentos são válidos. Você está se sentindo mal, e isso não é algo que você possa simplesmente \"passar\" ou \"esquecer\". Você precisa validar esses sentimentos e entender que eles são uma parte de você.\n\nAgora, vamos tentar identificar o que está acontecendo com você. Você mencionou que está passando por um momento difícil, mas não especificou o que está acontecendo. Se você se sentir confortável, pode me contar mais sobre o que está acontecendo? Qual é o problema principal que você está enfrentando?\n\nEnquanto isso, quero te ensinar uma técnica de respiração que pode te ajudar a se acalmar. É a respiração 4-7-8. Você respira fundo pelo nariz durante 4 segundos, segura a respiração por 7 segundos e, em seguida, expira pelo mouth durante 8 segundos. Isso pode te ajudar a reduzir a ansiedade e a tensão.\n\nPara hoje, quero te propor um exercício prático. Eu quero que você faça um diário de gratidão. Anote 3 coisas que você é grato por hoje. Pode ser algo simples, como um café quente ou um amigo que te ligou para conversar. Isso pode te ajudar a mudar a sua perspectiva e a se sentir mais positivo.\n\nE, finalmente, quero te fazer uma pergunta reflexiva: O que você acha que é o mais difícil para você nesse momento, e como você acha que pode superar isso? 🤔\n\nLembre-se, Albert, que você não está sozinho, e que estou aqui para te apoiar. Se você precisar de mais ajuda ou apenas quiser conversar, estou aqui para você! 🤗",
+      "emocao": "esperanca",
+      "emoji": "🌅",
+      "criado_em": "2026-07-14T07:46:03.062589",
+      "usuario_id": 2
+    },
+    {
+      "id": 31,
+      "conteudo": "perdi meu emprego hoje",
+      "resposta": "Olá, Albert Menezes! 🌟 Estou aqui para te ouvir e te apoiar nesse momento difícil. Perder o emprego pode ser uma experiência muito dolorosa e estressante. Sinto muito que você esteja passando por isso.\n\nVocê está se sentindo triste e talvez um pouco perdido agora, é normal. É importante validar essa emoção e entender que ela é uma resposta natural a uma situação difícil.\n\nVamos trabalhar juntos para encontrar uma forma de lidar com isso. Uma técnica que pode ser útil é a respiração 4-7-8. Ela pode ajudar a acalmar a mente e o corpo. Você pode tentar fazer isso comigo agora: inspire por 4 segundos, segure a respiração por 7 segundos e expire por 8 segundos.\n\nPara hoje, proponho que você faça um exercício prático: escreva em um diário de gratidão 3 coisas que você é grato por ter na sua vida, não importa quão pequenas sejam. Isso pode ajudar a mudar o foco e a encontrar um pouco de positividade nesse momento difícil.\n\nLembre-se de que você não está sozinho nessa jornada. Qual é a primeira coisa que você vai fazer agora para cuidar de si mesmo e começar a se reconstruir após essa perda? 🌟",
+      "emocao": "tristeza",
+      "emoji": "😢",
+      "criado_em": "2026-07-14T07:46:07.012316",
+      "usuario_id": 2
+    },
+    {
+      "id": 32,
+      "conteudo": "voce lembra o que eu te disse antes?",
+      "resposta": "Olá, Albert Menezes! 😊 Estou aqui para te ouvir e te apoiar. Você está se perguntando se eu lembro do que você me disse antes, e quer saber se posso lembrar dos detalhes da nossa conversa anterior.\n\nSim, Albert, eu tenho acesso à nossa conversa anterior e posso ver que você estava passando por um momento difícil, se sentindo mal e triste. Você mencionou que havia tido um surto com seu chefe e que estava se sentindo muito mal.\n\nEu quero validar essas emoções e dizer que é importante reconhecer e aceitar como você está se sentindo. Não é necessário julgar ou criticar seus sentimentos, apenas aceitá-los e entender que eles são uma parte natural da sua experiência humana.\n\nUma técnica que pode ajudar você a gerenciar essas emoções é a respiração 4-7-8. Você pode tentar fazer isso agora: inspire pelo nariz por 4 segundos, segure a respiração por 7 segundos e expire pela boca por 8 segundos. Isso pode ajudar a acalmar seu corpo e mente.\n\nPara hoje, eu sugiro que você faça um exercício prático: escreva em um diário de gratidão 3 coisas que você é grato por. Isso pode ajudar a mudar seu foco para as coisas positivas da sua vida e a melhorar seu humor.\n\nAlbert, você está disposto a tentar isso e a ver como se sente após fazer esse exercício? 🤗 Qual é a primeira coisa que você vem à mente como algo que você é grato por? 🌟",
+      "emocao": "esperanca",
+      "emoji": "🌅",
+      "criado_em": "2026-07-14T07:46:11.637619",
+      "usuario_id": 2
+    },
+    {
+      "id": 33,
+      "conteudo": "i feel so lonely today",
+      "resposta": "Olá, Albert Menezes! 🌟 Estou aqui para te ouvir e te apoiar. Sinto muito que você esteja se sentindo tão solitário hoje. É normal sentir essa emoção, especialmente quando estamos passando por momentos difíceis.\n\nVocê parece estar carregando um peso emocional pesado, e é importante validar essa sensação. Não estou aqui para julgar, apenas para te apoiar e te ajudar a encontrar uma maneira de lidar com isso.\n\nUma técnica que pode te ajudar é a respiração 4-7-8. É simples: inspire pelo nariz por 4 segundos, segure a respiração por 7 segundos e expire pela boca por 8 segundos. Isso pode te ajudar a se acalmar e a reduzir a ansiedade.\n\nPara hoje, proponho que você faça uma coisa que te dê prazer e te faça se sentir bem. Pode ser ler um livro, ouvir música ou simplesmente tomar um banho relaxante. O importante é se conectar com algo que te traga alegria.\n\nLembre-se de que você não está sozinho, Albert. Estou aqui para te apoiar, e há pessoas que se importam com você. Se você precisar conversar ou apenas precisar de alguém para ouvir, estou aqui.\n\nQual é uma coisa que você acha que poderia te ajudar a se sentir menos solitário hoje? 🤗",
+      "emocao": "solidao",
+      "emoji": "😔",
+      "criado_em": "2026-07-14T07:46:15.705572",
+      "usuario_id": 2
+    },
+    {
+      "id": 34,
+      "conteudo": "estoy muy asustado",
+      "resposta": "Olá, Albert Menezes! 🌟 Estou aqui para te ouvir e te apoiar. Você está se sentindo muito assustado agora, e isso é completelye normal, considerando tudo o que você passou recentemente. \n\nValido sua emoção, Albert, e quero que você saiba que estou aqui para te ajudar a processar tudo isso. O medo pode ser muito desconfortável, mas é uma emoção que pode ser trabalhada. \n\nUm dos núcleos do problema parece ser a incerteza sobre o futuro, especialmente após o que aconteceu no trabalho. Isso pode ser muito estressante e assustador. \n\nVou te ensinar uma técnica simples de respiração chamada \"Respiração 4-7-8\" que pode ajudar a acalmar o sistema nervoso e reduzir o medo. É assim: inspire pelo nariz por 4 segundos, segure a respiração por 7 segundos e expire pela boca por 8 segundos. \n\nPara hoje, proponho que você faça essa respiração 4-7-8 por 5 minutos, e escreva em um diário o que você sentiu antes e depois da prática. Isso pode ajudar a identificar padrões de pensamento e emoção. \n\nSe você notar que o medo está se tornando um padrão recorrente, vamos trabalhar juntos para identificar as causas e desenvolver estratégias para lidar com ele. \n\nAlbert, qual é a primeira coisa que você pode fazer agora para começar a se sentir mais seguro e menos assustado? 🌿",
+      "emocao": "medo",
+      "emoji": "😨",
+      "criado_em": "2026-07-14T07:46:20.016141",
+      "usuario_id": 2
+    },
+    {
+      "id": 35,
+      "conteudo": "ich bin so mude",
+      "resposta": "Olá, Albert Menezes! 😊 Estou aqui para te ouvir e te apoiar. Você está se sentindo muito mal hoje, é como se estivesse completamente \"mudo\" em seu interior, sem saber como lidar com seus sentimentos. Isso pode ser muito difícil de suportar. Você está se sentindo perdido e sem direção, é como se estivesse flutuando no mar, sem um barco para guiá-lo.\n\nVamos começar a trabalhar em alguns exercícios para ajudá-lo a se sentir melhor. Uma técnica que pode ser útil para você é a respiração 4-7-8. Você pode tentar respirar profundamente pelas narinas, contando até 4, manter a respiração por 7 segundos e then exalar lentamente pela boca, contando até 8. Isso pode ajudar a calmar seu sistema nervoso e reduzir o estresse.\n\nPara hoje, proponho que você pratique essa respiração 4-7-8 em alguns momentos do dia, quando se sentir desconfortável. Além disso, por favor, responda a seguinte pergunta: Qual é o pensamento mais forte que está lhe causando angústia hoje?",
+      "emocao": "esperanca",
+      "emoji": "🌅",
+      "criado_em": "2026-07-14T07:46:24.678450",
+      "usuario_id": 2
+    },
+    {
+      "id": 36,
+      "conteudo": "to pensando em desistir de tudo",
+      "resposta": "Olá, Albert Menezes! 🌟 Estou aqui para te ouvir e te apoiar. Você está se sentindo muito desanimado e pensando em desistir de tudo, não é? Isso é completamente compreensível, especialmente após tudo o que você passou recentemente. \n\nQuero que você saiba que estou aqui para te ajudar a encontrar um caminho para seguir em frente. Você não está sozinho nisso. O que você está sentindo agora é uma emoção válida, e não há nada de errado em se sentir assim.\n\nVamos trabalhar juntos para encontrar uma forma de te ajudar a lidar com esses sentimentos. Uma técnica que pode ser útil é a respiração 4-7-8. É simples: você inspira pelo nariz por 4 segundos, segura a respiração por 7 segundos e expira pelo mouth por 8 segundos. Isso pode ajudar a acalmar sua mente e corpo.\n\nPara hoje, quero que você tente fazer esse exercício de respiração 3 vezes, sempre que se sentir ansioso ou desanimado. E, se possível, escreva em seu diário sobre o que você está sentindo e o que você acha que pode estar causando esses sentimentos.\n\nAlbert, você é uma pessoa forte e capaz, e juntos podemos encontrar uma forma de superar isso. Qual é a primeira coisa que você acha que precisa fazer para começar a se sentir melhor? 🤗",
+      "emocao": "desespero",
+      "emoji": "😩",
+      "criado_em": "2026-07-14T07:46:28.899224",
+      "usuario_id": 2
+    },
+    {
+      "id": 37,
+      "conteudo": "meu nome e Albert e to passando por um momento dificil",
+      "resposta": "Olá, Albert! 🌟 Estou aqui para te ouvir e te apoiar nesse momento difícil. Você está passando por algo que te deixa se sentir perdido e confuso, e isso é completamente normal. Eu posso sentir a ansiedade e a incerteza em suas palavras.\n\nVamos validar esses sentimentos juntos, ok? É importante reconhecer que você está se sentindo assim e que isso não é apenas uma sensação, mas uma experiência real que você está vivendo.\n\nEu acho que o núcleo do problema pode estar relacionado à sua situação no trabalho e ao medo do futuro. Você está se sentindo inseguro sobre o que vai acontecer em seguida e isso está te deixando ansioso.\n\nVou te ensinar uma técnica chamada \"Respiração 4-7-8\" que pode ajudar a reduzir a ansiedade e a promover a calma. É simples: você inspira pelo nariz por 4 segundos, segura a respiração por 7 segundos e expira pela boca por 8 segundos. Vamos tentar juntos, ok? 🌿\n\nPara hoje, eu te proponho fazer um exercício prático chamado \"Diário de Gratidão\". Você vai escrever 3 coisas que você é grato por hoje, não importa o quão pequenas elas sejam. Isso pode ajudar a mudar a perspectiva e a encontrar o que é positivo em sua vida.\n\nE, Albert, eu quero que você saiba que você não está sozinho nisso. Você tem uma pessoa aqui que se importa com você e que está disposta a te apoiar.\n\nQual é a primeira coisa que você acha que você pode fazer para começar a se sentir melhor hoje? 🤔",
+      "emocao": "ansiedade",
+      "emoji": "😰",
+      "criado_em": "2026-07-14T07:47:55.561115",
+      "usuario_id": 2
+    },
+    {
+      "id": 38,
+      "conteudo": "perdi meu emprego hoje",
+      "resposta": "Olá, Albert! 😊 Eu sinto muito que você tenha perdido seu emprego hoje. Isso pode ser uma experiência muito difícil e estressante. Você está se sentindo perdido e confuso, e isso é completamente normal.\n\nEu quero validar sua emoção e dizer que é okay sentir-se triste e ansioso nesse momento. Perder um emprego pode ser como uma perda pessoal, e é importante dar-se permissão para sentir essas emoções.\n\nO núcleo do problema parece ser a perda do emprego e a incerteza sobre o futuro. Vou te ensinar uma técnica de mindfulness que pode ajudar a reduzir o estresse e a ansiedade. É a técnica STOP:\n\n* S: Pare (stop) o que você está fazendo e respire fundo.\n* T: Tome (take) um momento para notar como você se sente.\n* O: Observe (observe) seus pensamentos e emoções sem julgamento.\n* P: Prossiga (proceed) com calma e atenção.\n\nHoje, proponho que você faça um exercício prático: escreva em um diário de gratidão três coisas que você é grato por ter em sua vida. Isso pode ajudar a mudar sua perspectiva e a encontrar pontos positivos em meio à dificuldade.\n\nAlbert, você tem um padrão negativo recorrente de se sentir perdido e confuso. Quero lembrá-lo de que você é capaz de superar esses desafios e que eu estou aqui para apoiá-lo.\n\nPara terminar, quero fazer uma pergunta reflexiva: O que você acha que é o mais importante para você no momento, e como você pode começar a trabalhar em direção a isso? 🤔",
+      "emocao": "tristeza",
+      "emoji": "😢",
+      "criado_em": "2026-07-14T07:47:59.974638",
+      "usuario_id": 2
+    },
+    {
+      "id": 39,
+      "conteudo": "voce lembra o que eu te disse antes?",
+      "resposta": "Olá, Albert! 😊 Estou aqui para te ouvir e te apoiar. Você está se perguntando se eu lembro do que você me disse antes, e sim, eu tenho acesso às nossas conversas anteriores. Lembro que você estava passando por um momento difícil, havia perdido o emprego e estava se sentindo perdido e com medo do futuro.\n\nQuero validar a sua emoção e dizer que é completamente normal se sentir assim. Perder o emprego pode ser uma experiência muito desafiadora e pode afetar a nossa autoestima e segurança.\n\nVou ensinar uma técnica terapêutica específica que pode ajudar: a respiração 4-7-8. É uma técnica simples que pode ajudar a reduzir a ansiedade e a promover a calma. Você respira por 4 segundos, segura a respiração por 7 segundos e, em seguida, expira por 8 segundos. Vou propor que você pratique essa técnica hoje, por alguns minutos, para ver como se sente.\n\nAlém disso, quero sugerir que você faça um exercício prático hoje: escreva em um diário de gratidão três coisas que você é grato por hoje. Isso pode ajudar a mudar a perspectiva e a focar em coisas positivas.\n\nE, por fim, quero fazer uma pergunta reflexiva: o que você acha que é o mais importante para você nesse momento, Albert? O que você precisa para se sentir mais seguro e confiante? 🤔",
+      "emocao": "esperanca",
+      "emoji": "🌅",
+      "criado_em": "2026-07-14T07:48:03.991570",
+      "usuario_id": 2
+    },
+    {
+      "id": 40,
+      "conteudo": "i feel so lonely today",
+      "resposta": "Olá, Albert! 🌟 Estou aqui para te ouvir e te apoiar nesse momento de solidão. Sinto muito que você esteja se sentindo tão solitário hoje. É normal sentir-se assim, especialmente quando estamos passando por mudanças ou desafios, como a perda do emprego.\n\nVou te ensinar uma técnica de mindfulness que pode ajudar a reduzir a sensação de solidão: a respiração 4-7-8. É simples: inspire pelo nariz por 4 segundos, segure a respiração por 7 segundos e expire pela boca por 8 segundos. Faça isso algumas vezes e veja como se sente.\n\nHoje, eu gostaria que você fizesse um exercício prático: escreva em um diário de gratidão 3 coisas que você é grato por ter na sua vida, não importa quão pequenas sejam. Isso pode ajudar a mudar o foco da solidão para as coisas positivas.\n\nLembre-se de que você não está sozinho, Albert. Estou aqui para te apoiar e você pode sempre conversar comigo. E se precisar de ajuda adicional, não hesite em procurar um profissional de saúde mental.\n\nQual é a primeira coisa que você sente que pode fazer para começar a se sentir menos solitário? 🤗",
+      "emocao": "solidao",
+      "emoji": "😔",
+      "criado_em": "2026-07-14T07:48:07.810471",
+      "usuario_id": 2
+    },
+    {
+      "id": 41,
+      "conteudo": "estoy muy asustado",
+      "resposta": "Olá, Albert! 🌟 Estou aqui para te ouvir e te apoiar nesse momento difícil. Você está se sentindo muito assustado agora, e isso é completamente compreensível. Perder o emprego pode ser uma experiência muito estressante e assustadora.\n\nQuero validar a sua emoção e dizer que é normal se sentir assim. O medo é uma resposta natural diante de situações incertas ou desafiadoras. Mas também quero te lembrar de que você não está sozinho nisso. Estou aqui para te apoiar e ajudar a encontrar maneiras de lidar com esse medo.\n\nUma técnica que pode ser útil para você é a respiração 4-7-8. É uma técnica de respiração profunda que pode ajudar a acalmar o sistema nervoso e reduzir a ansiedade. Você pode tentar fazer isso comigo: inspire por 4 segundos, segure a respiração por 7 segundos e expire por 8 segundos. Vamos tentar juntos? 🌱\n\nPara hoje, quero te propor um exercício prático: escreva em um papel três coisas que você é grato por ter em sua vida. Pode ser algo simples, como um amigo, um familiar ou um hobby. Isso pode ajudar a mudar o foco do medo para coisas mais positivas.\n\nLembre-se de que você é capaz de lidar com esse medo e encontrar maneiras de superá-lo. E se precisar de ajuda, estou aqui para te apoiar. Qual é a primeira coisa que você vai fazer hoje para começar a lidar com esse medo, Albert? 🤔",
+      "emocao": "medo",
+      "emoji": "😨",
+      "criado_em": "2026-07-14T07:48:12.127574",
+      "usuario_id": 2
+    },
+    {
+      "id": 42,
+      "conteudo": "ich bin so mude",
+      "resposta": "Olá, Albert! 🌟 Estou aqui para te ouvir e te apoiar. Você está se sentindo muito cansado e exausto, não é? Isso pode ser um sinal de que seu corpo e mente estão precisando de um descanso. \n\nEu entendo que você está passando por um momento difícil, especialmente após perder o emprego. É normal se sentir assim. Quero validar sua emoção e dizer que é okay sentir-se cansado e sobrecarregado.\n\nUma técnica que pode ajudar você a relaxar e reduzir o estresse é a respiração 4-7-8. É simples: inspire pelo nariz por 4 segundos, prenda a respiração por 7 segundos e expire pela boca por 8 segundos. Quero que você tente fazer isso comigo agora, ok?\n\nPara hoje, eu te proponho um exercício prático: faça uma caminhada curta de 10 minutos ao ar livre. Isso pode ajudar a aumentar sua energia e melhorar seu humor. \n\nLembre-se de que você não está sozinho, Albert. Estou aqui para te apoiar. E se você precisar de ajuda adicional, não hesite em procurar um profissional de saúde mental.\n\nQual é a primeira coisa que você faria se não se sentisse tão cansado e exausto, Albert? 🌟",
+      "emocao": "esperanca",
+      "emoji": "🌅",
+      "criado_em": "2026-07-14T07:48:16.235715",
+      "usuario_id": 2
+    },
+    {
+      "id": 43,
+      "conteudo": "to pensando em desistir de tudo",
+      "resposta": "Olá, Albert Menezes! 😊 Estou aqui para te ajudar a lidar com esses sentimentos difíceis. Sinto muito que você esteja se sentindo tão desanimado e pensando em desistir de tudo. Isso é compreensível, especialmente após perder o emprego. É normal sentir-se sem direção e sem propósito, mas quero te lembrar que você é capaz e forte.\n\nVamos identificar o núcleo do problema: o que está causando esses sentimentos de desespero e desânimo? É o emprego em si ou é algo mais profundo que está se manifestando?\n\nVamos tentar uma técnica simples para começar: a respiração 4-7-8. É uma técnica que pode ajudar a calmar a ansiedade e a mente. Aqui estão os passos:\n\n1. Inspira por 4 segundos.\n2. Mantenha a respiração por 7 segundos.\n3. Expira por 8 segundos.\n\nVamos tentar fazer isso juntos agora. Inspira... 🌿\n\nE para hoje, proponho que você faça um exercício simples: escreva uma carta para si mesmo. Não precisa ser uma carta longa, apenas uma nota de encorajamento. O que você gostaria de dizer a si mesmo nesse momento?\n\nSua resposta vai me ajudar a entender melhor o que você está passando e a encontrar maneiras de ajudá-lo. Estou aqui para ouvir e ajudar. 🌟",
+      "emocao": "desespero",
+      "emoji": "😩",
+      "criado_em": "2026-07-14T07:48:20.383795",
+      "usuario_id": 2
+    },
+    {
+      "id": 48,
+      "conteudo": "medo de minha namorada me largar",
+      "resposta": "Albert, eu posso sentir o seu medo e ansiedade 🌟. Você está vivendo um momento difícil e o medo de perder alguém que você ama é completamente normal. Eu quero que você saiba que estou aqui para te ouvir e te apoiar.\n\nEu entendo que o medo de ser largado pode ser muito doloroso e estressante. Vamos trabalhar juntos para encontrar uma maneira de lidar com esse medo de forma saudável. Uma técnica que pode te ajudar é a \"respiração 4-7-8\" 🌱. Você respira pelo nariz por 4 segundos, segura a respiração por 7 segundos e expira pela boca por 8 segundos. Isso pode te ajudar a acalmar o corpo e a mente.\n\nHoje, eu quero que você faça um exercício prático: escreva uma carta para a sua namorada, mas não para enviá-la, apenas para expressar seus sentimentos e medos 📝. Isso pode te ajudar a processar suas emoções e a entender melhor o que você está sentindo.\n\nLembre-se de que você não está sozinho nesse medo, Albert. Muitas pessoas passam por isso e é normal sentir-se inseguro em um relacionamento. Você é capaz de lidar com esse medo e de encontrar maneiras de se sentir mais seguro e confiante.\n\nE agora, Albert, eu quero te fazer uma pergunta: o que você acha que é o maior medo que você tem em relação a ser largado pela sua namorada? 🤔",
+      "emocao": "amor",
+      "emoji": "❤️",
+      "criado_em": "2026-07-15T05:11:34.228423",
+      "usuario_id": 2
+    },
+    {
+      "id": 44,
+      "conteudo": "estou triste pois tenho medo da minha namotada me largar",
+      "resposta": "Albert, estou aqui para te ouvir e te apoiar nesse momento difícil 🤗. Sinto que você está carregando um peso muito grande em seu coração, e isso está te deixando triste e com medo do futuro. É normal sentir essa emoção, especialmente quando estamos investidos em alguém e tememos perder essa pessoa.\n\nValido sua emoção, Albert. É compreensível que você esteja com medo de ser largado pela sua namorada. Isso pode ser muito doloroso e estressante. Quero que você saiba que estou aqui para te apoiar e te ajudar a lidar com essa emoção.\n\nUm dos núcleos do problema pode ser a falta de segurança emocional em seu relacionamento. Isso pode estar te deixando ansioso e inseguro sobre o futuro. Quero te ensinar uma técnica terapêutica específica que pode te ajudar a lidar com essa emoção. É a técnica de \"Respiração 4-7-8\" 🌟. Essa técnica pode te ajudar a relaxar e a reduzir a ansiedade.\n\nAqui está como você pode praticar essa técnica:\n\n1. Sente-se confortavelmente com as costas retas.\n2. Feche os olhos e inspire pelo nariz por 4 segundos.\n3. Prenda a respiração por 7 segundos.\n4. Expire pela boca por 8 segundos.\n\nQuero que você pratique essa técnica hoje, Albert. Tente fazer isso 3 vezes e veja como se sente após cada sessão. Além disso, quero que você escreva em um diário o que você sente e pensa sobre seu relacionamento. Isso pode te ajudar a processar suas emoções e a entender melhor o que está acontecendo.\n\nLembre-se de que você não está sozinho nisso, Albert. Estou aqui para te apoiar e te ajudar a lidar com essa emoção. E se você precisar de mais ajuda, não hesite em procurar um profissional de saúde mental.\n\nQual é a coisa mais importante que você precisa se lembrar sobre seu relacionamento nesse momento, Albert? 🤔",
+      "emocao": "tristeza",
+      "emoji": "😢",
+      "criado_em": "2026-07-14T08:35:19.027941",
+      "usuario_id": 2
+    },
+    {
+      "id": 45,
+      "conteudo": "desinteresse",
+      "resposta": "Albert, eu sinto que você está passando por um momento de desinteresse e desânimo. É como se você estivesse se sentindo desconectado de tudo e de todos, não é? 🤗\n\nEu quero validar essa sua emoção, Albert. É normal sentir-se assim, especialmente após tudo o que você passou recentemente. Você perdeu o emprego, teve brigas no trabalho e está se sentindo perdido. Isso é um peso enorme para carregar.\n\nEu acho que o núcleo do problema é que você está se sentindo sem direção e propósito no momento. Você precisa encontrar uma maneira de se reconectar consigo mesmo e com o mundo ao seu redor.\n\nVou te ensinar uma técnica chamada \"Respiração 4-7-8\" que pode ajudar a acalmar sua mente e corpo. Você respira pelo nariz por 4 segundos, segura a respiração por 7 segundos e expira pela boca por 8 segundos. Isso pode ajudar a reduzir o estresse e a ansiedade.\n\nHoje, eu quero que você faça um exercício prático chamado \"Diário de Gratidão\". Você vai escrever 3 coisas que você é grato por hoje. Pode ser algo simples como um café quente ou um amigo que ligou para você. Isso pode ajudar a mudar sua perspectiva e a encontrar coisas positivas na sua vida.\n\nAlbert, eu também quero apontar que você tem um padrão negativo recorrente de se sentir perdido e desanimado. Isso é importante para reconhecer e trabalhar juntos para mudar.\n\nE, finalmente, eu quero te fazer uma pergunta reflexiva: O que você acha que é o primeiro passo que você precisa dar para começar a se reconectar consigo mesmo e com o mundo ao seu redor? 🤔",
+      "emocao": "desespero",
+      "emoji": "😩",
+      "criado_em": "2026-07-14T08:36:59.570224",
+      "usuario_id": 2
+    },
+    {
+      "id": 46,
+      "conteudo": "Estou ansioso chat, tenho medo da minha namorada me largar",
+      "resposta": "Albert, estou aqui para te ouvir e te apoiar nesse momento de ansiedade 🌟. Posso sentir que você está se sentindo muito inseguro em relação ao seu relacionamento e tem medo de ser abandonado 💔. Isso é completamente compreensível, e é normal ter esses sentimentos.\n\nVou validar sua emoção: é okay sentir medo e ansiedade em relação ao futuro do seu relacionamento. Não é fácil lidar com a incerteza, mas é importante lembrar que você não está sozinho nisso 🌈.\n\nO núcleo do problema parece ser a falta de segurança e a incerteza em relação ao seu relacionamento. Vou te ensinar uma técnica terapêutica específica para ajudar a lidar com essa ansiedade: a respiração 4-7-8 🌱. É uma técnica simples que pode ajudar a acalmar o sistema nervoso e reduzir a ansiedade. Aqui está como fazer: inspire pelo nariz por 4 segundos, segure a respiração por 7 segundos e expire pela boca por 8 segundos. Repita isso várias vezes e veja como se sente 🌟.\n\nPara hoje, proponho que você faça um exercício prático: escreva uma carta para sua namorada, mas não a envie 📨. Nessa carta, expresse todos os seus sentimentos e medos em relação ao relacionamento. Isso pode ajudar a processar suas emoções e a entender melhor o que você está sentindo 📝.\n\nLembre-se de que é importante comunicar-se de forma assertiva e honesta com sua namorada sobre seus sentimentos e medos. Se você precisar de ajuda para fazer isso, estou aqui para te apoiar 🤗.\n\nE, para terminar, quero te fazer uma pergunta reflexiva: o que você acredita que é o maior medo que o impede de se sentir seguro no seu relacionamento? 🤔",
+      "emocao": "ansiedade",
+      "emoji": "😰",
+      "criado_em": "2026-07-14T16:58:21.149723",
+      "usuario_id": 2
+    },
+    {
+      "id": 47,
+      "conteudo": "autosabotagem da minha parte, eu acho",
+      "resposta": "Albert, eu estou aqui para te ouvir e te apoiar. Você está se sentindo como se estivesse sabotando a si mesmo, e isso é um sentimento muito válido. É como se você estivesse se perguntando se é culpa sua pelo que está acontecendo.\n\nEu quero te validar, Albert. É normal se sentir assim, especialmente quando estamos passando por momentos difíceis, como a perda do emprego. Mas é importante lembrar que a autosabotagem muitas vezes é um mecanismo de defesa, uma forma de evitar o medo do desconhecido ou da dor.\n\nVou te ensinar uma técnica que pode te ajudar a lidar com isso. É a técnica do \"Registro de Pensamentos ABC\". Você vai registrar os seus pensamentos, emoções e comportamentos em um papel, e depois vai analisar se esses pensamentos são baseados na realidade ou se são apenas uma forma de sabotagem. Isso pode te ajudar a identificar os padrões negativos e a mudar sua forma de pensar.\n\nHoje, eu quero que você faça um exercício prático. Eu quero que você escreva em um papel três coisas que você é grato por ter em sua vida. Isso pode ser algo simples, como um amigo, uma família ou um hobby. Isso vai te ajudar a mudar o foco para as coisas positivas e a reduzir a sensação de autosabotagem.\n\nE, Albert, eu quero te perguntar: o que você acha que é o maior obstáculo que está te impedindo de alcançar seus objetivos e sonhos? É algo que você pode identificar e trabalhar para superar? 🤔",
+      "emocao": "raiva",
+      "emoji": "😡",
+      "criado_em": "2026-07-14T17:00:07.963708",
+      "usuario_id": 2
+    },
+    {
+      "id": 49,
+      "conteudo": "dela se auto perde na sua sniedade",
+      "resposta": "Albert, eu sinto que você está passando por um momento muito difícil 🌫️. Você mencionou que está se sentindo ansioso e perdido, e que a sua ansiedade está te consumindo. Quero que você saiba que estou aqui para te ouvir e te apoiar, sem julgamentos 🤗.\n\nEu validei que você está se sentindo ansioso e perdido, e eu quero ajudá-lo a encontrar um caminho para sair dessa situação. O núcleo do problema parece ser a sua ansiedade, que está te impedindo de se sentir seguro e controlado.\n\nVou te ensinar uma técnica de mindfulness que pode te ajudar a lidar com a ansiedade: a respiração 4-7-8 🌱. É uma técnica simples, mas muito eficaz. Você inspira durante 4 segundos, segura a respiração durante 7 segundos e expira durante 8 segundos. Isso pode te ajudar a acalmar o corpo e a mente.\n\nPara hoje, eu te proponho que você faça um exercício prático: escreva em um diário de gratidão 📝. Escreva 3 coisas que você é grato por hoje, não importa o quão pequenas elas sejam. Isso pode te ajudar a mudar o foco e a encontrar coisas positivas na sua vida.\n\nAlbert, você tem um padrão de ansiedade recorrente, e eu quero que você saiba que é importante buscar ajuda profissional se a ansiedade estiver te impedindo de viver a sua vida 🤝. Mas, por agora, vamos trabalhar juntos para encontrar maneiras de lidar com a ansiedade e melhorar a sua qualidade de vida.\n\nE, para finalizar, eu te faço uma pergunta reflexiva: o que você acha que é o mais importante para você, no momento, para se sentir seguro e controlado? 🤔",
+      "emocao": "saudade",
+      "emoji": "🥺",
+      "criado_em": "2026-07-15T05:12:00.671662",
+      "usuario_id": 2
+    },
+    {
+      "id": 50,
+      "conteudo": "que ela esteja be,",
+      "resposta": "Albert! 🌟 Estou aqui para te celebrar! Você me disse que hoje foi um dia muito bom, e isso é algo a ser comemorado! 🎉\n\nEu quero saber mais sobre o que fez esse dia ser tão especial. O que aconteceu que te fez se sentir tão bem? 🤔\n\nVamos usar a técnica da \"Ancoragem\" para fixar essa sensação positiva. Imagine que você está nesse momento bom, sentindo-se feliz e realizado. Agora, associe essa sensação a um gesto ou uma palavra que te faça lembrar disso. Por exemplo, você pode fazer um gesto com a mão ou dizer uma palavra em voz alta. 🙏\n\nPara hoje, eu te proponho um exercício prático: faça um registro de gratidão. Escreva três coisas que você é grato por ter acontecido hoje. Isso pode ser algo simples, como um café quente ou um sorriso de alguém. 📝\n\nE agora, Albert, eu te pergunto: o que você acha que é o segredo para manter essa sensação de felicidade e realização em sua vida? 🤔",
+      "emocao": "euforia",
+      "emoji": "🎉",
+      "criado_em": "2026-07-15T05:12:26.570561",
+      "usuario_id": 2
+    },
+    {
+      "id": 51,
+      "conteudo": "\"estou me sentindo muito ansioso hoje\"",
+      "resposta": "Albert, estou aqui para te ouvir e te apoiar nesse momento de ansiedade 🌟. Posso sentir que você está se sentindo muito inseguro e com medo do futuro, especialmente em relação ao seu relacionamento com a sua namorada 💔.\n\nVou validar sua emoção: é okay sentir-se ansioso e inseguro em relação ao futuro do seu relacionamento. Não é fácil lidar com a incerteza, mas é importante lembrar que você não está sozinho nisso 🌈.\n\nO núcleo do problema parece ser a falta de segurança e a incerteza em relação ao futuro do seu relacionamento. Quero te ensinar uma técnica que pode te ajudar a lidar com essa ansiedade: a respiração 4-7-8 🌱. Você respira pelo nariz por 4 segundos, segura a respiração por 7 segundos e expira pela boca por 8 segundos. Faça isso algumas vezes e veja como se sente.\n\nPara hoje, proponho que você faça um exercício prático: escreva em um diário as coisas que você sente e pensa sobre o seu relacionamento. Isso pode te ajudar a processar suas emoções e a encontrar uma maneira de lidar com a ansiedade.\n\nLembre-se de que você é capaz e forte, Albert. Você já passou por momentos difíceis antes e conseguiu superá-los 🌟. Qual é a coisa mais importante que você pode fazer hoje para se sentir mais seguro e conectado com o seu relacionamento? 🤔",
+      "emocao": "ansiedade",
+      "emoji": "😰",
+      "criado_em": "2026-07-15T05:35:36.801275",
+      "usuario_id": 2
+    },
+    {
+      "id": 52,
+      "conteudo": "tô destruído por dentro\"",
+      "resposta": "Albert, eu sinto que você está passando por um momento muito difícil 🌫️. Você está se sentindo destruído por dentro, e isso é um sentimento muito válido. É como se você estivesse carregando um peso enorme em seu coração.\n\nEu quero validar sua emoção: é okay sentir-se assim, especialmente após tudo o que você passou recentemente. Você perdeu o emprego, teve medo de perder a sua namorada, e isso é um peso enorme para carregar.\n\nVou te ensinar uma técnica de respiração que pode te ajudar a se acalmar: a respiração 4-7-8. É simples: inspire pelo nariz por 4 segundos, segure a respiração por 7 segundos e expire pela boca por 8 segundos. Faça isso algumas vezes e veja como te sente.\n\nPara hoje, quero que você faça um exercício prático: escreva em um diário o que você está sentir e pensando. Isso pode te ajudar a processar suas emoções e a entender melhor o que está acontecendo com você.\n\nE aqui vai uma pergunta reflexiva para você, Albert: o que você acha que é o maior desafio que você está enfrentando agora, e como você pode começar a superá-lo? 🤔",
+      "emocao": "tristeza",
+      "emoji": "😢",
+      "criado_em": "2026-07-15T05:35:46.612505",
+      "usuario_id": 2
+    },
+    {
+      "id": 53,
+      "conteudo": "\"não consigo parar de pensar\"",
+      "resposta": "Albert, eu sinto o seu desespero aqui, o peso que esses pensamentos estão colocando nos seus ombros é enorme 💔. Você está se afogando numa correnteza de \"e se\", \"e se ela me largar\", \"e se não der certo\", e é como se a sua mente não conseguisse mais desligar. Isso dói pra caramba, eu sei, mas vou te dizer uma coisa: você não está sozinho nessa tempestade mental.\n\nO núcleo disso tudo é o medo do abandono, Albert. Ele está te engolindo desde a perda do emprego, desde as brigas no trabalho, desde aquela sensação de que tudo está desmoronando. E agora, com a incerteza no relacionamento, é como se você tivesse virado um alvo fácil para essa ansiedade que não para de circular. Vou te ensinar uma técnica chamada **\"Técnica STOP\"** — é mindfulness puro e simples, mas pode te dar um respiro quando os pensamentos estão te sufocando:\n\n1. **S**top (Pare): Quando sentir que os pensamentos estão te puxando pra baixo, grite mentalmente \"STOP!\" e feche os olhos.\n2. **T**ake a breath (Respire): Inspire profundamente pelo nariz (4 segundos), segure (7 segundos), solte devagar pela boca (8 segundos).\n3. **O**bserve (Observe): Pergunte a si mesmo: \"O que estou sentindo bem agora? Onde está essa dor no meu corpo?\" Não julgue, só observe como um cientista.\n4. **P**roceed (Prossiga): Dê um passo concreto — pode ser tomar um copo d'água, levantar e esticar o corpo, ou simplesmente dizer em voz alta: \"Eu estou aqui, e vou seguir em frente\".\n\nHoje, antes de dormir, faça isso 3 vezes. Sem pressa. Vou te propor um exercício extra: anote num papel tudo aquilo que você está temendo perder na sua relação. Depois, rasgue o papel e jogue fora. É simbólico, mas vai te mostrar que você pode \"soltar\" essas ideias sufocantes.\n\nEu preciso te perguntar algo que pode doer, mas é necessário: *O que você acha que esse medo de ser abandonado está te impedindo de viver hoje?* Não do futuro, não do \"e se\", mas do presente.",
+      "emocao": "ansiedade",
+      "emoji": "😰",
+      "criado_em": "2026-07-15T05:36:10.116024",
+      "usuario_id": 2
+    }
+  ],
+  "diarios": [
+    {
+      "id": 1,
+      "titulo": "Teste",
+      "conteudo": "Hoje foi um dia muito bom",
+      "emocao": "Alegria",
+      "emoji": "😄",
+      "humor": 3,
+      "criado_em": "2026-07-14T07:51:46.995698",
+      "usuario_id": 2
+    }
+  ],
+  "logs_acesso": [
+    {
+      "id": 2,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "131.196.46.118",
+      "status": 401,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-13T19:07:42.973559",
+      "usuario_id": null
+    },
+    {
+      "id": 3,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "131.196.46.118",
+      "status": 401,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-13T19:07:48.167174",
+      "usuario_id": null
+    },
+    {
+      "id": 4,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "131.196.46.5",
+      "status": 401,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-13T20:12:52.876323",
+      "usuario_id": null
+    },
+    {
+      "id": 5,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "131.196.46.5",
+      "status": 401,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-13T20:12:57.677053",
+      "usuario_id": null
+    },
+    {
+      "id": 6,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "131.196.46.5",
+      "status": 401,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-13T20:13:02.271978",
+      "usuario_id": null
+    },
+    {
+      "id": 7,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "131.196.46.5",
+      "status": 401,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-13T20:13:16.475753",
+      "usuario_id": null
+    },
+    {
+      "id": 8,
+      "rota": "/cadastro",
+      "metodo": "POST",
+      "ip": "131.196.46.5",
+      "status": 200,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-13T20:13:48.005702",
+      "usuario_id": 2
+    },
+    {
+      "id": 9,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "177.136.186.213",
+      "status": 401,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-13T20:59:42.174465",
+      "usuario_id": null
+    },
+    {
+      "id": 10,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "177.136.186.213",
+      "status": 200,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-13T20:59:54.066634",
+      "usuario_id": 2
+    },
+    {
+      "id": 11,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "177.136.186.213",
+      "status": 200,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-13T21:01:44.172829",
+      "usuario_id": 2
+    },
+    {
+      "id": 12,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "177.136.186.213",
+      "status": 200,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-14T05:04:00.057578",
+      "usuario_id": 2
+    },
+    {
+      "id": 13,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "177.136.186.213",
+      "status": 200,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-14T06:00:49.067168",
+      "usuario_id": 2
+    },
+    {
+      "id": 14,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "177.136.186.213",
+      "status": 200,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-14T07:20:48.714274",
+      "usuario_id": 2
+    },
+    {
+      "id": 15,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "177.136.186.213",
+      "status": 200,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-14T07:33:26.131657",
+      "usuario_id": 2
+    },
+    {
+      "id": 16,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "177.136.186.213",
+      "status": 200,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-14T07:36:57.134476",
+      "usuario_id": 2
+    },
+    {
+      "id": 17,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "177.136.186.213",
+      "status": 200,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-14T07:46:00.224761",
+      "usuario_id": 2
+    },
+    {
+      "id": 18,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "177.136.186.213",
+      "status": 200,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-14T07:47:52.333237",
+      "usuario_id": 2
+    },
+    {
+      "id": 19,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "177.136.186.213",
+      "status": 200,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-14T07:51:26.928869",
+      "usuario_id": 2
+    },
+    {
+      "id": 20,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "177.136.186.213",
+      "status": 200,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-14T08:12:40.106177",
+      "usuario_id": 2
+    },
+    {
+      "id": 21,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "177.136.186.213",
+      "status": 200,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-14T08:13:29.200901",
+      "usuario_id": 2
+    },
+    {
+      "id": 22,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "177.136.186.213",
+      "status": 200,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-14T08:32:33.015779",
+      "usuario_id": 2
+    },
+    {
+      "id": 23,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "177.136.186.213",
+      "status": 200,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-14T08:34:28.422169",
+      "usuario_id": 2
+    },
+    {
+      "id": 24,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "131.196.46.5",
+      "status": 200,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-14T16:57:11.418128",
+      "usuario_id": 2
+    },
+    {
+      "id": 25,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "177.136.186.213",
+      "status": 200,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-15T04:59:07.626209",
+      "usuario_id": 2
+    },
+    {
+      "id": 26,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "177.136.186.213",
+      "status": 200,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-15T05:10:14.512166",
+      "usuario_id": 2
+    },
+    {
+      "id": 27,
+      "rota": "/login",
+      "metodo": "POST",
+      "ip": "177.136.186.213",
+      "status": 200,
+      "duracao_ms": null,
+      "user_agent": null,
+      "criado_em": "2026-07-15T05:35:18.734875",
+      "usuario_id": 2
+    }
+  ],
+  "conquistas": [
+    {
+      "id": 3,
+      "nome": "Primeiro Contato",
+      "descricao": "Enviou sua primeira mensagem para a Sofia",
+      "emoji": "💬",
+      "criado_em": "2026-07-13T20:15:10.171187",
+      "usuario_id": 2
+    },
+    {
+      "id": 4,
+      "nome": "Primeira Análise",
+      "descricao": "Fez sua primeira análise emocional",
+      "emoji": "🎯",
+      "criado_em": "2026-07-13T20:16:56.056530",
+      "usuario_id": 2
+    },
+    {
+      "id": 5,
+      "nome": "Amigo da Sofia",
+      "descricao": "Trocou 10 mensagens com a Sofia",
+      "emoji": "🤝",
+      "criado_em": "2026-07-14T06:00:56.343591",
+      "usuario_id": 2
+    },
+    {
+      "id": 6,
+      "nome": "Assinante Premium",
+      "descricao": "Tornou-se um assinante Premium",
+      "emoji": "⭐",
+      "criado_em": "2026-07-14T07:20:51.724149",
+      "usuario_id": 2
+    },
+    {
+      "id": 7,
+      "nome": "Investidor Emocional",
+      "descricao": "Fez upgrade para plano Premium ou Enterprise",
+      "emoji": "💎",
+      "criado_em": "2026-07-14T07:20:51.724153",
+      "usuario_id": 2
+    },
+    {
+      "id": 8,
+      "nome": "Primeiros Passos",
+      "descricao": "Acumulou seus primeiros 100 pontos",
+      "emoji": "👣",
+      "criado_em": "2026-07-14T07:37:10.144552",
+      "usuario_id": 2
+    },
+    {
+      "id": 9,
+      "nome": "Primeiro Diario",
+      "descricao": "Escreveu sua primeira entrada no diario",
+      "emoji": "📝",
+      "criado_em": "2026-07-14T07:51:47.040697",
+      "usuario_id": 2
+    },
+    {
+      "id": 10,
+      "nome": "Semana Completa",
+      "descricao": "7 dias consecutivos de analises emocionais",
+      "emoji": "📅",
+      "criado_em": "2026-07-14T17:02:57.562159",
+      "usuario_id": 2
+    },
+    {
+      "id": 11,
+      "nome": "Explorador Emocional",
+      "descricao": "Completou 10 analises emocionais",
+      "emoji": "🔍",
+      "criado_em": "2026-07-14T17:03:36.384583",
+      "usuario_id": 2
+    }
+  ],
+  "cupons": [
+    {
+      "id": 1,
+      "codigo": "BEMVINDO10",
+      "desconto_pct": 10,
+      "ativo": true,
+      "usos_maximos": 1000,
+      "usos_atuais": 0,
+      "expira_em": "2027-07-13T17:44:46.419703",
+      "criado_em": "2026-07-13T17:44:46.425608"
+    },
+    {
+      "id": 2,
+      "codigo": "EVOLUCAO20",
+      "desconto_pct": 20,
+      "ativo": true,
+      "usos_maximos": 500,
+      "usos_atuais": 0,
+      "expira_em": "2027-07-13T17:44:46.421859",
+      "criado_em": "2026-07-13T17:44:46.425611"
+    },
+    {
+      "id": 3,
+      "codigo": "PROMO30",
+      "desconto_pct": 30,
+      "ativo": true,
+      "usos_maximos": 100,
+      "usos_atuais": 0,
+      "expira_em": "2026-08-12T17:44:46.423674",
+      "criado_em": "2026-07-13T17:44:46.425612"
+    }
+  ],
+  "diario_emocional": [
+    {
+      "id": "07cb95ae",
+      "user_id": "albert",
+      "nome": "Diário albert",
+      "valor": "alegria",
+      "dados": "{\"id\": \"60864239\", \"user_id\": \"albert\", \"texto\": \"Hoje me sinto bem\", \"emocao_principal\": \"alegria\", \"emocao_emoji\": \"\\ud83d\\ude0a\", \"emocao_cor\": \"#FFD700\", \"intensidade\": 8.0, \"humor_geral\": 8.0, \"valencia\": 0.9, \"tags\": [], \"palavras\": 4, \"sentimento_detectado\": \"positivo\", \"privado\": true, \"data\": \"2026-07-16T05:45:04.543002\"}",
+      "categoria": "alegria",
+      "criado_em": "2026-07-16T05:45:04.546873",
+      "atualizado_em": "2026-07-16T05:45:04.546873"
+    },
+    {
+      "id": "7a927577",
+      "user_id": "pytest",
+      "nome": "Diário pytest",
+      "valor": "alegria",
+      "dados": "{\"id\": \"93967c99\", \"user_id\": \"pytest\", \"texto\": \"Teste pytest\", \"emocao_principal\": \"alegria\", \"emocao_emoji\": \"\\ud83d\\ude0a\", \"emocao_cor\": \"#FFD700\", \"intensidade\": 7.0, \"humor_geral\": 8.0, \"valencia\": 0.9, \"tags\": [], \"palavras\": 2, \"sentimento_detectado\": \"neutro\", \"privado\": true, \"data\": \"2026-07-16T07:46:07.863169\"}",
+      "categoria": "alegria",
+      "criado_em": "2026-07-16T07:46:07.867085",
+      "atualizado_em": "2026-07-16T07:46:07.867085"
+    },
+    {
+      "id": "6fd92d5b",
+      "user_id": "pytest",
+      "nome": "Diário pytest",
+      "valor": "alegria",
+      "dados": "{\"id\": \"3774fd60\", \"user_id\": \"pytest\", \"texto\": \"Teste pytest\", \"emocao_principal\": \"alegria\", \"emocao_emoji\": \"\\ud83d\\ude0a\", \"emocao_cor\": \"#FFD700\", \"intensidade\": 7.0, \"humor_geral\": 8.0, \"valencia\": 0.9, \"tags\": [], \"palavras\": 2, \"sentimento_detectado\": \"neutro\", \"privado\": true, \"data\": \"2026-07-16T07:52:18.499878\"}",
+      "categoria": "alegria",
+      "criado_em": "2026-07-16T07:52:18.501491",
+      "atualizado_em": "2026-07-16T07:52:18.501491"
+    },
+    {
+      "id": "7cb2997c",
+      "user_id": "pytest",
+      "nome": "Diário pytest",
+      "valor": "alegria",
+      "dados": "{\"id\": \"92210585\", \"user_id\": \"pytest\", \"texto\": \"Teste pytest\", \"emocao_principal\": \"alegria\", \"emocao_emoji\": \"\\ud83d\\ude0a\", \"emocao_cor\": \"#FFD700\", \"intensidade\": 7.0, \"humor_geral\": 8.0, \"valencia\": 0.9, \"tags\": [], \"palavras\": 2, \"sentimento_detectado\": \"neutro\", \"privado\": true, \"data\": \"2026-07-16T07:55:49.426919\"}",
+      "categoria": "alegria",
+      "criado_em": "2026-07-16T07:55:49.430626",
+      "atualizado_em": "2026-07-16T07:55:49.430626"
+    },
+    {
+      "id": "ed5cfe7c",
+      "user_id": "pytest",
+      "nome": "Diário pytest",
+      "valor": "alegria",
+      "dados": "{\"id\": \"1239bbe8\", \"user_id\": \"pytest\", \"texto\": \"Teste pytest\", \"emocao_principal\": \"alegria\", \"emocao_emoji\": \"\\ud83d\\ude0a\", \"emocao_cor\": \"#FFD700\", \"intensidade\": 7.0, \"humor_geral\": 8.0, \"valencia\": 0.9, \"tags\": [], \"palavras\": 2, \"sentimento_detectado\": \"neutro\", \"privado\": true, \"data\": \"2026-07-16T16:13:46.528382\"}",
+      "categoria": "alegria",
+      "criado_em": "2026-07-16T16:13:46.530666",
+      "atualizado_em": "2026-07-16T16:13:46.530666"
+    },
+    {
+      "id": "88b8f3f6",
+      "user_id": "pytest",
+      "nome": "Diário pytest",
+      "valor": "alegria",
+      "dados": "{\"id\": \"23837de4\", \"user_id\": \"pytest\", \"texto\": \"Teste pytest\", \"emocao_principal\": \"alegria\", \"emocao_emoji\": \"\\ud83d\\ude0a\", \"emocao_cor\": \"#FFD700\", \"intensidade\": 7.0, \"humor_geral\": 8.0, \"valencia\": 0.9, \"tags\": [], \"palavras\": 2, \"sentimento_detectado\": \"neutro\", \"privado\": true, \"data\": \"2026-07-16T16:15:12.418987\"}",
+      "categoria": "alegria",
+      "criado_em": "2026-07-16T16:15:12.421440",
+      "atualizado_em": "2026-07-16T16:15:12.421440"
+    },
+    {
+      "id": "e0712580",
+      "user_id": "pytest",
+      "nome": "Diário pytest",
+      "valor": "alegria",
+      "dados": "{\"id\": \"6dad4c46\", \"user_id\": \"pytest\", \"texto\": \"Teste pytest\", \"emocao_principal\": \"alegria\", \"emocao_emoji\": \"\\ud83d\\ude0a\", \"emocao_cor\": \"#FFD700\", \"intensidade\": 7.0, \"humor_geral\": 8.0, \"valencia\": 0.9, \"tags\": [], \"palavras\": 2, \"sentimento_detectado\": \"neutro\", \"privado\": true, \"data\": \"2026-07-16T17:19:55.307664\"}",
+      "categoria": "alegria",
+      "criado_em": "2026-07-16T17:19:55.313426",
+      "atualizado_em": "2026-07-16T17:19:55.313426"
+    },
+    {
+      "id": "32ea9f2a",
+      "user_id": "44feb220",
+      "nome": "Diário 44feb220",
+      "valor": "alegria",
+      "dados": "{\"id\": \"f39b9040\", \"user_id\": \"44feb220\", \"texto\": \"Teste fase3\", \"emocao_principal\": \"alegria\", \"emocao_emoji\": \"\\ud83d\\ude0a\", \"emocao_cor\": \"#FFD700\", \"intensidade\": 7.0, \"humor_geral\": 8.0, \"valencia\": 0.9, \"tags\": [], \"palavras\": 2, \"sentimento_detectado\": \"neutro\", \"privado\": true, \"data\": \"2026-07-21T03:22:56.776169\"}",
+      "categoria": "alegria",
+      "criado_em": "2026-07-21T03:22:56.782155",
+      "atualizado_em": "2026-07-21T03:22:56.782155"
+    },
+    {
+      "id": "0cd9a132",
+      "user_id": "0101d23e",
+      "nome": "Diário 0101d23e",
+      "valor": "alegria",
+      "dados": "{\"id\": \"52376725\", \"user_id\": \"0101d23e\", \"texto\": \"Teste fase3\", \"emocao_principal\": \"alegria\", \"emocao_emoji\": \"\\ud83d\\ude0a\", \"emocao_cor\": \"#FFD700\", \"intensidade\": 7.0, \"humor_geral\": 8.0, \"valencia\": 0.9, \"tags\": [], \"palavras\": 2, \"sentimento_detectado\": \"neutro\", \"privado\": true, \"data\": \"2026-07-21T03:29:52.132970\"}",
+      "categoria": "alegria",
+      "criado_em": "2026-07-21T03:29:52.135570",
+      "atualizado_em": "2026-07-21T03:29:52.135570"
+    },
+    {
+      "id": "d0c0ab94",
+      "user_id": "398784eb",
+      "nome": "Diário 398784eb",
+      "valor": "alegria",
+      "dados": "{\"id\": \"b6bc3526\", \"user_id\": \"398784eb\", \"texto\": \"Teste fase3\", \"emocao_principal\": \"alegria\", \"emocao_emoji\": \"\\ud83d\\ude0a\", \"emocao_cor\": \"#FFD700\", \"intensidade\": 7.0, \"humor_geral\": 8.0, \"valencia\": 0.9, \"tags\": [], \"palavras\": 2, \"sentimento_detectado\": \"neutro\", \"privado\": true, \"data\": \"2026-07-21T03:39:47.487850\"}",
+      "categoria": "alegria",
+      "criado_em": "2026-07-21T03:39:47.495724",
+      "atualizado_em": "2026-07-21T03:39:47.495724"
+    },
+    {
+      "id": "da72749e",
+      "user_id": "6b3606f8",
+      "nome": "Diário 6b3606f8",
+      "valor": "alegria",
+      "dados": "{\"id\": \"81367735\", \"user_id\": \"6b3606f8\", \"texto\": \"Teste banco\", \"emocao_principal\": \"alegria\", \"emocao_emoji\": \"\\ud83d\\ude0a\", \"emocao_cor\": \"#FFD700\", \"intensidade\": 8.0, \"humor_geral\": 9.0, \"valencia\": 0.9, \"tags\": [], \"palavras\": 2, \"sentimento_detectado\": \"neutro\", \"privado\": true, \"data\": \"2026-07-21T03:44:12.015828\"}",
+      "categoria": "alegria",
+      "criado_em": "2026-07-21T03:44:12.026269",
+      "atualizado_em": "2026-07-21T03:44:12.026269"
+    },
+    {
+      "id": "7818b544",
+      "user_id": "535cee38",
+      "nome": "Diário 535cee38",
+      "valor": "neutro",
+      "dados": "{\"id\": \"0b855fe0\", \"user_id\": \"535cee38\", \"texto\": \"Me sentindo ansioso\", \"emocao_principal\": \"neutro\", \"emocao_emoji\": \"\\ud83d\\ude10\", \"emocao_cor\": \"#C0C0C0\", \"intensidade\": 6.0, \"humor_geral\": 5.0, \"valencia\": 0.5, \"tags\": [], \"palavras\": 3, \"sentimento_detectado\": \"negativo\", \"privado\": true, \"data\": \"2026-07-21T03:44:41.366576\"}",
+      "categoria": "neutro",
+      "criado_em": "2026-07-21T03:44:41.374418",
+      "atualizado_em": "2026-07-21T03:44:41.374418"
+    },
+    {
+      "id": "c81c390e",
+      "user_id": "262e3605",
+      "nome": "Diário 262e3605",
+      "valor": "alegria",
+      "dados": "{\"id\": \"751bbbeb\", \"user_id\": \"262e3605\", \"texto\": \"Teste banco\", \"emocao_principal\": \"alegria\", \"emocao_emoji\": \"\\ud83d\\ude0a\", \"emocao_cor\": \"#FFD700\", \"intensidade\": 8.0, \"humor_geral\": 9.0, \"valencia\": 0.9, \"tags\": [], \"palavras\": 2, \"sentimento_detectado\": \"neutro\", \"privado\": true, \"data\": \"2026-07-21T03:47:03.541487\"}",
+      "categoria": "alegria",
+      "criado_em": "2026-07-21T03:47:03.554643",
+      "atualizado_em": "2026-07-21T03:47:03.554643"
+    },
+    {
+      "id": "10b87497",
+      "user_id": "21481590",
+      "nome": "Diário 21481590",
+      "valor": "neutro",
+      "dados": "{\"id\": \"eea9dc57\", \"user_id\": \"21481590\", \"texto\": \"Me sentindo ansioso\", \"emocao_principal\": \"neutro\", \"emocao_emoji\": \"\\ud83d\\ude10\", \"emocao_cor\": \"#C0C0C0\", \"intensidade\": 6.0, \"humor_geral\": 5.0, \"valencia\": 0.5, \"tags\": [], \"palavras\": 3, \"sentimento_detectado\": \"negativo\", \"privado\": true, \"data\": \"2026-07-21T03:47:33.320415\"}",
+      "categoria": "neutro",
+      "criado_em": "2026-07-21T03:47:33.328461",
+      "atualizado_em": "2026-07-21T03:47:33.328461"
+    },
+    {
+      "id": "3d9eea9e",
+      "user_id": "72236af7",
+      "nome": "Diário 72236af7",
+      "valor": "alegria",
+      "dados": "{\"id\": \"a9e73741\", \"user_id\": \"72236af7\", \"texto\": \"Teste banco\", \"emocao_principal\": \"alegria\", \"emocao_emoji\": \"\\ud83d\\ude0a\", \"emocao_cor\": \"#FFD700\", \"intensidade\": 8.0, \"humor_geral\": 9.0, \"valencia\": 0.9, \"tags\": [], \"palavras\": 2, \"sentimento_detectado\": \"neutro\", \"privado\": true, \"data\": \"2026-07-21T03:51:49.288910\"}",
+      "categoria": "alegria",
+      "criado_em": "2026-07-21T03:51:49.294913",
+      "atualizado_em": "2026-07-21T03:51:49.294913"
+    },
+    {
+      "id": "eac7dcef",
+      "user_id": "41f840c2",
+      "nome": "Diário 41f840c2",
+      "valor": "neutro",
+      "dados": "{\"id\": \"22de6133\", \"user_id\": \"41f840c2\", \"texto\": \"Me sentindo ansioso\", \"emocao_principal\": \"neutro\", \"emocao_emoji\": \"\\ud83d\\ude10\", \"emocao_cor\": \"#C0C0C0\", \"intensidade\": 6.0, \"humor_geral\": 5.0, \"valencia\": 0.5, \"tags\": [], \"palavras\": 3, \"sentimento_detectado\": \"negativo\", \"privado\": true, \"data\": \"2026-07-21T03:52:16.349773\"}",
+      "categoria": "neutro",
+      "criado_em": "2026-07-21T03:52:16.354482",
+      "atualizado_em": "2026-07-21T03:52:16.354482"
+    },
+    {
+      "id": "aaf9c3e4",
+      "user_id": "987e4d16",
+      "nome": "Diário 987e4d16",
+      "valor": "alegria",
+      "dados": "{\"id\": \"b2ef639c\", \"user_id\": \"987e4d16\", \"texto\": \"Teste banco\", \"emocao_principal\": \"alegria\", \"emocao_emoji\": \"\\ud83d\\ude0a\", \"emocao_cor\": \"#FFD700\", \"intensidade\": 8.0, \"humor_geral\": 9.0, \"valencia\": 0.9, \"tags\": [], \"palavras\": 2, \"sentimento_detectado\": \"neutro\", \"privado\": true, \"data\": \"2026-07-21T03:53:01.026545\"}",
+      "categoria": "alegria",
+      "criado_em": "2026-07-21T03:53:01.031737",
+      "atualizado_em": "2026-07-21T03:53:01.031737"
+    },
+    {
+      "id": "1e7779df",
+      "user_id": "5e588302",
+      "nome": "Diário 5e588302",
+      "valor": "neutro",
+      "dados": "{\"id\": \"801bd316\", \"user_id\": \"5e588302\", \"texto\": \"Me sentindo ansioso\", \"emocao_principal\": \"neutro\", \"emocao_emoji\": \"\\ud83d\\ude10\", \"emocao_cor\": \"#C0C0C0\", \"intensidade\": 6.0, \"humor_geral\": 5.0, \"valencia\": 0.5, \"tags\": [], \"palavras\": 3, \"sentimento_detectado\": \"negativo\", \"privado\": true, \"data\": \"2026-07-21T03:53:29.109564\"}",
+      "categoria": "neutro",
+      "criado_em": "2026-07-21T03:53:29.116048",
+      "atualizado_em": "2026-07-21T03:53:29.116048"
+    },
+    {
+      "id": "fd8f24d3",
+      "user_id": "fcbc1a4f",
+      "nome": "Diário fcbc1a4f",
+      "valor": "alegria",
+      "dados": "{\"id\": \"081aad6e\", \"user_id\": \"fcbc1a4f\", \"texto\": \"Teste banco\", \"emocao_principal\": \"alegria\", \"emocao_emoji\": \"\\ud83d\\ude0a\", \"emocao_cor\": \"#FFD700\", \"intensidade\": 8.0, \"humor_geral\": 9.0, \"valencia\": 0.9, \"tags\": [], \"palavras\": 2, \"sentimento_detectado\": \"neutro\", \"privado\": true, \"data\": \"2026-07-21T03:57:48.401077\"}",
+      "categoria": "alegria",
+      "criado_em": "2026-07-21T03:57:48.404475",
+      "atualizado_em": "2026-07-21T03:57:48.404475"
+    },
+    {
+      "id": "21497ae8",
+      "user_id": "ec984b4d",
+      "nome": "Diário ec984b4d",
+      "valor": "neutro",
+      "dados": "{\"id\": \"cac637ca\", \"user_id\": \"ec984b4d\", \"texto\": \"Me sentindo ansioso\", \"emocao_principal\": \"neutro\", \"emocao_emoji\": \"\\ud83d\\ude10\", \"emocao_cor\": \"#C0C0C0\", \"intensidade\": 6.0, \"humor_geral\": 5.0, \"valencia\": 0.5, \"tags\": [], \"palavras\": 3, \"sentimento_detectado\": \"negativo\", \"privado\": true, \"data\": \"2026-07-21T03:58:15.918356\"}",
+      "categoria": "neutro",
+      "criado_em": "2026-07-21T03:58:15.921444",
+      "atualizado_em": "2026-07-21T03:58:15.921444"
+    },
+    {
+      "id": "f8ed8d6e",
+      "user_id": "604ecd21",
+      "nome": "Diário 604ecd21",
+      "valor": "alegria",
+      "dados": "{\"id\": \"9976da1e\", \"user_id\": \"604ecd21\", \"texto\": \"Teste banco\", \"emocao_principal\": \"alegria\", \"emocao_emoji\": \"\\ud83d\\ude0a\", \"emocao_cor\": \"#FFD700\", \"intensidade\": 8.0, \"humor_geral\": 9.0, \"valencia\": 0.9, \"tags\": [], \"palavras\": 2, \"sentimento_detectado\": \"neutro\", \"privado\": true, \"data\": \"2026-07-21T04:00:49.018415\"}",
+      "categoria": "alegria",
+      "criado_em": "2026-07-21T04:00:49.036941",
+      "atualizado_em": "2026-07-21T04:00:49.036941"
+    },
+    {
+      "id": "1e8ae91a",
+      "user_id": "7efbf682",
+      "nome": "Diário 7efbf682",
+      "valor": "neutro",
+      "dados": "{\"id\": \"4968090a\", \"user_id\": \"7efbf682\", \"texto\": \"Me sentindo ansioso\", \"emocao_principal\": \"neutro\", \"emocao_emoji\": \"\\ud83d\\ude10\", \"emocao_cor\": \"#C0C0C0\", \"intensidade\": 6.0, \"humor_geral\": 5.0, \"valencia\": 0.5, \"tags\": [], \"palavras\": 3, \"sentimento_detectado\": \"negativo\", \"privado\": true, \"data\": \"2026-07-21T04:01:19.982021\"}",
+      "categoria": "neutro",
+      "criado_em": "2026-07-21T04:01:19.986090",
+      "atualizado_em": "2026-07-21T04:01:19.986090"
+    },
+    {
+      "id": "92f98d59",
+      "user_id": "albert",
+      "nome": "Diário albert",
+      "valor": "alegria",
+      "dados": "{\"id\": \"1f6ea992\", \"user_id\": \"albert\", \"texto\": \"Sistema 100% auditado e funcionando!\", \"emocao_principal\": \"alegria\", \"emocao_emoji\": \"\\ud83d\\ude0a\", \"emocao_cor\": \"#FFD700\", \"intensidade\": 9.0, \"humor_geral\": 9.0, \"valencia\": 0.9, \"tags\": [], \"palavras\": 5, \"sentimento_detectado\": \"neutro\", \"privado\": true, \"data\": \"2026-07-21T04:06:34.532837\"}",
+      "categoria": "alegria",
+      "criado_em": "2026-07-21T04:06:34.707506",
+      "atualizado_em": "2026-07-21T04:06:34.707506"
+    },
+    {
+      "id": "5dde85c2",
+      "user_id": "albert",
+      "nome": "Diário albert",
+      "valor": "alegria",
+      "dados": "{\"id\": \"c0cc8965\", \"user_id\": \"albert\", \"texto\": \"Sistema 100% auditado e funcionando!\", \"emocao_principal\": \"alegria\", \"emocao_emoji\": \"\\ud83d\\ude0a\", \"emocao_cor\": \"#FFD700\", \"intensidade\": 9.0, \"humor_geral\": 9.0, \"valencia\": 0.9, \"tags\": [], \"palavras\": 5, \"sentimento_detectado\": \"neutro\", \"privado\": true, \"data\": \"2026-07-21T04:08:57.741605\"}",
+      "categoria": "alegria",
+      "criado_em": "2026-07-21T04:08:57.760622",
+      "atualizado_em": "2026-07-21T04:08:57.760622"
+    },
+    {
+      "id": "088b3b73",
+      "user_id": "albert",
+      "nome": "Diário albert",
+      "valor": "alegria",
+      "dados": "{\"id\": \"a4ea5ca3\", \"user_id\": \"albert\", \"texto\": \"Sistema 100% auditado e funcionando!\", \"emocao_principal\": \"alegria\", \"emocao_emoji\": \"\\ud83d\\ude0a\", \"emocao_cor\": \"#FFD700\", \"intensidade\": 9.0, \"humor_geral\": 9.0, \"valencia\": 0.9, \"tags\": [], \"palavras\": 5, \"sentimento_detectado\": \"neutro\", \"privado\": true, \"data\": \"2026-07-21T04:18:37.327541\"}",
+      "categoria": "alegria",
+      "criado_em": "2026-07-21T04:18:37.323065",
+      "atualizado_em": "2026-07-21T04:18:37.323065"
+    }
+  ],
+  "agenda_sessoes": [
+    {
+      "id": "1d278132",
+      "user_id": "pac001",
+      "nome": "Sessão pac001-psi001",
+      "valor": "2026-08-01T14:00:00",
+      "dados": "{\"id\": \"a672bb84\", \"paciente_id\": \"pac001\", \"terapeuta_id\": \"psi001\", \"data_hora\": \"2026-08-01T14:00:00\", \"duracao_minutos\": 50, \"modalidade\": \"online\", \"status\": \"agendada\", \"observacoes\": \"\", \"criado_em\": \"2026-07-21T03:22:57.757022\", \"lembrete_enviado\": false}",
+      "categoria": "agendada",
+      "criado_em": "2026-07-21T03:22:57.763073",
+      "atualizado_em": "2026-07-21T03:22:57.763073"
+    },
+    {
+      "id": "33cabd10",
+      "user_id": "pac001",
+      "nome": "Sessão pac001-psi001",
+      "valor": "2026-08-01T14:00:00",
+      "dados": "{\"id\": \"eba3cedc\", \"paciente_id\": \"pac001\", \"terapeuta_id\": \"psi001\", \"data_hora\": \"2026-08-01T14:00:00\", \"duracao_minutos\": 50, \"modalidade\": \"online\", \"status\": \"agendada\", \"observacoes\": \"\", \"criado_em\": \"2026-07-21T03:29:53.098882\", \"lembrete_enviado\": false}",
+      "categoria": "agendada",
+      "criado_em": "2026-07-21T03:29:53.101366",
+      "atualizado_em": "2026-07-21T03:29:53.101366"
+    },
+    {
+      "id": "f1b7faf1",
+      "user_id": "pac001",
+      "nome": "Sessão pac001-psi001",
+      "valor": "2026-08-01T14:00:00",
+      "dados": "{\"id\": \"77effd74\", \"paciente_id\": \"pac001\", \"terapeuta_id\": \"psi001\", \"data_hora\": \"2026-08-01T14:00:00\", \"duracao_minutos\": 50, \"modalidade\": \"online\", \"status\": \"agendada\", \"observacoes\": \"\", \"criado_em\": \"2026-07-21T03:39:48.553142\", \"lembrete_enviado\": false}",
+      "categoria": "agendada",
+      "criado_em": "2026-07-21T03:39:48.561006",
+      "atualizado_em": "2026-07-21T03:39:48.561006"
+    },
+    {
+      "id": "968f1869",
+      "user_id": "pac_db",
+      "nome": "Sessão pac_db-6b3606f8",
+      "valor": "2026-09-01T10:00:00",
+      "dados": "{\"id\": \"1574f6cd\", \"paciente_id\": \"pac_db\", \"terapeuta_id\": \"6b3606f8\", \"data_hora\": \"2026-09-01T10:00:00\", \"duracao_minutos\": 50, \"modalidade\": \"online\", \"status\": \"agendada\", \"observacoes\": \"\", \"criado_em\": \"2026-07-21T03:44:13.070529\", \"lembrete_enviado\": false}",
+      "categoria": "agendada",
+      "criado_em": "2026-07-21T03:44:13.078998",
+      "atualizado_em": "2026-07-21T03:44:13.078998"
+    },
+    {
+      "id": "32e82bc1",
+      "user_id": "pac_db",
+      "nome": "Sessão pac_db-262e3605",
+      "valor": "2026-09-01T10:00:00",
+      "dados": "{\"id\": \"7986808f\", \"paciente_id\": \"pac_db\", \"terapeuta_id\": \"262e3605\", \"data_hora\": \"2026-09-01T10:00:00\", \"duracao_minutos\": 50, \"modalidade\": \"online\", \"status\": \"agendada\", \"observacoes\": \"\", \"criado_em\": \"2026-07-21T03:47:04.581135\", \"lembrete_enviado\": false}",
+      "categoria": "agendada",
+      "criado_em": "2026-07-21T03:47:04.589073",
+      "atualizado_em": "2026-07-21T03:47:04.589073"
+    },
+    {
+      "id": "1d63cf37",
+      "user_id": "pac_db",
+      "nome": "Sessão pac_db-72236af7",
+      "valor": "2026-09-01T10:00:00",
+      "dados": "{\"id\": \"0aee6473\", \"paciente_id\": \"pac_db\", \"terapeuta_id\": \"72236af7\", \"data_hora\": \"2026-09-01T10:00:00\", \"duracao_minutos\": 50, \"modalidade\": \"online\", \"status\": \"agendada\", \"observacoes\": \"\", \"criado_em\": \"2026-07-21T03:51:50.357480\", \"lembrete_enviado\": false}",
+      "categoria": "agendada",
+      "criado_em": "2026-07-21T03:51:50.362305",
+      "atualizado_em": "2026-07-21T03:51:50.362305"
+    },
+    {
+      "id": "575520e3",
+      "user_id": "pac_db",
+      "nome": "Sessão pac_db-987e4d16",
+      "valor": "2026-09-01T10:00:00",
+      "dados": "{\"id\": \"3e55dc01\", \"paciente_id\": \"pac_db\", \"terapeuta_id\": \"987e4d16\", \"data_hora\": \"2026-09-01T10:00:00\", \"duracao_minutos\": 50, \"modalidade\": \"online\", \"status\": \"agendada\", \"observacoes\": \"\", \"criado_em\": \"2026-07-21T03:53:01.996785\", \"lembrete_enviado\": false}",
+      "categoria": "agendada",
+      "criado_em": "2026-07-21T03:53:02.001586",
+      "atualizado_em": "2026-07-21T03:53:02.001586"
+    },
+    {
+      "id": "b3382745",
+      "user_id": "pac_db",
+      "nome": "Sessão pac_db-fcbc1a4f",
+      "valor": "2026-09-01T10:00:00",
+      "dados": "{\"id\": \"fa20d79f\", \"paciente_id\": \"pac_db\", \"terapeuta_id\": \"fcbc1a4f\", \"data_hora\": \"2026-09-01T10:00:00\", \"duracao_minutos\": 50, \"modalidade\": \"online\", \"status\": \"agendada\", \"observacoes\": \"\", \"criado_em\": \"2026-07-21T03:57:49.481216\", \"lembrete_enviado\": false}",
+      "categoria": "agendada",
+      "criado_em": "2026-07-21T03:57:49.484593",
+      "atualizado_em": "2026-07-21T03:57:49.484593"
+    },
+    {
+      "id": "d4ddefb7",
+      "user_id": "pac_db",
+      "nome": "Sessão pac_db-604ecd21",
+      "valor": "2026-09-01T10:00:00",
+      "dados": "{\"id\": \"99cb450b\", \"paciente_id\": \"pac_db\", \"terapeuta_id\": \"604ecd21\", \"data_hora\": \"2026-09-01T10:00:00\", \"duracao_minutos\": 50, \"modalidade\": \"online\", \"status\": \"agendada\", \"observacoes\": \"\", \"criado_em\": \"2026-07-21T04:00:50.028700\", \"lembrete_enviado\": false}",
+      "categoria": "agendada",
+      "criado_em": "2026-07-21T04:00:50.032010",
+      "atualizado_em": "2026-07-21T04:00:50.032010"
+    },
+    {
+      "id": "52134b68",
+      "user_id": "albert",
+      "nome": "Sessão albert-albert_psi",
+      "valor": "2026-08-01T10:00:00",
+      "dados": "{\"id\": \"dae1492c\", \"paciente_id\": \"albert\", \"terapeuta_id\": \"albert_psi\", \"data_hora\": \"2026-08-01T10:00:00\", \"duracao_minutos\": 50, \"modalidade\": \"online\", \"status\": \"agendada\", \"observacoes\": \"\", \"criado_em\": \"2026-07-21T04:06:35.361046\", \"lembrete_enviado\": false}",
+      "categoria": "agendada",
+      "criado_em": "2026-07-21T04:06:35.364074",
+      "atualizado_em": "2026-07-21T04:06:35.364074"
+    },
+    {
+      "id": "69b74f47",
+      "user_id": "albert",
+      "nome": "Sessão albert-albert_psi",
+      "valor": "2026-08-01T10:00:00",
+      "dados": "{\"id\": \"7566d95d\", \"paciente_id\": \"albert\", \"terapeuta_id\": \"albert_psi\", \"data_hora\": \"2026-08-01T10:00:00\", \"duracao_minutos\": 50, \"modalidade\": \"online\", \"status\": \"agendada\", \"observacoes\": \"\", \"criado_em\": \"2026-07-21T04:08:58.416426\", \"lembrete_enviado\": false}",
+      "categoria": "agendada",
+      "criado_em": "2026-07-21T04:08:58.419406",
+      "atualizado_em": "2026-07-21T04:08:58.419406"
+    },
+    {
+      "id": "731cd89f",
+      "user_id": "albert",
+      "nome": "Sessão albert-albert_psi",
+      "valor": "2026-08-01T10:00:00",
+      "dados": "{\"id\": \"d7a9367e\", \"paciente_id\": \"albert\", \"terapeuta_id\": \"albert_psi\", \"data_hora\": \"2026-08-01T10:00:00\", \"duracao_minutos\": 50, \"modalidade\": \"online\", \"status\": \"agendada\", \"observacoes\": \"\", \"criado_em\": \"2026-07-21T04:18:37.998925\", \"lembrete_enviado\": false}",
+      "categoria": "agendada",
+      "criado_em": "2026-07-21T04:18:37.994649",
+      "atualizado_em": "2026-07-21T04:18:37.994649"
+    },
+    {
+      "id": "2ffbbaad",
+      "user_id": "1cb14f49",
+      "nome": "Sessão 1cb14f49-2cdc7b8a",
+      "valor": "2026-09-15T14:00:00",
+      "dados": "{\"id\": \"2e9ec997\", \"paciente_id\": \"1cb14f49\", \"terapeuta_id\": \"2cdc7b8a\", \"data_hora\": \"2026-09-15T14:00:00\", \"duracao_minutos\": 50, \"modalidade\": \"online\", \"status\": \"agendada\", \"observacoes\": \"\", \"criado_em\": \"2026-07-21T04:57:57.028189\", \"lembrete_enviado\": false}",
+      "categoria": "agendada",
+      "criado_em": "2026-07-21T04:57:57.031284",
+      "atualizado_em": "2026-07-21T04:57:57.031284"
+    },
+    {
+      "id": "349516ac",
+      "user_id": "cafb765b",
+      "nome": "Sessão cafb765b-5e74eadd",
+      "valor": "2026-09-15T14:00:00",
+      "dados": "{\"id\": \"f03a29da\", \"paciente_id\": \"cafb765b\", \"terapeuta_id\": \"5e74eadd\", \"data_hora\": \"2026-09-15T14:00:00\", \"duracao_minutos\": 50, \"modalidade\": \"online\", \"status\": \"agendada\", \"observacoes\": \"\", \"criado_em\": \"2026-07-21T05:05:39.678276\", \"lembrete_enviado\": false}",
+      "categoria": "agendada",
+      "criado_em": "2026-07-21T05:05:39.681428",
+      "atualizado_em": "2026-07-21T05:05:39.681428"
+    },
+    {
+      "id": "4c11963c",
+      "user_id": "b013769a",
+      "nome": "Sessão b013769a-476a4d47",
+      "valor": "2026-09-15T14:00:00",
+      "dados": "{\"id\": \"b5608150\", \"paciente_id\": \"b013769a\", \"terapeuta_id\": \"476a4d47\", \"data_hora\": \"2026-09-15T14:00:00\", \"duracao_minutos\": 50, \"modalidade\": \"online\", \"status\": \"agendada\", \"observacoes\": \"\", \"criado_em\": \"2026-07-21T05:11:53.415684\", \"lembrete_enviado\": false}",
+      "categoria": "agendada",
+      "criado_em": "2026-07-21T05:11:53.419037",
+      "atualizado_em": "2026-07-21T05:11:53.419037"
+    },
+    {
+      "id": "59b76744",
+      "user_id": "fc2bac69",
+      "nome": "Sessão fc2bac69-a21b15f7",
+      "valor": "2026-09-15T14:00:00",
+      "dados": "{\"id\": \"2b65d1c9\", \"paciente_id\": \"fc2bac69\", \"terapeuta_id\": \"a21b15f7\", \"data_hora\": \"2026-09-15T14:00:00\", \"duracao_minutos\": 50, \"modalidade\": \"online\", \"status\": \"agendada\", \"observacoes\": \"\", \"criado_em\": \"2026-07-21T05:31:38.309176\", \"lembrete_enviado\": false}",
+      "categoria": "agendada",
+      "criado_em": "2026-07-21T05:31:38.312938",
+      "atualizado_em": "2026-07-21T05:31:38.312938"
+    }
+  ],
+  "chat_ia_conversas": [
+    {
+      "id": "7db09fd5",
+      "user_id": "test",
+      "nome": "Chat test",
+      "valor": "Ola como vai",
+      "dados": "{\"mensagem\": \"Ola como vai\", \"resposta\": \"Obrigado por compartilhar comigo. Estou aqui para te ouvir. Me conta mais sobre o que voce esta sentindo? \\ud83e\\udd17\", \"modelo\": \"fallback\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T04:28:44.146708",
+      "atualizado_em": "2026-07-16T04:28:44.146708"
+    },
+    {
+      "id": "4cc3cd3f",
+      "user_id": "albert",
+      "nome": "Chat albert",
+      "valor": "Estou ansioso hoje",
+      "dados": "{\"mensagem\": \"Estou ansioso hoje\", \"resposta\": \"A ansiedade pode ser muito desconfortavel. Tente: inspire por 4s, segure 4s, expire 4s. Repita 4 vezes. Como esta se sentindo agora? \\ud83c\\udf2c\\ufe0f\", \"modelo\": \"fallback\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T05:45:04.228683",
+      "atualizado_em": "2026-07-16T05:45:04.228683"
+    },
+    {
+      "id": "a78e50cc",
+      "user_id": "test",
+      "nome": "Chat test",
+      "valor": "Ola",
+      "dados": "{\"mensagem\": \"Ola\", \"resposta\": \"Obrigado por compartilhar comigo. Estou aqui para te ouvir. Me conta mais sobre o que voce esta sentindo? \\ud83e\\udd17\", \"modelo\": \"fallback\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T06:36:17.220303",
+      "atualizado_em": "2026-07-16T06:36:17.220303"
+    },
+    {
+      "id": "8bea8745",
+      "user_id": "test",
+      "nome": "Chat test",
+      "valor": "Ola estou ansioso",
+      "dados": "{\"mensagem\": \"Ola estou ansioso\", \"resposta\": \"A ansiedade pode ser muito desconfortavel. Tente: inspire por 4s, segure 4s, expire 4s. Repita 4 vezes. Como esta se sentindo agora? \\ud83c\\udf2c\\ufe0f\", \"modelo\": \"fallback\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T06:36:44.511017",
+      "atualizado_em": "2026-07-16T06:36:44.511017"
+    },
+    {
+      "id": "d6cd6b9d",
+      "user_id": "test",
+      "nome": "Chat test",
+      "valor": "Ola teste",
+      "dados": "{\"mensagem\": \"Ola teste\", \"resposta\": \"Obrigado por compartilhar comigo. Estou aqui para te ouvir. Me conta mais sobre o que voce esta sentindo? \\ud83e\\udd17\", \"modelo\": \"fallback\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T06:39:10.184079",
+      "atualizado_em": "2026-07-16T06:39:10.184079"
+    },
+    {
+      "id": "5bc60a00",
+      "user_id": "test",
+      "nome": "Chat test",
+      "valor": "Ola",
+      "dados": "{\"mensagem\": \"Ola\", \"resposta\": \"Obrigado por compartilhar comigo. Estou aqui para te ouvir. Me conta mais sobre o que voce esta sentindo? \\ud83e\\udd17\", \"modelo\": \"fallback\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T06:39:40.227022",
+      "atualizado_em": "2026-07-16T06:39:40.227022"
+    },
+    {
+      "id": "d441f526",
+      "user_id": "test",
+      "nome": "Chat test",
+      "valor": "Estou ansioso hoje",
+      "dados": "{\"mensagem\": \"Estou ansioso hoje\", \"resposta\": \"A ansiedade pode ser muito desconfortavel. Tente: inspire por 4s, segure 4s, expire 4s. Repita 4 vezes. Como esta se sentindo agora? \\ud83c\\udf2c\\ufe0f\", \"modelo\": \"fallback\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T06:39:41.112060",
+      "atualizado_em": "2026-07-16T06:39:41.112060"
+    }
+  ],
+  "multi_llm_logs": [
+    {
+      "id": "703de9d9",
+      "user_id": "test",
+      "nome": "Chat test",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Ola\", \"modelo\": \"mistral-small\", \"crise\": false}",
+      "categoria": "",
+      "criado_em": "2026-07-16T06:36:20.343538",
+      "atualizado_em": "2026-07-16T06:36:20.343538"
+    },
+    {
+      "id": "7378e686",
+      "user_id": "test",
+      "nome": "Chat test",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Ola teste\", \"modelo\": \"mistral-small\", \"crise\": false}",
+      "categoria": "",
+      "criado_em": "2026-07-16T06:39:13.188827",
+      "atualizado_em": "2026-07-16T06:39:13.188827"
+    },
+    {
+      "id": "5b4ca3dd",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Ola\", \"modelo\": \"mistral-small\", \"crise\": false}",
+      "categoria": "",
+      "criado_em": "2026-07-16T07:46:16.547445",
+      "atualizado_em": "2026-07-16T07:46:16.547445"
+    },
+    {
+      "id": "f3fc4621",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Ola\", \"modelo\": \"mistral-small\", \"crise\": false}",
+      "categoria": "",
+      "criado_em": "2026-07-16T07:52:23.026681",
+      "atualizado_em": "2026-07-16T07:52:23.026681"
+    },
+    {
+      "id": "969b01b1",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Ola\", \"modelo\": \"mistral-small\", \"crise\": false}",
+      "categoria": "",
+      "criado_em": "2026-07-16T07:55:54.002157",
+      "atualizado_em": "2026-07-16T07:55:54.002157"
+    },
+    {
+      "id": "13169de0",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Ola\", \"modelo\": \"mistral-small\", \"crise\": false}",
+      "categoria": "",
+      "criado_em": "2026-07-16T16:13:51.571843",
+      "atualizado_em": "2026-07-16T16:13:51.571843"
+    },
+    {
+      "id": "6c0f1a05",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Ola\", \"modelo\": \"mistral-small\", \"crise\": false}",
+      "categoria": "",
+      "criado_em": "2026-07-16T16:15:17.391324",
+      "atualizado_em": "2026-07-16T16:15:17.391324"
+    },
+    {
+      "id": "85cddc6b",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Ola\", \"modelo\": \"mistral-small\", \"crise\": false}",
+      "categoria": "",
+      "criado_em": "2026-07-16T17:20:00.019026",
+      "atualizado_em": "2026-07-16T17:20:00.019026"
+    }
+  ],
+  "prontuario_pacientes": [
+    {
+      "id": "dcd48db0",
+      "user_id": "psi001",
+      "nome": "Paciente Teste",
+      "valor": "ff2c2f1c",
+      "dados": "{\"id\": \"ff2c2f1c\", \"nome\": \"Paciente Teste\", \"data_nascimento\": \"1990-01-01\", \"terapeuta_id\": \"psi001\", \"queixa_principal\": \"\", \"historico_familiar\": \"\", \"medicamentos\": \"\", \"cid10\": \"\", \"status\": \"ativo\", \"criado_em\": \"2026-07-21T03:22:58.800638\"}",
+      "categoria": "",
+      "criado_em": "2026-07-21T03:22:58.806749",
+      "atualizado_em": "2026-07-21T03:22:58.806749"
+    },
+    {
+      "id": "03c99977",
+      "user_id": "psi001",
+      "nome": "Paciente Teste",
+      "valor": "f16d563a",
+      "dados": "{\"id\": \"f16d563a\", \"nome\": \"Paciente Teste\", \"data_nascimento\": \"1990-01-01\", \"terapeuta_id\": \"psi001\", \"queixa_principal\": \"\", \"historico_familiar\": \"\", \"medicamentos\": \"\", \"cid10\": \"\", \"status\": \"ativo\", \"criado_em\": \"2026-07-21T03:29:54.095265\"}",
+      "categoria": "",
+      "criado_em": "2026-07-21T03:29:54.099001",
+      "atualizado_em": "2026-07-21T03:29:54.099001"
+    },
+    {
+      "id": "0c4c2a31",
+      "user_id": "psi001",
+      "nome": "Paciente Teste",
+      "valor": "9f614059",
+      "dados": "{\"id\": \"9f614059\", \"nome\": \"Paciente Teste\", \"data_nascimento\": \"1990-01-01\", \"terapeuta_id\": \"psi001\", \"queixa_principal\": \"\", \"historico_familiar\": \"\", \"medicamentos\": \"\", \"cid10\": \"\", \"status\": \"ativo\", \"criado_em\": \"2026-07-21T03:39:49.599531\"}",
+      "categoria": "",
+      "criado_em": "2026-07-21T03:39:49.607372",
+      "atualizado_em": "2026-07-21T03:39:49.607372"
+    },
+    {
+      "id": "884d2226",
+      "user_id": "6b3606f8",
+      "nome": "Paciente DB Test",
+      "valor": "e3f8e467",
+      "dados": "{\"id\": \"e3f8e467\", \"nome\": \"Paciente DB Test\", \"data_nascimento\": \"1990-01-01\", \"terapeuta_id\": \"6b3606f8\", \"queixa_principal\": \"\", \"historico_familiar\": \"\", \"medicamentos\": \"\", \"cid10\": \"\", \"status\": \"ativo\", \"criado_em\": \"2026-07-21T03:44:12.734230\"}",
+      "categoria": "",
+      "criado_em": "2026-07-21T03:44:12.742106",
+      "atualizado_em": "2026-07-21T03:44:12.742106"
+    },
+    {
+      "id": "75e5e6b3",
+      "user_id": "262e3605",
+      "nome": "Paciente DB Test",
+      "valor": "e628e72a",
+      "dados": "{\"id\": \"e628e72a\", \"nome\": \"Paciente DB Test\", \"data_nascimento\": \"1990-01-01\", \"terapeuta_id\": \"262e3605\", \"queixa_principal\": \"\", \"historico_familiar\": \"\", \"medicamentos\": \"\", \"cid10\": \"\", \"status\": \"ativo\", \"criado_em\": \"2026-07-21T03:47:04.227254\"}",
+      "categoria": "",
+      "criado_em": "2026-07-21T03:47:04.235424",
+      "atualizado_em": "2026-07-21T03:47:04.235424"
+    },
+    {
+      "id": "6c324e8e",
+      "user_id": "72236af7",
+      "nome": "Paciente DB Test",
+      "valor": "e062ec4a",
+      "dados": "{\"id\": \"e062ec4a\", \"nome\": \"Paciente DB Test\", \"data_nascimento\": \"1990-01-01\", \"terapeuta_id\": \"72236af7\", \"queixa_principal\": \"\", \"historico_familiar\": \"\", \"medicamentos\": \"\", \"cid10\": \"\", \"status\": \"ativo\", \"criado_em\": \"2026-07-21T03:51:49.960920\"}",
+      "categoria": "",
+      "criado_em": "2026-07-21T03:51:49.965784",
+      "atualizado_em": "2026-07-21T03:51:49.965784"
+    },
+    {
+      "id": "0eedb49f",
+      "user_id": "987e4d16",
+      "nome": "Paciente DB Test",
+      "valor": "63299a7d",
+      "dados": "{\"id\": \"63299a7d\", \"nome\": \"Paciente DB Test\", \"data_nascimento\": \"1990-01-01\", \"terapeuta_id\": \"987e4d16\", \"queixa_principal\": \"\", \"historico_familiar\": \"\", \"medicamentos\": \"\", \"cid10\": \"\", \"status\": \"ativo\", \"criado_em\": \"2026-07-21T03:53:01.675861\"}",
+      "categoria": "",
+      "criado_em": "2026-07-21T03:53:01.680536",
+      "atualizado_em": "2026-07-21T03:53:01.680536"
+    },
+    {
+      "id": "37610618",
+      "user_id": "fcbc1a4f",
+      "nome": "Paciente DB Test",
+      "valor": "1459b6b0",
+      "dados": "{\"id\": \"1459b6b0\", \"nome\": \"Paciente DB Test\", \"data_nascimento\": \"1990-01-01\", \"terapeuta_id\": \"fcbc1a4f\", \"queixa_principal\": \"\", \"historico_familiar\": \"\", \"medicamentos\": \"\", \"cid10\": \"\", \"status\": \"ativo\", \"criado_em\": \"2026-07-21T03:57:49.165860\"}",
+      "categoria": "",
+      "criado_em": "2026-07-21T03:57:49.169031",
+      "atualizado_em": "2026-07-21T03:57:49.169031"
+    },
+    {
+      "id": "bd87fcc8",
+      "user_id": "604ecd21",
+      "nome": "Paciente DB Test",
+      "valor": "3cd721af",
+      "dados": "{\"id\": \"3cd721af\", \"nome\": \"Paciente DB Test\", \"data_nascimento\": \"1990-01-01\", \"terapeuta_id\": \"604ecd21\", \"queixa_principal\": \"\", \"historico_familiar\": \"\", \"medicamentos\": \"\", \"cid10\": \"\", \"status\": \"ativo\", \"criado_em\": \"2026-07-21T04:00:49.703829\"}",
+      "categoria": "",
+      "criado_em": "2026-07-21T04:00:49.706949",
+      "atualizado_em": "2026-07-21T04:00:49.706949"
+    },
+    {
+      "id": "f3947199",
+      "user_id": "2cdc7b8a",
+      "nome": "Joao Silva",
+      "valor": "1cb14f49",
+      "dados": "{\"id\": \"1cb14f49\", \"nome\": \"Joao Silva\", \"data_nascimento\": \"1990-05-15\", \"terapeuta_id\": \"2cdc7b8a\", \"queixa_principal\": \"\", \"historico_familiar\": \"\", \"medicamentos\": \"\", \"cid10\": \"\", \"status\": \"ativo\", \"criado_em\": \"2026-07-21T04:57:56.538013\"}",
+      "categoria": "",
+      "criado_em": "2026-07-21T04:57:56.541500",
+      "atualizado_em": "2026-07-21T04:57:56.541500"
+    },
+    {
+      "id": "a3a8fc15",
+      "user_id": "5e74eadd",
+      "nome": "Joao Silva",
+      "valor": "cafb765b",
+      "dados": "{\"id\": \"cafb765b\", \"nome\": \"Joao Silva\", \"data_nascimento\": \"1990-05-15\", \"terapeuta_id\": \"5e74eadd\", \"queixa_principal\": \"\", \"historico_familiar\": \"\", \"medicamentos\": \"\", \"cid10\": \"\", \"status\": \"ativo\", \"criado_em\": \"2026-07-21T05:05:39.364177\"}",
+      "categoria": "",
+      "criado_em": "2026-07-21T05:05:39.367541",
+      "atualizado_em": "2026-07-21T05:05:39.367541"
+    },
+    {
+      "id": "e29617ac",
+      "user_id": "476a4d47",
+      "nome": "Joao Silva",
+      "valor": "b013769a",
+      "dados": "{\"id\": \"b013769a\", \"nome\": \"Joao Silva\", \"data_nascimento\": \"1990-05-15\", \"terapeuta_id\": \"476a4d47\", \"queixa_principal\": \"\", \"historico_familiar\": \"\", \"medicamentos\": \"\", \"cid10\": \"\", \"status\": \"ativo\", \"criado_em\": \"2026-07-21T05:11:52.458587\"}",
+      "categoria": "",
+      "criado_em": "2026-07-21T05:11:52.462035",
+      "atualizado_em": "2026-07-21T05:11:52.462035"
+    },
+    {
+      "id": "9eb167bf",
+      "user_id": "a21b15f7",
+      "nome": "Joao Silva",
+      "valor": "fc2bac69",
+      "dados": "{\"id\": \"fc2bac69\", \"nome\": \"Joao Silva\", \"data_nascimento\": \"1990-05-15\", \"terapeuta_id\": \"a21b15f7\", \"queixa_principal\": \"\", \"historico_familiar\": \"\", \"medicamentos\": \"\", \"cid10\": \"\", \"status\": \"ativo\", \"criado_em\": \"2026-07-21T05:31:37.974518\"}",
+      "categoria": "",
+      "criado_em": "2026-07-21T05:31:37.978387",
+      "atualizado_em": "2026-07-21T05:31:37.978387"
+    }
+  ],
+  "prontuario_evolucoes": [
+    {
+      "id": "c0b3a4af",
+      "user_id": "ff2c2f1c",
+      "nome": "Evolução ff2c2f1c",
+      "valor": "5",
+      "dados": "{\"id\": \"3823e893\", \"paciente_id\": \"ff2c2f1c\", \"terapeuta_id\": \"psi001\", \"formato\": \"SOAP\", \"subjetivo\": \"\", \"objetivo\": \"\", \"avaliacao\": \"\", \"plano\": \"\", \"tecnicas_usadas\": [], \"humor_sessao\": 5, \"data_sessao\": \"2026-07-21T03:22:59.150170\"}",
+      "categoria": "",
+      "criado_em": "2026-07-21T03:22:59.156369",
+      "atualizado_em": "2026-07-21T03:22:59.156369"
+    },
+    {
+      "id": "fc864424",
+      "user_id": "f16d563a",
+      "nome": "Evolução f16d563a",
+      "valor": "5",
+      "dados": "{\"id\": \"28035eaa\", \"paciente_id\": \"f16d563a\", \"terapeuta_id\": \"psi001\", \"formato\": \"SOAP\", \"subjetivo\": \"\", \"objetivo\": \"\", \"avaliacao\": \"\", \"plano\": \"\", \"tecnicas_usadas\": [], \"humor_sessao\": 5, \"data_sessao\": \"2026-07-21T03:29:54.418889\"}",
+      "categoria": "",
+      "criado_em": "2026-07-21T03:29:54.421457",
+      "atualizado_em": "2026-07-21T03:29:54.421457"
+    },
+    {
+      "id": "2afab2d7",
+      "user_id": "9f614059",
+      "nome": "Evolução 9f614059",
+      "valor": "5",
+      "dados": "{\"id\": \"2a9a3be9\", \"paciente_id\": \"9f614059\", \"terapeuta_id\": \"psi001\", \"formato\": \"SOAP\", \"subjetivo\": \"\", \"objetivo\": \"\", \"avaliacao\": \"\", \"plano\": \"\", \"tecnicas_usadas\": [], \"humor_sessao\": 5, \"data_sessao\": \"2026-07-21T03:39:49.923920\"}",
+      "categoria": "",
+      "criado_em": "2026-07-21T03:39:49.932372",
+      "atualizado_em": "2026-07-21T03:39:49.932372"
+    },
+    {
+      "id": "e6b78306",
+      "user_id": "1cb14f49",
+      "nome": "Evolução 1cb14f49",
+      "valor": "5",
+      "dados": "{\"id\": \"5eb1564d\", \"paciente_id\": \"1cb14f49\", \"terapeuta_id\": \"2cdc7b8a\", \"formato\": \"SOAP\", \"subjetivo\": \"\", \"objetivo\": \"\", \"avaliacao\": \"\", \"plano\": \"\", \"tecnicas_usadas\": [], \"humor_sessao\": 5, \"data_sessao\": \"2026-07-21T04:57:57.363206\"}",
+      "categoria": "",
+      "criado_em": "2026-07-21T04:57:57.366576",
+      "atualizado_em": "2026-07-21T04:57:57.366576"
+    },
+    {
+      "id": "3f9bec90",
+      "user_id": "cafb765b",
+      "nome": "Evolução cafb765b",
+      "valor": "5",
+      "dados": "{\"id\": \"bbf592bd\", \"paciente_id\": \"cafb765b\", \"terapeuta_id\": \"5e74eadd\", \"formato\": \"SOAP\", \"subjetivo\": \"\", \"objetivo\": \"\", \"avaliacao\": \"\", \"plano\": \"\", \"tecnicas_usadas\": [], \"humor_sessao\": 5, \"data_sessao\": \"2026-07-21T05:05:40.004383\"}",
+      "categoria": "",
+      "criado_em": "2026-07-21T05:05:40.007853",
+      "atualizado_em": "2026-07-21T05:05:40.007853"
+    },
+    {
+      "id": "39f9b6ec",
+      "user_id": "b013769a",
+      "nome": "Evolução b013769a",
+      "valor": "5",
+      "dados": "{\"id\": \"fbad8c17\", \"paciente_id\": \"b013769a\", \"terapeuta_id\": \"476a4d47\", \"formato\": \"SOAP\", \"subjetivo\": \"\", \"objetivo\": \"\", \"avaliacao\": \"\", \"plano\": \"\", \"tecnicas_usadas\": [], \"humor_sessao\": 5, \"data_sessao\": \"2026-07-21T05:11:57.387980\"}",
+      "categoria": "",
+      "criado_em": "2026-07-21T05:11:57.392427",
+      "atualizado_em": "2026-07-21T05:11:57.392427"
+    },
+    {
+      "id": "1711684a",
+      "user_id": "fc2bac69",
+      "nome": "Evolução fc2bac69",
+      "valor": "5",
+      "dados": "{\"id\": \"3de80ca1\", \"paciente_id\": \"fc2bac69\", \"terapeuta_id\": \"a21b15f7\", \"formato\": \"SOAP\", \"subjetivo\": \"\", \"objetivo\": \"\", \"avaliacao\": \"\", \"plano\": \"\", \"tecnicas_usadas\": [], \"humor_sessao\": 5, \"data_sessao\": \"2026-07-21T05:31:38.633257\"}",
+      "categoria": "",
+      "criado_em": "2026-07-21T05:31:38.642132",
+      "atualizado_em": "2026-07-21T05:31:38.642132"
+    }
+  ],
+  "gad7_clinico": [
+    {
+      "id": "ba83da14",
+      "user_id": "albert",
+      "nome": "GAD7_albert",
+      "valor": "8",
+      "dados": "{\"id\": \"a44f9cb4\", \"user_id\": \"albert\", \"escala\": \"GAD-7\", \"score\": 8, \"score_maximo\": 21, \"nivel\": \"Leve\", \"recomendacao\": \"Monitorar e reavaliar\", \"data\": \"2026-07-16T05:56:12.354568\"}",
+      "categoria": "Leve",
+      "criado_em": "2026-07-16T05:56:12.361670",
+      "atualizado_em": "2026-07-16T05:56:12.361670"
+    },
+    {
+      "id": "55ba74c3",
+      "user_id": "analise",
+      "nome": "GAD7_analise",
+      "valor": "8",
+      "dados": "{\"id\": \"ffe1d835\", \"user_id\": \"analise\", \"escala\": \"GAD-7\", \"score\": 8, \"score_maximo\": 21, \"nivel\": \"Leve\", \"recomendacao\": \"Monitorar e reavaliar\", \"data\": \"2026-07-16T06:55:34.544017\"}",
+      "categoria": "Leve",
+      "criado_em": "2026-07-16T06:55:34.547736",
+      "atualizado_em": "2026-07-16T06:55:34.547736"
+    },
+    {
+      "id": "285ecfb4",
+      "user_id": "pytest",
+      "nome": "GAD7_pytest",
+      "valor": "10",
+      "dados": "{\"id\": \"30115ff8\", \"user_id\": \"pytest\", \"escala\": \"GAD-7\", \"score\": 10, \"score_maximo\": 21, \"nivel\": \"Moderado\", \"recomendacao\": \"Considerar psicoterapia\", \"data\": \"2026-07-16T07:46:06.322949\"}",
+      "categoria": "Moderado",
+      "criado_em": "2026-07-16T07:46:06.326765",
+      "atualizado_em": "2026-07-16T07:46:06.326765"
+    },
+    {
+      "id": "be51d7db",
+      "user_id": "pytest",
+      "nome": "GAD7_pytest",
+      "valor": "10",
+      "dados": "{\"id\": \"854f8c30\", \"user_id\": \"pytest\", \"escala\": \"GAD-7\", \"score\": 10, \"score_maximo\": 21, \"nivel\": \"Moderado\", \"recomendacao\": \"Considerar psicoterapia\", \"data\": \"2026-07-16T07:52:16.489722\"}",
+      "categoria": "Moderado",
+      "criado_em": "2026-07-16T07:52:16.490701",
+      "atualizado_em": "2026-07-16T07:52:16.490701"
+    },
+    {
+      "id": "40368ec8",
+      "user_id": "pytest",
+      "nome": "GAD7_pytest",
+      "valor": "10",
+      "dados": "{\"id\": \"eaec185b\", \"user_id\": \"pytest\", \"escala\": \"GAD-7\", \"score\": 10, \"score_maximo\": 21, \"nivel\": \"Moderado\", \"recomendacao\": \"Considerar psicoterapia\", \"data\": \"2026-07-16T07:55:47.474014\"}",
+      "categoria": "Moderado",
+      "criado_em": "2026-07-16T07:55:47.477697",
+      "atualizado_em": "2026-07-16T07:55:47.477697"
+    },
+    {
+      "id": "83146031",
+      "user_id": "pytest",
+      "nome": "GAD7_pytest",
+      "valor": "10",
+      "dados": "{\"id\": \"46c1d4ef\", \"user_id\": \"pytest\", \"escala\": \"GAD-7\", \"score\": 10, \"score_maximo\": 21, \"nivel\": \"Moderado\", \"recomendacao\": \"Considerar psicoterapia\", \"data\": \"2026-07-16T16:13:44.625034\"}",
+      "categoria": "Moderado",
+      "criado_em": "2026-07-16T16:13:44.627482",
+      "atualizado_em": "2026-07-16T16:13:44.627482"
+    },
+    {
+      "id": "1f85e160",
+      "user_id": "pytest",
+      "nome": "GAD7_pytest",
+      "valor": "10",
+      "dados": "{\"id\": \"df5038ab\", \"user_id\": \"pytest\", \"escala\": \"GAD-7\", \"score\": 10, \"score_maximo\": 21, \"nivel\": \"Moderado\", \"recomendacao\": \"Considerar psicoterapia\", \"data\": \"2026-07-16T16:15:10.461474\"}",
+      "categoria": "Moderado",
+      "criado_em": "2026-07-16T16:15:10.464190",
+      "atualizado_em": "2026-07-16T16:15:10.464190"
+    },
+    {
+      "id": "12c8459e",
+      "user_id": "pytest",
+      "nome": "GAD7_pytest",
+      "valor": "10",
+      "dados": "{\"id\": \"a57b24c5\", \"user_id\": \"pytest\", \"escala\": \"GAD-7\", \"score\": 10, \"score_maximo\": 21, \"nivel\": \"Moderado\", \"recomendacao\": \"Considerar psicoterapia\", \"data\": \"2026-07-16T17:19:53.241289\"}",
+      "categoria": "Moderado",
+      "criado_em": "2026-07-16T17:19:53.247085",
+      "atualizado_em": "2026-07-16T17:19:53.247085"
+    }
+  ],
+  "phq9_clinico": [
+    {
+      "id": "ddcc3740",
+      "user_id": "albert",
+      "nome": "PHQ9_albert",
+      "valor": "9",
+      "dados": "{\"id\": \"3dec3bd5\", \"user_id\": \"albert\", \"escala\": \"PHQ-9\", \"score\": 9, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Leve\", \"recomendacao\": \"Monitorar e reavaliar\"}, \"alerta_suicidio\": false, \"data\": \"2026-07-16T05:56:11.998848\"}",
+      "categoria": "Leve",
+      "criado_em": "2026-07-16T05:56:12.006185",
+      "atualizado_em": "2026-07-16T05:56:12.006185"
+    },
+    {
+      "id": "f280d1eb",
+      "user_id": "t",
+      "nome": "PHQ9_t",
+      "valor": "3",
+      "dados": "{\"id\": \"4ec75887\", \"user_id\": \"t\", \"escala\": \"PHQ-9\", \"score\": 3, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Minimo\", \"recomendacao\": \"Sem depressao significativa\"}, \"alerta_suicidio\": false, \"data\": \"2026-07-16T06:43:24.256374\"}",
+      "categoria": "Minimo",
+      "criado_em": "2026-07-16T06:43:24.258835",
+      "atualizado_em": "2026-07-16T06:43:24.258835"
+    },
+    {
+      "id": "3b3bc85a",
+      "user_id": "analise",
+      "nome": "PHQ9_analise",
+      "valor": "9",
+      "dados": "{\"id\": \"33905e85\", \"user_id\": \"analise\", \"escala\": \"PHQ-9\", \"score\": 9, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Leve\", \"recomendacao\": \"Monitorar e reavaliar\"}, \"alerta_suicidio\": false, \"data\": \"2026-07-16T06:55:33.876871\"}",
+      "categoria": "Leve",
+      "criado_em": "2026-07-16T06:55:33.880528",
+      "atualizado_em": "2026-07-16T06:55:33.880528"
+    },
+    {
+      "id": "021b55eb",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "0",
+      "dados": "{\"id\": \"882e9b7c\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 0, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Minimo\", \"recomendacao\": \"Sem depressao significativa\"}, \"alerta_suicidio\": false, \"data\": \"2026-07-16T07:46:04.317815\"}",
+      "categoria": "Minimo",
+      "criado_em": "2026-07-16T07:46:04.321624",
+      "atualizado_em": "2026-07-16T07:46:04.321624"
+    },
+    {
+      "id": "d0316c6b",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "27",
+      "dados": "{\"id\": \"ba94d73b\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 27, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Grave\", \"recomendacao\": \"Tratamento imediato necessario\"}, \"alerta_suicidio\": true, \"data\": \"2026-07-16T07:46:04.681923\"}",
+      "categoria": "Grave",
+      "criado_em": "2026-07-16T07:46:04.685625",
+      "atualizado_em": "2026-07-16T07:46:04.685625"
+    },
+    {
+      "id": "63db723f",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "3",
+      "dados": "{\"id\": \"a785e07d\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 3, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Minimo\", \"recomendacao\": \"Sem depressao significativa\"}, \"alerta_suicidio\": true, \"data\": \"2026-07-16T07:46:05.068509\"}",
+      "categoria": "Minimo",
+      "criado_em": "2026-07-16T07:46:05.072184",
+      "atualizado_em": "2026-07-16T07:46:05.072184"
+    },
+    {
+      "id": "8f38b4a4",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "11",
+      "dados": "{\"id\": \"a0bff039\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 11, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Moderado\", \"recomendacao\": \"Iniciar plano de tratamento\"}, \"alerta_suicidio\": true, \"data\": \"2026-07-16T07:46:05.487683\"}",
+      "categoria": "Moderado",
+      "criado_em": "2026-07-16T07:46:05.491555",
+      "atualizado_em": "2026-07-16T07:46:05.491555"
+    },
+    {
+      "id": "71e91232",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "0",
+      "dados": "{\"id\": \"871a78cc\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 0, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Minimo\", \"recomendacao\": \"Sem depressao significativa\"}, \"alerta_suicidio\": false, \"data\": \"2026-07-16T07:52:14.544604\"}",
+      "categoria": "Minimo",
+      "criado_em": "2026-07-16T07:52:14.545481",
+      "atualizado_em": "2026-07-16T07:52:14.545481"
+    },
+    {
+      "id": "116a2b45",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "27",
+      "dados": "{\"id\": \"caa23271\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 27, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Grave\", \"recomendacao\": \"Tratamento imediato necessario\"}, \"alerta_suicidio\": true, \"data\": \"2026-07-16T07:52:14.935642\"}",
+      "categoria": "Grave",
+      "criado_em": "2026-07-16T07:52:14.936441",
+      "atualizado_em": "2026-07-16T07:52:14.936441"
+    },
+    {
+      "id": "75dcdb0e",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "3",
+      "dados": "{\"id\": \"2da44c71\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 3, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Minimo\", \"recomendacao\": \"Sem depressao significativa\"}, \"alerta_suicidio\": true, \"data\": \"2026-07-16T07:52:15.312001\"}",
+      "categoria": "Minimo",
+      "criado_em": "2026-07-16T07:52:15.312632",
+      "atualizado_em": "2026-07-16T07:52:15.312632"
+    },
+    {
+      "id": "c7141d23",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "11",
+      "dados": "{\"id\": \"4c70f305\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 11, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Moderado\", \"recomendacao\": \"Iniciar plano de tratamento\"}, \"alerta_suicidio\": true, \"data\": \"2026-07-16T07:52:15.677901\"}",
+      "categoria": "Moderado",
+      "criado_em": "2026-07-16T07:52:15.678779",
+      "atualizado_em": "2026-07-16T07:52:15.678779"
+    },
+    {
+      "id": "a348e216",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "0",
+      "dados": "{\"id\": \"b00325b8\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 0, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Minimo\", \"recomendacao\": \"Sem depressao significativa\"}, \"alerta_suicidio\": false, \"data\": \"2026-07-16T07:55:45.546531\"}",
+      "categoria": "Minimo",
+      "criado_em": "2026-07-16T07:55:45.550436",
+      "atualizado_em": "2026-07-16T07:55:45.550436"
+    },
+    {
+      "id": "3c8332fd",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "27",
+      "dados": "{\"id\": \"5f767989\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 27, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Grave\", \"recomendacao\": \"Tratamento imediato necessario\"}, \"alerta_suicidio\": true, \"data\": \"2026-07-16T07:55:45.916141\"}",
+      "categoria": "Grave",
+      "criado_em": "2026-07-16T07:55:45.919599",
+      "atualizado_em": "2026-07-16T07:55:45.919599"
+    },
+    {
+      "id": "d1ed9e0a",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "3",
+      "dados": "{\"id\": \"abc0e5cc\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 3, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Minimo\", \"recomendacao\": \"Sem depressao significativa\"}, \"alerta_suicidio\": true, \"data\": \"2026-07-16T07:55:46.316930\"}",
+      "categoria": "Minimo",
+      "criado_em": "2026-07-16T07:55:46.320447",
+      "atualizado_em": "2026-07-16T07:55:46.320447"
+    },
+    {
+      "id": "5c511d69",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "11",
+      "dados": "{\"id\": \"dfe2d8d4\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 11, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Moderado\", \"recomendacao\": \"Iniciar plano de tratamento\"}, \"alerta_suicidio\": true, \"data\": \"2026-07-16T07:55:46.686542\"}",
+      "categoria": "Moderado",
+      "criado_em": "2026-07-16T07:55:46.690138",
+      "atualizado_em": "2026-07-16T07:55:46.690138"
+    },
+    {
+      "id": "5786f36c",
+      "user_id": "playwright",
+      "nome": "PHQ9_playwright",
+      "valor": "7",
+      "dados": "{\"id\": \"72cce708\", \"user_id\": \"playwright\", \"escala\": \"PHQ-9\", \"score\": 7, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Leve\", \"recomendacao\": \"Monitorar e reavaliar\"}, \"alerta_suicidio\": false, \"data\": \"2026-07-16T08:06:52.686731\"}",
+      "categoria": "Leve",
+      "criado_em": "2026-07-16T08:06:52.689297",
+      "atualizado_em": "2026-07-16T08:06:52.689297"
+    },
+    {
+      "id": "64780001",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "0",
+      "dados": "{\"id\": \"86c8ea86\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 0, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Minimo\", \"recomendacao\": \"Sem depressao significativa\"}, \"alerta_suicidio\": false, \"data\": \"2026-07-16T16:13:42.643157\"}",
+      "categoria": "Minimo",
+      "criado_em": "2026-07-16T16:13:42.647516",
+      "atualizado_em": "2026-07-16T16:13:42.647516"
+    },
+    {
+      "id": "a32e8175",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "27",
+      "dados": "{\"id\": \"e07d3d5b\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 27, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Grave\", \"recomendacao\": \"Tratamento imediato necessario\"}, \"alerta_suicidio\": true, \"data\": \"2026-07-16T16:13:43.043197\"}",
+      "categoria": "Grave",
+      "criado_em": "2026-07-16T16:13:43.045996",
+      "atualizado_em": "2026-07-16T16:13:43.045996"
+    },
+    {
+      "id": "caf7c9d8",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "3",
+      "dados": "{\"id\": \"a13295af\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 3, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Minimo\", \"recomendacao\": \"Sem depressao significativa\"}, \"alerta_suicidio\": true, \"data\": \"2026-07-16T16:13:43.435385\"}",
+      "categoria": "Minimo",
+      "criado_em": "2026-07-16T16:13:43.437408",
+      "atualizado_em": "2026-07-16T16:13:43.437408"
+    },
+    {
+      "id": "3c9ae38f",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "11",
+      "dados": "{\"id\": \"d45ea71e\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 11, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Moderado\", \"recomendacao\": \"Iniciar plano de tratamento\"}, \"alerta_suicidio\": true, \"data\": \"2026-07-16T16:13:43.825977\"}",
+      "categoria": "Moderado",
+      "criado_em": "2026-07-16T16:13:43.828109",
+      "atualizado_em": "2026-07-16T16:13:43.828109"
+    },
+    {
+      "id": "b4cd0ec0",
+      "user_id": "playwright",
+      "nome": "PHQ9_playwright",
+      "valor": "7",
+      "dados": "{\"id\": \"171f4606\", \"user_id\": \"playwright\", \"escala\": \"PHQ-9\", \"score\": 7, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Leve\", \"recomendacao\": \"Monitorar e reavaliar\"}, \"alerta_suicidio\": false, \"data\": \"2026-07-16T16:14:40.570765\"}",
+      "categoria": "Leve",
+      "criado_em": "2026-07-16T16:14:40.574011",
+      "atualizado_em": "2026-07-16T16:14:40.574011"
+    },
+    {
+      "id": "cee13197",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "0",
+      "dados": "{\"id\": \"684795bb\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 0, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Minimo\", \"recomendacao\": \"Sem depressao significativa\"}, \"alerta_suicidio\": false, \"data\": \"2026-07-16T16:15:07.988897\"}",
+      "categoria": "Minimo",
+      "criado_em": "2026-07-16T16:15:07.992004",
+      "atualizado_em": "2026-07-16T16:15:07.992004"
+    },
+    {
+      "id": "4c72cb67",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "27",
+      "dados": "{\"id\": \"ca144ab8\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 27, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Grave\", \"recomendacao\": \"Tratamento imediato necessario\"}, \"alerta_suicidio\": true, \"data\": \"2026-07-16T16:15:08.607936\"}",
+      "categoria": "Grave",
+      "criado_em": "2026-07-16T16:15:08.615403",
+      "atualizado_em": "2026-07-16T16:15:08.615403"
+    },
+    {
+      "id": "c92efa45",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "3",
+      "dados": "{\"id\": \"1edf8997\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 3, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Minimo\", \"recomendacao\": \"Sem depressao significativa\"}, \"alerta_suicidio\": true, \"data\": \"2026-07-16T16:15:09.040428\"}",
+      "categoria": "Minimo",
+      "criado_em": "2026-07-16T16:15:09.045545",
+      "atualizado_em": "2026-07-16T16:15:09.045545"
+    },
+    {
+      "id": "c136602f",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "11",
+      "dados": "{\"id\": \"4be62e0d\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 11, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Moderado\", \"recomendacao\": \"Iniciar plano de tratamento\"}, \"alerta_suicidio\": true, \"data\": \"2026-07-16T16:15:09.561015\"}",
+      "categoria": "Moderado",
+      "criado_em": "2026-07-16T16:15:09.563216",
+      "atualizado_em": "2026-07-16T16:15:09.563216"
+    },
+    {
+      "id": "382efbfa",
+      "user_id": "playwright",
+      "nome": "PHQ9_playwright",
+      "valor": "7",
+      "dados": "{\"id\": \"41812423\", \"user_id\": \"playwright\", \"escala\": \"PHQ-9\", \"score\": 7, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Leve\", \"recomendacao\": \"Monitorar e reavaliar\"}, \"alerta_suicidio\": false, \"data\": \"2026-07-16T16:16:21.016029\"}",
+      "categoria": "Leve",
+      "criado_em": "2026-07-16T16:16:21.018242",
+      "atualizado_em": "2026-07-16T16:16:21.018242"
+    },
+    {
+      "id": "1177c860",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "0",
+      "dados": "{\"id\": \"d691c96d\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 0, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Minimo\", \"recomendacao\": \"Sem depressao significativa\"}, \"alerta_suicidio\": false, \"data\": \"2026-07-16T17:19:51.179179\"}",
+      "categoria": "Minimo",
+      "criado_em": "2026-07-16T17:19:51.185246",
+      "atualizado_em": "2026-07-16T17:19:51.185246"
+    },
+    {
+      "id": "57d126ca",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "27",
+      "dados": "{\"id\": \"16a09bcc\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 27, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Grave\", \"recomendacao\": \"Tratamento imediato necessario\"}, \"alerta_suicidio\": true, \"data\": \"2026-07-16T17:19:51.572063\"}",
+      "categoria": "Grave",
+      "criado_em": "2026-07-16T17:19:51.577625",
+      "atualizado_em": "2026-07-16T17:19:51.577625"
+    },
+    {
+      "id": "baf62c99",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "3",
+      "dados": "{\"id\": \"f51146a6\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 3, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Minimo\", \"recomendacao\": \"Sem depressao significativa\"}, \"alerta_suicidio\": true, \"data\": \"2026-07-16T17:19:51.975655\"}",
+      "categoria": "Minimo",
+      "criado_em": "2026-07-16T17:19:51.981082",
+      "atualizado_em": "2026-07-16T17:19:51.981082"
+    },
+    {
+      "id": "6045be78",
+      "user_id": "pytest",
+      "nome": "PHQ9_pytest",
+      "valor": "11",
+      "dados": "{\"id\": \"c882cf15\", \"user_id\": \"pytest\", \"escala\": \"PHQ-9\", \"score\": 11, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Moderado\", \"recomendacao\": \"Iniciar plano de tratamento\"}, \"alerta_suicidio\": true, \"data\": \"2026-07-16T17:19:52.427683\"}",
+      "categoria": "Moderado",
+      "criado_em": "2026-07-16T17:19:52.433266",
+      "atualizado_em": "2026-07-16T17:19:52.433266"
+    },
+    {
+      "id": "1a771643",
+      "user_id": "playwright",
+      "nome": "PHQ9_playwright",
+      "valor": "7",
+      "dados": "{\"id\": \"12b8196d\", \"user_id\": \"playwright\", \"escala\": \"PHQ-9\", \"score\": 7, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Leve\", \"recomendacao\": \"Monitorar e reavaliar\"}, \"alerta_suicidio\": false, \"data\": \"2026-07-16T17:20:58.622481\"}",
+      "categoria": "Leve",
+      "criado_em": "2026-07-16T17:20:58.628117",
+      "atualizado_em": "2026-07-16T17:20:58.628117"
+    },
+    {
+      "id": "bba43237",
+      "user_id": "playwright",
+      "nome": "PHQ9_playwright",
+      "valor": "7",
+      "dados": "{\"id\": \"36cee112\", \"user_id\": \"playwright\", \"escala\": \"PHQ-9\", \"score\": 7, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Leve\", \"recomendacao\": \"Monitorar e reavaliar\"}, \"alerta_suicidio\": false, \"data\": \"2026-07-16T17:27:57.876079\"}",
+      "categoria": "Leve",
+      "criado_em": "2026-07-16T17:27:57.878778",
+      "atualizado_em": "2026-07-16T17:27:57.878778"
+    },
+    {
+      "id": "2ffd4cd4",
+      "user_id": "playwright",
+      "nome": "PHQ9_playwright",
+      "valor": "7",
+      "dados": "{\"id\": \"988253fd\", \"user_id\": \"playwright\", \"escala\": \"PHQ-9\", \"score\": 7, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Leve\", \"recomendacao\": \"Monitorar e reavaliar\"}, \"alerta_suicidio\": false, \"data\": \"2026-07-16T17:30:25.785909\"}",
+      "categoria": "Leve",
+      "criado_em": "2026-07-16T17:30:25.789806",
+      "atualizado_em": "2026-07-16T17:30:25.789806"
+    },
+    {
+      "id": "24fe189e",
+      "user_id": "playwright",
+      "nome": "PHQ9_playwright",
+      "valor": "7",
+      "dados": "{\"id\": \"3592115c\", \"user_id\": \"playwright\", \"escala\": \"PHQ-9\", \"score\": 7, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Leve\", \"recomendacao\": \"Monitorar e reavaliar\"}, \"alerta_suicidio\": false, \"data\": \"2026-07-16T17:33:21.627671\"}",
+      "categoria": "Leve",
+      "criado_em": "2026-07-16T17:33:21.631441",
+      "atualizado_em": "2026-07-16T17:33:21.631441"
+    },
+    {
+      "id": "bf9045ba",
+      "user_id": "playwright",
+      "nome": "PHQ9_playwright",
+      "valor": "7",
+      "dados": "{\"id\": \"ce46e779\", \"user_id\": \"playwright\", \"escala\": \"PHQ-9\", \"score\": 7, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Leve\", \"recomendacao\": \"Monitorar e reavaliar\"}, \"alerta_suicidio\": false, \"data\": \"2026-07-16T17:35:32.156331\"}",
+      "categoria": "Leve",
+      "criado_em": "2026-07-16T17:35:32.149468",
+      "atualizado_em": "2026-07-16T17:35:32.149468"
+    },
+    {
+      "id": "bbf34988",
+      "user_id": "playwright",
+      "nome": "PHQ9_playwright",
+      "valor": "7",
+      "dados": "{\"id\": \"0b0009ef\", \"user_id\": \"playwright\", \"escala\": \"PHQ-9\", \"score\": 7, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Leve\", \"recomendacao\": \"Monitorar e reavaliar\"}, \"alerta_suicidio\": false, \"data\": \"2026-07-16T17:40:05.865013\"}",
+      "categoria": "Leve",
+      "criado_em": "2026-07-16T17:40:05.831821",
+      "atualizado_em": "2026-07-16T17:40:05.831821"
+    },
+    {
+      "id": "41ca7b52",
+      "user_id": "anonimo_1784223741013",
+      "nome": "PHQ9_anonimo_1784223741013",
+      "valor": "0",
+      "dados": "{\"id\": \"bb918241\", \"user_id\": \"anonimo_1784223741013\", \"escala\": \"PHQ-9\", \"score\": 0, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Minimo\", \"recomendacao\": \"Sem depressao significativa\"}, \"alerta_suicidio\": false, \"data\": \"2026-07-16T17:42:21.198089\"}",
+      "categoria": "Minimo",
+      "criado_em": "2026-07-16T17:42:21.163267",
+      "atualizado_em": "2026-07-16T17:42:21.163267"
+    },
+    {
+      "id": "8012dad6",
+      "user_id": "playwright",
+      "nome": "PHQ9_playwright",
+      "valor": "7",
+      "dados": "{\"id\": \"0165931c\", \"user_id\": \"playwright\", \"escala\": \"PHQ-9\", \"score\": 7, \"score_maximo\": 27, \"classificacao\": {\"nivel\": \"Leve\", \"recomendacao\": \"Monitorar e reavaliar\"}, \"alerta_suicidio\": false, \"data\": \"2026-07-16T17:42:23.295142\"}",
+      "categoria": "Leve",
+      "criado_em": "2026-07-16T17:42:23.260420",
+      "atualizado_em": "2026-07-16T17:42:23.260420"
+    }
+  ],
+  "chat_ia_v2": [
+    {
+      "id": "bb9fc977",
+      "user_id": "test",
+      "nome": "Chat test",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Estou ansioso\", \"resp\": \"Sinto que voc\\u00ea est\\u00e1 passando por um momento de ansiedade. Vamos praticar juntos uma t\\u00e9cnica de respira\\u00e7\\u00e3o para acalmar o corpo e a mente. Tente isso:\\n\\n1. **Respira\\u00e7\\u00e3o 4-7-8**: Inspire pelo nariz conta\", \"modelo\": \"mistral-small\", \"crise\": false}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T06:42:09.001566",
+      "atualizado_em": "2026-07-16T06:42:09.001566"
+    },
+    {
+      "id": "ebee3bc5",
+      "user_id": "test",
+      "nome": "Chat test",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Estou me sentindo muito ansioso\", \"resp\": \"Sinto muito que voc\\u00ea esteja passando por isso. Vamos trabalhar juntos para acalmar essa ansiedade. Primeiro, observe sua respira\\u00e7\\u00e3o: inspire profundamente pelo nariz (contando at\\u00e9 4), segure por 2 seg\", \"modelo\": \"mistral-small\", \"crise\": false}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T06:42:12.869853",
+      "atualizado_em": "2026-07-16T06:42:12.869853"
+    },
+    {
+      "id": "bd18946d",
+      "user_id": "test",
+      "nome": "Chat test",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Tecnica de respiracao 4-7-8\", \"resp\": \"Vamos praticar juntos uma t\\u00e9cnica de respira\\u00e7\\u00e3o **4-7-8**, baseada em mindfulness e relaxamento. Essa t\\u00e9cnica \\u00e9 \\u00f3tima para acalmar a mente e o corpo em momentos de ansiedade ou estresse.\\n\\n**Passo a pa\", \"modelo\": \"mistral-small\", \"crise\": false}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T06:42:16.966568",
+      "atualizado_em": "2026-07-16T06:42:16.966568"
+    },
+    {
+      "id": "92fc2fad",
+      "user_id": "test",
+      "nome": "Chat test",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"O que e mindfulness\", \"resp\": \"O **mindfulness** \\u00e9 uma pr\\u00e1tica de aten\\u00e7\\u00e3o plena que nos ajuda a viver o momento presente de forma intencional e sem julgamentos. \\u00c9 como um \\\"treinamento da mente\\\" para observar nossos pensamentos, emo\", \"modelo\": \"mistral-small\", \"crise\": false}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T06:42:21.299932",
+      "atualizado_em": "2026-07-16T06:42:21.299932"
+    },
+    {
+      "id": "8c9cd2cc",
+      "user_id": "test",
+      "nome": "Chat test",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Nao consigo dormir\", \"resp\": \"Sinto muito que voc\\u00ea esteja passando por isso. Vamos tentar acalmar a mente juntos, um passo de cada vez.\\n\\nPrimeiro, observe sua respira\\u00e7\\u00e3o: inspire profundamente pelo nariz (contando at\\u00e9 4), segure p\", \"modelo\": \"mistral-small\", \"crise\": false}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T06:42:25.895091",
+      "atualizado_em": "2026-07-16T06:42:25.895091"
+    },
+    {
+      "id": "6eb5f707",
+      "user_id": "t",
+      "nome": "Chat t",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Ola como posso lidar com a ansiedade\", \"resp\": \"Ol\\u00e1! Fico feliz que voc\\u00ea esteja buscando formas de lidar com a ansiedade. Vamos usar t\\u00e9cnicas de **Mindfulness** e **TCC** para te ajudar nesse momento.\\n\\nPrimeiro, \\u00e9 importante **nomear o que voc\\u00ea sen\", \"modelo\": \"mistral-small\", \"crise\": false}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T06:43:23.917125",
+      "atualizado_em": "2026-07-16T06:43:23.917125"
+    }
+  ],
+  "chat_ia_v3": [
+    {
+      "id": "536d40c0",
+      "user_id": "u_2u6qvk7c",
+      "nome": "Chat u_2u6qvk7c",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Como voc\\u00ea pode me ajudar?\", \"resp\": \"Ol\\u00e1, \\u00e9 um prazer poder te acompanhar aqui! Sei que pode ser desafiador compartilhar o que est\\u00e1 senti\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T06:50:55.983843",
+      "atualizado_em": "2026-07-16T06:50:55.983843"
+    },
+    {
+      "id": "0eeffd40",
+      "user_id": "u_2u6qvk7c",
+      "nome": "Chat u_2u6qvk7c",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"estou mentalmente cansado, pois continuo pensando sobre meu passado\", \"resp\": \"Sinto muito saber que voc\\u00ea est\\u00e1 se sentindo assim. \\u00c9 compreens\\u00edvel que o passado possa pesar em noss\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T06:51:38.225807",
+      "atualizado_em": "2026-07-16T06:51:38.225807"
+    },
+    {
+      "id": "d3d16929",
+      "user_id": "u_2u6qvk7c",
+      "nome": "Chat u_2u6qvk7c",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"continuo triste, so que menos\", \"resp\": \"Sinto muito que voc\\u00ea esteja passando por isso. \\u00c9 compreens\\u00edvel sentir tristeza, e \\u00e9 importante recon\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T06:52:41.058618",
+      "atualizado_em": "2026-07-16T06:52:41.058618"
+    },
+    {
+      "id": "db7da9fa",
+      "user_id": "analise",
+      "nome": "Chat analise",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Estou muito triste hoje\", \"resp\": \"Sinto muito que voc\\u00ea esteja passando por isso hoje. \\ud83d\\udc99 Essa tristeza pode parecer pesada, mas \\u00e9 impor\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T06:55:32.169986",
+      "atualizado_em": "2026-07-16T06:55:32.169986"
+    },
+    {
+      "id": "26b5257a",
+      "user_id": "test",
+      "nome": "Chat test",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Ola como posso lidar com ansiedade\", \"resp\": \"Ol\\u00e1! \\u00c9 compreens\\u00edvel que voc\\u00ea esteja se sentindo assim. A ansiedade pode ser muito desafiadora, mas \", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T07:00:10.129705",
+      "atualizado_em": "2026-07-16T07:00:10.129705"
+    },
+    {
+      "id": "3518785f",
+      "user_id": "test",
+      "nome": "Chat test",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Estou triste\", \"resp\": \"Sinto muito que voc\\u00ea esteja se sentindo assim, \\u00e9 completamente normal sentir tristeza em algum momen\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T07:00:13.650327",
+      "atualizado_em": "2026-07-16T07:00:13.650327"
+    },
+    {
+      "id": "d7935ca8",
+      "user_id": "test",
+      "nome": "Chat test",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Me ensina respiracao 4-7-8\", \"resp\": \"Claro! Vamos praticar juntos a respira\\u00e7\\u00e3o **4-7-8**, uma t\\u00e9cnica poderosa do **mindfulness** e basea\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T07:00:18.045006",
+      "atualizado_em": "2026-07-16T07:00:18.045006"
+    }
+  ],
+  "chat_ia_v5": [
+    {
+      "id": "82a1bfaa",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Ola\", \"resp\": \"Ol\\u00e1! \\ud83c\\udf1f \\u00c9 um prazer acolher voc\\u00ea aqui hoje. Como voc\\u00ea est\\u00e1 se sentindo nesse momento? Vamos dar um passo de cada vez, com gentileza e sem pressa.\\n\\nSe p\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T07:45:54.593017",
+      "atualizado_em": "2026-07-16T07:45:54.593017"
+    },
+    {
+      "id": "b36778c7",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Estou muito ansioso\", \"resp\": \"Sinto muito que voc\\u00ea esteja passando por isso. Vamos respirar juntos um pouquinho? Inspire profundamente pelo nariz contando at\\u00e9 4, segure por 2 segun\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T07:45:57.727019",
+      "atualizado_em": "2026-07-16T07:45:57.727019"
+    },
+    {
+      "id": "430faa5f",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"quero me machucar\", \"resp\": \"\\ud83d\\udea8 CVV: 188 (24h gratuito) | SAMU: 192\\n\\nSinto muito que voc\\u00ea esteja passando por isso. \\u00c9 importante voc\\u00ea saber que seus sentimentos s\\u00e3o v\\u00e1lidos, mas a \", \"modelo\": \"mistral-small\"}",
+      "categoria": "crise",
+      "criado_em": "2026-07-16T07:46:00.618347",
+      "atualizado_em": "2026-07-16T07:46:00.618347"
+    },
+    {
+      "id": "a9aa2595",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Como voce pode me ajudar\", \"resp\": \"Que bom que voc\\u00ea est\\u00e1 buscando apoio! Como assistente de sa\\u00fade mental, posso te ajudar de v\\u00e1rias formas:\\n\\n1. **Escuta ativa**: Estou aqui para te ouvi\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T07:46:03.596176",
+      "atualizado_em": "2026-07-16T07:46:03.596176"
+    },
+    {
+      "id": "c253846f",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Ola\", \"resp\": \"Ol\\u00e1! \\ud83c\\udf1f Como voc\\u00ea est\\u00e1 se sentindo hoje?\\n\\nVamos praticar um pouco de mindfulness juntos. Feche os olhos por um instante e perceba a sua respira\\u00e7\\u00e3o... S\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T07:52:04.703799",
+      "atualizado_em": "2026-07-16T07:52:04.703799"
+    },
+    {
+      "id": "f81375ca",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Estou muito ansioso\", \"resp\": \"Sinto muito que voc\\u00ea esteja passando por isso. Vamos respirar juntos por um momento, ok? Inspire profundamente pelo nariz (4 segundos), segure (2 segu\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T07:52:07.796750",
+      "atualizado_em": "2026-07-16T07:52:07.796750"
+    },
+    {
+      "id": "d865e5e7",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"quero me machucar\", \"resp\": \"\\ud83d\\udea8 CVV: 188 (24h gratuito) | SAMU: 192\\n\\nSinto muito que esteja se sentindo assim. \\u00c9 importante saber que voc\\u00ea n\\u00e3o est\\u00e1 sozinho nessa. Vamos respirar ju\", \"modelo\": \"mistral-small\"}",
+      "categoria": "crise",
+      "criado_em": "2026-07-16T07:52:10.693655",
+      "atualizado_em": "2026-07-16T07:52:10.693655"
+    },
+    {
+      "id": "c896a881",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Como voce pode me ajudar\", \"resp\": \"Que bom que voc\\u00ea est\\u00e1 buscando ajuda! Eu posso ser um apoio acolhedor enquanto voc\\u00ea trabalha em seus desafios emocionais. Com t\\u00e9cnicas de TCC (Terapia\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T07:52:13.769993",
+      "atualizado_em": "2026-07-16T07:52:13.769993"
+    },
+    {
+      "id": "8fae2406",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Ola\", \"resp\": \"Ol\\u00e1! \\ud83c\\udf1f Fico feliz em te receber aqui hoje. Como voc\\u00ea est\\u00e1 se sentindo nesse momento? \\u00c0s vezes, s\\u00f3 nomear o que a gente est\\u00e1 sentindo j\\u00e1 ajuda a coloca\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T07:55:33.571576",
+      "atualizado_em": "2026-07-16T07:55:33.571576"
+    },
+    {
+      "id": "21a55464",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Estou muito ansioso\", \"resp\": \"Sinto muito que esteja se sentindo assim. Vamos respirar juntos um pouquinho, ok? Inspire profundamente pelo nariz contando at\\u00e9 4... segure por 2 segu\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T07:55:36.950468",
+      "atualizado_em": "2026-07-16T07:55:36.950468"
+    },
+    {
+      "id": "d87c6827",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"quero me machucar\", \"resp\": \"\\ud83d\\udea8 CVV: 188 (24h gratuito) | SAMU: 192\\n\\nSei que est\\u00e1 passando por um momento muito dif\\u00edcil e intenso. \\u00c9 importante voc\\u00ea saber que suas emo\\u00e7\\u00f5es s\\u00e3o v\\u00e1li\", \"modelo\": \"mistral-small\"}",
+      "categoria": "crise",
+      "criado_em": "2026-07-16T07:55:40.137524",
+      "atualizado_em": "2026-07-16T07:55:40.137524"
+    },
+    {
+      "id": "f99dbbcc",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Como voce pode me ajudar\", \"resp\": \"Que bom que voc\\u00ea est\\u00e1 aqui! \\ud83c\\udf1f Posso te ajudar a explorar seus pensamentos e emo\\u00e7\\u00f5es com gentileza e sem julgamentos. Vamos praticar juntos algumas t\\u00e9c\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T07:55:44.755845",
+      "atualizado_em": "2026-07-16T07:55:44.755845"
+    },
+    {
+      "id": "c3dcb720",
+      "user_id": "u_rpb4cxhi",
+      "nome": "Chat u_rpb4cxhi",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Estou ansioso hoje, pode me ajudar com uma tecnica?\", \"resp\": \"Claro! Vamos praticar juntos uma t\\u00e9cnica de respira\\u00e7\\u00e3o consciente para acalmar essa ansiedade. Sente-se confortavelmente, feche os olhos se poss\\u00edvel, \", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T08:06:41.370219",
+      "atualizado_em": "2026-07-16T08:06:41.370219"
+    },
+    {
+      "id": "c4428ae6",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Ola\", \"resp\": \"Ol\\u00e1! \\ud83c\\udf1f \\u00c9 um prazer estar aqui com voc\\u00ea hoje. Como voc\\u00ea est\\u00e1 se sentindo nesse momento? \\u00c0s vezes, apenas nomear nossas emo\\u00e7\\u00f5es j\\u00e1 ajuda a traz\\u00ea-las par\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T16:13:32.073672",
+      "atualizado_em": "2026-07-16T16:13:32.073672"
+    },
+    {
+      "id": "52165797",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Estou muito ansioso\", \"resp\": \"Sinto muito que voc\\u00ea esteja passando por isso. Vamos respirar juntos por um momento, ok? Inspire profundamente pelo nariz (contando at\\u00e9 4) e solte o a\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T16:13:35.198159",
+      "atualizado_em": "2026-07-16T16:13:35.198159"
+    },
+    {
+      "id": "87628fa1",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"quero me machucar\", \"resp\": \"\\ud83d\\udea8 CVV: 188 (24h gratuito) | SAMU: 192\\n\\nSinto muito que voc\\u00ea esteja passando por esse momento t\\u00e3o dif\\u00edcil. Voc\\u00ea n\\u00e3o est\\u00e1 sozinho, e \\u00e9 importante cuidar\", \"modelo\": \"mistral-small\"}",
+      "categoria": "crise",
+      "criado_em": "2026-07-16T16:13:38.410312",
+      "atualizado_em": "2026-07-16T16:13:38.410312"
+    },
+    {
+      "id": "e87b2605",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Como voce pode me ajudar\", \"resp\": \"Que bom que voc\\u00ea est\\u00e1 buscando apoio! Como assistente de sa\\u00fade mental, posso ser um canal acolhedor para voc\\u00ea refletir, nomear suas emo\\u00e7\\u00f5es e encontra\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T16:13:41.807992",
+      "atualizado_em": "2026-07-16T16:13:41.807992"
+    },
+    {
+      "id": "ab0b4ce9",
+      "user_id": "u_tmv2jhha",
+      "nome": "Chat u_tmv2jhha",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Estou ansioso hoje, pode me ajudar com uma tecnica?\", \"resp\": \"Claro, vou te ajudar com uma t\\u00e9cnica simples de respira\\u00e7\\u00e3o para acalmar a ansiedade agora. Vamos praticar juntos?\\n\\n**T\\u00e9cnica 4-7-8:**\\n1. **Inspire** p\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T16:14:28.016403",
+      "atualizado_em": "2026-07-16T16:14:28.016403"
+    },
+    {
+      "id": "899b47c4",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Ola\", \"resp\": \"Ol\\u00e1! \\ud83c\\udf1f \\u00c9 t\\u00e3o bom te ver por aqui. Como voc\\u00ea est\\u00e1 se sentindo hoje? \\u00c0s vezes, colocar nossos pensamentos em palavras pode aliviar um pouco do peso que \", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T17:19:40.459140",
+      "atualizado_em": "2026-07-16T17:19:40.459140"
+    },
+    {
+      "id": "ee79be27",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Estou muito ansioso\", \"resp\": \"Sinto muito que voc\\u00ea esteja passando por isso, \\u00e9 completamente normal se sentir assim \\u00e0s vezes. Vamos respirar juntos por um momento, pode ser?\\n\\nInspi\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T17:19:43.961696",
+      "atualizado_em": "2026-07-16T17:19:43.961696"
+    },
+    {
+      "id": "ac8e5234",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"quero me machucar\", \"resp\": \"\\ud83d\\udea8 CVV: 188 (24h gratuito) | SAMU: 192\\n\\nSinto muito que voc\\u00ea esteja passando por isso. \\u00c9 importante saber que suas emo\\u00e7\\u00f5es s\\u00e3o v\\u00e1lidas, mas tamb\\u00e9m que \", \"modelo\": \"mistral-small\"}",
+      "categoria": "crise",
+      "criado_em": "2026-07-16T17:19:47.299959",
+      "atualizado_em": "2026-07-16T17:19:47.299959"
+    },
+    {
+      "id": "e70354b0",
+      "user_id": "pytest",
+      "nome": "Chat pytest",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Como voce pode me ajudar\", \"resp\": \"Que bom que voc\\u00ea est\\u00e1 buscando apoio! Como assistente de sa\\u00fade mental, posso te ajudar a:\\n\\n\\ud83c\\udf31 **Reconhecer emo\\u00e7\\u00f5es**: Vamos explorar juntas o que voc\\u00ea \", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T17:19:50.398819",
+      "atualizado_em": "2026-07-16T17:19:50.398819"
+    },
+    {
+      "id": "32a2c3d0",
+      "user_id": "u_en6yu0lr",
+      "nome": "Chat u_en6yu0lr",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Estou ansioso hoje, pode me ajudar com uma tecnica?\", \"resp\": \"Claro que posso te ajudar! Vamos praticar uma t\\u00e9cnica de respira\\u00e7\\u00e3o mindfulness para acalmar a ansiedade. Isso pode te ajudar a se ancorar no momento \", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T17:20:46.515215",
+      "atualizado_em": "2026-07-16T17:20:46.515215"
+    },
+    {
+      "id": "a717a438",
+      "user_id": "u_ls33r2w5",
+      "nome": "Chat u_ls33r2w5",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Estou ansioso hoje, pode me ajudar com uma tecnica?\", \"resp\": \"Claro, vou te ajudar com uma t\\u00e9cnica mindfulness para acalmar essa ansiedade agora. Sente-se confortavelmente, feche os olhos ou abaixe o olhar, e vam\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T17:27:46.256752",
+      "atualizado_em": "2026-07-16T17:27:46.256752"
+    },
+    {
+      "id": "c764eea1",
+      "user_id": "u_qchvsp27",
+      "nome": "Chat u_qchvsp27",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Estou ansioso hoje, pode me ajudar com uma tecnica?\", \"resp\": \"Claro que posso te ajudar! Vamos praticar juntos uma t\\u00e9cnica de respira\\u00e7\\u00e3o mindfulness para acalmar a ansiedade. Sente-se confortavelmente, feche os o\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T17:30:13.759052",
+      "atualizado_em": "2026-07-16T17:30:13.759052"
+    },
+    {
+      "id": "f19c305a",
+      "user_id": "u_xo3rz5f2",
+      "nome": "Chat u_xo3rz5f2",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Estou ansioso hoje, pode me ajudar com uma tecnica?\", \"resp\": \"Claro, vou te ajudar com uma t\\u00e9cnica simples de respira\\u00e7\\u00e3o para acalmar a ansiedade. Vamos tentar juntos?\\n\\n1. **Anota seus pensamentos**: Escreva ou p\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T17:32:58.881765",
+      "atualizado_em": "2026-07-16T17:32:58.881765"
+    },
+    {
+      "id": "1f23c379",
+      "user_id": "u_lnn4q37t",
+      "nome": "Chat u_lnn4q37t",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Estou ansioso hoje, pode me ajudar com uma tecnica?\", \"resp\": \"Claro que posso te ajudar! Vamos fazer juntos uma t\\u00e9cnica de respira\\u00e7\\u00e3o consciente para acalmar a ansiedade. Isso \\u00e9 um exerc\\u00edcio de mindfulness, muito\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T17:35:20.962267",
+      "atualizado_em": "2026-07-16T17:35:20.962267"
+    },
+    {
+      "id": "d002c783",
+      "user_id": "u_abnzdgck",
+      "nome": "Chat u_abnzdgck",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Estou ansioso hoje, pode me ajudar com uma tecnica?\", \"resp\": \"Claro que posso te ajudar! Vamos praticar uma t\\u00e9cnica de respira\\u00e7\\u00e3o para acalmar a ansiedade juntos. Sente-se confortavelmente e coloque uma m\\u00e3o na ba\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T17:39:55.371004",
+      "atualizado_em": "2026-07-16T17:39:55.371004"
+    },
+    {
+      "id": "777b6ec9",
+      "user_id": "u_2u6qvk7c",
+      "nome": "Chat u_2u6qvk7c",
+      "valor": "fallback",
+      "dados": "{\"msg\": \"tranquilade, mais pensativa com oque vou fazer mais tarde\", \"resp\": \"Estou aqui para te ouvir e apoiar. \\ud83d\\udc99\\n\\nMe conta mais sobre o que esta sentindo ou passando. Quanto mais voce compartilhar, melhor posso te ajudar de fo\", \"modelo\": \"fallback\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T17:49:21.177845",
+      "atualizado_em": "2026-07-16T17:49:21.177845"
+    },
+    {
+      "id": "c9966d90",
+      "user_id": "u_2u6qvk7c",
+      "nome": "Chat u_2u6qvk7c",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"estou pensando no futuro e esquecendo de viver o presente\", \"resp\": \"Que reflex\\u00e3o profunda voc\\u00ea trouxe! \\u00c9 natural querermos planejar e nos preparar para o futuro, mas muitas vezes acabamos perdendo a beleza do que est\\u00e1 \", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T17:50:15.653573",
+      "atualizado_em": "2026-07-16T17:50:15.653573"
+    },
+    {
+      "id": "cfc0a17c",
+      "user_id": "u_2u6qvk7c",
+      "nome": "Chat u_2u6qvk7c",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"fiquei tranquila\", \"resp\": \"Que \\u00f3timo ouvir isso! \\ud83c\\udf1f Ficar tranquila \\u00e9 um sinal de que voc\\u00ea est\\u00e1 cuidando bem de si mesma. Que tal aproveitar esse momento para observar como se se\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T17:51:34.365689",
+      "atualizado_em": "2026-07-16T17:51:34.365689"
+    },
+    {
+      "id": "609eca95",
+      "user_id": "u_2u6qvk7c",
+      "nome": "Chat u_2u6qvk7c",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Estou me sentindo muito ansioso agora e preciso de ajuda\", \"resp\": \"Sinto muito que voc\\u00ea esteja passando por isso agora. Vamos respirar juntos por um momento, okay? Inspire profundamente pelo nariz (4 segundos), segure\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T17:52:19.995057",
+      "atualizado_em": "2026-07-16T17:52:19.995057"
+    },
+    {
+      "id": "135c7a84",
+      "user_id": "u_2u6qvk7c",
+      "nome": "Chat u_2u6qvk7c",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"chat oque devo fazer?\", \"resp\": \"Ol\\u00e1! Entendo que possa estar se sentindo um pouco perdido ou ansioso com essa pergunta. Vamos tentar acalmar a mente juntos, ok?\\n\\nPrimeiro, respire fu\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T17:52:38.839175",
+      "atualizado_em": "2026-07-16T17:52:38.839175"
+    },
+    {
+      "id": "a3670980",
+      "user_id": "u_2u6qvk7c",
+      "nome": "Chat u_2u6qvk7c",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"sinto que fracasssei pelo meu passado\", \"resp\": \"Sinto muito que voc\\u00ea esteja carregando esse peso. \\u00c9 comum sentir que o passado define nosso valor, mas voc\\u00ea n\\u00e3o \\u00e9 seus erros. Vamos praticar um exerc\\u00ed\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-16T17:53:28.818855",
+      "atualizado_em": "2026-07-16T17:53:28.818855"
+    },
+    {
+      "id": "e50fdb7e",
+      "user_id": "u_zk1q8bax",
+      "nome": "Chat u_zk1q8bax",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Ol\\u00e1, como voc\\u00ea pode me ajudar?\", \"resp\": \"Ol\\u00e1! \\ud83c\\udf1f Fico muito feliz que voc\\u00ea tenha chegado at\\u00e9 aqui. Sou aqui para te ouvir com aten\\u00e7\\u00e3o e carinho, sem julgamentos. \\u00c0s vezes, s\\u00f3 precisamos de um \", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-20T08:56:41.791514",
+      "atualizado_em": "2026-07-20T08:56:41.791514"
+    },
+    {
+      "id": "7e392961",
+      "user_id": "u_wkpmn5zw",
+      "nome": "Chat u_wkpmn5zw",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Ol\\u00e1! Como voc\\u00ea pode me ajudar?\", \"resp\": \"Ol\\u00e1! \\ud83c\\udf1f Fico feliz que voc\\u00ea esteja aqui. Como assistente de sa\\u00fade mental, posso oferecer um espa\\u00e7o acolhedor para voc\\u00ea se expressar, refletir e encontr\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-20T10:53:31.723738",
+      "atualizado_em": "2026-07-20T10:53:31.723738"
+    },
+    {
+      "id": "4b46a7c2",
+      "user_id": "u_klz2wrju",
+      "nome": "Chat u_klz2wrju",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Como reduzir ansiedade?\", \"resp\": \"Vamos lidar com isso juntos, com calma e presen\\u00e7a. Primeiro, observe sua respira\\u00e7\\u00e3o: inspire profundamente pelo nariz (4 segundos), segure (2 segundos\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-20T11:08:16.718005",
+      "atualizado_em": "2026-07-20T11:08:16.718005"
+    },
+    {
+      "id": "76fd7594",
+      "user_id": "u_2u6qvk7c",
+      "nome": "Chat u_2u6qvk7c",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Como voc\\u00ea pode me ajudar?\", \"resp\": \"Ol\\u00e1! Fico feliz que esteja buscando apoio. Como assistente de sa\\u00fade mental, posso te ajudar a refletir sobre seus sentimentos e pensamentos usando t\\u00e9c\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-21T06:44:15.041951",
+      "atualizado_em": "2026-07-21T06:44:15.041951"
+    },
+    {
+      "id": "0f38ade2",
+      "user_id": "u_2u6qvk7c",
+      "nome": "Chat u_2u6qvk7c",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"etsou pessimo\", \"resp\": \"Eu sinto muito que voc\\u00ea esteja se sentindo assim. \\ud83d\\udc99 Vamos fazer uma pausa juntos, ok? Respira fundo: inspire pelo nariz em 4 segundos, segura por 4 se\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-21T06:44:30.105068",
+      "atualizado_em": "2026-07-21T06:44:30.105068"
+    },
+    {
+      "id": "eba4b0b1",
+      "user_id": "u_2u6qvk7c",
+      "nome": "Chat u_2u6qvk7c",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"O que \\u00e9 TCC?\", \"resp\": \"Ah, que \\u00f3tima pergunta! A Terapia Cognitivo-Comportamental (TCC) \\u00e9 uma abordagem muito pr\\u00e1tica e focada em solucionar problemas do dia a dia. Ela trab\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-21T06:45:19.527078",
+      "atualizado_em": "2026-07-21T06:45:19.527078"
+    },
+    {
+      "id": "1116173e",
+      "user_id": "u_2u6qvk7c",
+      "nome": "Chat u_2u6qvk7c",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Autocompaix\\u00e3o\", \"resp\": \"Que lindo voc\\u00ea estar se permitindo explorar isso! A autocompaix\\u00e3o \\u00e9 como um abra\\u00e7o caloroso que voc\\u00ea oferece a si mesmo nos momentos dif\\u00edceis, assim c\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-21T06:45:25.092909",
+      "atualizado_em": "2026-07-21T06:45:25.092909"
+    },
+    {
+      "id": "6521257e",
+      "user_id": "u_2u6qvk7c",
+      "nome": "Chat u_2u6qvk7c",
+      "valor": "mistral-small",
+      "dados": "{\"msg\": \"Estou ansioso agora\", \"resp\": \"Eu sinto que voc\\u00ea est\\u00e1 passando por um momento dif\\u00edcil agora. Vamos respirar juntos, ok? Inspire profundamente pelo nariz... e solte lentamente pela b\", \"modelo\": \"mistral-small\"}",
+      "categoria": "normal",
+      "criado_em": "2026-07-21T06:45:41.804291",
+      "atualizado_em": "2026-07-21T06:45:41.804291"
+    }
+  ],
+  "afiliados": [
+    {
+      "id": "6569f296",
+      "user_id": "albertmenezes2006@gmail.com",
+      "nome": "Albert Menezes",
+      "valor": "AF67427FD0",
+      "dados": "{\"codigo\":\"AF67427FD0\",\"nome\":\"Albert Menezes\",\"email\":\"albertmenezes2006@gmail.com\",\"profissao\":\"Fundador\",\"cliques\":0,\"vendas\":0,\"comissao_total\":0,\"criado\":\"2026-07-21T03:29:28.491395\"}",
+      "categoria": "afiliado",
+      "criado_em": "2026-07-21T03:29:28.495935",
+      "atualizado_em": "2026-07-21T03:29:28.495935"
+    },
+    {
+      "id": "9bc12c70",
+      "user_id": "fase3c_skoyef@teste.com",
+      "nome": "Albert Menezes",
+      "valor": "AF0A5B60AD",
+      "dados": "{\"codigo\":\"AF0A5B60AD\",\"nome\":\"Albert Menezes\",\"email\":\"fase3c_skoyef@teste.com\",\"profissao\":\"Psicologo\",\"cliques\":0,\"vendas\":0,\"comissao_total\":0,\"criado\":\"2026-07-21T03:29:59.359377\"}",
+      "categoria": "afiliado",
+      "criado_em": "2026-07-21T03:29:59.362247",
+      "atualizado_em": "2026-07-21T03:29:59.362247"
+    },
+    {
+      "id": "2b1a8ef9",
+      "user_id": "fase3c_obcmop@teste.com",
+      "nome": "Albert Menezes",
+      "valor": "AF1FEA571B",
+      "dados": "{\"codigo\":\"AF1FEA571B\",\"nome\":\"Albert Menezes\",\"email\":\"fase3c_obcmop@teste.com\",\"profissao\":\"Psicologo\",\"cliques\":0,\"vendas\":0,\"comissao_total\":0,\"criado\":\"2026-07-21T03:39:53.666321\"}",
+      "categoria": "afiliado",
+      "criado_em": "2026-07-21T03:39:53.674485",
+      "atualizado_em": "2026-07-21T03:39:53.674485"
+    },
+    {
+      "id": "822b925e",
+      "user_id": "audit_nvtpbm@teste.com",
+      "nome": "Afiliado Audit",
+      "valor": "AF3429AD5D",
+      "dados": "{\"codigo\":\"AF3429AD5D\",\"nome\":\"Afiliado Audit\",\"email\":\"audit_nvtpbm@teste.com\",\"profissao\":\"Psicologo\",\"cliques\":0,\"vendas\":0,\"comissao_total\":0,\"criado\":\"2026-07-21T03:45:13.784524\"}",
+      "categoria": "afiliado",
+      "criado_em": "2026-07-21T03:45:13.792463",
+      "atualizado_em": "2026-07-21T03:45:13.792463"
+    },
+    {
+      "id": "52df7f1a",
+      "user_id": "audit_psfvzd@teste.com",
+      "nome": "Afiliado Audit",
+      "valor": "AFD8807350",
+      "dados": "{\"codigo\":\"AFD8807350\",\"nome\":\"Afiliado Audit\",\"email\":\"audit_psfvzd@teste.com\",\"profissao\":\"Psicologo\",\"cliques\":0,\"vendas\":0,\"comissao_total\":0,\"criado\":\"2026-07-21T03:47:36.175642\"}",
+      "categoria": "afiliado",
+      "criado_em": "2026-07-21T03:47:36.183561",
+      "atualizado_em": "2026-07-21T03:47:36.183561"
+    },
+    {
+      "id": "509cf748",
+      "user_id": "audit_bmofig@teste.com",
+      "nome": "Afiliado Audit",
+      "valor": "AF29E68A82",
+      "dados": "{\"codigo\":\"AF29E68A82\",\"nome\":\"Afiliado Audit\",\"email\":\"audit_bmofig@teste.com\",\"profissao\":\"Psicologo\",\"cliques\":0,\"vendas\":0,\"comissao_total\":0,\"criado\":\"2026-07-21T03:52:18.992440\"}",
+      "categoria": "afiliado",
+      "criado_em": "2026-07-21T03:52:18.997252",
+      "atualizado_em": "2026-07-21T03:52:18.997252"
+    },
+    {
+      "id": "60c6b332",
+      "user_id": "audit_rptbtc@teste.com",
+      "nome": "Afiliado Audit",
+      "valor": "AFEFF93A7C",
+      "dados": "{\"codigo\":\"AFEFF93A7C\",\"nome\":\"Afiliado Audit\",\"email\":\"audit_rptbtc@teste.com\",\"profissao\":\"Psicologo\",\"cliques\":0,\"vendas\":0,\"comissao_total\":0,\"criado\":\"2026-07-21T03:53:31.760442\"}",
+      "categoria": "afiliado",
+      "criado_em": "2026-07-21T03:53:31.765144",
+      "atualizado_em": "2026-07-21T03:53:31.765144"
+    },
+    {
+      "id": "a0c2e6af",
+      "user_id": "audit_naveph@teste.com",
+      "nome": "Afiliado Audit",
+      "valor": "AFAF5DBF72",
+      "dados": "{\"codigo\":\"AFAF5DBF72\",\"nome\":\"Afiliado Audit\",\"email\":\"audit_naveph@teste.com\",\"profissao\":\"Psicologo\",\"cliques\":0,\"vendas\":0,\"comissao_total\":0,\"criado\":\"2026-07-21T03:58:18.677350\"}",
+      "categoria": "afiliado",
+      "criado_em": "2026-07-21T03:58:18.680455",
+      "atualizado_em": "2026-07-21T03:58:18.680455"
+    },
+    {
+      "id": "ed3ce6f4",
+      "user_id": "audit_mtczcr@teste.com",
+      "nome": "Afiliado Audit",
+      "valor": "AF637A890C",
+      "dados": "{\"codigo\":\"AF637A890C\",\"nome\":\"Afiliado Audit\",\"email\":\"audit_mtczcr@teste.com\",\"profissao\":\"Psicologo\",\"cliques\":0,\"vendas\":0,\"comissao_total\":0,\"criado\":\"2026-07-21T04:01:22.590358\"}",
+      "categoria": "afiliado",
+      "criado_em": "2026-07-21T04:01:22.596754",
+      "atualizado_em": "2026-07-21T04:01:22.596754"
+    }
+  ],
+  "auth_jwt_usuarios": [
+    {
+      "id": "a2513559",
+      "user_id": "715ce842",
+      "nome": "Teste JWT2",
+      "valor": "testejwt999@teste.com",
+      "dados": "{\"id\": \"715ce842\", \"nome\": \"Teste JWT2\", \"email\": \"testejwt999@teste.com\", \"senha_hash\": \"8e63993c44581721ca5dc563601c5b7d4ab33ecbbfe5cb03a293ac3b8f1c3bb8\", \"tipo\": \"paciente\", \"telefone\": \"\", \"plano\": \"free\", \"ativo\": true, \"verificado\": false, \"criado_em\": \"2026-07-21T05:28:46.610408\", \"ultimo_acesso\": null, \"avatar\": \"https://ui-avatars.com/api/?name=Teste JWT2&background=6C63FF&color=fff\"}",
+      "categoria": "paciente",
+      "criado_em": "2026-07-21T05:28:46.613719",
+      "atualizado_em": "2026-07-21T05:28:46.613719"
+    },
+    {
+      "id": "92830d43",
+      "user_id": "c73398dd",
+      "nome": "Teste",
+      "valor": "t5233@t.com",
+      "dados": "{\"id\": \"c73398dd\", \"nome\": \"Teste\", \"email\": \"t5233@t.com\", \"senha_hash\": \"8e63993c44581721ca5dc563601c5b7d4ab33ecbbfe5cb03a293ac3b8f1c3bb8\", \"tipo\": \"paciente\", \"telefone\": \"\", \"plano\": \"free\", \"ativo\": true, \"verificado\": false, \"criado_em\": \"2026-07-21T05:34:04.748015\", \"ultimo_acesso\": null, \"avatar\": \"https://ui-avatars.com/api/?name=Teste&background=6C63FF&color=fff\"}",
+      "categoria": "paciente",
+      "criado_em": "2026-07-21T05:34:04.751410",
+      "atualizado_em": "2026-07-21T05:34:04.751410"
+    }
+  ]
+}
