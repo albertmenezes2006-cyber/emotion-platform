@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.onrender.emotion_platform_albert.twa",
+        "sha256_cert_fingerprints": ["9D:C5:83:E6:EE:3B:D8:F8:22:AE:22:04:54:82:30:16:56:BA:12:0D:C5:36:00:3D:81:4A:9D:80:5B:23:85:9C"]
+      }
+    }]
