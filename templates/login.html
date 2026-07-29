@@ -281,7 +281,11 @@ body {
     </div>
 
     <!-- FORM CADASTRO -->
-    <div id="form-cadastro">
+    <div id="form-cadastro"><div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:12px 16px;margin-bottom:20px;text-align:center;">
+  <p style="margin:0;font-size:14px;color:#856404;">
+    ⏰ <strong>Oferta de lançamento:</strong> 14 dias grátis + R$29,90/mês para sempre para os primeiros usuários
+  </p>
+</div>
       <div class="form-group">
         <label>Você é...</label>
         <div class="tipo-grid">
@@ -310,7 +314,7 @@ body {
         <input type="password" id="cad-senha" placeholder="••••••••" autocomplete="new-password">
       </div>
       <button class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:1rem" onclick="fazer_cadastro()" id="btn-cadastro">
-        Criar conta grátis →
+        🚀 Começar agora — Grátis por 14 dias
       </button>
       <p style="text-align:center;font-size:0.8rem;color:var(--text3)">
         Ao criar conta você concorda com os
@@ -362,7 +366,7 @@ function setLoading(btnId, loading) {
     btn.innerHTML = '<span class="spinner"></span> Aguarde...';
   } else {
     btn.disabled = false;
-    btn.innerHTML = btnId === 'btn-login' ? 'Entrar na plataforma →' : 'Criar conta grátis →';
+    btn.innerHTML = btnId === 'btn-login' ? 'Entrar na plataforma →' : '🚀 Começar agora — Grátis por 14 dias';
   }
 }
 
