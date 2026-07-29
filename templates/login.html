@@ -246,16 +246,16 @@ body {
 
     <!-- TABS -->
     <div class="tabs">
-      <div class="tab active" onclick="showForm('login')" id="tab-login">
+      <div class="tab" onclick="showForm('login')" id="tab-login">
         Entrar
       </div>
-      <div class="tab" onclick="showForm('cadastro')" id="tab-cadastro">
+      <div class="tab active" onclick="showForm('cadastro')" id="tab-cadastro">
         Criar conta
       </div>
     </div>
 
     <!-- FORM LOGIN -->
-    <div id="form-login">
+    <div id="form-login" style="display:none">
       <div class="form-group">
         <label>E-mail profissional</label>
         <input type="email" id="login-email" placeholder="seu@email.com" autocomplete="email">
@@ -281,7 +281,7 @@ body {
     </div>
 
     <!-- FORM CADASTRO -->
-    <div id="form-cadastro" style="display:none">
+    <div id="form-cadastro">
       <div class="form-group">
         <label>Você é...</label>
         <div class="tipo-grid">
