@@ -29,7 +29,7 @@ async def login(request: Request):
 
 @router.get("/app/cadastro", response_class=HTMLResponse)
 async def cadastro(request: Request):
-    try: return templates.TemplateResponse("login.html", {"request": request})
+    try: return templates.TemplateResponse("cadastro_simples.html", {"request": request})
     except Exception: return RedirectResponse("/docs")
 
 @router.get("/app/sucesso", response_class=HTMLResponse)
