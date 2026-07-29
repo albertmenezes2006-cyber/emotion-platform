@@ -101,7 +101,7 @@ async def login():
 
 @router.get("/app/cadastro", response_class=HTMLResponse)
 async def cadastro():
-    html = ler_html("login.html")
+    html = ler_html("cadastro_simples.html")
     if html:
         return HTMLResponse(html)
     return RedirectResponse("/")
