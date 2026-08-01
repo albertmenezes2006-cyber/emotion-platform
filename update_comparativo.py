@@ -1,0 +1,79 @@
+import os
+
+file_path = 'templates/comparativo.html'
+comparativo_content = """
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmotionAI vs Outros - Por que mudar?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 font-sans">
+    <nav class="p-6 bg-white shadow-sm">
+        <a href="/" class="text-blue-600 font-bold">← Voltar para Home</a>
+    </nav>
+
+    <main class="max-w-4xl mx-auto py-12 px-4">
+        <h1 class="text-4xl font-extrabold text-center text-slate-900 mb-4">Escolha a ferramenta certa para sua clínica</h1>
+        <p class="text-center text-slate-600 mb-12">Não perca mais tempo com processos manuais. Veja como a EmotionAI se compara.</p>
+
+        <div class="overflow-x-auto bg-white rounded-xl shadow-lg">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-900 text-white">
+                        <th class="p-4">Recurso</th>
+                        <th class="p-4 border-l border-slate-700 bg-blue-600 text-center">EmotionAI</th>
+                        <th class="p-4 text-center opacity-70">Outros Sistemas</th>
+                        <th class="p-4 text-center opacity-70">Papel / Notion</th>
+                    </tr>
+                </thead>
+                <tbody class="text-slate-700">
+                    <tr class="border-b">
+                        <td class="p-4 font-semibold">Preço Mensal</td>
+                        <td class="p-4 text-center font-bold text-blue-600">R$ 29,90</td>
+                        <td class="p-4 text-center">R$ 60,00+</td>
+                        <td class="p-4 text-center">Grátis* (Toma seu tempo)</td>
+                    </tr>
+                    <tr class="border-b bg-blue-50">
+                        <td class="p-4 font-semibold">PHQ-9 e GAD-7 Digital</td>
+                        <td class="p-4 text-center text-blue-600">✅ Automático</td>
+                        <td class="p-4 text-center text-red-400">❌ Manual</td>
+                        <td class="p-4 text-center text-red-400">❌ Manual</td>
+                    </tr>
+                    <tr class="border-b">
+                        <td class="p-4 font-semibold">Gráfico de Evolução</td>
+                        <td class="p-4 text-center text-blue-600">✅ Gerado via IA</td>
+                        <td class="p-4 text-center text-red-400">❌ Não possui</td>
+                        <td class="p-4 text-center text-red-400">❌ Não possui</td>
+                    </tr>
+                    <tr class="border-b">
+                        <td class="p-4 font-semibold">Criptografia de Prontuário</td>
+                        <td class="p-4 text-center text-blue-600">✅ Ponta a ponta</td>
+                        <td class="p-4 text-center">Alguns possuem</td>
+                        <td class="p-4 text-center text-red-400">❌ Nenhuma</td>
+                    </tr>
+                    <tr class="border-b">
+                        <td class="p-4 font-semibold">Foco em Recém-formados</td>
+                        <td class="p-4 text-center text-blue-600">✅ Sim (Simples)</td>
+                        <td class="p-4 text-center">Focado em Clínicas</td>
+                        <td class="p-4 text-center">Genérico</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-12 text-center bg-blue-600 text-white p-8 rounded-xl">
+            <h2 class="text-2xl font-bold mb-4">Pronta para profissionalizar sua clínica?</h2>
+            <p class="mb-6">Comece agora por apenas R$ 29,90 e economize 2 horas por dia.</p>
+            <a href="/cadastro" class="bg-white text-blue-600 px-8 py-3 rounded-full font-bold hover:bg-slate-100 transition">Testar Grátis por 14 dias</a>
+        </div>
+    </main>
+</body>
+</html>
+"""
+
+with open(file_path, 'w', encoding='utf-8') as f:
+    f.write(comparativo_content)
+print("✅ Página /comparativo atualizada!")
