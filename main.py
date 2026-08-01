@@ -8,6 +8,7 @@ import gc
 from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from datetime import datetime
 
 sys.setrecursionlimit(10000)
@@ -49,6 +50,34 @@ async def health():
 @app.api_route("/ping", methods=["GET","HEAD"])
 async def ping():
     return {"pong":True,"ts":datetime.utcnow().isoformat()}
+
+@app.get("/api/v1/metricas")
+async def get_metricas():
+    try:
+        import psutil
+        cpu = psutil.cpu_percent(interval=0.1)
+        mem = psutil.Process(os.getpid()).memory_info().rss / 1024 / 1024
+    except Exception:
+        cpu = 0
+        mem = 0
+    uptime = datetime.utcnow() - _start
+    return JSONResponse({
+        "status": "ok",
+        "versao": "24.4.0",
+        "plataforma": "Emotion Intelligence Platform",
+        "uptime_horas": round(uptime.total_seconds() / 3600, 2),
+        "plugins_carregados": _ok,
+        "plugins_erros": _err,
+        "rotas_ativas": len(app.routes),
+        "cpu_pct": cpu,
+        "memoria_mb": round(mem, 1),
+        "atualizado_em": datetime.utcnow().strftime("%d/%m/%Y %H:%M:%S")
+    })
+
+@app.get("/api/v1/versao")
+async def get_versao():
+    return {"versao": "24.4.0", "status": "ok",
+            "plataforma": "Emotion Intelligence Platform"}
 
 SKIP = {"__init__.py","loader.py","plugin_base.py","db_manager.py"}
 
