@@ -29,3 +29,27 @@ marketing_2026/
 marketing_assets/
 marketing_leads*
 crm_emotionai.csv
+# Reels e análises
+reels_*.mp4
+reels_*.py
+reels_*_temp/
+reels_frames/
+reels2_frames/
+reels_audio/
+reels_audio_pro/
+reels_audio_emocional/
+reels_musica_bg.mp3
+analise_*/
+analise_*.txt
+analise_*.jpg
+audio_sync/
+narra_*.mp3
+lista_audio_*.txt
+scripts_reels_*.py
+backup_render_*.json
+backup_banco_*.json
+backup_banco_*.sql
+*.mp4
+*.mp3
+*.m4a
+*.wav
