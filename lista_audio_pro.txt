@@ -1,0 +1,7 @@
+file 'reels_audio_pro/avaliacao.mp3'
+file 'reels_audio_pro/chat.mp3'
+file 'reels_audio_pro/cta.mp3'
+file 'reels_audio_pro/dashboard.mp3'
+file 'reels_audio_pro/intro.mp3'
+file 'reels_audio_pro/mindfulness.mp3'
+file 'reels_audio_pro/planos.mp3'

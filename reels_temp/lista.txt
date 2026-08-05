@@ -1,0 +1,7 @@
+file '/home/w77/emotion_platform/reels_temp/clip_00.mp4'
+file '/home/w77/emotion_platform/reels_temp/clip_01.mp4'
+file '/home/w77/emotion_platform/reels_temp/clip_02.mp4'
+file '/home/w77/emotion_platform/reels_temp/clip_03.mp4'
+file '/home/w77/emotion_platform/reels_temp/clip_04.mp4'
+file '/home/w77/emotion_platform/reels_temp/clip_05.mp4'
+file '/home/w77/emotion_platform/reels_temp/clip_06.mp4'

@@ -1,0 +1,42 @@
+
+=== GANCHO ===
+1. **Textos sobrepostos** (com efeitos de camadas e tamanhos variados).
+2. **Sim**, legíveis.
+3. **Sim**, bom contraste (fundo escuro + letras claras/coloridas).
+4. **Nota: 9/10**.
+5. **Falta de hierarquia visual clara** (alguns textos competem por atenção).
+
+=== DOR ===
+1. Textos sobrepostos e organizados em blocos.
+2. Sim, legíveis.
+3. Sim, bom contraste.
+4. Nota: 8/10
+5. Uso excessivo de negrito e cores chamativas pode distrair.
+
+=== VIRADA ===
+1. Textos sobrepostos e organizados em camadas.
+2. Sim, legíveis.
+3. Sim, bom contraste.
+4. Nota: 9/10
+5. Fonte muito grande e variada pode cansar em leituras longas.
+
+=== CHAT IA ===
+1. Textos sobrepostos.
+2. Sim, legíveis.
+3. Sim, bom contraste.
+4. 9/10
+5. Tamanho excessivo de alguns textos pode prejudicar a leitura rápida em movimento.
+
+=== AVALIACOES ===
+1. Textos sobrepostos e organizados em camadas.
+2. Sim, legíveis.
+3. Sim, contraste bom.
+4. Nota: 9/10
+5. Espaço para mais respiro visual entre elementos.
+
+=== CTA FINAL ===
+1. **Sobrepostos e organizados em blocos**.
+2. **Sim, legíveis** (com exceção de alguns detalhes pequenos).
+3. **Sim, bom contraste** (fundo escuro + texto claro).
+4. **Nota: 8/10**.
+5. **Falta de hierarquia visual clara** (muitos elementos competindo por atenção).
