@@ -38,3 +38,12 @@ async def receber_notificacao(request: Request):
         if res["response"]["status"] == "approved":
             print(f"Pagamento {payment_id} aprovado!")
     return {"status": "ok"}
+
+from plugins.plugin_base import PluginBase
+
+class MercadoPagoPlugin(PluginBase):
+    name = "mercado_pago_plugin"
+    def setup(self, app):
+        app.include_router(router)
+
+plugin = MercadoPagoPlugin()
