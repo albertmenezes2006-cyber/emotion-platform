@@ -105,7 +105,7 @@ for cat in cats:
             _err += 1
         except Exception as e:
             _err += 1
-            log.debug(f"skip {mod_path}: {type(e).__name__}")
+            log.warning(f"skip {mod_path}: {type(e).__name__}: {e}")
         finally:
             if (_ok + _err) % 500 == 0:
                 gc.collect()
