@@ -1,5 +1,5 @@
 import os
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 import qrcode
 import io
@@ -16,6 +16,7 @@ TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 PLANOS = {
+    "teste": {"nome": "Teste", "valor": 1.00},
     "pro": {"nome": "Pro", "valor": 29.90},
     "clinica": {"nome": "Clinica", "valor": 99.90}
 }
@@ -66,7 +67,12 @@ async def alertar_telegram(plano, valor, email=""):
         pass
 
 @router.get("/pix/{plano}")
-async def checkout_pix(plano: str, email: str = ""):
+async def checkout_pix(plano: str, email: str = "", request: Request = None):
+    from fastapi.responses import RedirectResponse
+    # Verifica se veio email (do usuário logado)
+    if not email and plano != "teste":
+        return RedirectResponse(url="/app/login?redirect=/planos", status_code=302)
+
     p = PLANOS.get(plano, PLANOS["pro"])
     valor = p["valor"]
     nome = p["nome"]
