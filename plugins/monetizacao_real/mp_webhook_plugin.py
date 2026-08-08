@@ -8,6 +8,24 @@ import psycopg2
 
 router = APIRouter(prefix="/api/v1/mp-webhook", tags=["Webhook"])
 
+import hmac
+import hashlib
+
+def validar_assinatura(request: Request, body: bytes):
+    secret = os.getenv("MP_WEBHOOK_SECRET")
+    if not secret:
+        return True
+    assinatura = request.headers.get("x-signature", "")
+    if not assinatura:
+        return False
+    hash_calc = hmac.new(
+        secret.encode(),
+        body,
+        hashlib.sha256
+    ).hexdigest()
+    return hmac.compare_digest(hash_calc, assinatura)
+
+
 def get_sdk():
     token = os.getenv("MP_ACCESS_TOKEN")
     if not token:
@@ -52,6 +70,9 @@ async def enviar_telegram(msg: str):
 @router.post("/notificacao")
 async def receber_webhook(request: Request):
     try:
+        body = await request.body()
+        if not validar_assinatura(request, body):
+            return {"status": "assinatura_invalida"}
         data = await request.json()
         tipo = data.get("type", "")
         
