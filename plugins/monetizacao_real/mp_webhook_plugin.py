@@ -116,6 +116,29 @@ async def testar_webhook():
         "instrucao": "Configure essa URL no painel do Mercado Pago em Webhooks"
     }
 
+
+@router.get("/teste-telegram")
+async def teste_telegram():
+    token = os.getenv("TELEGRAM_TOKEN")
+    chat_id = os.getenv("TELEGRAM_CHAT_ID")
+    resultado = {
+        "tem_token": bool(token),
+        "tem_chat_id": bool(chat_id),
+    }
+    if token and chat_id:
+        try:
+            import httpx
+            async with httpx.AsyncClient() as client:
+                r = await client.post(
+                    f"https://api.telegram.org/bot{token}/sendMessage",
+                    json={"chat_id": chat_id, "text": "🧪 Teste do webhook EmotionAI funcionando!"}
+                )
+                resultado["telegram_status"] = r.status_code
+                resultado["telegram_resposta"] = r.json()
+        except Exception as e:
+            resultado["erro"] = str(e)
+    return resultado
+
 class MpWebhookPlugin(PluginBase):
     name = "mp_webhook_plugin"
     def setup(self, app):
