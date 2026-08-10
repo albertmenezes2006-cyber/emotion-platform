@@ -3,7 +3,7 @@ Plugin: Auth PostgreSQL — usuários persistem entre deploys
 Padrão: PluginBase + plugin = AuthPostgresqlPlugin()
 """
 from plugins.plugin_base import PluginBase
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import Request, APIRouter, HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from datetime import datetime
 from plugins.db_manager import SimpleDB
@@ -63,10 +63,36 @@ async def cadastrar(req: CadastroReq):
             "nome": req.nome, "msg": "Cadastro realizado!"}
 
 @router.post("/login")
-async def login(req: LoginReq):
+async def login(req: LoginReq, request: Request = None):
     user = _users_pg.get(req.email)
-    if not user or user.get("senha_hash") != _hash(req.senha):
-        raise HTTPException(401, "Email ou senha incorretos")
+    
+    # Registra evento de segurança
+    try:
+        from plugins.seguranca.security_monitor import registrar_evento, contar_falhas_recentes, alertar_telegram
+        ip = request.client.host if request and request.client else "unknown"
+        ua = request.headers.get("user-agent", "") if request else ""
+        
+        if not user or user.get("senha_hash") != _hash(req.senha):
+            registrar_evento("login", ip, req.email, sucesso=False, detalhes="Email ou senha incorretos", user_agent=ua)
+            n = contar_falhas_recentes(ip, minutos=10)
+            if n >= 5:
+                await alertar_telegram(
+                    f"🚨 ALERTA DE SEGURANÇA\n\n"
+                    f"IP: {ip}\n"
+                    f"Email tentado: {req.email}\n"
+                    f"Falhas em 10min: {n}\n\n"
+                    f"Possível ataque de força bruta!"
+                )
+            raise HTTPException(401, "Email ou senha incorretos")
+        else:
+            registrar_evento("login", ip, req.email, sucesso=True, user_agent=ua)
+    except HTTPException:
+        raise
+    except Exception as e:
+        # Se der erro no monitor, não bloqueia login
+        if not user or user.get("senha_hash") != _hash(req.senha):
+            raise HTTPException(401, "Email ou senha incorretos")
+    
     return {"token": _token(user["id"], req.email, user.get("plano","free")),
             "plano": user.get("plano","free"), "nome": user.get("nome",""),
             "msg": "Login realizado!"}
