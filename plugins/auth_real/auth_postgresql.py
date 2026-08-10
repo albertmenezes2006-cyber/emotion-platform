@@ -64,32 +64,34 @@ async def cadastrar(req: CadastroReq):
 
 @router.post("/login")
 async def login(req: LoginReq, request: Request = None):
-    user = _users_pg.get(req.email)
-    
-    # Registra evento de segurança
+    # Verifica se IP está bloqueado ANTES de tudo
     try:
-        from plugins.seguranca.security_monitor import registrar_evento, contar_falhas_recentes, alertar_telegram
+        from plugins.seguranca.security_monitor import registrar_evento, verificar_e_bloquear, ip_bloqueado
         ip = request.client.host if request and request.client else "unknown"
         ua = request.headers.get("user-agent", "") if request else ""
         
+        # IP bloqueado? Nega imediatamente
+        bloqueio = ip_bloqueado(ip)
+        if bloqueio:
+            raise HTTPException(429, f"Muitas tentativas. Tente novamente em breve. Motivo: {bloqueio.get('motivo', '')}")
+    except HTTPException:
+        raise
+    except Exception:
+        ip = "unknown"
+        ua = ""
+    
+    user = _users_pg.get(req.email)
+    
+    try:
         if not user or user.get("senha_hash") != _hash(req.senha):
             registrar_evento("login", ip, req.email, sucesso=False, detalhes="Email ou senha incorretos", user_agent=ua)
-            n = contar_falhas_recentes(ip, minutos=10)
-            if n >= 5:
-                await alertar_telegram(
-                    f"🚨 ALERTA DE SEGURANÇA\n\n"
-                    f"IP: {ip}\n"
-                    f"Email tentado: {req.email}\n"
-                    f"Falhas em 10min: {n}\n\n"
-                    f"Possível ataque de força bruta!"
-                )
+            await verificar_e_bloquear(ip, req.email)
             raise HTTPException(401, "Email ou senha incorretos")
         else:
             registrar_evento("login", ip, req.email, sucesso=True, user_agent=ua)
     except HTTPException:
         raise
-    except Exception as e:
-        # Se der erro no monitor, não bloqueia login
+    except Exception:
         if not user or user.get("senha_hash") != _hash(req.senha):
             raise HTTPException(401, "Email ou senha incorretos")
     

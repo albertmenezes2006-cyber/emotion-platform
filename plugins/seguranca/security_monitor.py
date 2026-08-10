@@ -1,8 +1,8 @@
-"""Monitor de segurança em tempo real com alerta Telegram"""
+"""Monitor de segurança em tempo real com alerta Telegram e bloqueio automático"""
 import os
 import logging
 from datetime import datetime
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, HTTPException
 from plugins.plugin_base import PluginBase
 import psycopg2
 import httpx
@@ -29,13 +29,23 @@ def init_tabela():
                 criado_em TIMESTAMP DEFAULT NOW()
             )
         """)
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS security_blocks (
+                ip VARCHAR(50) PRIMARY KEY,
+                motivo TEXT,
+                bloqueado_em TIMESTAMP DEFAULT NOW(),
+                expira_em TIMESTAMP,
+                ativo BOOLEAN DEFAULT TRUE
+            )
+        """)
         cur.execute("CREATE INDEX IF NOT EXISTS idx_sec_ip ON security_log(ip)")
         cur.execute("CREATE INDEX IF NOT EXISTS idx_sec_data ON security_log(criado_em)")
+        cur.execute("CREATE INDEX IF NOT EXISTS idx_block_expira ON security_blocks(expira_em)")
         conn.commit()
         cur.close()
         conn.close()
     except Exception as e:
-        logger.warning(f"Erro init security_log: {e}")
+        logger.warning(f"Erro init security: {e}")
 
 init_tabela()
 
@@ -72,8 +82,8 @@ def contar_falhas_recentes(ip: str, minutos: int = 10) -> int:
         conn = get_db()
         cur = conn.cursor()
         cur.execute(
-            "SELECT COUNT(*) FROM security_log WHERE ip=%s AND sucesso=FALSE AND criado_em > NOW() - INTERVAL '%s minutes'",
-            (ip, minutos)
+            f"SELECT COUNT(*) FROM security_log WHERE ip=%s AND sucesso=FALSE AND criado_em > NOW() - INTERVAL '{int(minutos)} minutes'",
+            (ip,)
         )
         n = cur.fetchone()[0]
         cur.close()
@@ -81,6 +91,99 @@ def contar_falhas_recentes(ip: str, minutos: int = 10) -> int:
         return n
     except:
         return 0
+
+def ip_bloqueado(ip: str) -> dict:
+    """Retorna info do bloqueio se IP está bloqueado, senão None"""
+    try:
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT motivo, expira_em FROM security_blocks WHERE ip=%s AND ativo=TRUE AND expira_em > NOW()",
+            (ip,)
+        )
+        row = cur.fetchone()
+        cur.close()
+        conn.close()
+        if row:
+            return {"bloqueado": True, "motivo": row[0], "expira_em": row[1].isoformat()}
+        return None
+    except:
+        return None
+
+def bloquear_ip(ip: str, motivo: str, horas: int = 1):
+    try:
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute(
+            f"""INSERT INTO security_blocks (ip, motivo, expira_em, ativo)
+                VALUES (%s, %s, NOW() + INTERVAL '{int(horas)} hours', TRUE)
+                ON CONFLICT (ip) DO UPDATE SET
+                    motivo = EXCLUDED.motivo,
+                    bloqueado_em = NOW(),
+                    expira_em = NOW() + INTERVAL '{int(horas)} hours',
+                    ativo = TRUE""",
+            (ip, motivo)
+        )
+        conn.commit()
+        cur.close()
+        conn.close()
+        return True
+    except Exception as e:
+        logger.warning(f"Erro bloquear IP: {e}")
+        return False
+
+def desbloquear_ip(ip: str):
+    try:
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute("UPDATE security_blocks SET ativo=FALSE WHERE ip=%s", (ip,))
+        conn.commit()
+        cur.close()
+        conn.close()
+        return True
+    except:
+        return False
+
+async def verificar_e_bloquear(ip: str, email: str = ""):
+    """Verifica se deve bloquear e alerta no Telegram"""
+    falhas_10min = contar_falhas_recentes(ip, minutos=10)
+    falhas_1h = contar_falhas_recentes(ip, minutos=60)
+    
+    # 30 falhas em 1h = bloqueio de 24h
+    if falhas_1h >= 30:
+        if bloquear_ip(ip, f"30+ falhas em 1h (email: {email})", horas=24):
+            await alertar_telegram(
+                f"🛑 IP BLOQUEADO POR 24 HORAS\n\n"
+                f"IP: {ip}\n"
+                f"Email tentado: {email}\n"
+                f"Falhas em 1h: {falhas_1h}\n\n"
+                f"Ataque persistente detectado!"
+            )
+        return True
+    
+    # 10 falhas em 10min = bloqueio de 1h
+    if falhas_10min >= 10:
+        if bloquear_ip(ip, f"10+ falhas em 10min (email: {email})", horas=1):
+            await alertar_telegram(
+                f"🛑 IP BLOQUEADO POR 1 HORA\n\n"
+                f"IP: {ip}\n"
+                f"Email tentado: {email}\n"
+                f"Falhas em 10min: {falhas_10min}\n\n"
+                f"Força bruta detectada!"
+            )
+        return True
+    
+    # 5 falhas = só alerta
+    if falhas_10min >= 5:
+        await alertar_telegram(
+            f"⚠️ ALERTA DE SEGURANÇA\n\n"
+            f"IP: {ip}\n"
+            f"Email tentado: {email}\n"
+            f"Falhas em 10min: {falhas_10min}\n\n"
+            f"Próximas 5 falhas = bloqueio automático!"
+        )
+    
+    return False
 
 @router.get("/dashboard")
 async def dashboard(limite: int = 50):
@@ -103,43 +206,27 @@ async def dashboard(limite: int = 50):
         falhas_24h = cur.fetchone()[0]
         cur.execute("SELECT ip, COUNT(*) as n FROM security_log WHERE sucesso=FALSE AND criado_em > NOW() - INTERVAL '24 hours' GROUP BY ip ORDER BY n DESC LIMIT 10")
         ips_suspeitos = [{"ip": r[0], "falhas": r[1]} for r in cur.fetchall()]
+        cur.execute("SELECT ip, motivo, bloqueado_em, expira_em FROM security_blocks WHERE ativo=TRUE AND expira_em > NOW() ORDER BY bloqueado_em DESC")
+        ips_bloqueados = [
+            {"ip": r[0], "motivo": r[1], "bloqueado_em": r[2].isoformat(), "expira_em": r[3].isoformat()}
+            for r in cur.fetchall()
+        ]
         cur.close()
         conn.close()
         return {
             "falhas_24h": falhas_24h,
             "ips_suspeitos": ips_suspeitos,
+            "ips_bloqueados": ips_bloqueados,
             "eventos_recentes": eventos
         }
     except Exception as e:
         return {"erro": str(e)}
 
-@router.post("/registrar")
-async def registrar(request: Request):
-    """Endpoint interno para outros plugins registrarem eventos"""
-    data = await request.json()
-    tipo = data.get("tipo", "unknown")
-    ip = request.client.host if request.client else "unknown"
-    email = data.get("email", "")
-    sucesso = data.get("sucesso", True)
-    detalhes = data.get("detalhes", "")
-    ua = request.headers.get("user-agent", "")
-    
-    registrar_evento(tipo, ip, email, sucesso, detalhes, ua)
-    
-    # Se falha, checa se tem muitas
-    if not sucesso:
-        n = contar_falhas_recentes(ip, minutos=10)
-        if n >= 5:
-            await alertar_telegram(
-                f"🚨 ALERTA DE SEGURANÇA\n\n"
-                f"IP: {ip}\n"
-                f"Tipo: {tipo}\n"
-                f"Email tentado: {email}\n"
-                f"Falhas em 10min: {n}\n\n"
-                f"Possível ataque de força bruta!"
-            )
-    
-    return {"status": "registrado"}
+@router.post("/desbloquear/{ip}")
+async def desbloquear(ip: str):
+    if desbloquear_ip(ip):
+        return {"status": "ok", "ip_desbloqueado": ip}
+    return {"status": "erro"}
 
 class SecurityMonitorPlugin(PluginBase):
     name = "security_monitor"
