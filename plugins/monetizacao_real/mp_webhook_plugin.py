@@ -70,10 +70,9 @@ async def enviar_telegram(msg: str):
 @router.post("/notificacao")
 async def receber_webhook(request: Request):
     try:
-        body = await request.body()
-        if not validar_assinatura(request, body):
-            return {"status": "assinatura_invalida"}
         data = await request.json()
+        # Log para debug
+        print(f"🔔 Webhook recebido: {data}")
         tipo = data.get("type", "")
         
         if tipo != "payment":
