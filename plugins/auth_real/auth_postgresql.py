@@ -3,7 +3,7 @@ Plugin: Auth PostgreSQL — usuários persistem entre deploys
 Padrão: PluginBase + plugin = AuthPostgresqlPlugin()
 """
 from plugins.plugin_base import PluginBase
-from fastapi import Request, APIRouter, HTTPException, Depends
+from fastapi import BackgroundTasks, Request, APIRouter, HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from datetime import datetime
 from plugins.db_manager import SimpleDB
@@ -49,16 +49,40 @@ class LoginReq(BaseModel):
     senha: str
 
 @router.post("/cadastrar")
-async def cadastrar(req: CadastroReq):
+async def cadastrar(req: CadastroReq, background_tasks: BackgroundTasks = None):
     existente = _users_pg.get(req.email)
     if existente:
-        raise HTTPException(400, "Email já cadastrado")
+        raise HTTPException(400, "Email ja cadastrado")
     uid = str(uuid.uuid4())
     _users_pg.set(req.email, {
         "id": uid, "email": req.email,
         "nome": req.nome, "senha_hash": _hash(req.senha),
         "plano": "free", "criado_em": datetime.utcnow().isoformat()
     })
+    
+    # Dispara sequencia de emails + alerta telegram (nao bloqueia resposta)
+    if background_tasks:
+        try:
+            from plugins.notificacoes.email_sequence import sequencia_emails
+            background_tasks.add_task(sequencia_emails, req.email, req.nome)
+        except Exception as e:
+            logger.warning(f"Erro sequencia email: {e}")
+        
+        try:
+            import httpx
+            token = os.getenv("TELEGRAM_TOKEN")
+            chat_id = os.getenv("TELEGRAM_CHAT_ID")
+            if token and chat_id:
+                async def alertar():
+                    async with httpx.AsyncClient(timeout=5) as client:
+                        await client.post(
+                            f"https://api.telegram.org/bot{token}/sendMessage",
+                            json={"chat_id": chat_id, "text": f"NOVO CADASTRO!\n\nNome: {req.nome}\nEmail: {req.email}\nPlano: free"}
+                        )
+                background_tasks.add_task(alertar)
+        except Exception as e:
+            logger.warning(f"Erro telegram: {e}")
+    
     return {"token": _token(uid, req.email, "free"), "plano": "free",
             "nome": req.nome, "msg": "Cadastro realizado!"}
 
