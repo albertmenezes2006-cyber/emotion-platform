@@ -218,6 +218,51 @@ async def executar_e_enviar():
     
     return resultado
 
+
+
+@router.post("/debug-email-backup")
+async def debug_email_backup():
+    import base64
+    try:
+        BREVO_KEY = os.getenv("BREVO_API_KEY", "")
+        FROM_EMAIL = os.getenv("FROM_EMAIL", "albertmenezes2006@gmail.com")
+        ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "albertmenezes2006@gmail.com")
+        
+        if not BREVO_KEY:
+            return {"erro": "BREVO_API_KEY vazio"}
+        
+        # Faz backup primeiro
+        resultado = fazer_backup_sql()
+        if not resultado["sucesso"]:
+            return {"erro": "backup falhou", "detalhes": resultado}
+        
+        arquivo_path = BACKUP_DIR / resultado["arquivo"]
+        
+        with open(arquivo_path, "rb") as f:
+            conteudo = base64.b64encode(f.read()).decode()
+        
+        async with httpx.AsyncClient(timeout=30) as client:
+            r = await client.post(
+                "https://api.brevo.com/v3/smtp/email",
+                headers={"api-key": BREVO_KEY, "Content-Type": "application/json"},
+                json={
+                    "sender": {"name": "EmotionAI", "email": FROM_EMAIL},
+                    "to": [{"email": ADMIN_EMAIL}],
+                    "subject": "Debug Backup",
+                    "htmlContent": "<p>Teste</p>",
+                    "attachment": [{"name": resultado["arquivo"], "content": conteudo}]
+                }
+            )
+            return {
+                "status_code": r.status_code,
+                "resposta": r.text[:500],
+                "brevo_key_len": len(BREVO_KEY),
+                "arquivo": resultado["arquivo"],
+                "tamanho_conteudo": len(conteudo)
+            }
+    except Exception as e:
+        return {"erro": str(e), "tipo": type(e).__name__}
+
 class BackupRealPlugin(PluginBase):
     name = "backup_real"
     def setup(self, app):
