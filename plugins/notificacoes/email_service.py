@@ -1,47 +1,63 @@
-"""Serviço de email via Gmail SMTP"""
+"""Servico de email via Brevo HTTP (funciona no Render)"""
 import os
-import smtplib
 import logging
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+import httpx
 
 logger = logging.getLogger(__name__)
 
-GMAIL_USER = os.getenv("GMAIL_USER", "albertmenezes2006@gmail.com")
-GMAIL_APP_PASSWORD = os.getenv("GMAIL_APP_PASSWORD", "")
+BREVO_KEY = os.getenv("BREVO_API_KEY", "")
+FROM_EMAIL = os.getenv("FROM_EMAIL", "albertmenezes2006@gmail.com")
+FROM_NAME = os.getenv("FROM_NAME", "EmotionAI")
 
-def enviar_email(destinatario: str, assunto: str, html: str) -> bool:
-    if not GMAIL_APP_PASSWORD:
-        logger.warning("GMAIL_APP_PASSWORD nao configurado")
+
+def enviar_email(destinatario: str, assunto: str, html: str, nome: str = "") -> bool:
+    if not BREVO_KEY:
+        logger.warning("BREVO_API_KEY nao configurado")
         return False
     try:
-        msg = MIMEMultipart("alternative")
-        msg["Subject"] = assunto
-        msg["From"] = f"EmotionAI <{GMAIL_USER}>"
-        msg["To"] = destinatario
-        msg.attach(MIMEText(html, "html", "utf-8"))
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=15) as server:
-            server.login(GMAIL_USER, GMAIL_APP_PASSWORD)
-            server.send_message(msg)
-        return True
-    except Exception as e:
-        logger.error(f"Erro email: {e}")
+        r = httpx.post(
+            "https://api.brevo.com/v3/smtp/email",
+            headers={"api-key": BREVO_KEY, "Content-Type": "application/json"},
+            json={
+                "sender": {"name": FROM_NAME, "email": FROM_EMAIL},
+                "to": [{"email": destinatario, "name": nome or destinatario}],
+                "subject": assunto,
+                "htmlContent": html
+            },
+            timeout=10
+        )
+        if r.status_code in (200, 201):
+            return True
+        logger.error(f"Brevo erro {r.status_code}: {r.text}")
         return False
+    except Exception as e:
+        logger.error(f"Erro envio: {e}")
+        return False
+
 
 def email_pagamento_aprovado(destinatario, plano, valor, payment_id):
     plano_nome = "Pro" if plano == "pro" else "Clinica" if plano == "clinica" else plano.title()
-    html = f"""<div style="font-family:sans-serif;max-width:560px;margin:auto;padding:30px;background:#fff;border-radius:12px">
-    <h1 style="color:#6366f1">Pagamento Confirmado!</h1>
-    <p>Ola! Recebemos a confirmacao do seu pagamento.</p>
-    <p><strong>Plano:</strong> {plano_nome}<br><strong>Valor:</strong> R$ {valor:.2f}<br><strong>ID:</strong> {payment_id}</p>
+    html = f"""<div style="font-family:sans-serif;max-width:560px;margin:auto;padding:30px;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.08)">
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="width:70px;height:70px;background:linear-gradient(135deg,#10b981,#059669);border-radius:50%;display:inline-block;line-height:70px;color:white;font-size:36px">check</div>
+    </div>
+    <h1 style="color:#1e293b;text-align:center">Pagamento Confirmado!</h1>
+    <p style="color:#64748b">Ola! Recebemos a confirmacao do seu pagamento. Bem-vindo ao <strong>Plano {plano_nome}</strong> da EmotionAI.</p>
+    <div style="background:#f8fafc;border-radius:8px;padding:20px;margin:20px 0">
+      <p style="margin:5px 0"><strong>Plano:</strong> {plano_nome}</p>
+      <p style="margin:5px 0"><strong>Valor:</strong> R$ {valor:.2f}</p>
+      <p style="margin:5px 0"><strong>Forma:</strong> PIX</p>
+      <p style="margin:5px 0"><strong>ID:</strong> {payment_id}</p>
+    </div>
     <p>Seu acesso ao plano <strong>{plano_nome}</strong> ja esta liberado!</p>
-    <a href="https://emotion-platform-albert.onrender.com/app/dashboard" style="display:inline-block;background:#6366f1;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;margin-top:20px">Acessar Dashboard</a>
-    <p style="color:#94a3b8;font-size:12px;margin-top:30px">EmotionAI - Saude mental com IA</p>
+    <center>
+      <a href="https://emotion-platform-albert.onrender.com/app/dashboard" style="display:inline-block;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:20px">Acessar Dashboard</a>
+    </center>
+    <p style="color:#94a3b8;font-size:12px;margin-top:30px;text-align:center">EmotionAI - Saude mental com IA</p>
     </div>"""
     return enviar_email(destinatario, f"Pagamento Confirmado - Plano {plano_nome}", html)
 
 
-# Endpoint de teste
 from fastapi import APIRouter
 from plugins.plugin_base import PluginBase
 
@@ -52,7 +68,36 @@ async def teste_endpoint(destinatario: str = ""):
     if not destinatario:
         return {"erro": "passe ?destinatario=seu@email.com"}
     ok = email_pagamento_aprovado(destinatario, "pro", 29.90, "teste123")
-    return {"enviado": ok, "destinatario": destinatario}
+    return {"enviado": ok, "destinatario": destinatario, "provider": "brevo"}
+
+@router.get("/brevo-check")
+async def brevo_check():
+    key = os.getenv("BREVO_API_KEY", "")
+    return {
+        "brevo_configurado": bool(key),
+        "tamanho_chave": len(key),
+        "comeca_com": key[:8] + "..." if key else ""
+    }
+
+@router.get("/debug-brevo")
+async def debug_brevo(destinatario: str = ""):
+    if not destinatario:
+        return {"erro": "passe destinatario"}
+    try:
+        r = httpx.post(
+            "https://api.brevo.com/v3/smtp/email",
+            headers={"api-key": BREVO_KEY, "Content-Type": "application/json"},
+            json={
+                "sender": {"name": FROM_NAME, "email": FROM_EMAIL},
+                "to": [{"email": destinatario}],
+                "subject": "Teste EmotionAI",
+                "htmlContent": "<p>Teste de envio</p>"
+            },
+            timeout=10
+        )
+        return {"status": r.status_code, "resposta": r.text}
+    except Exception as e:
+        return {"erro": str(e)}
 
 class EmailServicePlugin(PluginBase):
     name = "email_service"
@@ -60,46 +105,3 @@ class EmailServicePlugin(PluginBase):
         app.include_router(router)
 
 plugin = EmailServicePlugin()
-
-
-@router.get("/debug")
-async def debug_email():
-    import os
-    return {
-        "gmail_user_set": bool(os.getenv("GMAIL_USER")),
-        "gmail_user_value": os.getenv("GMAIL_USER", "")[:5] + "...",
-        "gmail_password_set": bool(os.getenv("GMAIL_APP_PASSWORD")),
-        "gmail_password_length": len(os.getenv("GMAIL_APP_PASSWORD", ""))
-    }
-
-@router.get("/debug-envio")
-async def debug_envio(destinatario: str = ""):
-    import os
-    if not destinatario:
-        return {"erro": "passe ?destinatario=seu@email.com"}
-    try:
-        import smtplib
-        from email.mime.text import MIMEText
-        user = os.getenv("GMAIL_USER", "")
-        pwd = os.getenv("GMAIL_APP_PASSWORD", "")
-        msg = MIMEText("Teste EmotionAI", "plain", "utf-8")
-        msg["Subject"] = "Teste Debug"
-        msg["From"] = user
-        msg["To"] = destinatario
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=15) as s:
-            s.login(user, pwd)
-            s.send_message(msg)
-        return {"ok": True}
-    except Exception as e:
-        return {"ok": False, "erro": str(e), "tipo": type(e).__name__}
-
-
-@router.get("/brevo-check")
-async def brevo_check():
-    import os
-    key = os.getenv("BREVO_API_KEY", "")
-    return {
-        "brevo_configurado": bool(key),
-        "tamanho_chave": len(key),
-        "comeca_com": key[:8] + "..." if key else ""
-    }
