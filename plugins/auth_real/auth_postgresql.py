@@ -73,9 +73,18 @@ async def cadastrar(req: CadastroReq, background_tasks: BackgroundTasks = None):
             logger.warning(f"Erro sequencia email: {e}")
         
         try:
-            from plugins.seguranca.security_monitor import alertar_telegram
-            msg = f"NOVO CADASTRO!\n\nNome: {req.nome}\nEmail: {req.email}\nPlano: free"
-            background_tasks.add_task(alertar_telegram, msg)
+            import httpx
+            tg_token = os.getenv("TELEGRAM_TOKEN")
+            tg_chat = os.getenv("TELEGRAM_CHAT_ID")
+            if tg_token and tg_chat:
+                msg = f"NOVO CADASTRO!\n\nNome: {req.nome}\nEmail: {req.email}\nPlano: free"
+                async def _send_tg():
+                    async with httpx.AsyncClient(timeout=10) as client:
+                        await client.post(
+                            f"https://api.telegram.org/bot{tg_token}/sendMessage",
+                            json={"chat_id": tg_chat, "text": msg}
+                        )
+                background_tasks.add_task(_send_tg)
         except Exception as e:
             logger.warning(f"Erro telegram: {e}")
     
