@@ -3,6 +3,7 @@ import os
 import logging
 import subprocess
 import gzip
+import zipfile
 from datetime import datetime, timedelta
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse, FileResponse
@@ -45,10 +46,11 @@ def fazer_backup_sql():
         tabelas = [r[0] for r in cur.fetchall()]
         
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        arquivo = BACKUP_DIR / f"backup_{timestamp}.sql.gz"
+        arquivo_sql = BACKUP_DIR / f"backup_{timestamp}.sql"
+        arquivo = BACKUP_DIR / f"backup_{timestamp}.zip"
         
         total_registros = 0
-        with gzip.open(arquivo, "wt", encoding="utf-8") as f:
+        with open(arquivo_sql, "w", encoding="utf-8") as f:
             f.write(f"-- Backup EmotionAI - {datetime.now().isoformat()}\n\n")
             
             for tabela in tabelas:
@@ -70,6 +72,11 @@ def fazer_backup_sql():
         cur.close()
         conn.close()
         
+        # Compacta em ZIP
+        with zipfile.ZipFile(arquivo, 'w', zipfile.ZIP_DEFLATED) as zf:
+            zf.write(arquivo_sql, arquivo_sql.name)
+        arquivo_sql.unlink()  # remove o SQL cru
+        
         tamanho = arquivo.stat().st_size / 1024
         return {
             "sucesso": True,
@@ -87,7 +94,7 @@ def limpar_backups_antigos(dias: int = 7):
     """Remove backups com mais de N dias"""
     limite = datetime.now() - timedelta(days=dias)
     removidos = 0
-    for arq in BACKUP_DIR.glob("backup_*.sql.gz"):
+    for arq in BACKUP_DIR.glob("backup_*.zip"):
         if datetime.fromtimestamp(arq.stat().st_mtime) < limite:
             arq.unlink()
             removidos += 1
@@ -110,7 +117,7 @@ async def executar_backup():
 
 @router.get("/listar")
 async def listar_backups():
-    arquivos = sorted(BACKUP_DIR.glob("backup_*.sql.gz"), reverse=True)
+    arquivos = sorted(BACKUP_DIR.glob("backup_*.zip"), reverse=True)
     return {
         "total": len(arquivos),
         "backups": [
@@ -132,7 +139,7 @@ async def download_backup(nome_arquivo: str):
 
 @router.get("/status")
 async def status():
-    arquivos = list(BACKUP_DIR.glob("backup_*.sql.gz"))
+    arquivos = list(BACKUP_DIR.glob("backup_*.zip"))
     ultimo = None
     if arquivos:
         mais_recente = max(arquivos, key=lambda a: a.stat().st_mtime)
