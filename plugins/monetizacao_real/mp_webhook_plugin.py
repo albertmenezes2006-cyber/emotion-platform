@@ -94,6 +94,14 @@ async def receber_webhook(request: Request):
         if status == "approved":
             plano = "clinica" if valor >= 99 else "pro"
             upgrade_usuario(email, plano)
+            
+            # Envia email de confirmacao
+            try:
+                from plugins.notificacoes.email_service import email_pagamento_aprovado
+                email_pagamento_aprovado(email, plano, valor, str(payment_id))
+            except Exception as e:
+                print(f"Erro email: {e}")
+            
             await enviar_telegram(
                 f"💰 PAGAMENTO APROVADO!\n\n"
                 f"Email: {email}\n"
