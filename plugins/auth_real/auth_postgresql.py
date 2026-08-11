@@ -54,11 +54,15 @@ async def cadastrar(req: CadastroReq, background_tasks: BackgroundTasks = None):
     if existente:
         raise HTTPException(400, "Email ja cadastrado")
     uid = str(uuid.uuid4())
-    _users_pg.set(req.email, {
-        "id": uid, "email": req.email,
-        "nome": req.nome, "senha_hash": _hash(req.senha),
-        "plano": "free", "criado_em": datetime.utcnow().isoformat()
-    })
+    _users_pg.create(
+        nome=req.nome,
+        valor=json.dumps({
+            "id": uid, "email": req.email,
+            "nome": req.nome, "senha_hash": _hash(req.senha),
+            "plano": "free", "criado_em": datetime.utcnow().isoformat()
+        }),
+        user_id=req.email
+    )
     
     # Dispara sequencia de emails + alerta telegram (nao bloqueia resposta)
     if background_tasks:
