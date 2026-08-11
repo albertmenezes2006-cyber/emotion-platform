@@ -70,35 +70,6 @@ async def teste_endpoint(destinatario: str = ""):
     ok = email_pagamento_aprovado(destinatario, "pro", 29.90, "teste123")
     return {"enviado": ok, "destinatario": destinatario, "provider": "brevo"}
 
-@router.get("/brevo-check")
-async def brevo_check():
-    key = os.getenv("BREVO_API_KEY", "")
-    return {
-        "brevo_configurado": bool(key),
-        "tamanho_chave": len(key),
-        "comeca_com": key[:8] + "..." if key else ""
-    }
-
-@router.get("/debug-brevo")
-async def debug_brevo(destinatario: str = ""):
-    if not destinatario:
-        return {"erro": "passe destinatario"}
-    try:
-        r = httpx.post(
-            "https://api.brevo.com/v3/smtp/email",
-            headers={"api-key": BREVO_KEY, "Content-Type": "application/json"},
-            json={
-                "sender": {"name": FROM_NAME, "email": FROM_EMAIL},
-                "to": [{"email": destinatario}],
-                "subject": "Teste EmotionAI",
-                "htmlContent": "<p>Teste de envio</p>"
-            },
-            timeout=10
-        )
-        return {"status": r.status_code, "resposta": r.text}
-    except Exception as e:
-        return {"erro": str(e)}
-
 class EmailServicePlugin(PluginBase):
     name = "email_service"
     def setup(self, app):
