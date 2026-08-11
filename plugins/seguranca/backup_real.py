@@ -147,6 +147,77 @@ async def status():
         "pasta": str(BACKUP_DIR)
     }
 
+
+
+async def enviar_backup_email(arquivo_path):
+    """Envia backup por email como anexo via Brevo"""
+    import base64
+    try:
+        BREVO_KEY = os.getenv("BREVO_API_KEY", "")
+        FROM_EMAIL = os.getenv("FROM_EMAIL", "albertmenezes2006@gmail.com")
+        ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "albertmenezes2006@gmail.com")
+        
+        if not BREVO_KEY:
+            return False
+        
+        # Lê arquivo e converte para base64
+        with open(arquivo_path, "rb") as f:
+            conteudo = base64.b64encode(f.read()).decode()
+        
+        nome_arquivo = arquivo_path.name if hasattr(arquivo_path, "name") else str(arquivo_path).split("/")[-1]
+        tamanho_kb = round(arquivo_path.stat().st_size / 1024, 2) if hasattr(arquivo_path, "stat") else 0
+        
+        async with httpx.AsyncClient(timeout=30) as client:
+            r = await client.post(
+                "https://api.brevo.com/v3/smtp/email",
+                headers={"api-key": BREVO_KEY, "Content-Type": "application/json"},
+                json={
+                    "sender": {"name": "EmotionAI Backup", "email": FROM_EMAIL},
+                    "to": [{"email": ADMIN_EMAIL}],
+                    "subject": f"Backup EmotionAI - {datetime.now().strftime('%d/%m/%Y %H:%M')}",
+                    "htmlContent": f"""
+                    <h2>Backup automatico do banco de dados</h2>
+                    <p><strong>Arquivo:</strong> {nome_arquivo}</p>
+                    <p><strong>Tamanho:</strong> {tamanho_kb} KB</p>
+                    <p><strong>Data:</strong> {datetime.now().isoformat()}</p>
+                    <p>Guarde este email. Contem backup completo do banco.</p>
+                    """,
+                    "attachment": [{
+                        "name": nome_arquivo,
+                        "content": conteudo
+                    }]
+                }
+            )
+            return r.status_code in (200, 201)
+    except Exception as e:
+        logger.error(f"Erro email backup: {e}")
+        return False
+
+@router.post("/executar-e-enviar")
+async def executar_e_enviar():
+    """Faz backup e envia por email"""
+    resultado = fazer_backup_sql()
+    if not resultado["sucesso"]:
+        return resultado
+    
+    limpar_backups_antigos(dias=7)
+    
+    arquivo_path = BACKUP_DIR / resultado["arquivo"]
+    email_ok = await enviar_backup_email(arquivo_path)
+    resultado["email_enviado"] = email_ok
+    
+    if email_ok:
+        await alertar_telegram(
+            f"💾 BACKUP + EMAIL ENVIADO\n\n"
+            f"Arquivo: {resultado['arquivo']}\n"
+            f"Tamanho: {resultado['tamanho_kb']} KB\n"
+            f"Tabelas: {resultado['total_tabelas']}\n"
+            f"Registros: {resultado['total_registros']}\n\n"
+            f"Backup enviado para seu Gmail!"
+        )
+    
+    return resultado
+
 class BackupRealPlugin(PluginBase):
     name = "backup_real"
     def setup(self, app):
