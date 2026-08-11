@@ -60,3 +60,35 @@ class EmailServicePlugin(PluginBase):
         app.include_router(router)
 
 plugin = EmailServicePlugin()
+
+
+@router.get("/debug")
+async def debug_email():
+    import os
+    return {
+        "gmail_user_set": bool(os.getenv("GMAIL_USER")),
+        "gmail_user_value": os.getenv("GMAIL_USER", "")[:5] + "...",
+        "gmail_password_set": bool(os.getenv("GMAIL_APP_PASSWORD")),
+        "gmail_password_length": len(os.getenv("GMAIL_APP_PASSWORD", ""))
+    }
+
+@router.get("/debug-envio")
+async def debug_envio(destinatario: str = ""):
+    import os
+    if not destinatario:
+        return {"erro": "passe ?destinatario=seu@email.com"}
+    try:
+        import smtplib
+        from email.mime.text import MIMEText
+        user = os.getenv("GMAIL_USER", "")
+        pwd = os.getenv("GMAIL_APP_PASSWORD", "")
+        msg = MIMEText("Teste EmotionAI", "plain", "utf-8")
+        msg["Subject"] = "Teste Debug"
+        msg["From"] = user
+        msg["To"] = destinatario
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=15) as s:
+            s.login(user, pwd)
+            s.send_message(msg)
+        return {"ok": True}
+    except Exception as e:
+        return {"ok": False, "erro": str(e), "tipo": type(e).__name__}
