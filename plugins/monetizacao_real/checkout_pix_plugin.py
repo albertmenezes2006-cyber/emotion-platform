@@ -139,6 +139,75 @@ function copiar(){{
 </html>"""
     return HTMLResponse(html)
 
+
+@router.get("/iniciar/{plano}")
+async def iniciar_checkout(plano: str):
+    p = PLANOS.get(plano, PLANOS.get("pro"))
+    valor = p["valor"]
+    nome = p["nome"]
+    html = f"""<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assinar {nome} — EmotionAI</title>
+<style>
+*{{margin:0;padding:0;box-sizing:border-box}}
+body{{font-family:-apple-system,sans-serif;background:#0f172a;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}}
+.card{{background:#1e293b;border-radius:20px;padding:40px;max-width:440px;width:100%;box-shadow:0 25px 50px rgba(0,0,0,0.5)}}
+.logo{{font-size:48px;text-align:center;margin-bottom:15px}}
+h1{{font-size:26px;text-align:center;margin-bottom:8px;color:#e2e8f0}}
+.plano{{background:linear-gradient(135deg,#6366f1,#8b5cf6);padding:8px 20px;border-radius:20px;display:inline-block;font-size:13px;font-weight:600;margin:10px auto;display:block;width:fit-content}}
+.valor{{font-size:42px;font-weight:800;color:#10b981;text-align:center;margin:15px 0}}
+.valor small{{font-size:16px;color:#64748b;font-weight:400}}
+label{{display:block;color:#94a3b8;font-size:14px;margin-bottom:8px;margin-top:20px}}
+input{{width:100%;background:#0f172a;border:2px solid #334155;color:#fff;padding:14px 16px;border-radius:10px;font-size:15px;outline:none;transition:border 0.2s}}
+input:focus{{border-color:#6366f1}}
+.btn{{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;padding:16px 30px;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;width:100%;margin-top:20px}}
+.btn:hover{{opacity:0.9;transform:translateY(-2px)}}
+.beneficios{{background:#0f172a;border-radius:12px;padding:15px;margin:20px 0}}
+.beneficios li{{padding:6px 0;color:#94a3b8;font-size:13px;list-style:none;display:flex;align-items:center;gap:8px}}
+.beneficios li::before{{content:"✓";color:#10b981;font-weight:bold}}
+.seguro{{color:#64748b;font-size:12px;text-align:center;margin-top:15px}}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">🧠</div>
+  <h1>EmotionAI</h1>
+  <div class="plano">Plano {nome}</div>
+  <div class="valor">R$ {valor:.2f}<small>/mês</small></div>
+  
+  <div class="beneficios">
+    <ul>
+      <li>Acesso completo à IA Sofia</li>
+      <li>PHQ-9 e GAD-7 ilimitados</li>
+      <li>Prontuário digital completo</li>
+      <li>Dashboard de evolução</li>
+      <li>Suporte prioritário</li>
+    </ul>
+  </div>
+  
+  <form onsubmit="iniciar(event)">
+    <label>Seu email para receber a confirmação:</label>
+    <input type="email" id="email" required placeholder="seu@email.com">
+    <button type="submit" class="btn">Continuar para pagamento →</button>
+  </form>
+  <p class="seguro">🔒 Pagamento seguro via PIX (Mercado Pago)</p>
+</div>
+<script>
+function iniciar(e){{
+  e.preventDefault();
+  const email = document.getElementById("email").value;
+  window.location.href = `/api/v1/checkout/pix/{plano}?email=${{encodeURIComponent(email)}}`;
+}}
+</script>
+</body>
+</html>"""
+    from fastapi.responses import HTMLResponse
+    return HTMLResponse(html)
+
+
 class CheckoutPixPlugin(PluginBase):
     name = "checkout_pix_plugin"
     def setup(self, app):
