@@ -39,3 +39,24 @@ def email_pagamento_aprovado(destinatario, plano, valor, payment_id):
     <p style="color:#94a3b8;font-size:12px;margin-top:30px">EmotionAI - Saude mental com IA</p>
     </div>"""
     return enviar_email(destinatario, f"Pagamento Confirmado - Plano {plano_nome}", html)
+
+
+# Endpoint de teste
+from fastapi import APIRouter
+from plugins.plugin_base import PluginBase
+
+router = APIRouter(prefix="/api/v1/email", tags=["Email"])
+
+@router.get("/teste")
+async def teste_endpoint(destinatario: str = ""):
+    if not destinatario:
+        return {"erro": "passe ?destinatario=seu@email.com"}
+    ok = email_pagamento_aprovado(destinatario, "pro", 29.90, "teste123")
+    return {"enviado": ok, "destinatario": destinatario}
+
+class EmailServicePlugin(PluginBase):
+    name = "email_service"
+    def setup(self, app):
+        app.include_router(router)
+
+plugin = EmailServicePlugin()
