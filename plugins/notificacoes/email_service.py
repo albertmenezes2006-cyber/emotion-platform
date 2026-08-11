@@ -92,3 +92,14 @@ async def debug_envio(destinatario: str = ""):
         return {"ok": True}
     except Exception as e:
         return {"ok": False, "erro": str(e), "tipo": type(e).__name__}
+
+
+@router.get("/brevo-check")
+async def brevo_check():
+    import os
+    key = os.getenv("BREVO_API_KEY", "")
+    return {
+        "brevo_configurado": bool(key),
+        "tamanho_chave": len(key),
+        "comeca_com": key[:8] + "..." if key else ""
+    }
