@@ -78,13 +78,11 @@ async def cadastrar(req: CadastroReq, background_tasks: BackgroundTasks = None):
             tg_chat = os.getenv("TELEGRAM_CHAT_ID")
             if tg_token and tg_chat:
                 msg = f"NOVO CADASTRO!\n\nNome: {req.nome}\nEmail: {req.email}\nPlano: free"
-                def _send_tg_sync():
-                    req_lib.post(
-                        f"https://api.telegram.org/bot{tg_token}/sendMessage",
-                        json={"chat_id": tg_chat, "text": msg},
-                        timeout=10
-                    )
-                background_tasks.add_task(_send_tg_sync)
+                req_lib.post(
+                    f"https://api.telegram.org/bot{tg_token}/sendMessage",
+                    json={"chat_id": tg_chat, "text": msg},
+                    timeout=5
+                )
         except Exception as e:
             logger.warning(f"Erro telegram: {e}")
     
